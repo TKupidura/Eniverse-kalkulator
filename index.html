@@ -1055,6 +1055,25 @@
       #eni-calc .ec-final .ec-existing-site { margin-top:5px; }
       #eni-calc .ec-final .ec-existing-site .ec-field { margin-top:5px; }
 
+      /* Na telefonach pokazujemy również zaliczkę i sumę w ostatnim kroku,
+         zamiast ukrywać całe podsumowanie. */
+      @media(max-width:720px) {
+        #eni-calc .ec-final { display:flex; flex-direction:column; }
+        #eni-calc .ec-final .ec-summary { display:block; flex:0 0 auto; max-height:170px; overflow:hidden; padding:7px 12px; }
+        #eni-calc .ec-final .ec-summary > h3, #eni-calc .ec-final .ec-summary > .ec-line,
+        #eni-calc .ec-final .ec-summary > .ec-note { display:none; }
+        #eni-calc .ec-final .ec-summary-total { margin-top:0; padding:6px 9px; }
+        #eni-calc .ec-final .ec-payment-summary { margin:5px 0 0; padding:6px 9px; }
+        #eni-calc .ec-final .ec-payment-summary h3 { font-size:12px; }
+        #eni-calc .ec-final .ec-payment-summary p { font-size:10px; }
+        #eni-calc .ec-final .ec-payment-summary p:nth-of-type(1),
+        #eni-calc .ec-final .ec-payment-summary p:nth-of-type(2) { display:none; }
+        #eni-calc .ec-final .ec-lead { flex:1; min-height:0; padding:8px 12px; overflow-y:auto; }
+        #eni-calc .ec-bundle-grid .ec-scope label { font-size:10px; padding:2px 0; }
+        #eni-calc .ec-addon { padding:4px; min-height:29px; }
+        #eni-calc .ec-addon span { font-size:10px; }
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -2131,11 +2150,12 @@
 
           const bundle = document.createElement("div");
           bundle.className = "ec-bundle-grid";
+          sections[0].querySelector("h3").textContent = "W cenie Twojego projektu";
           const scope = q("#ec-scope");
           scope.before(bundle);
           const included = document.createElement("div");
           const title = document.createElement("h4");
-          title.textContent = "W cenie Twojego projektu";
+          title.textContent = "Elementy zawarte w pakiecie";
           included.append(title,scope);
           bundle.append(included);
           const extras = document.createElement("div");
@@ -2449,7 +2469,7 @@
             (p.recurring
               ? "Dodatki — wartość za całą umowę: "
               : "Suma dodatków: ") + money(a.extra),
-            "Hosting poza ceną bazową / rok: " + money(a.host),
+            "Dodatkowe usługi roczne (hosting/opieka): " + money(a.host),
             "Łącznie" + " w pierwszym roku" + ": " + money(a.total),
             "",
           ];
