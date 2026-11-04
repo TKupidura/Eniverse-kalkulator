@@ -823,7 +823,7 @@
       #eni-calc .ec-card-price span { font-size:12px; }
       #eni-calc .ec-card-budget .ec-muted { margin-top:8px; font-size:12px; }
       /* Mini Start: dwie czytelne ceny w jednym wierszu. */
-      #eni-calc .ec-mini-prices { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:clamp(7px,1vw,16px); width:100%; }
+      #eni-calc .ec-mini-prices { display:grid; grid-template-columns:max-content max-content max-content; justify-content:start; align-items:baseline; column-gap:clamp(6px,.8vw,12px); row-gap:5px; max-width:100%; }
       #eni-calc .ec-mini-price { min-width:0; display:flex; align-items:baseline; flex-wrap:wrap; column-gap:5px; row-gap:0; }
       #eni-calc .ec-mini-price strong { font-size:clamp(31px,3.2vw,47px); font-weight:500; line-height:1.14; letter-spacing:-.065em; font-variant-numeric:tabular-nums; white-space:nowrap; }
       #eni-calc .ec-mini-price span { font-size:12px; white-space:nowrap; }
@@ -874,11 +874,11 @@
       #eni-calc .ec-package--featured .ec-project-scale p, #eni-calc .ec-package--featured .ec-features small,
       #eni-calc .ec-package--featured .ec-card-meta dt { color:#b9c0c7; }
       #eni-calc .ec-package--featured .ec-project-scale, #eni-calc .ec-package--featured .ec-features { border-color:#454c52; }
-      #eni-calc .ec-package--featured .ec-card-details { background:#fff; border-color:#E20B0C; color:#101112; }
-      #eni-calc .ec-package--featured .ec-card-details summary { background:#fff; color:#101112; }
-      #eni-calc .ec-package--featured .ec-card-details summary:hover { background:#fafafa; }
-      #eni-calc .ec-package--featured .ec-details-copy small { color:#66727f; }
-      #eni-calc .ec-package--featured .ec-details-list { background:#fff; border-color:#e5e5e5; color:#101112; }
+      #eni-calc .ec-package--featured .ec-card-details { background:#101112; border-color:#E20B0C; color:#fff; }
+      #eni-calc .ec-package--featured .ec-card-details summary { background:#101112; color:#fff; }
+      #eni-calc .ec-package--featured .ec-card-details summary:hover { background:#24272a; }
+      #eni-calc .ec-package--featured .ec-details-copy small { color:#e6e9eb; }
+      #eni-calc .ec-package--featured .ec-details-list { background:#101112; border-color:#454c52; color:#fff; }
       #eni-calc .ec-package--featured .ec-project-tiles i { background:#333c43; border-color:#7b8790; }
       #eni-calc .ec-package--featured .ec-project-tiles i.is-active { background:#e0002e; border-color:#e0002e; }
       #eni-calc .ec-package--featured .ec-card-actions .ec-choose { background:#e0002d; border-color:#e0002d; color:#fff; }
