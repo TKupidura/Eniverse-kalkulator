@@ -2201,6 +2201,22 @@
           const opened = all("#ec-catalog .ec-card-details[open]");
           catalog.style.removeProperty("--ec-equal-card-height");
           opened.forEach(details => { details.open = false; });
+          // Mini Start ma dwa warianty ceny i dodatkowe objaśnienia, więc jego
+          // część cenowa jest wyższa niż w Start. Wyrównujemy wysokości kolejnych
+          // bloków obu kart, aby „1 strona · do 3/5 sekcji” zaczynało się równo,
+          // podobnie jak nagłówki „Co zyskujesz” i dolne przyciski.
+          const entryCards = all("#ec-entry-packages .ec-package");
+          const alignParts = [".ec-card-header", ".ec-card-budget", ".ec-project-scale", ".ec-features"];
+          entryCards.forEach(card => alignParts.forEach(selector =>
+            card.querySelector(selector)?.style.removeProperty("min-height")
+          ));
+          if (entryCards.length === 2 && window.matchMedia("(min-width:581px)").matches) {
+            alignParts.forEach(selector => {
+              const elements = entryCards.map(card => card.querySelector(selector)).filter(Boolean);
+              const maxHeight = Math.ceil(Math.max(...elements.map(el => el.getBoundingClientRect().height)));
+              elements.forEach(el => el.style.minHeight = maxHeight + "px");
+            });
+          }
           const height = Math.ceil(Math.max(...cards.map(card => card.getBoundingClientRect().height)));
           catalog.style.setProperty("--ec-equal-card-height", height + "px");
           // Po wyrównaniu wysokości zapamiętaj faktyczny pusty odstęp NAD metadanymi.
