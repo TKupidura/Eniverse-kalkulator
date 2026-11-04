@@ -1354,6 +1354,19 @@
         }
       }
 
+      /* Uzupełniające przełączniki SEO pod wyborem pakietu SEO. */
+      #eni-calc .ec-seo-services { margin-top:20px; padding-top:18px; border-top:1px solid #e2e7eb; }
+      #eni-calc .ec-seo-services h4 { margin:0 0 7px; font-size:17px; font-weight:600; }
+      #eni-calc .ec-seo-services > .ec-muted { margin:0 0 13px; }
+      #eni-calc .ec-seo-extra-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+      #eni-calc .ec-seo-addon { min-height:74px; }
+      #eni-calc .ec-seo-addon .ec-addon-content small { font-size:11px; line-height:1.4; }
+      #eni-calc .ec-seo-price-note { margin:12px 0 0; font-size:11px; line-height:1.5; color:#66727f; }
+      @media(max-width:930px) {
+        #eni-calc .ec-seo-extra-grid { grid-template-columns:1fr; }
+        #eni-calc .ec-seo-addon { min-height:60px; }
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -1535,6 +1548,12 @@
                     role="group"
                     aria-label="Wariant SEO"
                   ></div>
+                  <div class="ec-seo-services">
+                    <h4>Dodatkowe usługi SEO i reklamy</h4>
+                    <p class="ec-muted">Zaznacz wybrane usługi. Poniższe ceny są przykładowe i doliczane do projektu.</p>
+                    <div class="ec-seo-extra-grid" id="ec-seo-extras" role="group" aria-label="Dodatkowe usługi SEO"></div>
+                    <p class="ec-seo-price-note">Google Ads: uruchomienie kampanii bez budżetu reklamowego. Pozycjonowanie SEO: pakiet startowy, dalsza obsługa wyceniana osobno.</p>
+                  </div>
                 </section>
                 <section class="ec-section">
                   <h3>Kontakt z klientem</h3>
@@ -1934,6 +1953,14 @@
           ["analytics", "Google Analytics", 200, false],
           ["gsc", "Google Search Console", 99, true],
           ["blog", "Blog / Realizacje", 249, true],
+          ["logoAi", "Logo stworzone przy pomocy AI", 190, false],
+        ];
+        // Stawki poglądowe: dodatki jednorazowe, bez cyklicznej obsługi reklam i SEO.
+        const seoServices = [
+          ["contentEdit", "Redakcja i optymalizacja treści", 290, "Optymalizacja istniejących tekstów"],
+          ["contentSeo", "Stworzenie i optymalizacja treści pod SEO", 590, "Przygotowanie nowych tekstów pod SEO"],
+          ["googleAds", "Kampania Google Ads", 490, "Uruchomienie kampanii · bez budżetu reklamowego"],
+          ["seoPosition", "Pozycjonowanie SEO", 690, "Pakiet startowy · dalsza obsługa osobno"],
         ];
         const annualHosting = 600;
         const annualCare = 348;
@@ -2191,6 +2218,11 @@
           newsletter: false,
           social: false,
           analytics: false,
+          logoAi: false,
+          contentEdit: false,
+          contentSeo: false,
+          googleAds: false,
+          seoPosition: false,
           blog: p.blog,
           gsc: p.gsc,
         });
@@ -2270,6 +2302,14 @@
             (e) => (e.checked = e.value === s.billing),
           );
           optionGroup("#ec-seo", "ec-seo", seo, p.seo, s.seo);
+          q("#ec-seo-extras").innerHTML = seoServices.map(([key,label,price,description]) =>
+            '<label class="ec-addon ec-seo-addon ec-interactive">' +
+            '<span class="ec-addon-content"><strong>' + label + '</strong><small>' + description +
+            ' · +' + money(price) + '</small></span>' +
+            '<input class="ec-toggle" type="checkbox" role="switch" id="ec-seo-addon-' + key +
+            '" aria-label="' + label + '" ' + (s[key] ? 'checked ' : '') + '>' +
+            '<span class="ec-toggle-track" aria-hidden="true"></span></label>'
+          ).join("");
           optionGroup(
             "#ec-contact",
             "ec-contact",
@@ -2344,6 +2384,9 @@
             if (s[key] && !(mayBeIncluded && p[key]))
               items.push([label, price]);
           });
+          seoServices.forEach(([key,label,price]) => {
+            if (s[key]) items.push([label, price]);
+          });
           // W Mini Start opieka jest opłacana za 2 lata w ramach abonamentu.
           if (p.recurring && s.care)
             items.push(["Opieka techniczna na 24 miesiące", annualCare * 2]);
@@ -2381,6 +2424,9 @@
            .filter((language, index, languages) => language && languages.indexOf(language) === index);
           extraServices.forEach(([key,, ,mayBeIncluded]) => {
             s[key] = (mayBeIncluded && !!p[key]) || q("#ec-addon-" + key).checked;
+          });
+          seoServices.forEach(([key]) => {
+            s[key] = q("#ec-seo-addon-" + key).checked;
           });
         }
         function baseUpdate() {
@@ -2448,6 +2494,8 @@
             ["Pakiet", p.name],
             ["Zakres", p.structure],
             ["SEO", seo[s.seo][0]],
+            ["Dodatkowe usługi SEO", seoServices.filter(([key]) => s[key])
+              .map(([,label]) => label).join(", ") || "Bez dodatkowych usług"],
             ["Kontakt", contacts[s.contact][0]],
             ["Języki obce", (s.languages || []).join(", ") || "Bez dodatkowych języków"],
             ["Wybrane dodatki", a.items.length ? a.items.length + " pozycji" : "Bez dodatków"],
@@ -2788,6 +2836,8 @@
             "Dodatkowe sekcje: " + s.sections,
             "Dodatkowe podstrony: " + s.pages,
             "SEO: " + seo[s.seo][0],
+            ...seoServices.map(([key,label,price]) =>
+              label + ": " + (s[key] ? "Dodane, " + money(price) : "Nie")),
             "Kontakt: " + contacts[s.contact][0],
             "Szkolenie: " + trainingLabel(),
             "Dopłata za zmianę szkolenia: " + money(trainingCharge()),
