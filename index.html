@@ -1043,6 +1043,18 @@
         #eni-calc .ec-head h2 { font-size:19px; }
       }
 
+      #eni-calc .ec-existing-toggle { display:flex!important; justify-content:space-between; cursor:pointer; font-weight:600; font-size:12px; }
+      #eni-calc .ec-existing-toggle input[type=checkbox] { position:absolute; width:1px; height:1px; opacity:0; }
+      #eni-calc .ec-existing-toggle .ec-switch-track { margin-left:auto; position:relative; width:40px; height:22px; border-radius:13px; background:#b8c0c7; flex:0 0 40px; transition:background .16s ease; }
+      #eni-calc .ec-existing-toggle .ec-switch-track::before { content:""; position:absolute; width:16px; height:16px; top:3px; left:3px; background:#fff; border-radius:50%; transition:transform .16s ease; }
+      #eni-calc .ec-existing-toggle input:checked + .ec-switch-track { background:#E20B0C; }
+      #eni-calc .ec-existing-toggle input:checked + .ec-switch-track::before { transform:translateX(18px); }
+      #eni-calc .ec-existing-toggle input:focus-visible + .ec-switch-track { outline:3px solid #f4adb0; outline-offset:2px; }
+      #eni-calc .ec-final .ec-form-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      #eni-calc .ec-final .ec-form-grid .ec-full { grid-column:1/-1; }
+      #eni-calc .ec-final .ec-existing-site { margin-top:5px; }
+      #eni-calc .ec-final .ec-existing-site .ec-field { margin-top:5px; }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -1365,6 +1377,18 @@
                       maxlength="30"
                       placeholder="np. +48 600 000 000"
                   /></label>
+                </div>
+                <div class="ec-existing-site">
+                  <label class="ec-existing-toggle" for="ec-existing-check">
+                    <span>Czy masz swoją stronę/sklep?</span>
+                    <input id="ec-existing-check" name="has_site" type="checkbox" role="switch" aria-controls="ec-existing-url-wrap">
+                    <span class="ec-switch-track" aria-hidden="true"></span>
+                  </label>
+                  <div id="ec-existing-url-wrap" hidden>
+                    <label class="ec-field" for="ec-existing-url">Link do Twojej strony/sklepu
+                      <input id="ec-existing-url" name="existing_site_url" type="url" maxlength="500" placeholder="https://twojastrona.pl">
+                    </label>
+                  </div>
                 </div>
                 <input
                   id="ec-quote-payload"
@@ -2061,80 +2085,30 @@
           });
         }
         function baseSummary(baseChoice) {
-          const p = current,
-            s = states[p.id],
-            a = calculate();
-          const rows = [
+          const p = current, s = states[p.id], a = calculate();
+          const project = p.price + a.extra;
+          const simpleRows = [
             ["Pakiet", p.name],
-            [
-              "Zakres bazowy",
-              p.structure + (p.chips.length ? " — " + p.chips.join(", ") : ""),
-            ],
-            [
-              "Rozliczenie",
-              p.recurring
-                ? miniSchedule() + " · umowa 24 mies."
-                : money(p.price + a.extra) + " jednorazowo za stronę i dodatki",
-            ],
-            ["Dodatkowe sekcje", s.sections],
-            ["Dodatkowe podstrony", s.pages],
+            ["Zakres", p.structure],
             ["SEO", seo[s.seo][0]],
             ["Kontakt", contacts[s.contact][0]],
-            ["Szkolenie", trainingLabel()],
-            [
-              "Sesje poprawek",
-              p.revisions +
-                s.revisions +
-                " łącznie (" +
-                p.revisions +
-                " w cenie, " +
-                s.revisions +
-                " dodatkowych)",
-            ],
-            ["Hosting", hostingDescription(p)],
-            ["Moduł bloga lub realizacji", s.blog ? "Tak" : "Nie"],
-            ["Google Search Console", s.gsc ? "Tak" : "Nie"],
+            ["Język obcy", s.language || "Bez dodatkowego języka"],
+            ["Wybrane dodatki", a.items.length ? a.items.length + " pozycji" : "Bez dodatków"],
+            ["Hosting / opieka", hostingDescription(p)]
           ];
+          const row = (label,value) =>
+            '<div class="ec-line"><span>' + label + '</span><span>' + value + '</span></div>';
+          const lines = simpleRows.map(([label,value]) => row(label,value)).join("");
+          const total = p.recurring ? a.contract : a.total;
           q("#ec-summary").innerHTML =
-            `<h3>${baseChoice ? "Wybrano pakiet bazowy: " : "Twoja konfiguracja: "}${p.name}</h3>${baseChoice ? '<p class="ec-result-note">Wybrany zakres bazowy jest gotowy do dalszego kontaktu z agencją. Uzupełnij formularz poniżej, aby przygotować zapytanie.</p>' : ""}` +
-            rows
-              .map(
-                (x) =>
-                  `<div class="ec-line"><span>${x[0]}</span><span>${x[1]}</span></div>`,
-              )
-              .join("") +
-            '<h3 style="margin-top:24px">Pozostały zakres bazowy</h3><div class="ec-scope">' +
-            fixed(p)
-              .filter((x) => x[1])
-              .map(
-                (x) =>
-                  `<label><input type="checkbox" checked disabled><span>${x[0]}</span></label>`,
-              )
-              .join("") +
-            '</div><div class="ec-summary-total">' +
-            [
-              [
-                p.recurring
-                  ? "Abonament bazowy przez 24 miesiące"
-                  : "Wykonanie strony",
-                p.recurring ? a.contract - a.extra : a.year,
-              ],
-              ...a.items,
-              ...(a.host
-                ? [
-                    [
-                      "Hosting i opieka / rok",
-                      paymentInfo().hostInitial,
-                    ],
-                  ]
-                : []),
-            ]
-              .map(
-                (x) =>
-                  `<div class="ec-line"><span>${x[0]}</span><span>${money(x[1])}</span></div>`,
-              )
-              .join("") +
-            `<div class="ec-line" style="margin-top:12px"><span>${p.recurring ? "Łącznie za 24 miesiące" : "Do zapłaty na start"}</span><strong>${money(p.recurring ? a.contract : paymentInfo().initial)}</strong></div></div><p class="ec-note">${p.recurring ? "Umowa na 24 miesiące. Łączny koszt umowy z dodatkami: " + money(a.contract) + "." : a.host ? hostingDescription(p) : p.hosting === "year" ? "Hosting i opieka w cenie przez pierwszy rok; dalsza cena do ustalenia." : "Hosting poza bazą pakietu."} Ceny rozszerzeń są przykładowe. Sesje poprawek i modyfikacje od 69 zł — w makiecie 69 zł za sesję. Kwoty netto; VAT według właściwej stawki.</p>`;
+            '<h3>' + (baseChoice ? "Wybrano pakiet: " : "Twoja konfiguracja: ") + p.name + '</h3>' +
+            lines + '<div class="ec-summary-total">' +
+            row(p.recurring ? "Łącznie za 24 miesiące" : "Projekt i usługi łącznie",money(total)) +
+            (p.recurring ? row("Rata pakietu i dodatków",miniSchedule()) :
+              row("Wartość projektu z dodatkami",money(project)) +
+              (a.host ? row("Usługi roczne z góry",money(a.host)) : "")) +
+            '</div>' +
+            '<p class="ec-note">Ceny netto. Dodatki i usługi oznaczone jako robocze wymagają potwierdzenia w ofercie.</p>';
         }
         let wizardStep = 0;
         let wizardPanes = [];
@@ -2356,55 +2330,53 @@
           }).format(n) + " zł";
         function hostingDescription(p = current) {
           const s = states[p.id];
-          if (p.hosting !== "optional") return hostingText(p);
-          return s.hosting
-            ? "Hosting i opieka: 948 zł za rok, płatne z góry"
-            : "Bez hostingu i opieki w wycenie";
+          if (p.hosting === "year") return "Hosting i opieka w cenie na 1 rok";
+          if (p.recurring)
+            return "Hosting w abonamencie" + (s.care ? "; opieka na 24 mies. w ratach" : "; bez dodatkowej opieki");
+          const parts = [];
+          if(s.hosting) parts.push("Hosting: " + money(annualHosting) + "/rok z góry");
+          if(s.care) parts.push("Opieka: " + money(annualCare) + "/rok z góry");
+          return parts.length ? parts.join("; ") : "Bez hostingu i opieki w wycenie";
         }
         function paymentInfo() {
-          const p = current, s = states[p.id], a = calculate();
+          const p = current, a = calculate();
           const principal = p.price + a.extra;
-          const hostInitial = p.hosting === "optional" && s.hosting ? 948 : 0;
+          const deposit = Math.round(principal * 50) / 100;
           return {
             eligible: !p.recurring,
             principal,
-            hostInitial,
-            initial: principal + hostInitial,
-            total: a.total,
+            deposit,
+            remaining: principal - deposit,
+            hostInitial: a.host,
+            initial: deposit + a.host,
+            total: a.total
           };
         }
         function paymentDescription() {
           const b = paymentInfo();
           if (!b.eligible) return "";
-          return money(b.principal) + " jednorazowo za projekt i dodatki" +
-            (b.hostInitial ? " + 948 zł za rok hostingu z góry." : ".");
+          return "Zaliczka 50% za projekt i dodatki: " + decimalMoney(b.deposit) +
+            (b.hostInitial ? " + roczne usługi płatne z góry: " + money(b.hostInitial) : "") + ".";
         }
         function remainingPaymentDescription() {
-          return current.hosting === "year"
-            ? "Pierwszy rok hostingu i opieki jest w cenie pakietu. Warunki odnowienia do ustalenia."
-            : states[current.id].hosting
-              ? "Hosting opłacony za cały pierwszy rok. Odnowienie: 948 zł za kolejny rok."
-              : "Brak kolejnych opłat w tej wycenie.";
+          const b = paymentInfo();
+          if(!b.eligible) return "";
+          return "Pozostałe 50% projektu: " + decimalMoney(b.remaining) +
+            ". Termin zapłaty zgodnie z umową.";
         }
         function singlePaymentUpdate() {
           baseUpdate();
           const b = paymentInfo();
           q("#ec-payment-aside").hidden = !b.eligible;
-          if (b.eligible) {
-            q("#ec-host-label").textContent = "Hosting / rok";
+          if(b.eligible) {
+            q("#ec-host-label").textContent = states[current.id].hosting && states[current.id].care
+              ? "Hosting + opieka / rok" : states[current.id].hosting ? "Hosting / rok" : "Opieka / rok";
             q("#ec-host-cost").textContent = money(b.hostInitial);
             q("#ec-total").textContent = money(b.initial);
-            q("#ec-total-label").textContent = "Do zapłaty na start";
+            q("#ec-total-label").textContent = "Zaliczka 50% + usługi na start";
             q("#ec-payment-aside").innerHTML =
-              '<span>Płatność jednorazowa</span><strong>' +
-              decimalMoney(b.initial) +
-              '</strong><p class="ec-muted">Projekt i dodatki opłacone w całości.' +
-              (b.hostInitial ? " Hosting za cały pierwszy rok płatny z góry." : "") +
-              '</p>' +
-              (states[current.id].hosting
-                ? '<p class="ec-muted" style="margin-top:10px">Łącznie z hostingiem w pierwszym roku: ' +
-                  money(b.total) + '.</p>'
-                : "");
+              '<span>Do zapłaty na start</span><strong>' + decimalMoney(b.initial) +
+              '</strong><p class="ec-muted">Pozostałe 50% projektu: ' + decimalMoney(b.remaining) + '</p>';
             q("#ec-paynote").textContent = paymentDescription();
           }
           q("#ec-items").removeAttribute("aria-label");
@@ -2416,31 +2388,23 @@
             const block = document.createElement("section");
             block.className = "ec-payment-summary";
             const h = document.createElement("h3");
-            h.textContent = "Płatność jednorazowa";
-            const p = document.createElement("p");
-            p.textContent = paymentDescription();
-            const start = document.createElement("p");
-            start.id = "ec-upfront-summary";
-            start.style.marginTop = "12px";
-            start.textContent = "Do zapłaty na start: " + decimalMoney(b.initial) + ".";
+            h.textContent = "Zaliczka 50% wartości projektu";
+            const first = document.createElement("p");
+            first.textContent = "50% za projekt i dodatki: " + decimalMoney(b.deposit);
+            const second = document.createElement("p");
+            second.textContent = "Usługi roczne płatne z góry: " + money(b.hostInitial);
+            const amount = document.createElement("p");
+            amount.style.fontWeight = "700";
+            amount.textContent = "Do zapłaty na start: " + decimalMoney(b.initial);
             const note = document.createElement("p");
             note.className = "ec-muted";
             note.textContent = remainingPaymentDescription();
-            block.append(h, p, start, note);
-            if (states[current.id].hosting) {
-              const total = document.createElement("p");
-              total.id = "ec-host-year-total";
-              total.style.marginTop = "12px";
-              total.textContent = "Łącznie w pierwszym roku: " + decimalMoney(b.total) + ".";
-              block.append(total);
-            }
+            block.append(h,first,second,amount,note);
             q("#ec-summary").append(block);
           }
           q("#ec-send-result").hidden = true;
           q("#ec-form-error").hidden = true;
-          all("#ec-lead-form [aria-invalid]").forEach(e =>
-            e.removeAttribute("aria-invalid")
-          );
+          all("#ec-lead-form [aria-invalid]").forEach(el => el.removeAttribute("aria-invalid"));
           q("#ec-quote-payload").value = quoteText();
         }
         function quoteText() {
@@ -2467,9 +2431,12 @@
               " w cenie, " +
               s.revisions +
               " dodatkowych)",
-            "Hosting: " + hostingDescription(p),
-            "Moduł bloga lub realizacji: " + (s.blog ? "Tak" : "Nie"),
-            "Konfiguracja Google Search Console: " + (s.gsc ? "Tak" : "Nie"),
+            "Hosting i opieka: " + hostingDescription(p),
+            "Dodatkowy język strony: " + (s.language || "Nie"),
+            ...extraServices.map(([key,label,price,mayBeIncluded]) =>
+              label + ": " + (s[key] ? ((mayBeIncluded && p[key]) ? "W cenie pakietu" : "Dodane, " + money(price)) : "Nie")),
+            "Czy ma stronę/sklep: " + (q("#ec-existing-check").checked ? "Tak" : "Nie"),
+            "Link do istniejącej strony: " + (q("#ec-existing-check").checked ? q("#ec-existing-url").value.trim() : "Brak"),
             "",
             "POZOSTAŁY ZAKRES BAZOWY",
             ...fixed(p).filter((x) => x[1]).map((x) => "W cenie: " + x[0]),
@@ -2502,6 +2469,8 @@
             );
           if (b.eligible)
             lines.push(
+              "Zaliczka 50% wartości projektu: " + decimalMoney(b.deposit),
+              "Hosting i opieka za rok z góry: " + money(b.hostInitial),
               "Do zapłaty na start: " + decimalMoney(b.initial),
               remainingPaymentDescription(),
             );
@@ -2516,10 +2485,19 @@
           event.preventDefault();
           const name = q("#ec-client-name"),
             email = q("#ec-client-email"),
-            phone = q("#ec-client-phone");
+            phone = q("#ec-client-phone"),
+            existing = q("#ec-existing-check"),
+            site = q("#ec-existing-url");
           name.value = name.value.trim();
           email.value = email.value.trim();
           phone.value = phone.value.trim();
+          site.value = site.value.trim();
+          site.required = existing.checked;
+          site.setCustomValidity(
+            existing.checked && !/^https?:\/\/[^\s.]+\.[^\s]+/i.test(site.value)
+              ? "Podaj pełny adres strony zaczynający się od https://."
+              : ""
+          );
           name.setCustomValidity(
             name.value ? "" : "Podaj imię i nazwisko lub nazwę firmy.",
           );
@@ -2530,7 +2508,7 @@
               ? "Podaj poprawny numer telefonu lub pozostaw to pole puste."
               : "",
           );
-          const fields = [name, email, phone],
+          const fields = existing.checked ? [name,email,phone,site] : [name,email,phone],
             invalid = fields.filter((e) => !e.checkValidity());
           fields.forEach((e) => {
             if (!e.checkValidity()) e.setAttribute("aria-invalid", "true");
@@ -2557,6 +2535,8 @@
             "Imię i nazwisko / Firma: " + name.value,
             "E-mail: " + email.value,
             "Telefon: " + (phone.value || "Nie podano"),
+            "Czy posiada stronę/sklep: " + (existing.checked ? "Tak" : "Nie"),
+            "Link: " + (existing.checked ? site.value : "Nie dotyczy"),
             "",
             quote,
           ].join(nl);
@@ -2564,6 +2544,14 @@
           q("#ec-send-status").textContent =
             "Dane są poprawne. To podgląd wiadomości — makieta nie wysłała e-maila.";
           q("#ec-send-result").hidden = false;
+        });
+        q("#ec-existing-check").addEventListener("change", () => {
+          const active = q("#ec-existing-check").checked;
+          q("#ec-existing-url-wrap").hidden = !active;
+          q("#ec-existing-url").required = active;
+          q("#ec-existing-url").setCustomValidity("");
+          q("#ec-existing-url").removeAttribute("aria-invalid");
+          q("#ec-send-result").hidden = true;
         });
         all('#ec-lead-form input:not([type="hidden"])').forEach((e) =>
           e.addEventListener("input", () => {
