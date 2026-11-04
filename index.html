@@ -1167,40 +1167,6 @@
                 <section class="ec-section">
                   <h3>Hosting i opieka techniczna</h3>
                   <div id="ec-hosting"></div>
-                  <div
-                    class="ec-options"
-                    id="ec-host-billing-options"
-                    role="group"
-                    aria-label="Sposób płatności za hosting"
-                    hidden
-                  >
-                    <label class="ec-option ec-interactive"
-                      ><input
-                        type="radio"
-                        name="ec-host-billing"
-                        value="monthly"
-                        checked
-                      /><span
-                        ><strong>Hosting w ratach miesięcznych</strong
-                        ><small
-                          >12 płatności po 79 zł · łącznie 948 zł za rok</small
-                        ></span
-                      ><span class="ec-tag">79 zł / mies.</span></label
-                    >
-                    <label class="ec-option ec-interactive"
-                      ><input
-                        type="radio"
-                        name="ec-host-billing"
-                        value="annual"
-                      /><span
-                        ><strong>Hosting za rok z góry</strong
-                        ><small
-                          >Jedna płatność za 12 miesięcy hostingu i
-                          opieki</small
-                        ></span
-                      ><span class="ec-tag">948 zł / rok</span></label
-                    >
-                  </div>
                 </section>
                 <section class="ec-section">
                   <h3>Moduły i konfiguracja</h3>
@@ -1251,8 +1217,8 @@
                 ></div>
                 <p class="ec-note">
                   Ceny rozszerzeń są przykładowe. Od pakietu Start: strona i
-                  dodatki płatne jednorazowo. Hosting opcjonalnie: 948 zł/rok
-                  lub 12 rat po 79 zł, pierwsza rata na start. Kwoty netto; VAT według właściwej stawki.
+                  dodatki płatne jednorazowo. Hosting opcjonalnie: 948 zł za rok,
+                  płatne z góry. Kwoty netto; VAT według właściwej stawki.
                 </p>
               </aside>
             </div>
@@ -1764,7 +1730,6 @@
           revisions: 0,
           billing: "monthly",
           hosting: false,
-          hostBilling: "annual",
           blog: p.blog,
           gsc: p.gsc,
         });
@@ -1786,9 +1751,6 @@
           const p = current,
             s = states[p.id];
           fillTraining();
-          all('[name="ec-host-billing"]').forEach(
-            (e) => (e.checked = e.value === s.hostBilling),
-          );
           q("#ec-badge").textContent = "Wybrany pakiet: " + p.name;
           q("#ec-title").textContent = "Dopasuj pakiet " + p.name + ".";
           q("#ec-subtitle").textContent =
@@ -1839,7 +1801,7 @@
             .join("");
           q("#ec-hosting").innerHTML =
             p.hosting === "optional"
-              ? `<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-hosting-check" ${s.hosting ? "checked" : ""}><span>Dodaj hosting i opiekę techniczną<small>948 zł / rok z góry lub 12 rat po 79 zł</small></span></label>`
+              ? `<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-hosting-check" ${s.hosting ? "checked" : ""}><span>Dodaj hosting i opiekę techniczną<small>948 zł za rok, płatne z góry</small></span></label>`
               : `<label class="ec-checkbox"><input type="checkbox" checked disabled><span>${hostingText(p)}<small>W cenie pakietu${p.hosting === "year" ? "; warunki po pierwszym roku do ustalenia" : ""}.</small></span></label>`;
           q("#ec-modules").innerHTML = [
             ["blog", "Moduł bloga lub realizacji", p.blog, 249],
@@ -1915,8 +1877,6 @@
           s.billing = val("ec-billing");
           s.hosting =
             p.hosting === "optional" && q("#ec-hosting-check").checked;
-          s.hostBilling =
-            p.hosting === "optional" ? val("ec-host-billing") : "annual";
           s.blog = q("#ec-blog").checked;
           s.gsc = q("#ec-gsc").checked;
         }
@@ -2037,9 +1997,7 @@
               ...(a.host
                 ? [
                     [
-                      paymentInfo().monthly
-                        ? "Pierwsza rata hostingu"
-                        : "Hosting i opieka / rok",
+                      "Hosting i opieka / rok",
                       paymentInfo().hostInitial,
                     ],
                   ]
@@ -2066,7 +2024,7 @@
             ? "Podgląd wyceny. Ta makieta nie wysyła zapytania."
             : current.recurring
               ? "Mini Start: łączna rata pakietu i dodatków przez 24 miesiące."
-              : "Strona i dodatki płatne jednorazowo. Hosting opcjonalnie: za rok z góry lub miesięcznie, z pierwszą ratą na start.";
+              : "Strona i dodatki płatne jednorazowo. Hosting opcjonalnie: wyłącznie za rok z góry.";
           [q("#ec-step1"), q("#ec-step2")].forEach((e, i) => {
             const active = i === (second ? 1 : 0);
             e.classList.toggle("active", active);
@@ -2212,27 +2170,18 @@
         function hostingDescription(p = current) {
           const s = states[p.id];
           if (p.hosting !== "optional") return hostingText(p);
-          if (!s.hosting) return "Bez hostingu i opieki w wycenie";
-          return s.hostBilling === "monthly"
-            ? "Hosting: 12 rat po 79 zł; pierwsza rata w płatności początkowej"
-            : "Hosting i opieka: 948 zł za rok z góry";
+          return s.hosting
+            ? "Hosting i opieka: 948 zł za rok, płatne z góry"
+            : "Bez hostingu i opieki w wycenie";
         }
         function paymentInfo() {
-          const p = current,
-            s = states[p.id],
-            a = calculate(),
-            monthly =
-              p.hosting === "optional" &&
-              s.hosting &&
-              s.hostBilling === "monthly",
-            hostInitial = s.hosting ? (monthly ? 79 : 948) : 0,
-            principal = p.price + a.extra;
+          const p = current, s = states[p.id], a = calculate();
+          const principal = p.price + a.extra;
+          const hostInitial = p.hosting === "optional" && s.hosting ? 948 : 0;
           return {
             eligible: !p.recurring,
             principal,
-            monthly,
             hostInitial,
-            remaining: monthly ? 869 : 0,
             initial: principal + hostInitial,
             total: a.total,
           };
@@ -2240,20 +2189,10 @@
         function paymentDescription() {
           const b = paymentInfo();
           if (!b.eligible) return "";
-          return (
-            money(b.principal) +
-            " jednorazowo za projekt i dodatki" +
-            (b.monthly
-              ? " + pierwsza rata hostingu 79 zł."
-              : b.hostInitial
-                ? " + 948 zł za rok hostingu z góry."
-                : ".")
-          );
+          return money(b.principal) + " jednorazowo za projekt i dodatki" +
+            (b.hostInitial ? " + 948 zł za rok hostingu z góry." : ".");
         }
         function remainingPaymentDescription() {
-          const b = paymentInfo();
-          if (b.monthly)
-            return "Pozostały hosting: 11 rat po 79 zł, razem 869 zł. Pierwsza rata została uwzględniona w kwocie na start.";
           return current.hosting === "year"
             ? "Pierwszy rok hostingu i opieki jest w cenie pakietu. Warunki odnowienia do ustalenia."
             : states[current.id].hosting
@@ -2262,39 +2201,22 @@
         }
         function singlePaymentUpdate() {
           baseUpdate();
-          const b = paymentInfo(),
-            enabled =
-              current.hosting === "optional" && states[current.id].hosting;
-          q("#ec-host-billing-options").hidden = !enabled;
-          all('[name="ec-host-billing"]').forEach(
-            (e) => (e.disabled = !enabled),
-          );
+          const b = paymentInfo();
           q("#ec-payment-aside").hidden = !b.eligible;
           if (b.eligible) {
-            q("#ec-host-label").textContent = b.monthly
-              ? "Pierwsza rata hostingu"
-              : "Hosting / rok";
+            q("#ec-host-label").textContent = "Hosting / rok";
             q("#ec-host-cost").textContent = money(b.hostInitial);
             q("#ec-total").textContent = money(b.initial);
             q("#ec-total-label").textContent = "Do zapłaty na start";
             q("#ec-payment-aside").innerHTML =
-              "<span>" +
-              (b.monthly
-                ? "Pozostałe raty — tylko hosting"
-                : "Płatność jednorazowa") +
-              "</span><strong>" +
-              (b.monthly ? "11 × 79 zł" : decimalMoney(b.initial)) +
-              '</strong><p class="ec-muted">' +
-              (b.monthly
-                ? "Pozostało " +
-                  money(b.remaining) +
-                  " za hosting. Pierwsze 79 zł jest już w kwocie na start."
-                : "Projekt i dodatki opłacone w całości.") +
-              "</p>" +
+              '<span>Płatność jednorazowa</span><strong>' +
+              decimalMoney(b.initial) +
+              '</strong><p class="ec-muted">Projekt i dodatki opłacone w całości.' +
+              (b.hostInitial ? " Hosting za cały pierwszy rok płatny z góry." : "") +
+              '</p>' +
               (states[current.id].hosting
                 ? '<p class="ec-muted" style="margin-top:10px">Łącznie z hostingiem w pierwszym roku: ' +
-                  money(b.total) +
-                  ".</p>"
+                  money(b.total) + '.</p>'
                 : "");
             q("#ec-paynote").textContent = paymentDescription();
           }
@@ -2307,16 +2229,13 @@
             const block = document.createElement("section");
             block.className = "ec-payment-summary";
             const h = document.createElement("h3");
-            h.textContent = b.monthly
-              ? "Projekt jednorazowo, hosting miesięcznie"
-              : "Płatność jednorazowa";
+            h.textContent = "Płatność jednorazowa";
             const p = document.createElement("p");
             p.textContent = paymentDescription();
             const start = document.createElement("p");
             start.id = "ec-upfront-summary";
             start.style.marginTop = "12px";
-            start.textContent =
-              "Do zapłaty na start: " + decimalMoney(b.initial) + ".";
+            start.textContent = "Do zapłaty na start: " + decimalMoney(b.initial) + ".";
             const note = document.createElement("p");
             note.className = "ec-muted";
             note.textContent = remainingPaymentDescription();
@@ -2325,16 +2244,15 @@
               const total = document.createElement("p");
               total.id = "ec-host-year-total";
               total.style.marginTop = "12px";
-              total.textContent =
-                "Łącznie w pierwszym roku: " + decimalMoney(b.total) + ".";
+              total.textContent = "Łącznie w pierwszym roku: " + decimalMoney(b.total) + ".";
               block.append(total);
             }
             q("#ec-summary").append(block);
           }
           q("#ec-send-result").hidden = true;
           q("#ec-form-error").hidden = true;
-          all("#ec-lead-form [aria-invalid]").forEach((e) =>
-            e.removeAttribute("aria-invalid"),
+          all("#ec-lead-form [aria-invalid]").forEach(e =>
+            e.removeAttribute("aria-invalid")
           );
           q("#ec-quote-payload").value = quoteText();
         }
