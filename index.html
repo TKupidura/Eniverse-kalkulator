@@ -1117,7 +1117,11 @@
       }
       #eni-calc .ec-addon:has(input:checked) { background:#fffafa; border-color:#e6a0a1; }
       #eni-calc .ec-addon:has(input:disabled) { cursor:default; }
-      #eni-calc .ec-addon-content { display:flex; flex-direction:column; gap:4px; flex:1; min-width:0; }
+      #eni-calc .ec-addon .ec-addon-content {
+        display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
+        gap:5px; width:auto; flex:1; min-width:0; font-size:14px; line-height:1.45;
+      }
+      #eni-calc .ec-addon .ec-toggle-track { display:block; width:45px; height:25px; flex:0 0 45px; }
       #eni-calc .ec-addon-content strong { font-size:14px; font-weight:600; }
       #eni-calc .ec-addon-content small { font-size:12px; color:#687684; }
       #eni-calc .ec-addon .ec-toggle { position:absolute; opacity:0; width:1px; height:1px; pointer-events:none; }
