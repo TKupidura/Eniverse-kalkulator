@@ -1379,6 +1379,12 @@
       #eni-calc .ec-pane[data-ec-step="0"] > .ec-section {
         border-bottom:0;
       }
+      /* Mini Start: separator tylko między zakresem pakietu a rozliczeniem abonamentu. */
+      #eni-calc .ec-pane[data-ec-step="0"] > #ec-billing-section:not([hidden]) {
+        border-top:1px solid var(--ec-line);
+        margin-top:14px;
+        padding-top:22px;
+      }
 
 </style>
 
