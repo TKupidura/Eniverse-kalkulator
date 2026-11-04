@@ -1591,8 +1591,20 @@
           p.hosting === "subscription"
             ? "Hosting na okres abonamentu"
             : p.hosting === "year"
-              ? "Hosting i opieka techniczna na 1 rok"
-              : "Hosting i opieka techniczna: opcjonalnie 948 zł/rok lub 79 zł/mies.";
+              ? "Hosting i opieka techniczna w cenie na pierwszy rok"
+              : "Hosting i opieka techniczna: usługi opcjonalne, płatne rocznie z góry";
+        // Ceny dodatków: stawki robocze netto, do potwierdzenia przed wdrożeniem.
+        const extraServices = [
+          ["maps", "Mapy Google", 50, false],
+          ["newsletter", "Newsletter", 300, false],
+          ["social", "Integracja z social media", 50, false],
+          ["analytics", "Google Analytics", 200, false],
+          ["gsc", "Google Search Console", 99, true],
+          ["blog", "Blog / Realizacje", 249, true],
+        ];
+        const annualHosting = 600;
+        const annualCare = 348;
+        const languagePrice = 490;
         const revisionText = (n) =>
           n === 0
             ? "Brak sesji poprawek"
@@ -1825,6 +1837,12 @@
           revisions: 0,
           billing: "monthly",
           hosting: false,
+          care: p.hosting === "year",
+          language: "",
+          maps: false,
+          newsletter: false,
+          social: false,
+          analytics: false,
           blog: p.blog,
           gsc: p.gsc,
         });
@@ -1894,19 +1912,33 @@
                 `<label class="ec-option ec-interactive"><input type="radio" name="ec-revisions" value="${n}" ${n === s.revisions ? "checked" : ""}><span><strong>${n === 0 ? "Bez dodatkowych sesji" : n === 1 ? "+1 sesja" : n === 2 ? "+2 sesje" : "+3 sesje"}</strong><small>${n ? "+" + money(n * 69) + " · łącznie " + (p.revisions + n) + " sesji" : "Zakres bazowy · " + p.revisions + " sesji"}</small></span></label>`,
             )
             .join("");
+          // Dodatki po prawej stronie listy elementów objętych pakietem.
+          q("#ec-addons").innerHTML = extraServices.map(([key,label,price,mayBeIncluded]) => {
+            const included = mayBeIncluded && !!p[key];
+            const checked = included || !!s[key];
+            return '<label class="ec-addon ec-interactive"><input type="checkbox" id="ec-addon-' +
+              key + '" ' + (checked ? 'checked ' : '') + (included ? 'disabled ' : '') +
+              '><span><strong>' + label + '</strong><small>' +
+              (included ? 'W cenie' : '+' + money(price)) + '</small></span></label>';
+          }).join("");
+          q("#ec-language").value = s.language || "";
+          const includedHost = p.hosting !== "optional";
+          const includedCare = p.hosting === "year";
           q("#ec-hosting").innerHTML =
-            p.hosting === "optional"
-              ? `<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-hosting-check" ${s.hosting ? "checked" : ""}><span>Dodaj hosting i opiekę techniczną<small>948 zł za rok, płatne z góry</small></span></label>`
-              : `<label class="ec-checkbox"><input type="checkbox" checked disabled><span>${hostingText(p)}<small>W cenie pakietu${p.hosting === "year" ? "; warunki po pierwszym roku do ustalenia" : ""}.</small></span></label>`;
-          q("#ec-modules").innerHTML = [
-            ["blog", "Moduł bloga lub realizacji", p.blog, 249],
-            ["gsc", "Konfiguracja Google Search Console", p.gsc, 99],
-          ]
-            .map(
-              ([key, label, base, price]) =>
-                `<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-${key}" ${s[key] || base ? "checked" : ""} ${base ? "disabled" : ""}><span>${label}<small>${base ? "W cenie pakietu" : "+" + money(price) + " jednorazowo · opcja dodatkowa"}</small></span></label>`,
-            )
-            .join("");
+            '<div class="ec-service-list">' +
+            '<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-hosting-check" ' +
+            (includedHost || s.hosting ? 'checked ' : '') + (includedHost ? 'disabled ' : '') +
+            '><span><strong>Hosting strony</strong><small>' +
+            (includedHost ? 'W cenie pakietu' : money(annualHosting) + ' / rok · z góry') +
+            '</small></span></label>' +
+            '<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-care-check" ' +
+            (includedCare || s.care ? 'checked ' : '') + (includedCare ? 'disabled ' : '') +
+            '><span><strong>Opieka techniczna</strong><small>' +
+            (includedCare ? 'W cenie przez pierwszy rok' :
+              p.recurring ? money(annualCare) + ' / rok · za 24 mies. w abonamencie' :
+              money(annualCare) + ' / rok · z góry') +
+            '</small></span></label></div>' +
+            '<p class="ec-note">Dwie niezależne usługi. W Mini Start hosting jest już częścią abonamentu.</p>';
           update();
         }
         function count(id) {
@@ -1917,9 +1949,7 @@
         }
         const val = (name) => q(`[name="${name}"]:checked`).value;
         function calculate() {
-          const p = current,
-            s = states[p.id],
-            items = [];
+          const p = current, s = states[p.id], items = [];
           if (s.sections)
             items.push(["Dodatkowe sekcje × " + s.sections, s.sections * 99]);
           if (s.pages)
@@ -1927,37 +1957,33 @@
           if (s.seo > p.seo)
             items.push([seo[s.seo][0], seo[s.seo][2] - seo[p.seo][2]]);
           if (s.contact > p.contact)
-            items.push([
-              contacts[s.contact][0],
-              contacts[s.contact][2] - contacts[p.contact][2],
-            ]);
+            items.push([contacts[s.contact][0], contacts[s.contact][2] - contacts[p.contact][2]]);
           if (s.revisions)
             items.push(["Dodatkowe sesje × " + s.revisions, s.revisions * 69]);
-          if (s.blog && !p.blog)
-            items.push(["Moduł bloga lub realizacji", 249]);
-          if (s.gsc && !p.gsc) items.push(["Google Search Console", 99]);
           if (trainingCharge())
-            items.push([
-              "Zmiana szkolenia: " + trainingLabel(),
-              trainingCharge(),
-            ]);
-          const extra = items.reduce((a, x) => a + x[1], 0),
-            year = p.recurring ? (s.billing === "annual" ? 649 : 708) : p.price,
-            host = s.hosting ? 948 : 0,
-            total = p.recurring
-              ? s.billing === "annual"
-                ? 649 + extra / 2
-                : ((5900 + Math.floor((extra * 100) / 24)) * 12) / 100
-              : year + extra + host;
+            items.push(["Zmiana szkolenia: " + trainingLabel(), trainingCharge()]);
+          if (s.language)
+            items.push(["Dodatkowy język: " + s.language, languagePrice]);
+          extraServices.forEach(([key,label,price,mayBeIncluded]) => {
+            if (s[key] && !(mayBeIncluded && p[key]))
+              items.push([label, price]);
+          });
+          // W Mini Start opieka jest opłacana za 2 lata w ramach abonamentu.
+          if (p.recurring && s.care)
+            items.push(["Opieka techniczna na 24 miesiące", annualCare * 2]);
+          const extra = items.reduce((sum,item) => sum + item[1], 0);
+          const year = p.recurring ? (s.billing === "annual" ? 649 : 708) : p.price;
+          const host = p.hosting === "optional"
+            ? (s.hosting ? annualHosting : 0) + (s.care ? annualCare : 0)
+            : 0;
+          const total = p.recurring
+            ? s.billing === "annual"
+              ? 649 + extra / 2
+              : ((5900 + Math.floor((extra * 100) / 24)) * 12) / 100
+            : year + extra + host;
           return {
-            items,
-            extra,
-            year,
-            host,
-            total,
-            contract: p.recurring
-              ? (s.billing === "annual" ? 1298 : 1416) + extra
-              : null,
+            items, extra, year, host, total,
+            contract: p.recurring ? (s.billing === "annual" ? 1298 : 1416) + extra : null
           };
         }
         function read() {
@@ -1972,8 +1998,11 @@
           s.billing = val("ec-billing");
           s.hosting =
             p.hosting === "optional" && q("#ec-hosting-check").checked;
-          s.blog = q("#ec-blog").checked;
-          s.gsc = q("#ec-gsc").checked;
+          s.care = p.hosting === "year" ? true : q("#ec-care-check").checked;
+          s.language = q("#ec-language").value;
+          extraServices.forEach(([key,, ,mayBeIncluded]) => {
+            s[key] = (mayBeIncluded && !!p[key]) || q("#ec-addon-" + key).checked;
+          });
         }
         function baseUpdate() {
           read();
@@ -1994,6 +2023,8 @@
           q("#ec-base-cost").textContent = money(a.year);
           q("#ec-extra").textContent = money(a.extra);
           q("#ec-host-row").hidden = !a.host;
+          q("#ec-host-label").textContent = s.hosting && s.care
+            ? "Hosting + opieka / rok" : s.hosting ? "Hosting / rok" : "Opieka / rok";
           q("#ec-host-cost").textContent = money(a.host);
           q("#ec-total-label").textContent =
             p.recurring || a.host
@@ -2005,7 +2036,7 @@
               ? "649 zł / rok + dodatki jednorazowe."
               : "12 × 59 zł + dodatki jednorazowe."
             : a.host
-              ? "Wykonanie, dodatki i hosting za rok płatne jednorazowo."
+              ? "Projekt, dodatki i wybrane usługi roczne płatne z góry."
               : p.hosting === "year"
                 ? "Hosting i opieka w cenie na pierwszy rok."
                 : "Hosting i opieka techniczna nie są doliczone.";
@@ -2623,12 +2654,6 @@
             decimalMoney(annual.regular) + " / rok";
           q("#ec-annual-detail").textContent =
             miniSchedule("annual") + " za pakiet i dodatki.";
-          all("#ec-modules small").forEach((e) => {
-            e.textContent = e.textContent.replace(
-              "jednorazowo",
-              "wliczone w raty",
-            );
-          });
           if (!a.items.length) q("#ec-items").textContent = "Brak dodatków.";
           q("#ec-items").setAttribute(
             "aria-label",
