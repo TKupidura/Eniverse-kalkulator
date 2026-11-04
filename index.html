@@ -849,7 +849,8 @@
       #eni-calc .ec-dotted { text-decoration:underline dotted; text-decoration-thickness:1px; text-underline-offset:3px; }
       #eni-calc .ec-card-meta { margin:12px 0 0; }
       #eni-calc .ec-card-meta div { display:flex; justify-content:space-between; gap:12px; margin:7px 0; font-size:12px; }
-      #eni-calc .ec-card-meta dt { color:#64717d; font-weight:600; }
+      #eni-calc .ec-card-meta dt { color:#64717d; font-weight:600; display:inline-flex; align-items:center; gap:8px; }
+      #eni-calc .ec-card-meta .ec-meta-icon { display:inline-flex; align-items:center; justify-content:center; width:15px; flex:0 0 15px; }
       #eni-calc .ec-card-meta dd { margin:0; text-align:right; }
       #eni-calc .ec-card-details { margin:16px 0 16px; padding:0; border:1px solid #E20B0C; border-radius:6px; background:#fff; color:#101112; font-size:12px; overflow:hidden; }
       #eni-calc .ec-card-details[open] { border-color:#E20B0C; box-shadow:none; }
@@ -2007,6 +2008,14 @@
             499,
           ],
         ];
+        // Wyświetlana nazwa SEO tylko w pakietach One Page i Wizytówka.
+        // Ceny oraz zakres wariantów pozostają niezmienione.
+        function seoName(p, index) {
+          const name = seo[index][0];
+          return (p.id === "one" || p.id === "wiz")
+            ? name.replace(/ na start$/, "")
+            : name;
+        }
         const contacts = [
           ["Kontakt podstawowy", "Przyciski kontaktowe: telefon i e-mail", 0],
           ["Formularz kontaktowy", "Standardowy formularz kontaktowy", 99],
@@ -2150,7 +2159,7 @@
             ["Dostosowanie do urządzeń mobilnych", true],
             [hostingText(p), p.hosting !== "optional"],
             [p.design, true],
-            [seo[p.seo][0], p.seo !== 0],
+            [seoName(p, p.seo), p.seo !== 0],
             [contacts[p.contact][0], true],
             [revisionText(p.revisions), p.revisions !== 0],
           ];
@@ -2173,7 +2182,7 @@
             <div class="ec-card-budget">${price}${p.recurring ? '<p class="ec-mini-saving">Przy płatności za rok z góry zyskujesz 1 miesiąc gratis.</p><p class="ec-muted ec-mini-small">Hosting w cenie · umowa na 24 miesiące</p>' : '<p class="ec-muted">Jednorazowa opłata za wykonanie strony</p>'}</div>
             <div class="ec-project-scale">${projectIcon(p)}<h3>${scale}</h3><p>${scaleNote}</p></div>
             <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul>${benefits}${originalPlan ? "" : cardRows(excluded)}</ul></div>
-            <dl class="ec-card-meta"><div><dt>▢ &nbsp;<span class="ec-dotted">Czas realizacji</span></dt><dd>${p.days ? `Do ${p.days} dni roboczych` : "Do zatwierdzenia"}</dd></div><div><dt>♢ &nbsp;<span class="ec-dotted">Rundy poprawek</span></dt><dd>${p.revisions ? p.revisions + " w cenie" : "Brak w cenie"}</dd></div>${p.recurring ? '<div><dt>◷ &nbsp;<span class="ec-dotted">Abonament</span></dt><dd>24 miesiące</dd></div>' : ''}</dl>
+            <dl class="ec-card-meta"><div><dt><span class="ec-meta-icon" aria-hidden="true">▢</span><span class="ec-dotted">Czas realizacji</span></dt><dd>${p.days ? `Do ${p.days} dni roboczych` : "Do zatwierdzenia"}</dd></div><div><dt><span class="ec-meta-icon" aria-hidden="true">♢</span><span class="ec-dotted">Rundy poprawek</span></dt><dd>${p.revisions ? p.revisions + " w cenie" : "Brak w cenie"}</dd></div>${p.recurring ? '<div><dt><span class="ec-meta-icon" aria-hidden="true">◷</span><span class="ec-dotted">Abonament</span></dt><dd>24 miesiące</dd></div>' : ''}</dl>
             <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><span class="ec-details-copy"><strong>Pełen zakres pakietu</strong><small>Sprawdź, co dokładnie zawiera cena</small></span></summary>${cardDetails(p)}</details>
             <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="${p.id}"><span>${p.id === "firm" ? "Wybieram Stronę Firmową" : "Wybieram " + (p.id === "wiz" ? "Wizytówkę" : p.name)}</span><span aria-hidden="true">↗</span></button>
             <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="${p.id}">Skonfiguruj pakiet <span aria-hidden="true">⚙</span></button></div>
@@ -2378,7 +2387,7 @@
           all('[name="ec-billing"]').forEach(
             (e) => (e.checked = e.value === s.billing),
           );
-          optionGroup("#ec-seo", "ec-seo", seo, p.seo, s.seo);
+          optionGroup("#ec-seo", "ec-seo", seo.map((variant,i) => [seoName(p,i), variant[1], variant[2]]), p.seo, s.seo);
           q("#ec-seo-extras").innerHTML = seoServices.map(([key,label,price,description]) =>
             '<label class="ec-addon ec-seo-addon ec-interactive">' +
             '<span class="ec-addon-content"><strong>' + label + '</strong><small>' + description +
@@ -2447,7 +2456,7 @@
           if (s.pages)
             items.push(["Dodatkowe podstrony × " + s.pages, s.pages * 199]);
           if (s.seo > p.seo)
-            items.push([seo[s.seo][0], seo[s.seo][2] - seo[p.seo][2]]);
+            items.push([seoName(p,s.seo), seo[s.seo][2] - seo[p.seo][2]]);
           if (s.contact > p.contact)
             items.push([contacts[s.contact][0], contacts[s.contact][2] - contacts[p.contact][2]]);
           if (s.revisions)
@@ -2570,7 +2579,7 @@
           const simpleRows = [
             ["Pakiet", p.name],
             ["Zakres", p.structure],
-            ["SEO", seo[s.seo][0]],
+            ["SEO", seoName(p,s.seo)],
             ["Dodatkowe usługi SEO", seoServices.filter(([key]) => s[key])
               .map(([,label]) => label).join(", ") || "Bez dodatkowych usług"],
             ["Kontakt", contacts[s.contact][0]],
@@ -2915,7 +2924,7 @@
               (p.chips.length ? " — " + p.chips.join(", ") : ""),
             "Dodatkowe sekcje: " + s.sections,
             "Dodatkowe podstrony: " + s.pages,
-            "SEO: " + seo[s.seo][0],
+            "SEO: " + seoName(p,s.seo),
             ...seoServices.map(([key,label,price]) =>
               label + ": " + (s[key] ? "Dodane, " + money(price) : "Nie")),
             "Kontakt: " + contacts[s.contact][0],
