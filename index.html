@@ -1,0 +1,2530 @@
+<!-- Eniverse — kalkulator HTML/CSS/JS. Wersja Elementor; źródłem ofert i cen jest eniverse-cennik.html od użytkownika. -->
+<!-- Ten fragment działa też jako samodzielny plik .html; nie wklejaj go jako pełnego dokumentu <html>. -->
+<style>
+
+      #eni-calc {
+        --ec-red: #dd0429;
+        --ec-ink: #101112;
+        --ec-muted: #5f6973;
+        --ec-line: #dce0e3;
+        --ec-soft: #f7f8fa;
+        --ec-white: #fff;
+        color: var(--ec-ink);
+        font:
+          400 14px/1.5 "DM Sans",
+          sans-serif;
+        isolation: isolate;
+        text-align: left;
+      }
+      #eni-calc * {
+        box-sizing: border-box;
+      }
+      #eni-calc [hidden] {
+        display: none !important;
+      }
+      #eni-calc h2,
+      #eni-calc h3,
+      #eni-calc p {
+        margin: 0;
+      }
+      #eni-calc button,
+      #eni-calc input {
+        font: inherit;
+      }
+      #eni-calc button {
+        cursor: inherit;
+      }
+      #eni-calc button:focus-visible,
+      #eni-calc input:focus-visible {
+        outline: 3px solid #dd042980;
+        outline-offset: 3px;
+      }
+      #eni-calc .ec-stage {
+        background: #edf0f2;
+        padding: 20px;
+        border-radius: 12px;
+      }
+      #eni-calc .ec-package {
+        background: white;
+        border: 1px solid var(--ec-line);
+        border-top: 4px solid var(--ec-red);
+        padding: 30px;
+        border-radius: 8px;
+        max-width: 440px;
+        margin: 10px auto;
+      }
+      #eni-calc .ec-kicker {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--ec-red);
+        font-weight: 700;
+      }
+      #eni-calc h2 {
+        font-size: 28px;
+        font-weight: 500;
+        letter-spacing: -0.04em;
+        line-height: 1.2;
+      }
+      #eni-calc h3 {
+        font-size: 15px;
+        font-weight: 600;
+      }
+      #eni-calc .ec-muted {
+        color: var(--ec-muted);
+        font-size: 12px;
+      }
+      #eni-calc .ec-price {
+        font-size: 38px;
+        letter-spacing: -0.05em;
+        font-weight: 500;
+      }
+      #eni-calc .ec-action {
+        background: var(--ec-red);
+        color: white;
+        border: 1px solid var(--ec-red);
+        border-radius: 6px;
+        padding: 11px 18px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+      }
+      #eni-calc .ec-secondary {
+        background: white;
+        color: var(--ec-ink);
+        border-color: var(--ec-line);
+      }
+      #eni-calc .ec-package ul {
+        padding-left: 20px;
+        margin: 22px 0;
+        line-height: 2;
+      }
+      #eni-calc .ec-package .ec-action {
+        width: 100%;
+      }
+      #eni-calc .ec-window {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 12px 44px #10111214;
+        overflow: hidden;
+      }
+      #eni-calc .ec-head {
+        padding: 24px 26px 18px;
+        border-bottom: 1px solid var(--ec-line);
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: flex-start;
+      }
+      #eni-calc .ec-head h2 {
+        margin: 5px 0 7px;
+      }
+      #eni-calc .ec-close {
+        border: 1px solid var(--ec-line);
+        background: white;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        font-size: 23px;
+        line-height: 1;
+      }
+      #eni-calc .ec-steps {
+        display: flex;
+        gap: 22px;
+        padding: 15px 26px;
+        background: var(--ec-soft);
+        border-bottom: 1px solid var(--ec-line);
+      }
+      #eni-calc .ec-step {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        color: var(--ec-muted);
+        font-size: 12px;
+      }
+      #eni-calc .ec-step span {
+        border-radius: 50%;
+        background: #e3e6e9;
+        width: 22px;
+        height: 22px;
+        display: grid;
+        place-items: center;
+      }
+      #eni-calc .ec-step.active {
+        color: var(--ec-ink);
+        font-weight: 600;
+      }
+      #eni-calc .ec-step.active span {
+        background: var(--ec-red);
+        color: white;
+      }
+      #eni-calc .ec-body {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 216px;
+      }
+      #eni-calc .ec-fields {
+        padding: 4px 26px 10px;
+        min-width: 0;
+      }
+      #eni-calc .ec-section {
+        padding: 20px 0;
+        border-bottom: 1px solid var(--ec-line);
+      }
+      #eni-calc .ec-section:last-child {
+        border-bottom: 0;
+      }
+      #eni-calc .ec-section h3 {
+        margin-bottom: 4px;
+      }
+      #eni-calc .ec-chips {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      #eni-calc .ec-chip {
+        padding: 6px 9px;
+        border-radius: 5px;
+        background: #fff3f5;
+        color: #9e0020;
+        font-size: 12px;
+      }
+      #eni-calc .ec-counter-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        margin-top: 14px;
+      }
+      #eni-calc .ec-counter {
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--ec-line);
+        border-radius: 6px;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+      #eni-calc .ec-counter button {
+        width: 32px;
+        height: 34px;
+        border: 0;
+        background: var(--ec-soft);
+        font-size: 18px;
+      }
+      #eni-calc .ec-counter button:disabled {
+        color: #b4b9be;
+      }
+      #eni-calc .ec-counter input {
+        width: 36px;
+        text-align: center;
+        border: 0;
+        padding: 0;
+        background: white;
+        color: var(--ec-ink);
+        appearance: textfield;
+        font-variant-numeric: tabular-nums;
+      }
+      #eni-calc input::-webkit-inner-spin-button {
+        appearance: none;
+      }
+      #eni-calc .ec-options {
+        display: grid;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      #eni-calc .ec-option {
+        position: relative;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 11px;
+        border: 1px solid var(--ec-line);
+        border-radius: 6px;
+        cursor: inherit;
+      }
+      #eni-calc .ec-option:has(input:checked) {
+        border-color: var(--ec-red);
+        background: #fff7f8;
+        box-shadow: inset 0 0 0 1px var(--ec-red);
+      }
+      #eni-calc .ec-option input {
+        accent-color: var(--ec-red);
+        margin: 3px 0 0;
+        flex-shrink: 0;
+      }
+      #eni-calc .ec-option strong {
+        display: block;
+        font-weight: 500;
+        font-size: 13px;
+      }
+      #eni-calc .ec-option small {
+        display: block;
+        color: var(--ec-muted);
+        font-size: 11px;
+        margin-top: 2px;
+      }
+      #eni-calc .ec-option .ec-tag {
+        margin-left: auto;
+        white-space: nowrap;
+        font-size: 12px;
+        color: var(--ec-muted);
+      }
+      #eni-calc .ec-revisions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      #eni-calc .ec-revisions .ec-option {
+        padding: 10px;
+        gap: 7px;
+      }
+      #eni-calc .ec-aside {
+        padding: 22px 18px;
+        background: var(--ec-soft);
+        border-left: 1px solid var(--ec-line);
+        min-width: 0;
+      }
+      #eni-calc .ec-badge {
+        display: inline-flex;
+        padding: 4px 8px;
+        background: white;
+        border: 1px solid var(--ec-line);
+        border-radius: 4px;
+        font-size: 11px;
+        margin-bottom: 18px;
+      }
+      #eni-calc .ec-aside h3 {
+        margin-bottom: 12px;
+      }
+      #eni-calc .ec-total {
+        font-size: 32px;
+        font-weight: 500;
+        letter-spacing: -0.05em;
+        line-height: 1.3;
+        font-variant-numeric: tabular-nums;
+      }
+      #eni-calc .ec-breakdown {
+        margin: 20px 0 0;
+        padding: 16px 0;
+        border-top: 1px solid var(--ec-line);
+        border-bottom: 1px solid var(--ec-line);
+        font-size: 12px;
+      }
+      #eni-calc .ec-line {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin: 8px 0;
+      }
+      #eni-calc .ec-line span:last-child {
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+      #eni-calc .ec-smalltitle {
+        margin-top: 20px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      #eni-calc .ec-foot {
+        padding: 18px 26px;
+        border-top: 1px solid var(--ec-line);
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        align-items: center;
+      }
+      #eni-calc .ec-foot .ec-muted {
+        max-width: 270px;
+        font-size: 11px;
+      }
+      #eni-calc .ec-summary {
+        padding: 24px 26px;
+      }
+      #eni-calc .ec-summary h3 {
+        margin-bottom: 14px;
+      }
+      #eni-calc .ec-summary .ec-line {
+        padding: 10px 0;
+        margin: 0;
+        border-bottom: 1px solid var(--ec-line);
+        font-size: 13px;
+      }
+      #eni-calc .ec-summary .ec-line span:last-child {
+        white-space: normal;
+        text-align: right;
+      }
+      #eni-calc .ec-summary-total {
+        background: var(--ec-soft);
+        border-radius: 7px;
+        padding: 18px;
+        margin-top: 20px;
+      }
+      #eni-calc .ec-summary-total .ec-line {
+        border: 0;
+        padding: 3px 0;
+      }
+      #eni-calc .ec-summary-total strong {
+        font-size: 22px;
+        font-weight: 500;
+        letter-spacing: -0.03em;
+      }
+      #eni-calc .ec-note {
+        margin-top: 14px !important;
+        font-size: 11px;
+        color: var(--ec-muted);
+      }
+      @media (max-width: 620px) {
+        #eni-calc .ec-body {
+          grid-template-columns: 1fr;
+        }
+        #eni-calc .ec-aside {
+          border-left: 0;
+          border-top: 1px solid var(--ec-line);
+          padding: 20px;
+        }
+        #eni-calc .ec-head,
+        #eni-calc .ec-fields,
+        #eni-calc .ec-summary {
+          padding-left: 18px;
+          padding-right: 18px;
+        }
+        #eni-calc .ec-stage {
+          padding: 10px;
+        }
+        #eni-calc .ec-foot {
+          padding: 16px 18px;
+          flex-wrap: wrap;
+        }
+        #eni-calc .ec-foot .ec-action {
+          flex: 1;
+        }
+        #eni-calc .ec-foot .ec-muted {
+          max-width: none;
+          width: 100%;
+        }
+        #eni-calc .ec-option {
+          flex-wrap: wrap;
+        }
+        #eni-calc .ec-option .ec-tag {
+          margin-left: 24px;
+        }
+        #eni-calc .ec-revisions .ec-option {
+          flex-wrap: nowrap;
+        }
+        #eni-calc .ec-counter button {
+          height: 44px;
+          width: 38px;
+        }
+        #eni-calc .ec-counter input {
+          font-size: 16px;
+        }
+        #eni-calc .ec-close {
+          width: 44px;
+          height: 44px;
+        }
+      }
+      #eni-calc .ec-page {
+        background: var(--ec-white);
+        padding: 24px 18px;
+      }
+      #eni-calc .ec-nav {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding-bottom: 22px;
+        border-bottom: 1px solid var(--ec-line);
+        margin-bottom: 28px;
+        padding-right: 80px;
+      }
+      #eni-calc .ec-brand {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.06em;
+      }
+      #eni-calc .ec-brand b {
+        color: var(--ec-red);
+      }
+      #eni-calc .ec-page-title {
+        max-width: 650px;
+        margin: 10px 0 12px;
+        font-size: 38px;
+        letter-spacing: -0.045em;
+        font-weight: 500;
+        line-height: 1.15;
+      }
+      #eni-calc .ec-intro {
+        color: var(--ec-muted);
+        max-width: 620px;
+        margin-bottom: 26px;
+      }
+      #eni-calc .ec-packages {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+      #eni-calc .ec-package {
+        max-width: none;
+        margin: 0;
+        padding: 20px 16px;
+        display: flex;
+        flex-direction: column;
+        border-top-width: 3px;
+        min-width: 0;
+      }
+      #eni-calc .ec-package h2 {
+        font-size: 25px;
+        margin: 7px 0 0;
+      }
+      #eni-calc .ec-package .ec-price {
+        font-size: 33px;
+        white-space: nowrap;
+      }
+      #eni-calc .ec-pack-price {
+        margin-top: 18px;
+        min-height: 86px;
+      }
+      #eni-calc .ec-package ul {
+        list-style: none;
+        padding: 0;
+        line-height: 1.5;
+        margin: 12px 0 14px;
+      }
+      #eni-calc .ec-package li {
+        display: flex;
+        gap: 7px;
+        padding: 8px 0;
+        border-bottom: 1px solid #edf0f2;
+        font-size: 12px;
+      }
+      #eni-calc .ec-tick {
+        color: var(--ec-red);
+        flex-shrink: 0;
+      }
+      #eni-calc .ec-package details {
+        font-size: 12px;
+        margin: 0 0 18px;
+      }
+      #eni-calc .ec-package summary {
+        font-weight: 600;
+        padding: 8px 0;
+        color: var(--ec-ink);
+      }
+      #eni-calc .ec-card-actions {
+        display: grid;
+        gap: 8px;
+        margin-top: auto;
+        padding-top: 10px;
+      }
+      #eni-calc .ec-card-actions .ec-action {
+        font-size: 12px;
+        padding: 10px 6px;
+        gap: 4px;
+        min-height: 42px;
+      }
+      #eni-calc .ec-card-note {
+        font-size: 11px;
+        color: var(--ec-muted);
+        margin-top: 10px;
+      }
+      #eni-calc .ec-off {
+        color: var(--ec-muted);
+      }
+      #eni-calc .ec-modal-stage {
+        background: #edf0f2;
+        padding: 18px;
+        border-radius: 8px;
+      }
+      #eni-calc .ec-window {
+        max-width: 820px;
+        margin: auto;
+      }
+      #eni-calc .ec-scope {
+        display: grid;
+        gap: 9px;
+        margin-top: 14px;
+      }
+      #eni-calc .ec-scope label {
+        display: flex;
+        align-items: flex-start;
+        gap: 9px;
+        font-size: 12px;
+      }
+      #eni-calc .ec-scope input {
+        accent-color: var(--ec-red);
+        margin: 3px 0 0;
+        flex-shrink: 0;
+      }
+      #eni-calc .ec-excluded {
+        font-size: 11px;
+        color: var(--ec-muted);
+        margin-top: 12px !important;
+      }
+      #eni-calc .ec-checkbox {
+        display: flex;
+        gap: 9px;
+        padding: 11px 0;
+        align-items: flex-start;
+        font-size: 13px;
+      }
+      #eni-calc .ec-checkbox input {
+        accent-color: var(--ec-red);
+        margin-top: 4px;
+      }
+      #eni-calc .ec-checkbox small {
+        display: block;
+        font-size: 11px;
+        color: var(--ec-muted);
+      }
+      #eni-calc .ec-dim {
+        opacity: 0.55;
+      }
+      #eni-calc .ec-summary .ec-scope {
+        border-top: 1px solid var(--ec-line);
+        padding-top: 14px;
+      }
+      #eni-calc .ec-summary .ec-line span {
+        max-width: 64%;
+        overflow-wrap: anywhere;
+      }
+      #eni-calc .ec-revisions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      #eni-calc .ec-aside .ec-line {
+        flex-wrap: wrap;
+        gap: 3px;
+      }
+      #eni-calc .ec-aside .ec-line span:last-child {
+        margin-left: auto;
+      }
+      #eni-calc .ec-result-note {
+        background: #fff3f5;
+        border-left: 3px solid var(--ec-red);
+        padding: 12px;
+        margin: 14px 0;
+        font-size: 12px;
+      }
+      #eni-calc .ec-pricing-note {
+        margin-top: 24px;
+        font-size: 11px;
+        color: var(--ec-muted);
+      }
+      @media (min-width: 980px) {
+        #eni-calc .ec-packages {
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 10px;
+        }
+        #eni-calc .ec-package {
+          padding: 18px 12px;
+        }
+        #eni-calc .ec-package h2 {
+          font-size: 22px;
+        }
+        #eni-calc .ec-package .ec-price {
+          font-size: 29px;
+        }
+      }
+      @media (max-width: 760px) {
+        #eni-calc .ec-packages {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        #eni-calc .ec-modal-stage {
+          padding: 10px;
+        }
+        #eni-calc .ec-page-title {
+          font-size: 30px;
+        }
+      }
+      @media (max-width: 470px) {
+        #eni-calc .ec-packages {
+          grid-template-columns: 1fr;
+        }
+        #eni-calc .ec-page {
+          padding: 18px 10px;
+        }
+        #eni-calc .ec-package {
+          padding: 22px;
+        }
+        #eni-calc .ec-option .ec-tag {
+          white-space: normal;
+        }
+        #eni-calc .ec-counter-row {
+          flex-wrap: wrap;
+        }
+        #eni-calc .ec-foot .ec-action {
+          min-width: 100%;
+        }
+        #eni-calc .ec-revisions {
+          grid-template-columns: 1fr;
+        }
+        #eni-calc .ec-modal-stage {
+          padding: 5px;
+        }
+      }
+      #eni-calc .ec-payment-aside {
+        border-top: 1px solid var(--ec-line);
+        padding-top: 14px;
+        margin-top: 16px;
+        font-size: 12px;
+      }
+      #eni-calc .ec-payment-aside strong {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        margin: 4px 0;
+        font-variant-numeric: tabular-nums;
+      }
+      #eni-calc .ec-payment-summary {
+        padding: 16px;
+        background: #fff7f8;
+        border: 1px solid #f3c5ce;
+        border-radius: 7px;
+        margin: 20px 0;
+      }
+      #eni-calc .ec-payment-summary h3 {
+        margin: 0 0 8px;
+      }
+      #eni-calc .ec-payment-summary p {
+        font-size: 13px;
+      }
+      #eni-calc .ec-payment-summary .ec-muted {
+        font-size: 11px;
+        margin-top: 8px;
+      }
+      #eni-calc .ec-lead {
+        padding: 26px;
+        border-top: 1px solid var(--ec-line);
+      }
+      #eni-calc .ec-lead h3 {
+        font-size: 23px;
+        letter-spacing: -0.03em;
+        margin: 7px 0 10px;
+        font-weight: 500;
+      }
+      #eni-calc .ec-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin: 22px 0 12px;
+      }
+      #eni-calc .ec-field {
+        font-size: 12px;
+        display: block;
+        min-width: 0;
+      }
+      #eni-calc .ec-full {
+        grid-column: 1/-1;
+      }
+      #eni-calc .ec-field input {
+        display: block;
+        width: 100%;
+        margin-top: 7px;
+        padding: 12px;
+        border: 1px solid var(--ec-line);
+        border-radius: 6px;
+        color: var(--ec-ink);
+        background: var(--ec-white);
+        font-size: 16px;
+        min-width: 0;
+      }
+      #eni-calc .ec-field input[aria-invalid="true"] {
+        border-color: var(--ec-red);
+      }
+      #eni-calc .ec-field input::placeholder {
+        color: #69757e;
+        font-size: 13px;
+      }
+      #eni-calc .ec-send {
+        margin-top: 20px;
+        min-width: 150px;
+      }
+      #eni-calc .ec-form-error {
+        color: #b90020;
+        font-size: 12px;
+        margin-top: 14px;
+      }
+      #eni-calc .ec-send-result {
+        margin-top: 20px;
+        padding: 16px;
+        background: var(--ec-soft);
+        border: 1px solid var(--ec-line);
+        border-radius: 7px;
+        font-size: 12px;
+      }
+      #eni-calc .ec-send-result summary {
+        margin: 14px 0 8px;
+        font-weight: 500;
+      }
+      #eni-calc .ec-send-result pre {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        font:
+          400 12px/1.65 "DM Sans",
+          sans-serif;
+        margin: 0;
+        color: var(--ec-ink);
+      }
+      @media (max-width: 620px) {
+        #eni-calc .ec-lead {
+          padding: 22px 18px;
+        }
+        #eni-calc .ec-form-grid {
+          grid-template-columns: 1fr;
+        }
+        #eni-calc .ec-send {
+          width: 100%;
+        }
+      }
+      /* Samodzielna strona: bez kontenera podglądu i zależności od czatu. */
+      html {
+        color-scheme: light;
+      }
+      body {
+        margin: 0;
+        background: #fff;
+      }
+      #eni-calc {
+        max-width: 1440px;
+        margin-inline: auto;
+      }
+      #eni-calc .ec-interactive {
+        cursor: pointer;
+      }
+      #eni-calc button:disabled {
+        cursor: not-allowed;
+      }
+    
+
+      /* ENIVERSE: widok 5 kart. Projekt 3 kart WordPress odpowiada żywemu cennikowi. */
+      #eni-calc { --ec-red:#df002b; --ec-ink:#101112; --ec-line:#d9dfe4; --ec-muted:#606d7a; width:100%; max-width:1260px; margin-inline:auto; font-size:14px; }
+      #eni-calc .ec-preview-page { padding:28px 18px 42px; background:#fff; border-radius:0; }
+      #eni-calc .ec-preview-heading { margin-bottom:32px; }
+      #eni-calc .ec-page-title { font-size:clamp(29px,4vw,43px); margin:8px 0; }
+      #eni-calc .ec-intro { font-size:14px; margin-bottom:0; }
+      #eni-calc .ec-group-label { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:22px 0 12px; padding-bottom:10px; border-bottom:1px solid var(--ec-line); }
+      #eni-calc .ec-group-label span:first-child { font-weight:600; font-size:16px; }
+      #eni-calc .ec-group-label span:last-child { color:var(--ec-muted); font-size:12px; }
+      #eni-calc .ec-group-label--main { margin-top:42px; }
+      #eni-calc .ec-packages, #eni-calc .ec-packages--main { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+      #eni-calc .ec-packages--entry { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      #eni-calc .ec-package { position:relative; background:#fff; border:1px solid #d9dfe4; border-radius:9px; padding:23px 24px 24px; margin:0; max-width:none; display:flex; flex-direction:column; min-width:0; color:#121414; }
+      #eni-calc .ec-package h2 { font-size:29px; font-weight:500; letter-spacing:-.045em; margin:10px 0 10px; line-height:1.12; color:inherit; }
+      #eni-calc .ec-package h3 { font-size:18px; letter-spacing:-.035em; font-weight:500; margin:7px 0 5px; color:inherit; }
+      #eni-calc .ec-package .ec-kicker { font-size:11px; font-weight:600; letter-spacing:.095em; color:#617080; }
+      #eni-calc .ec-card-header { min-height:148px; }
+      #eni-calc .ec-card-description { font-size:15px; line-height:1.55; color:#66727f; min-height:70px; }
+      #eni-calc .ec-card-budget { margin-top:4px; padding-bottom:17px; }
+      #eni-calc .ec-card-price { display:flex; align-items:baseline; flex-wrap:wrap; gap:9px; white-space:nowrap; }
+      #eni-calc .ec-card-price small { font-size:13px; font-weight:400; }
+      #eni-calc .ec-card-price strong { font-size:47px; font-weight:500; letter-spacing:-.065em; line-height:1.15; font-variant-numeric:tabular-nums; }
+      #eni-calc .ec-card-price span { font-size:12px; }
+      #eni-calc .ec-card-budget .ec-muted { margin-top:8px; font-size:12px; }
+      #eni-calc .ec-project-scale { min-height:152px; padding:14px 0 20px; border-top:1px solid var(--ec-line); }
+      #eni-calc .ec-project-scale p { font-size:12px; line-height:1.55; color:#66727f; }
+      #eni-calc .ec-project-page { display:flex; flex-direction:column; gap:4px; width:54px; height:47px; padding:5px; border:1px solid #a8b7c4; border-radius:2px; margin-bottom:9px; }
+      #eni-calc .ec-project-page i { height:5px; background:#dfe5e9; border-radius:1px; }
+      #eni-calc .ec-project-page i:first-child { background:currentColor; height:6px; }
+      #eni-calc .ec-project-tiles { display:grid; grid-template-columns:repeat(5,31px); gap:4px; width:max-content; margin:2px 0 9px; }
+      #eni-calc .ec-project-tiles i { display:block; width:31px; height:12px; border:1px solid #9caab5; background:#e9edf0; border-radius:1px; }
+      #eni-calc .ec-project-tiles i.is-active { background:#121414; border-color:#121414; }
+      #eni-calc .ec-features { border-top:1px solid var(--ec-line); padding-top:17px; min-height:285px; }
+      #eni-calc .ec-section-label { letter-spacing:.07em; font-size:11px; font-weight:600; color:#64717c; }
+      #eni-calc .ec-features ul { list-style:none; padding:0; margin:10px 0 0; }
+      #eni-calc .ec-features li { display:flex; gap:9px; padding:3px 0; border:0; font-size:13px; line-height:1.5; }
+      #eni-calc .ec-features li small { display:block; font-size:11px; color:#65717b; margin-top:1px; }
+      #eni-calc .ec-tick { min-width:12px; color:inherit; }
+      #eni-calc .ec-dotted { text-decoration:underline dotted; text-decoration-thickness:1px; text-underline-offset:3px; }
+      #eni-calc .ec-card-meta { margin:12px 0 0; }
+      #eni-calc .ec-card-meta div { display:flex; justify-content:space-between; gap:12px; margin:7px 0; font-size:12px; }
+      #eni-calc .ec-card-meta dt { color:#64717d; font-weight:600; }
+      #eni-calc .ec-card-meta dd { margin:0; text-align:right; }
+      #eni-calc .ec-card-details { margin:10px 0 15px; border-top:1px solid var(--ec-line); font-size:12px; }
+      #eni-calc .ec-card-details summary { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:9px 0; color:inherit; list-style:none!important; cursor:pointer; font-weight:600; }
+      #eni-calc .ec-card-details summary::-webkit-details-marker { display:none; }
+      #eni-calc .ec-card-details summary::after { content:"+"; color:#75818d; font-size:17px; line-height:1; }
+      #eni-calc .ec-card-details[open] summary::after { content:"−"; }
+      #eni-calc .ec-package .ec-details-list { margin:3px 0 8px; }
+      #eni-calc .ec-package .ec-details-list li { font-size:12px; padding:4px 0; border:0; line-height:1.5; }
+      #eni-calc .ec-card-actions { margin-top:auto; display:grid; gap:9px; padding-top:0; }
+      #eni-calc .ec-card-actions .ec-action { display:flex; justify-content:space-between; align-items:center; gap:15px; padding:14px 17px; min-height:57px; border:1px solid #7b8792; border-radius:4px; font-size:14px; font-weight:500; text-align:left; background:transparent; color:#141719; line-height:1.4; }
+      #eni-calc .ec-card-actions .ec-action:hover { border-color:var(--ec-red); color:var(--ec-red); }
+      #eni-calc .ec-card-actions .ec-configure { border-color:#dce1e5; min-height:44px; background:#f6f7f8; font-size:12px; }
+      #eni-calc .ec-package--featured { background:#101112; color:#f7f8f9; border-color:#101112; }
+      #eni-calc .ec-package--featured .ec-kicker, #eni-calc .ec-package--featured .ec-section-label,
+      #eni-calc .ec-package--featured .ec-card-description, #eni-calc .ec-package--featured .ec-muted,
+      #eni-calc .ec-package--featured .ec-project-scale p, #eni-calc .ec-package--featured .ec-features small,
+      #eni-calc .ec-package--featured .ec-card-meta dt { color:#b9c0c7; }
+      #eni-calc .ec-package--featured .ec-project-scale, #eni-calc .ec-package--featured .ec-features, #eni-calc .ec-package--featured .ec-card-details { border-color:#454c52; }
+      #eni-calc .ec-package--featured .ec-project-tiles i { background:#333c43; border-color:#7b8790; }
+      #eni-calc .ec-package--featured .ec-project-tiles i.is-active { background:#e0002e; border-color:#e0002e; }
+      #eni-calc .ec-package--featured .ec-card-actions .ec-choose { background:#e0002d; border-color:#e0002d; color:#fff; }
+      #eni-calc .ec-package--featured .ec-card-actions .ec-configure { background:#24282c; border-color:#545d65; color:#fff; }
+      #eni-calc .ec-package--featured .ec-card-actions .ec-action:hover { filter:brightness(1.1); }
+      #eni-calc .ec-featured-badge { position:absolute; right:16px; top:-11px; padding:6px 9px; border-radius:2px; background:#e0002d; color:#fff; font-size:10px; font-weight:600; line-height:1; }
+      #eni-calc .ec-off { color:var(--ec-muted); }
+      #eni-calc .ec-package--featured .ec-off { color:#9ea6ae; }
+      #eni-calc .ec-pricing-note { font-size:11px; margin-top:18px; }
+      #eni-calc button { cursor:pointer; }
+      #eni-calc button:disabled { cursor:not-allowed; }
+      /* Modal ma własny overlay; nie ukrywa karty ani pozostałych sekcji Elementora. */
+      #eni-calc .ec-modal-stage { position:fixed; z-index:2147481000; inset:0; overflow:auto; overscroll-behavior:contain; display:flex; align-items:flex-start; justify-content:center; padding:clamp(12px,4vh,46px) 16px; background:rgba(10,13,17,.72); border-radius:0; }
+      #eni-calc .ec-window { width:min(100%,860px); max-width:860px; margin:0 auto; overflow:visible; background:#fff; border:1px solid #dbe0e5; box-shadow:0 18px 70px #0005; border-radius:12px; }
+      #eni-calc .ec-head { background:#fff; border-radius:12px 12px 0 0; }
+      #eni-calc .ec-head h2 { color:#101112; }
+      #eni-calc .ec-steps { flex-wrap:wrap; }
+      #eni-calc .ec-option, #eni-calc .ec-scope label { cursor:pointer; }
+      #eni-calc .ec-option:has(input:disabled), #eni-calc .ec-scope label:has(input:disabled) { cursor:default; }
+      #eni-calc .ec-head .ec-close { flex-shrink:0; cursor:pointer; }
+      /* Elementor / WordPress: widok demonstracyjny znika, gdy wykryte są istniejące boksy. */
+      #eni-calc.ec-elementor-mode { margin:0; max-width:none; isolation:auto; }
+      #eni-calc [hidden] { display:none!important; }
+      #enp-cennik.eniverse-pricing .enp-card { position:relative; }
+      #enp-cennik.eniverse-pricing .enp-card .ec-elementor-configure,
+      .eniverse-pricing .enp-card .ec-elementor-configure { appearance:none; width:100%; min-height:42px; border:1px solid currentColor; border-radius:4px; background:transparent; color:inherit; font:500 13px/1.3 "DM Sans",sans-serif; padding:10px 14px; margin-top:10px; cursor:pointer; text-align:center; }
+      #enp-cennik.eniverse-pricing .enp-card .ec-elementor-configure:hover,
+      .eniverse-pricing .enp-card .ec-elementor-configure:hover { border-color:#e0002d; color:#e0002d; }
+      #enp-cennik.eniverse-pricing .enp-card[data-eni-featured="true"],
+      .eniverse-pricing .enp-card[data-eni-featured="true"] { background:#101112!important; color:#f7f8f9!important; border-color:#101112!important; }
+      #enp-cennik.eniverse-pricing .enp-card[data-eni-featured="false"],
+      .eniverse-pricing .enp-card[data-eni-featured="false"] { background:#fff!important; color:#101112!important; border-color:#d9dfe4!important; }
+      #enp-cennik.eniverse-pricing .enp-card[data-eni-featured="true"] :is(h3,.enp-price,.enp-feature,.enp-project-scale),
+      .eniverse-pricing .enp-card[data-eni-featured="true"] :is(h3,.enp-price,.enp-feature,.enp-project-scale) { color:#f7f8f9!important; }
+      #enp-cennik.eniverse-pricing .enp-card[data-eni-featured="false"] :is(h3,.enp-price,.enp-feature,.enp-project-scale),
+      .eniverse-pricing .enp-card[data-eni-featured="false"] :is(h3,.enp-price,.enp-feature,.enp-project-scale) { color:#101112!important; }
+      #enp-cennik.eniverse-pricing .enp-card[data-eni-featured="true"] :is(.enp-eyebrow,.enp-card-desc,.enp-price-note,.enp-features small,.enp-meta dt),
+      .eniverse-pricing .enp-card[data-eni-featured="true"] :is(.enp-eyebrow,.enp-card-desc,.enp-price-note,.enp-features small,.enp-meta dt) { color:#b9c0c7!important; }
+      #enp-cennik.eniverse-pricing .enp-card[data-eni-featured="false"] :is(.enp-eyebrow,.enp-card-desc,.enp-price-note,.enp-features small,.enp-meta dt),
+      .eniverse-pricing .enp-card[data-eni-featured="false"] :is(.enp-eyebrow,.enp-card-desc,.enp-price-note,.enp-features small,.enp-meta dt) { color:#64717d!important; }
+      #enp-cennik.eniverse-pricing .enp-card[data-eni-featured="true"] .enp-btn,
+      .eniverse-pricing .enp-card[data-eni-featured="true"] .enp-btn { background:#e0002d!important; border-color:#e0002d!important; color:#fff!important; }
+      #enp-cennik.eniverse-pricing .enp-card[data-eni-featured="false"] .enp-btn,
+      .eniverse-pricing .enp-card[data-eni-featured="false"] .enp-btn { background:#fff!important; border-color:#87929d!important; color:#141719!important; }
+      #enp-cennik.eniverse-pricing .enp-card[data-eni-featured="false"] .enp-card-badge,
+      .eniverse-pricing .enp-card[data-eni-featured="false"] .enp-card-badge { display:none!important; }
+      #enp-cennik.eniverse-pricing .enp-card[data-eni-featured="true"] .ec-elementor-badge,
+      .eniverse-pricing .enp-card[data-eni-featured="true"] .ec-elementor-badge { position:absolute; top:-10px; right:14px; background:#e0002d; color:#fff; font-size:10px; font-weight:600; line-height:1; padding:6px 9px; border-radius:2px; }
+      @media(max-width:1040px) {
+        #eni-calc .ec-packages--main { gap:12px; }
+        #eni-calc .ec-package { padding:19px 16px; }
+        #eni-calc .ec-card-price strong { font-size:40px; }
+      }
+      @media(max-width:750px) {
+        #eni-calc .ec-packages--main, #eni-calc .ec-packages--entry { grid-template-columns:repeat(2,minmax(0,1fr)); }
+        #eni-calc .ec-card-header, #eni-calc .ec-features, #eni-calc .ec-project-scale { min-height:0; }
+        #eni-calc .ec-card-meta { margin-top:30px; }
+      }
+      @media(max-width:580px) {
+        #eni-calc .ec-packages--main, #eni-calc .ec-packages--entry { grid-template-columns:1fr; }
+        #eni-calc .ec-preview-page { padding:18px 10px 26px; }
+        #eni-calc .ec-package { padding:23px 20px; }
+        #eni-calc .ec-package .ec-card-price strong { font-size:45px; }
+        #eni-calc .ec-group-label { align-items:flex-start; flex-direction:column; gap:3px; }
+        #eni-calc .ec-modal-stage { padding:6px; }
+        #eni-calc .ec-window { border-radius:8px; }
+      }
+
+</style>
+
+    <!-- WIDOK CENNIKA I KONFIGURATORY -->
+    <div id="eni-calc">
+      <div class="ec-page ec-preview-page" id="ec-demo-page">
+        <section id="ec-catalog" aria-label="Cennik Eniverse — podgląd">
+          <div class="ec-preview-heading">
+            <div class="ec-kicker">Eniverse / Cennik i konfigurator</div>
+            <h1 class="ec-page-title">Wybierz stronę dla swojej firmy.</h1>
+            <p class="ec-intro">Porównaj pakiety i dopasuj wycenę. Ceny i zakresy bazowe pochodzą z pliku źródłowego kalkulatora.</p>
+          </div>
+          <div class="ec-group-label"><span>Pakiety na start</span><span>Prosty sposób na obecność w sieci</span></div>
+          <div class="ec-packages ec-packages--entry" id="ec-entry-packages"></div>
+          <div class="ec-group-label ec-group-label--main"><span>Strony WordPress</span><span>Układ wizualny dopasowany do strony Eniverse</span></div>
+          <div class="ec-packages ec-packages--main" id="ec-packages"></div>
+          <p class="ec-pricing-note">Ceny dodatków są przykładowe, a końcowy zakres i termin realizacji wymagają zatwierdzenia. Wysłanie formularza w tej wersji jest demonstracyjne.</p>
+        </section>
+      </div><!-- Koniec widoku demonstracyjnego. Elementor ukrywa ten widok, jeśli znajdzie istniejące karty .enp-card. -->
+        <div class="ec-modal-stage" id="ec-modal-stage" hidden>
+          <section
+            class="ec-window"
+            id="ec-window"
+            role="dialog"
+            aria-labelledby="ec-title"
+            aria-modal="true"
+          >
+            <header class="ec-head">
+              <div>
+                <div class="ec-kicker">Eniverse / Konfigurator strony</div>
+                <h2 id="ec-title">Dopasuj swój pakiet.</h2>
+                <p class="ec-muted" id="ec-subtitle">
+                  Zacznij od pakietu. Dodaj to, czego potrzebujesz.
+                </p>
+              </div>
+              <button
+                class="ec-close ec-interactive"
+                id="ec-close"
+                type="button"
+                aria-label="Zamknij i wróć do pakietów"
+              >
+                ×
+              </button>
+            </header>
+            <div class="ec-steps" aria-label="Etapy konfiguracji">
+              <div class="ec-step active" id="ec-step1" aria-current="step">
+                <span>1</span>Konfiguracja
+              </div>
+              <div class="ec-step" id="ec-step2">
+                <span>2</span>Podsumowanie
+              </div>
+            </div>
+            <div class="ec-body" id="ec-config">
+              <div class="ec-fields">
+                <section class="ec-section">
+                  <h3>W cenie Twojego pakietu</h3>
+                  <p class="ec-muted">
+                    Stałe elementy bazy. Rozszerzenia wybierzesz poniżej.
+                  </p>
+                  <div class="ec-scope" id="ec-scope"></div>
+                  <p class="ec-excluded" id="ec-excluded"></p>
+                </section>
+                <section class="ec-section" id="ec-billing-section">
+                  <h3>Rozliczenie abonamentu</h3>
+                  <p class="ec-muted">Umowa na 24 miesiące.</p>
+                  <div class="ec-options" role="group" aria-label="Rozliczenie">
+                    <label class="ec-option ec-interactive"
+                      ><input
+                        type="radio"
+                        name="ec-billing"
+                        value="monthly"
+                        checked
+                      /><span
+                        ><strong>Miesięcznie — tylko Mini Start</strong
+                        ><small id="ec-monthly-detail"
+                          >24 raty za pakiet i dodatki</small
+                        ></span
+                      ><span class="ec-tag" id="ec-monthly-rate"
+                        >59 zł / mies.</span
+                      ></label
+                    ><label class="ec-option ec-interactive"
+                      ><input
+                        type="radio"
+                        name="ec-billing"
+                        value="annual"
+                      /><span
+                        ><strong>Rocznie z góry</strong
+                        ><small id="ec-annual-detail"
+                          >2 płatności za pakiet i dodatki</small
+                        ></span
+                      ><span class="ec-tag" id="ec-annual-rate"
+                        >649 zł / rok</span
+                      ></label
+                    >
+                  </div>
+                </section>
+                <section class="ec-section">
+                  <h3>Struktura strony</h3>
+                  <p class="ec-muted" id="ec-structure"></p>
+                  <div class="ec-chips" id="ec-chips"></div>
+                  <div class="ec-counter-row">
+                    <div>
+                      Dodatkowe sekcje
+                      <div class="ec-muted" data-extra-cost="+99 zł / sekcję">
+                        +99 zł / sekcję · jednorazowo
+                      </div>
+                    </div>
+                    <div class="ec-counter">
+                      <button
+                        type="button"
+                        data-counter="sections"
+                        data-delta="-1"
+                        aria-label="Usuń dodatkową sekcję"
+                        class="ec-interactive"
+                      >
+                        −</button
+                      ><input
+                        id="ec-sections"
+                        type="number"
+                        min="0"
+                        max="99"
+                        value="0"
+                        aria-label="Liczba dodatkowych sekcji"
+                      /><button
+                        type="button"
+                        data-counter="sections"
+                        data-delta="1"
+                        aria-label="Dodaj sekcję"
+                        class="ec-interactive"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <div class="ec-counter-row">
+                    <div>
+                      Dodatkowe podstrony
+                      <div
+                        class="ec-muted"
+                        data-extra-cost="+199 zł / podstronę"
+                      >
+                        +199 zł / podstronę · jednorazowo
+                      </div>
+                    </div>
+                    <div class="ec-counter">
+                      <button
+                        type="button"
+                        data-counter="pages"
+                        data-delta="-1"
+                        aria-label="Usuń dodatkową podstronę"
+                        class="ec-interactive"
+                      >
+                        −</button
+                      ><input
+                        id="ec-pages"
+                        type="number"
+                        min="0"
+                        max="99"
+                        value="0"
+                        aria-label="Liczba dodatkowych podstron"
+                      /><button
+                        type="button"
+                        data-counter="pages"
+                        data-delta="1"
+                        aria-label="Dodaj podstronę"
+                        class="ec-interactive"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </section>
+                <section class="ec-section">
+                  <h3>SEO</h3>
+                  <p class="ec-muted">
+                    Zakres z pakietu jest wybrany. Możesz go rozszerzyć.
+                  </p>
+                  <div
+                    class="ec-options"
+                    id="ec-seo"
+                    role="group"
+                    aria-label="Wariant SEO"
+                  ></div>
+                </section>
+                <section class="ec-section">
+                  <h3>Kontakt z klientem</h3>
+                  <div
+                    class="ec-options"
+                    id="ec-contact"
+                    role="group"
+                    aria-label="Wariant kontaktu"
+                  ></div>
+                </section>
+                <section class="ec-section">
+                  <h3>Sesje poprawek</h3>
+                  <p class="ec-muted" id="ec-revisions-base"></p>
+                  <div
+                    class="ec-options ec-revisions"
+                    id="ec-revisions"
+                    role="group"
+                    aria-label="Dodatkowe sesje poprawek"
+                  ></div>
+                </section>
+                <section class="ec-section" id="ec-training-section" hidden>
+                  <h3>Szkolenie z obsługi strony</h3>
+                  <p class="ec-muted" id="ec-training-base"></p>
+                  <div
+                    class="ec-options"
+                    id="ec-training"
+                    role="group"
+                    aria-label="Rodzaj szkolenia"
+                  ></div>
+                  <p class="ec-note">
+                    Przy dłuższym szkoleniu dopłacasz różnicę względem wartości
+                    szkolenia w pakiecie. Krótsze szkolenie nie obniża ceny
+                    pakietu.
+                  </p>
+                </section>
+                <section class="ec-section">
+                  <h3>Hosting i opieka techniczna</h3>
+                  <div id="ec-hosting"></div>
+                  <div
+                    class="ec-options"
+                    id="ec-host-billing-options"
+                    role="group"
+                    aria-label="Sposób płatności za hosting"
+                    hidden
+                  >
+                    <label class="ec-option ec-interactive"
+                      ><input
+                        type="radio"
+                        name="ec-host-billing"
+                        value="monthly"
+                        checked
+                      /><span
+                        ><strong>Hosting w ratach miesięcznych</strong
+                        ><small
+                          >12 płatności po 79 zł · łącznie 948 zł za rok</small
+                        ></span
+                      ><span class="ec-tag">79 zł / mies.</span></label
+                    >
+                    <label class="ec-option ec-interactive"
+                      ><input
+                        type="radio"
+                        name="ec-host-billing"
+                        value="annual"
+                      /><span
+                        ><strong>Hosting za rok z góry</strong
+                        ><small
+                          >Jedna płatność za 12 miesięcy hostingu i
+                          opieki</small
+                        ></span
+                      ><span class="ec-tag">948 zł / rok</span></label
+                    >
+                  </div>
+                </section>
+                <section class="ec-section">
+                  <h3>Moduły i konfiguracja</h3>
+                  <div id="ec-modules"></div>
+                </section>
+              </div>
+              <aside class="ec-aside" aria-label="Bieżąca wycena">
+                <span class="ec-badge" id="ec-badge"></span>
+                <h3>Twoja wycena</h3>
+                <div aria-live="polite" aria-atomic="true">
+                  <div class="ec-total" id="ec-base"></div>
+                  <p class="ec-muted" id="ec-period"></p>
+                  <div class="ec-breakdown">
+                    <div class="ec-line">
+                      <span id="ec-base-label"></span
+                      ><span id="ec-base-cost"></span>
+                    </div>
+                    <div class="ec-line">
+                      <span id="ec-extra-label">Dodatki jednorazowe</span
+                      ><span id="ec-extra"></span>
+                    </div>
+                    <div class="ec-line" id="ec-host-row">
+                      <span id="ec-host-label">Hosting / rok</span
+                      ><span id="ec-host-cost"></span>
+                    </div>
+                  </div>
+                  <div class="ec-smalltitle" id="ec-total-label"></div>
+                  <div class="ec-total" id="ec-total"></div>
+                  <p
+                    class="ec-muted"
+                    style="margin-top: 8px"
+                    id="ec-paynote"
+                  ></p>
+                  <div
+                    class="ec-payment-aside"
+                    id="ec-payment-aside"
+                    hidden
+                  ></div>
+                  <p class="ec-note" id="ec-contract"></p>
+                </div>
+                <div class="ec-smalltitle" id="ec-items-title">
+                  Wybrane dodatki
+                </div>
+                <div
+                  id="ec-items"
+                  class="ec-muted"
+                  style="margin-top: 8px"
+                ></div>
+                <p class="ec-note">
+                  Ceny rozszerzeń są przykładowe. Od pakietu Start: strona i
+                  dodatki płatne jednorazowo. Hosting opcjonalnie: 948 zł/rok
+                  lub 12 rat po 79 zł, pierwsza rata na start. Kwoty netto; VAT według właściwej stawki.
+                </p>
+              </aside>
+            </div>
+            <div class="ec-summary" id="ec-summary" hidden></div>
+            <section
+              class="ec-lead"
+              id="ec-contact-section"
+              aria-labelledby="ec-lead-title"
+              hidden
+            >
+              <div class="ec-kicker">Ostatni krok</div>
+              <h3 id="ec-lead-title">Porozmawiajmy o Twojej stronie.</h3>
+              <p class="ec-muted">
+                Do zapytania dołączymy wybrany pakiet, pełną konfigurację,
+                sposób płatności i wycenę.
+              </p>
+              <form id="ec-lead-form" novalidate>
+                <div class="ec-form-grid">
+                  <label class="ec-field ec-full" for="ec-client-name"
+                    >Imię i nazwisko / Nazwa firmy
+                    <span aria-hidden="true">*</span
+                    ><input
+                      id="ec-client-name"
+                      name="client_name"
+                      type="text"
+                      autocomplete="name"
+                      maxlength="150"
+                      required
+                      placeholder="np. Jan Kowalski / Nazwa firmy"
+                  /></label>
+                  <label class="ec-field" for="ec-client-email"
+                    >Adres e-mail <span aria-hidden="true">*</span
+                    ><input
+                      id="ec-client-email"
+                      name="client_email"
+                      type="email"
+                      autocomplete="email"
+                      maxlength="254"
+                      required
+                      placeholder="np. kontakt@twojafirma.pl"
+                  /></label>
+                  <label class="ec-field" for="ec-client-phone"
+                    >Telefon <span class="ec-muted">(opcjonalnie)</span
+                    ><input
+                      id="ec-client-phone"
+                      name="client_phone"
+                      type="tel"
+                      autocomplete="tel"
+                      maxlength="30"
+                      placeholder="np. +48 600 000 000"
+                  /></label>
+                </div>
+                <input
+                  id="ec-quote-payload"
+                  type="hidden"
+                  name="quote_summary"
+                />
+                <p class="ec-note" id="ec-form-demo">
+                  Tryb makiety: „Wyślij” sprawdza dane i pokazuje podgląd
+                  wiadomości. Rzeczywista wysyłka będzie dostępna po podłączeniu
+                  formularza do skrzynki agencji.
+                </p>
+                <p
+                  id="ec-form-error"
+                  class="ec-form-error"
+                  role="alert"
+                  hidden
+                ></p>
+                <button
+                  class="ec-action ec-interactive ec-send"
+                  type="submit"
+                  aria-describedby="ec-form-demo"
+                >
+                  Wyślij <span aria-hidden="true">↗</span>
+                </button>
+                <div id="ec-send-result" class="ec-send-result" hidden>
+                  <p id="ec-send-status" role="status" aria-live="polite"></p>
+                  <details open>
+                    <summary class="ec-interactive">
+                      Podgląd wiadomości do agencji
+                    </summary>
+                    <pre id="ec-message-preview"></pre>
+                  </details>
+                </div>
+              </form>
+            </section>
+
+            <footer class="ec-foot">
+              <p class="ec-muted" id="ec-footer-note"></p>
+              <button
+                class="ec-action ec-interactive"
+                id="ec-next"
+                type="button"
+              >
+                Podsumowanie →</button
+              ><button
+                class="ec-action ec-secondary ec-interactive"
+                id="ec-back"
+                type="button"
+                hidden
+              >
+                ← Wróć do konfiguracji
+              </button>
+            </footer>
+          </section>
+        </div>
+    </div>
+    <!-- LOGIKA PAKIETÓW, WYCENY I FORMULARZA -->
+    
+<script>
+
+      (() => {
+        const root = document.getElementById("eni-calc"),
+          q = (s) => root.querySelector(s),
+          all = (s) => [...root.querySelectorAll(s)],
+          money = (n) => new Intl.NumberFormat("pl-PL", {useGrouping:"always"}).format(n) + " zł";
+        const sections3 = ["Hero", "O nas / Oferta", "Kontakt"],
+          sections5 = ["Hero", "O nas", "Oferta", "Opinie", "Kontakt"];
+        const rights =
+          "Prawa do indywidualnie wykonanych elementów — zgodnie z umową i licencjami";
+        const packages = [
+          {
+            id: "mini",
+            name: "Mini Start",
+            price: 59,
+            recurring: true,
+            structure: "Strona główna do 3 sekcji",
+            chips: sections3,
+            seo: 0,
+            contact: 0,
+            revisions: 0,
+            hosting: "subscription",
+            blog: false,
+            gsc: false,
+            days: 3,
+            tech: "HTML / CSS",
+            design: "Gotowy szablon z bazy Eniverse",
+            content:
+              "Klient dostarcza gotowe treści, dopasowane do wybranego szablonu.",
+            panel: false,
+            rights: "Korzystanie ze strony w ramach abonamentu",
+            terms: "Umowa abonamentowa na 24 miesiące",
+            training: "Brak szkolenia",
+            nav: false,
+          },
+          {
+            id: "start",
+            name: "Start",
+            price: 1299,
+            recurring: false,
+            structure: "Strona główna do 5 sekcji",
+            chips: sections5,
+            seo: 0,
+            contact: 0,
+            revisions: 1,
+            hosting: "optional",
+            blog: false,
+            gsc: false,
+            days: 5,
+            tech: "CMS — WordPress",
+            design: "Gotowy szablon z bazy Eniverse (WordPress)",
+            content:
+              "Klient dostarcza treści, a my dopasowujemy je do projektu strony.",
+            panel: true,
+            rights:
+              "Licencja na korzystanie ze strony, bez wyłączności do szablonu",
+            terms: "Samodzielne zarządzanie stroną bez abonamentu za projekt",
+            training: "Instrukcja PDF",
+            nav: false,
+          },
+          {
+            id: "one",
+            name: "One Page",
+            price: 1699,
+            recurring: false,
+            structure: "Strona główna do 5 sekcji",
+            chips: sections5,
+            seo: 1,
+            contact: 1,
+            revisions: 2,
+            hosting: "optional",
+            blog: false,
+            gsc: false,
+            days: 7,
+            tech: "CMS — WordPress",
+            design:
+              "Dostosowanie układu sekcji i wyglądu strony do Twojej marki: zmiana kolejności sekcji, usunięcie lub drobne modyfikacje.",
+            content:
+              "Klient dostarcza treści, a my dopasowujemy je do projektu strony.",
+            panel: true,
+            rights,
+            terms: "Jednorazowa opłata za wykonanie strony",
+            training: "Szkolenie z obsługi CMS: 30 min",
+            nav: false,
+          },
+          {
+            id: "wiz",
+            name: "Wizytówka",
+            price: 2499,
+            recurring: false,
+            structure: "Do 5 podstron",
+            chips: [],
+            seo: 2,
+            contact: 1,
+            revisions: 3,
+            hosting: "optional",
+            blog: false,
+            gsc: true,
+            days: 10,
+            tech: "CMS — WordPress",
+            design:
+              "Personalizacja szablonu WordPress — dopasowanie kolorystyki, układu sekcji i prezentacji usług firmy.",
+            content:
+              "Klient dostarcza treści, a my dopasowujemy je do projektu strony.",
+            panel: true,
+            rights,
+            terms: "Jednorazowa opłata za wykonanie strony",
+            training: "Szkolenie z obsługi CMS: 1 h",
+            nav: false,
+          },
+          {
+            id: "firm",
+            name: "Strona Firmowa",
+            price: 3599,
+            recurring: false,
+            structure: "Do 10 podstron",
+            chips: [],
+            seo: 3,
+            contact: 1,
+            revisions: 3,
+            hosting: "year",
+            blog: true,
+            gsc: true,
+            days: 14,
+            tech: "CMS — WordPress",
+            design:
+              "Rozszerzona personalizacja szablonu WordPress — dopasowanie struktury podstron, prezentacji usług i ścieżek kontaktu.",
+            content:
+              "Klient dostarcza treści, a my dopasowujemy je do projektu strony.",
+            panel: true,
+            rights,
+            terms: "Jednorazowa opłata za wykonanie strony",
+            training: "Szkolenie z obsługi CMS: 2 h",
+            nav: true,
+          },
+        ];
+        const seo = [
+          ["Bez dodatkowego SEO", "Brak SEO na start w bazie pakietu", 0],
+          [
+            "SEO techniczne na start",
+            "Zakres do doprecyzowania w warunkach SEO",
+            149,
+          ],
+          [
+            "Podstawowe SEO na start",
+            "Według warunków SEO; dalsze usługi wyceniane osobno",
+            299,
+          ],
+          [
+            "Rozszerzone SEO",
+            "Według warunków SEO; dalsze usługi wyceniane osobno",
+            499,
+          ],
+        ];
+        const contacts = [
+          ["Kontakt podstawowy", "Przyciski kontaktowe: telefon i e-mail", 0],
+          ["Formularz kontaktowy", "Standardowy formularz kontaktowy", 99],
+          [
+            "Formularz kontaktowy rozszerzony",
+            "Rozbudowane pola i opcje formularza",
+            199,
+          ],
+        ];
+        const hostingText = (p) =>
+          p.hosting === "subscription"
+            ? "Hosting na okres abonamentu"
+            : p.hosting === "year"
+              ? "Hosting i opieka techniczna na 1 rok"
+              : "Hosting i opieka techniczna: opcjonalnie 948 zł/rok lub 79 zł/mies.";
+        const revisionText = (n) =>
+          n === 0
+            ? "Brak sesji poprawek"
+            : n === 1
+              ? "1 sesja poprawek w cenie"
+              : n + " sesje poprawek w cenie";
+        function fixed(p) {
+          const a = [
+            ["Strona dopasowana do urządzeń mobilnych", true],
+            [p.tech, true],
+            [p.design, true],
+            [p.content, true],
+            ["Panel administracyjny", p.panel],
+            [
+              p.panel
+                ? "Samodzielna edycja tekstów i zdjęć"
+                : "Brak edycji treści",
+              p.panel,
+            ],
+            [p.rights, true],
+            [
+              p.days ? `Czas realizacji: do ${p.days} dni roboczych od otrzymania kompletu materiałów` : "Czas realizacji: do zatwierdzenia w wycenie",
+              true,
+            ],
+            [p.terms, true],
+            ...(p.recurring ? [[p.training, false]] : []),
+          ];
+          if (p.nav)
+            a.push([
+              "Zaplanowanie nawigacji i ścieżki kontaktu dopasowanej do celów firmy",
+              true,
+            ]);
+          return a;
+        }
+        // Karty podglądowe nawiązujące do obecnej struktury .enp-card z Elementora.
+        const cardContent = {
+          mini: {
+            kicker: "PROSTY START W INTERNECIE",
+            description: "Dla osób, które chcą prostej strony bez dużej opłaty początkowej.",
+            scale: "1 strona · do 3 sekcji",
+            scaleNote: "Gotowy szablon HTML i CSS.",
+            benefits: ["Gotowy wygląd i wersja mobilna", "Hosting przez okres umowy", "Strona z Twoimi gotowymi materiałami"],
+            icon: "page",
+          },
+          start: {
+            kicker: "STRONA NA DOBRY POCZĄTEK",
+            description: "Dla małej działalności, która potrzebuje strony WordPress do samodzielnej edycji.",
+            scale: "1 strona · do 5 sekcji",
+            scaleNote: "Np. Hero, O nas, Oferta, Opinie i Kontakt.",
+            benefits: ["WordPress i edycja własnych treści", "Dopasowanie szablonu do marki", "Wprowadzenie dostarczonych treści", "Instrukcja obsługi PDF"],
+            icon: "page",
+          },
+          one: { icon: "page" },
+          wiz: { icon: "pages" },
+          firm: { icon: "many" },
+        };
+        function cardRows(rows) {
+          // Najpierw świadczenia w cenie, dopiero po nich wyłączenia oznaczone minusem.
+          return [...rows].sort((a, b) => Number(a[1] === false) - Number(b[1] === false))
+            .map((x) => `<li class="${x[1] === false ? "ec-off" : ""}"><span class="ec-tick" aria-hidden="true">${x[1] === false ? "−" : "✓"}</span><span>${x[0]}</span></li>`)
+            .join("");
+        }
+        function projectIcon(p) {
+          if (p.id === "firm" || p.id === "wiz") {
+            // Diagram nie może sugerować liczby podstron ze starego cennika.
+            const n = parseInt(p.structure.match(/\d+/)?.[0] || "0", 10);
+            return `<div class="ec-project-tiles ${p.id === "wiz" ? "ec-project-tiles--single" : ""}" aria-hidden="true">${Array.from({length:n},(_,i)=>`<i class="${i===0?'is-active':''}"></i>`).join('')}</div>`;
+          }
+          return `<div class="ec-project-page" aria-hidden="true"><i></i><i></i><i></i><i></i></div>`;
+        }
+        function cardDetails(p) {
+          // Rozwijany zakres zawiera TYLKO funkcje dostępne w danym pakiecie.
+          // Nie pokazujemy nieobecnych funkcji ani ofert dopiero do dokupienia.
+          const included = [
+            ["Dostosowanie do urządzeń mobilnych", true],
+            [p.tech, true],
+            [p.design, true],
+            [p.content, true],
+            ["Panel administracyjny", p.panel],
+            ["Samodzielna edycja tekstów i zdjęć", p.panel],
+            [p.rights, true],
+            [revisionText(p.revisions), p.revisions > 0],
+            [hostingText(p), p.hosting !== "optional"],
+            ["Moduł bloga lub realizacji", p.blog],
+            ["Konfiguracja Google Search Console", p.gsc],
+            [p.training, p.training !== "Brak szkolenia"],
+            [p.days ? `Realizacja: do ${p.days} dni roboczych od kompletu materiałów` : "Czas realizacji: do zatwierdzenia w wycenie", true],
+            [p.terms, true],
+            ["Zaplanowanie nawigacji i ścieżek kontaktu", p.nav],
+          ].filter(x => x[1]);
+          return `<ul class="ec-details-list">${cardRows(included)}</ul>`;
+        }
+        function renderCard(p) {
+          const c = cardContent[p.id], featured = p.id === "wiz", starter = p.id === "mini";
+          // Dla One Page / Wizytówka / Strona Firmowa widoczny zakres karty
+          // odpowiada 1:1 liście z pierwotnego eniverse-cennik.html.
+          const originalPlan = ["one", "wiz", "firm"].includes(p.id);
+          const core = [
+            [p.structure + (p.chips.length ? " (" + p.chips.join(", ") + ")" : ""), true],
+            [p.tech, true],
+            ["Dostosowanie do urządzeń mobilnych", true],
+            [hostingText(p), p.hosting !== "optional"],
+            [p.design, true],
+            [seo[p.seo][0], p.seo !== 0],
+            [contacts[p.contact][0], true],
+            [revisionText(p.revisions), p.revisions !== 0],
+          ];
+          const benefits = originalPlan
+            ? cardRows(core)
+            : c.benefits.map(benefit => `<li><span class="ec-tick" aria-hidden="true">✓</span><span>${benefit}</span></li>`).join("");
+          const excluded = [];
+          if (starter) excluded.push(["Panel administracyjny WordPress", false]);
+          if (p.id === "start") excluded.push(["Szkolenie na żywo", false]);
+          const kicker = originalPlan ? "OPŁATA JEDNORAZOWA" : c.kicker;
+          const description = originalPlan ? p.content : c.description;
+          const scale = originalPlan ? p.structure : c.scale;
+          const scaleNote = originalPlan ? (p.chips.length ? p.chips.join(", ") : "") : c.scaleNote;
+          const price = `<div class="ec-card-price"><small></small><strong>${money(p.price).replace(" zł", "")}</strong><span>${p.recurring ? "zł / mies." : "zł"}</span></div>`;
+          return `<article class="ec-package ${featured ? "ec-package--featured" : ""}" data-ec-plan="${p.id}" aria-labelledby="ec-plan-${p.id}">
+            ${featured ? '<div class="ec-featured-badge">Wyróżniony pakiet</div>' : ''}
+            <div class="ec-card-header"><span class="ec-kicker">${kicker}</span><h2 id="ec-plan-${p.id}">${p.name}</h2><p class="ec-card-description">${description}</p></div>
+            <div class="ec-card-budget">${price}<p class="ec-muted">${p.recurring ? "Z hostingiem · umowa na 24 miesiące" : "Jednorazowa opłata za wykonanie strony"}</p></div>
+            <div class="ec-project-scale">${projectIcon(p)}<h3>${scale}</h3><p>${scaleNote}</p></div>
+            <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul>${benefits}${originalPlan ? "" : cardRows(excluded)}</ul></div>
+            <dl class="ec-card-meta"><div><dt>▢ &nbsp;<span class="ec-dotted">Czas realizacji</span></dt><dd>${p.days ? `Do ${p.days} dni roboczych` : "Do zatwierdzenia"}</dd></div><div><dt>♢ &nbsp;<span class="ec-dotted">Rundy poprawek</span></dt><dd>${p.revisions ? p.revisions + " w cenie" : "Brak w cenie"}</dd></div></dl>
+            <details class="ec-card-details"><summary class="ec-interactive">Pełen zakres pakietu</summary>${cardDetails(p)}</details>
+            <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="${p.id}"><span>${p.id === "firm" ? "Wybieram Stronę Firmową" : "Wybieram " + (p.id === "wiz" ? "Wizytówkę" : p.name)}</span><span aria-hidden="true">↗</span></button>
+            <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="${p.id}">Skonfiguruj pakiet <span aria-hidden="true">⚙</span></button></div>
+          </article>`;
+        }
+        q("#ec-entry-packages").innerHTML = packages.filter(p => ["mini","start"].includes(p.id)).map(renderCard).join("");
+        q("#ec-packages").innerHTML = packages.filter(p => ["one","wiz","firm"].includes(p.id)).map(renderCard).join("");
+        const trainingOptions = [
+          ["Instrukcja PDF", 0],
+          ["Szkolenie z obsługi CMS: 30 min", 49],
+          ["Szkolenie z obsługi CMS: 1 h", 99],
+          ["Szkolenie z obsługi CMS: 2 h", 179],
+        ];
+        function trainingBase(p) {
+          return p.id === "one"
+            ? 1
+            : p.id === "wiz"
+              ? 2
+              : p.id === "firm"
+                ? 3
+                : 0;
+        }
+        function trainingLabel() {
+          return current.recurring
+            ? "Brak szkolenia"
+            : trainingOptions[states[current.id].training][0];
+        }
+        function trainingCharge() {
+          const p = current;
+          return p.recurring
+            ? 0
+            : Math.max(
+                0,
+                trainingOptions[states[p.id].training][1] -
+                  trainingOptions[trainingBase(p)][1],
+              );
+        }
+        function fillTraining() {
+          const p = current,
+            s = states[p.id],
+            base = trainingBase(p);
+          q("#ec-training-section").hidden = p.recurring;
+          if (p.recurring) {
+            q("#ec-training").innerHTML = "";
+            return;
+          }
+          q("#ec-training-base").textContent =
+            "W pakiecie: " +
+            trainingOptions[base][0] +
+            "." +
+            (base
+              ? " Wartość szkolenia w bazie: " +
+                money(trainingOptions[base][1]) +
+                "."
+              : "");
+          q("#ec-training").innerHTML = trainingOptions
+            .map((x, i) => {
+              if (i === 0 && base !== 0) return "";
+              const extra = Math.max(0, x[1] - trainingOptions[base][1]);
+              return `<label class="ec-option ec-interactive"><input type="radio" name="ec-training" value="${i}" ${i === s.training ? "checked" : ""}><span><strong>${x[0]}</strong><small>${i === base ? "Domyślnie w pakiecie" : i === 0 ? "Materiały do samodzielnej nauki" : "Wartość szkolenia: " + money(x[1]) + (extra ? " · dopłata za zmianę wariantu" : " · bez obniżenia ceny pakietu")}</small></span><span class="ec-tag">${extra ? "+" + money(extra) : i === base ? "W cenie" : "Bez dopłaty"}</span></label>`;
+            })
+            .join("");
+        }
+
+        const defaults = (p) => ({
+          training: trainingBase(p),
+          sections: 0,
+          pages: 0,
+          seo: p.seo,
+          contact: p.contact,
+          revisions: 0,
+          billing: "monthly",
+          hosting: false,
+          hostBilling: "annual",
+          blog: p.blog,
+          gsc: p.gsc,
+        });
+        const states = Object.fromEntries(
+          packages.map((p) => [p.id, defaults(p)]),
+        );
+        let current = packages[0],
+          opener = null;
+        function optionGroup(id, name, items, base, selected) {
+          q(id).innerHTML = items
+            .map((x, i) => {
+              const disabled = i < base,
+                extra = x[2] - items[base][2];
+              return `<label class="ec-option ec-interactive ${disabled ? "ec-dim" : ""}"><input type="radio" name="${name}" value="${i}" ${i === selected ? "checked" : ""} ${disabled ? "disabled" : ""}><span><strong>${x[0]}</strong><small>${disabled ? "Wariant poniżej bazy pakietu" : x[1]}</small></span><span class="ec-tag">${disabled ? "—" : extra > 0 ? "+" + money(extra) : "W cenie"}</span></label>`;
+            })
+            .join("");
+        }
+        function fill() {
+          const p = current,
+            s = states[p.id];
+          fillTraining();
+          all('[name="ec-host-billing"]').forEach(
+            (e) => (e.checked = e.value === s.hostBilling),
+          );
+          q("#ec-badge").textContent = "Wybrany pakiet: " + p.name;
+          q("#ec-title").textContent = "Dopasuj pakiet " + p.name + ".";
+          q("#ec-subtitle").textContent =
+            "Zakres bazowy jest już uwzględniony w cenie.";
+          q("#ec-scope").innerHTML = fixed(p)
+            .filter((x) => x[1])
+            .map(
+              (x) =>
+                `<label><input type="checkbox" checked disabled><span>${x[0]}</span></label>`,
+            )
+            .join("");
+          q("#ec-excluded").textContent =
+            "Poza bazą: " +
+            fixed(p)
+              .filter((x) => !x[1])
+              .map((x) => x[0])
+              .join(", ") +
+            (fixed(p).some((x) => !x[1])
+              ? "."
+              : "brak dodatkowych wyłączeń w tej sekcji.");
+          q("#ec-billing-section").hidden = !p.recurring;
+          q("#ec-structure").textContent =
+            p.structure + ". Dodatki naliczane ponad zakres bazowy.";
+          q("#ec-chips").innerHTML = p.chips
+            .map((x) => `<span class="ec-chip">✓ ${x}</span>`)
+            .join("");
+          q("#ec-sections").value = s.sections;
+          q("#ec-pages").value = s.pages;
+          all('[name="ec-billing"]').forEach(
+            (e) => (e.checked = e.value === s.billing),
+          );
+          optionGroup("#ec-seo", "ec-seo", seo, p.seo, s.seo);
+          optionGroup(
+            "#ec-contact",
+            "ec-contact",
+            contacts,
+            p.contact,
+            s.contact,
+          );
+          q("#ec-revisions-base").textContent =
+            revisionText(p.revisions) +
+            ". Jedna sesja = jeden zbiorczy zestaw uwag.";
+          q("#ec-revisions").innerHTML = [0, 1, 2, 3]
+            .map(
+              (n) =>
+                `<label class="ec-option ec-interactive"><input type="radio" name="ec-revisions" value="${n}" ${n === s.revisions ? "checked" : ""}><span><strong>${n === 0 ? "Bez dodatkowych sesji" : n === 1 ? "+1 sesja" : n === 2 ? "+2 sesje" : "+3 sesje"}</strong><small>${n ? "+" + money(n * 69) + " · łącznie " + (p.revisions + n) + " sesji" : "Zakres bazowy · " + p.revisions + " sesji"}</small></span></label>`,
+            )
+            .join("");
+          q("#ec-hosting").innerHTML =
+            p.hosting === "optional"
+              ? `<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-hosting-check" ${s.hosting ? "checked" : ""}><span>Dodaj hosting i opiekę techniczną<small>948 zł / rok z góry lub 12 rat po 79 zł</small></span></label>`
+              : `<label class="ec-checkbox"><input type="checkbox" checked disabled><span>${hostingText(p)}<small>W cenie pakietu${p.hosting === "year" ? "; warunki po pierwszym roku do ustalenia" : ""}.</small></span></label>`;
+          q("#ec-modules").innerHTML = [
+            ["blog", "Moduł bloga lub realizacji", p.blog, 249],
+            ["gsc", "Konfiguracja Google Search Console", p.gsc, 99],
+          ]
+            .map(
+              ([key, label, base, price]) =>
+                `<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-${key}" ${s[key] || base ? "checked" : ""} ${base ? "disabled" : ""}><span>${label}<small>${base ? "W cenie pakietu" : "+" + money(price) + " jednorazowo · opcja dodatkowa"}</small></span></label>`,
+            )
+            .join("");
+          update();
+        }
+        function count(id) {
+          let n = Math.floor(Number(q(id).value));
+          n = Number.isFinite(n) ? Math.max(0, Math.min(99, n)) : 0;
+          q(id).value = n;
+          return n;
+        }
+        const val = (name) => q(`[name="${name}"]:checked`).value;
+        function calculate() {
+          const p = current,
+            s = states[p.id],
+            items = [];
+          if (s.sections)
+            items.push(["Dodatkowe sekcje × " + s.sections, s.sections * 99]);
+          if (s.pages)
+            items.push(["Dodatkowe podstrony × " + s.pages, s.pages * 199]);
+          if (s.seo > p.seo)
+            items.push([seo[s.seo][0], seo[s.seo][2] - seo[p.seo][2]]);
+          if (s.contact > p.contact)
+            items.push([
+              contacts[s.contact][0],
+              contacts[s.contact][2] - contacts[p.contact][2],
+            ]);
+          if (s.revisions)
+            items.push(["Dodatkowe sesje × " + s.revisions, s.revisions * 69]);
+          if (s.blog && !p.blog)
+            items.push(["Moduł bloga lub realizacji", 249]);
+          if (s.gsc && !p.gsc) items.push(["Google Search Console", 99]);
+          if (trainingCharge())
+            items.push([
+              "Zmiana szkolenia: " + trainingLabel(),
+              trainingCharge(),
+            ]);
+          const extra = items.reduce((a, x) => a + x[1], 0),
+            year = p.recurring ? (s.billing === "annual" ? 649 : 708) : p.price,
+            host = s.hosting ? 948 : 0,
+            total = p.recurring
+              ? s.billing === "annual"
+                ? 649 + extra / 2
+                : ((5900 + Math.floor((extra * 100) / 24)) * 12) / 100
+              : year + extra + host;
+          return {
+            items,
+            extra,
+            year,
+            host,
+            total,
+            contract: p.recurring
+              ? (s.billing === "annual" ? 1298 : 1416) + extra
+              : null,
+          };
+        }
+        function read() {
+          const p = current,
+            s = states[p.id];
+          s.training = p.recurring ? 0 : +val("ec-training");
+          s.sections = count("#ec-sections");
+          s.pages = count("#ec-pages");
+          s.seo = +val("ec-seo");
+          s.contact = +val("ec-contact");
+          s.revisions = +val("ec-revisions");
+          s.billing = val("ec-billing");
+          s.hosting =
+            p.hosting === "optional" && q("#ec-hosting-check").checked;
+          s.hostBilling =
+            p.hosting === "optional" ? val("ec-host-billing") : "annual";
+          s.blog = q("#ec-blog").checked;
+          s.gsc = q("#ec-gsc").checked;
+        }
+        function baseUpdate() {
+          read();
+          const p = current,
+            s = states[p.id],
+            a = calculate();
+          q("#ec-base").textContent = money(
+            p.recurring ? (s.billing === "annual" ? 649 : 59) : p.price,
+          );
+          q("#ec-period").textContent = p.recurring
+            ? s.billing === "annual"
+              ? "rocznie, płatne z góry"
+              : "miesięcznie"
+            : "jednorazowo za wykonanie";
+          q("#ec-base-label").textContent = p.recurring
+            ? "Abonament / rok"
+            : "Cena bazowa";
+          q("#ec-base-cost").textContent = money(a.year);
+          q("#ec-extra").textContent = money(a.extra);
+          q("#ec-host-row").hidden = !a.host;
+          q("#ec-host-cost").textContent = money(a.host);
+          q("#ec-total-label").textContent =
+            p.recurring || a.host
+              ? "Łącznie w pierwszym roku"
+              : "Łącznie jednorazowo";
+          q("#ec-total").textContent = money(a.total);
+          q("#ec-paynote").textContent = p.recurring
+            ? s.billing === "annual"
+              ? "649 zł / rok + dodatki jednorazowe."
+              : "12 × 59 zł + dodatki jednorazowe."
+            : a.host
+              ? "Wykonanie, dodatki i hosting za rok płatne jednorazowo."
+              : p.hosting === "year"
+                ? "Hosting i opieka w cenie na pierwszy rok."
+                : "Hosting i opieka techniczna nie są doliczone.";
+          q("#ec-contract").textContent = p.recurring
+            ? "Koszt umowy na 24 miesiące z dodatkami: " +
+              money(a.contract) +
+              "."
+            : p.hosting === "year"
+              ? "Cena hostingu po pierwszym roku do ustalenia."
+              : "";
+          q("#ec-items").innerHTML = a.items.length
+            ? a.items
+                .map(
+                  (x) =>
+                    `<div class="ec-line"><span>${x[0]}</span><span>${money(x[1])}</span></div>`,
+                )
+                .join("")
+            : "Brak dodatków jednorazowych.";
+          all("[data-counter]").forEach((b) => {
+            const n = s[b.dataset.counter];
+            b.disabled = b.dataset.delta === "-1" ? n === 0 : n === 99;
+          });
+        }
+        function baseSummary(baseChoice) {
+          const p = current,
+            s = states[p.id],
+            a = calculate();
+          const rows = [
+            ["Pakiet", p.name],
+            [
+              "Zakres bazowy",
+              p.structure + (p.chips.length ? " — " + p.chips.join(", ") : ""),
+            ],
+            [
+              "Rozliczenie",
+              p.recurring
+                ? miniSchedule() + " · umowa 24 mies."
+                : money(p.price + a.extra) + " jednorazowo za stronę i dodatki",
+            ],
+            ["Dodatkowe sekcje", s.sections],
+            ["Dodatkowe podstrony", s.pages],
+            ["SEO", seo[s.seo][0]],
+            ["Kontakt", contacts[s.contact][0]],
+            ["Szkolenie", trainingLabel()],
+            [
+              "Sesje poprawek",
+              p.revisions +
+                s.revisions +
+                " łącznie (" +
+                p.revisions +
+                " w cenie, " +
+                s.revisions +
+                " dodatkowych)",
+            ],
+            ["Hosting", hostingDescription(p)],
+            ["Moduł bloga lub realizacji", s.blog ? "Tak" : "Nie"],
+            ["Google Search Console", s.gsc ? "Tak" : "Nie"],
+          ];
+          q("#ec-summary").innerHTML =
+            `<h3>${baseChoice ? "Wybrano pakiet bazowy: " : "Twoja konfiguracja: "}${p.name}</h3>${baseChoice ? '<p class="ec-result-note">Wybrany zakres bazowy jest gotowy do dalszego kontaktu z agencją. Uzupełnij formularz poniżej, aby przygotować zapytanie.</p>' : ""}` +
+            rows
+              .map(
+                (x) =>
+                  `<div class="ec-line"><span>${x[0]}</span><span>${x[1]}</span></div>`,
+              )
+              .join("") +
+            '<h3 style="margin-top:24px">Pozostały zakres bazowy</h3><div class="ec-scope">' +
+            fixed(p)
+              .filter((x) => x[1])
+              .map(
+                (x) =>
+                  `<label><input type="checkbox" checked disabled><span>${x[0]}</span></label>`,
+              )
+              .join("") +
+            '</div><div class="ec-summary-total">' +
+            [
+              [
+                p.recurring
+                  ? "Abonament bazowy przez 24 miesiące"
+                  : "Wykonanie strony",
+                p.recurring ? a.contract - a.extra : a.year,
+              ],
+              ...a.items,
+              ...(a.host
+                ? [
+                    [
+                      paymentInfo().monthly
+                        ? "Pierwsza rata hostingu"
+                        : "Hosting i opieka / rok",
+                      paymentInfo().hostInitial,
+                    ],
+                  ]
+                : []),
+            ]
+              .map(
+                (x) =>
+                  `<div class="ec-line"><span>${x[0]}</span><span>${money(x[1])}</span></div>`,
+              )
+              .join("") +
+            `<div class="ec-line" style="margin-top:12px"><span>${p.recurring ? "Łącznie za 24 miesiące" : "Do zapłaty na start"}</span><strong>${money(p.recurring ? a.contract : paymentInfo().initial)}</strong></div></div><p class="ec-note">${p.recurring ? "Umowa na 24 miesiące. Łączny koszt umowy z dodatkami: " + money(a.contract) + "." : a.host ? hostingDescription(p) : p.hosting === "year" ? "Hosting i opieka w cenie przez pierwszy rok; dalsza cena do ustalenia." : "Hosting poza bazą pakietu."} Ceny rozszerzeń są przykładowe. Sesje poprawek i modyfikacje od 69 zł — w makiecie 69 zł za sesję. Kwoty netto; VAT według właściwej stawki.</p>`;
+        }
+        function step(second, baseChoice = false) {
+          q("#ec-config").hidden = second;
+          q("#ec-summary").hidden = !second;
+          q("#ec-contact-section").hidden = !second;
+          q("#ec-next").hidden = second;
+          q("#ec-back").hidden = !second;
+          q("#ec-title").textContent =
+            (second ? "Podsumowanie: " : "Dopasuj pakiet ") +
+            current.name +
+            (second ? "" : ".");
+          q("#ec-footer-note").textContent = second
+            ? "Podgląd wyceny. Ta makieta nie wysyła zapytania."
+            : current.recurring
+              ? "Mini Start: łączna rata pakietu i dodatków przez 24 miesiące."
+              : "Strona i dodatki płatne jednorazowo. Hosting opcjonalnie: za rok z góry lub miesięcznie, z pierwszą ratą na start.";
+          [q("#ec-step1"), q("#ec-step2")].forEach((e, i) => {
+            const active = i === (second ? 1 : 0);
+            e.classList.toggle("active", active);
+            if (active) e.setAttribute("aria-current", "step");
+            else e.removeAttribute("aria-current");
+          });
+          if (second) summary(baseChoice);
+        }
+        let scrollBeforeModal = "";
+        function open(id, baseChoice, button) {
+          const target = packages.find((p) => p.id === id);
+          if (!target) return;
+          current = target;
+          opener = button || null;
+          if (baseChoice) states[id] = defaults(current);
+          scrollBeforeModal = document.body.style.overflow;
+          document.body.style.overflow = "hidden";
+          q("#ec-modal-stage").hidden = false;
+          fill();
+          step(baseChoice, baseChoice);
+          q("#ec-modal-stage").scrollTop = 0;
+          q("#ec-close").focus();
+        }
+        function close() {
+          q("#ec-modal-stage").hidden = true;
+          document.body.style.overflow = scrollBeforeModal;
+          opener?.focus();
+        }
+        q("#ec-catalog").addEventListener("click", (e) => {
+          const b = e.target.closest("[data-configure],[data-choose]");
+          if (b)
+            open(
+              b.dataset.configure || b.dataset.choose,
+              !!b.dataset.choose,
+              b,
+            );
+        });
+        q("#ec-close").addEventListener("click", close);
+        q("#ec-next").addEventListener("click", () => {
+          update();
+          step(true);
+          q("#ec-back").focus();
+        });
+        q("#ec-back").addEventListener("click", () => {
+          step(false);
+          q("#ec-next").focus();
+        });
+        q("#ec-config").addEventListener("change", update);
+        all("[data-counter]").forEach((b) =>
+          b.addEventListener("click", () => {
+            const el = q("#ec-" + b.dataset.counter);
+            el.value = Number(el.value) + Number(b.dataset.delta);
+            update();
+          }),
+        );
+        q("#ec-modal-stage").addEventListener("click", (e) => {
+          if (e.target === q("#ec-modal-stage")) close();
+        });
+        document.addEventListener("keydown", (e) => {
+          if (q("#ec-modal-stage").hidden) return;
+          if (e.key === "Escape") {
+            e.preventDefault();
+            close();
+          }
+          if (e.key === "Tab") {
+            const focusables = all('#ec-modal-stage button:not([disabled]):not([hidden]), #ec-modal-stage input:not([disabled]):not([type="hidden"]), #ec-modal-stage summary, #ec-modal-stage a[href]')
+              .filter(el => el.getClientRects().length > 0);
+            const first = focusables[0], last = focusables[focusables.length - 1];
+            if (!first || !last) return;
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+          }
+        });
+        // Elementor: wykorzystujemy gotowe karty, a nie odtwarzamy ich w drugim miejscu.
+        // Żaden istniejący link CTA nie jest podmieniany lub blokowany.
+        function integrateWithElementor() {
+          const holder = document.querySelector('#enp-cennik.eniverse-pricing, .eniverse-pricing');
+          if (!holder || holder.closest('#eni-calc')) return;
+          const liveCards = [...holder.querySelectorAll('.enp-card')];
+          if (!liveCards.length) return;
+          const byName = name => {
+            const n = (name || '').toLocaleLowerCase('pl-PL');
+            if (n.includes('wizytówk')) return 'wiz';
+            if (n.includes('one page')) return 'one';
+            if (n.includes('strona firmowa')) return 'firm';
+            if (n.includes('mini start')) return 'mini';
+            if (n.includes('start')) return 'start';
+            return null;
+          };
+          const matched = [];
+          liveCards.forEach(card => {
+            const title = card.querySelector('h3, h2');
+            const plan = byName(title?.textContent || card.getAttribute('aria-labelledby'));
+            if (!plan) return;
+            card.dataset.eniPlan = plan;
+            matched.push(card);
+            const existing = card.querySelector('.ec-elementor-configure');
+            if (existing) return;
+            const link = card.querySelector('.enp-btn, a[data-enp-package]');
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'ec-elementor-configure';
+            button.textContent = 'Skonfiguruj pakiet ↗';
+            button.dataset.configure = plan;
+            button.setAttribute('aria-label', 'Skonfiguruj pakiet ' + (title?.textContent || ''));
+            if (link) link.insertAdjacentElement('afterend', button);
+            else card.append(button);
+            button.addEventListener('click', () => open(plan, false, button));
+          });
+          if (!matched.length) return;
+          q('#ec-demo-page').hidden = true;
+          root.classList.add('ec-elementor-mode');
+          // Zmiana wyróżnienia tylko przez oznaczenia klas/atrybutów na oryginalnych boksach.
+          const oldFeatured = matched.filter(c => c.dataset.eniPlan !== 'wiz');
+          oldFeatured.forEach(card => {
+            card.classList.remove('enp-card--featured', 'enp-card--highlight', 'is-featured');
+            card.dataset.eniFeatured = 'false';
+            card.querySelectorAll('.enp-badge, .enp-card-badge, .enp-featured-badge').forEach(b => b.hidden = true);
+          });
+          const wizCard = matched.find(c => c.dataset.eniPlan === 'wiz');
+          if (wizCard) {
+            wizCard.dataset.eniFeatured = 'true';
+            wizCard.classList.add('enp-card--featured');
+            let badge = wizCard.querySelector('.ec-elementor-badge');
+            if (!badge) {
+              badge = document.createElement('span');
+              badge.className = 'ec-elementor-badge';
+              badge.textContent = 'Wyróżniony pakiet';
+              wizCard.append(badge);
+            }
+          }
+        }
+        // W Elementorze kod w widżecie HTML wykonuje się po stworzeniu kart na stronie.
+        // Jeśli widget ładuje się wcześniej, DOMContentLoaded uruchomi próbę ponownie.
+        integrateWithElementor();
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', integrateWithElementor, {once:true});
+        const decimalMoney = (n) =>
+          new Intl.NumberFormat("pl-PL", {
+            useGrouping: "always",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(n) + " zł";
+        function hostingDescription(p = current) {
+          const s = states[p.id];
+          if (p.hosting !== "optional") return hostingText(p);
+          if (!s.hosting) return "Bez hostingu i opieki w wycenie";
+          return s.hostBilling === "monthly"
+            ? "Hosting: 12 rat po 79 zł; pierwsza rata w płatności początkowej"
+            : "Hosting i opieka: 948 zł za rok z góry";
+        }
+        function paymentInfo() {
+          const p = current,
+            s = states[p.id],
+            a = calculate(),
+            monthly =
+              p.hosting === "optional" &&
+              s.hosting &&
+              s.hostBilling === "monthly",
+            hostInitial = s.hosting ? (monthly ? 79 : 948) : 0,
+            principal = p.price + a.extra;
+          return {
+            eligible: !p.recurring,
+            principal,
+            monthly,
+            hostInitial,
+            remaining: monthly ? 869 : 0,
+            initial: principal + hostInitial,
+            total: a.total,
+          };
+        }
+        function paymentDescription() {
+          const b = paymentInfo();
+          if (!b.eligible) return "";
+          return (
+            money(b.principal) +
+            " jednorazowo za projekt i dodatki" +
+            (b.monthly
+              ? " + pierwsza rata hostingu 79 zł."
+              : b.hostInitial
+                ? " + 948 zł za rok hostingu z góry."
+                : ".")
+          );
+        }
+        function remainingPaymentDescription() {
+          const b = paymentInfo();
+          if (b.monthly)
+            return "Pozostały hosting: 11 rat po 79 zł, razem 869 zł. Pierwsza rata została uwzględniona w kwocie na start.";
+          return current.hosting === "year"
+            ? "Pierwszy rok hostingu i opieki jest w cenie pakietu. Warunki odnowienia do ustalenia."
+            : states[current.id].hosting
+              ? "Hosting opłacony za cały pierwszy rok. Odnowienie: 948 zł za kolejny rok."
+              : "Brak kolejnych opłat w tej wycenie.";
+        }
+        function singlePaymentUpdate() {
+          baseUpdate();
+          const b = paymentInfo(),
+            enabled =
+              current.hosting === "optional" && states[current.id].hosting;
+          q("#ec-host-billing-options").hidden = !enabled;
+          all('[name="ec-host-billing"]').forEach(
+            (e) => (e.disabled = !enabled),
+          );
+          q("#ec-payment-aside").hidden = !b.eligible;
+          if (b.eligible) {
+            q("#ec-host-label").textContent = b.monthly
+              ? "Pierwsza rata hostingu"
+              : "Hosting / rok";
+            q("#ec-host-cost").textContent = money(b.hostInitial);
+            q("#ec-total").textContent = money(b.initial);
+            q("#ec-total-label").textContent = "Do zapłaty na start";
+            q("#ec-payment-aside").innerHTML =
+              "<span>" +
+              (b.monthly
+                ? "Pozostałe raty — tylko hosting"
+                : "Płatność jednorazowa") +
+              "</span><strong>" +
+              (b.monthly ? "11 × 79 zł" : decimalMoney(b.initial)) +
+              '</strong><p class="ec-muted">' +
+              (b.monthly
+                ? "Pozostało " +
+                  money(b.remaining) +
+                  " za hosting. Pierwsze 79 zł jest już w kwocie na start."
+                : "Projekt i dodatki opłacone w całości.") +
+              "</p>" +
+              (states[current.id].hosting
+                ? '<p class="ec-muted" style="margin-top:10px">Łącznie z hostingiem w pierwszym roku: ' +
+                  money(b.total) +
+                  ".</p>"
+                : "");
+            q("#ec-paynote").textContent = paymentDescription();
+          }
+          q("#ec-items").removeAttribute("aria-label");
+        }
+        function singlePaymentSummary(baseChoice) {
+          baseSummary(baseChoice);
+          const b = paymentInfo();
+          if (b.eligible) {
+            const block = document.createElement("section");
+            block.className = "ec-payment-summary";
+            const h = document.createElement("h3");
+            h.textContent = b.monthly
+              ? "Projekt jednorazowo, hosting miesięcznie"
+              : "Płatność jednorazowa";
+            const p = document.createElement("p");
+            p.textContent = paymentDescription();
+            const start = document.createElement("p");
+            start.id = "ec-upfront-summary";
+            start.style.marginTop = "12px";
+            start.textContent =
+              "Do zapłaty na start: " + decimalMoney(b.initial) + ".";
+            const note = document.createElement("p");
+            note.className = "ec-muted";
+            note.textContent = remainingPaymentDescription();
+            block.append(h, p, start, note);
+            if (states[current.id].hosting) {
+              const total = document.createElement("p");
+              total.id = "ec-host-year-total";
+              total.style.marginTop = "12px";
+              total.textContent =
+                "Łącznie w pierwszym roku: " + decimalMoney(b.total) + ".";
+              block.append(total);
+            }
+            q("#ec-summary").append(block);
+          }
+          q("#ec-send-result").hidden = true;
+          q("#ec-form-error").hidden = true;
+          all("#ec-lead-form [aria-invalid]").forEach((e) =>
+            e.removeAttribute("aria-invalid"),
+          );
+          q("#ec-quote-payload").value = quoteText();
+        }
+        function quoteText() {
+          const p = current,
+            s = states[p.id],
+            a = calculate(),
+            b = paymentInfo();
+          const lines = [
+            "ZAPYTANIE O STRONĘ — ENIVERSE",
+            "Pakiet: " + p.name,
+            "Zakres: " +
+              p.structure +
+              (p.chips.length ? " — " + p.chips.join(", ") : ""),
+            "Dodatkowe sekcje: " + s.sections,
+            "Dodatkowe podstrony: " + s.pages,
+            "SEO: " + seo[s.seo][0],
+            "Kontakt: " + contacts[s.contact][0],
+            "Szkolenie: " + trainingLabel(),
+            "Dopłata za zmianę szkolenia: " + money(trainingCharge()),
+            "Sesje poprawek: " +
+              (p.revisions + s.revisions) +
+              " (" +
+              p.revisions +
+              " w cenie, " +
+              s.revisions +
+              " dodatkowych)",
+            "Hosting: " + hostingDescription(p),
+            "Moduł bloga lub realizacji: " + (s.blog ? "Tak" : "Nie"),
+            "Konfiguracja Google Search Console: " + (s.gsc ? "Tak" : "Nie"),
+            "",
+            "POZOSTAŁY ZAKRES BAZOWY",
+            ...fixed(p).filter((x) => x[1]).map((x) => "W cenie: " + x[0]),
+            "",
+            "WYCENA",
+            "Cena bazowa: " +
+              money(a.year) +
+              (p.recurring ? " / rok" : " za wykonanie"),
+            ...a.items.map((x) => x[0] + ": " + money(x[1])),
+            (p.recurring
+              ? "Dodatki — wartość za całą umowę: "
+              : "Suma dodatków: ") + money(a.extra),
+            "Hosting poza ceną bazową / rok: " + money(a.host),
+            "Łącznie" + " w pierwszym roku" + ": " + money(a.total),
+            "",
+          ];
+          if (p.recurring)
+            lines.push(
+              "Łączna płatność za pakiet i dodatki: " + miniSchedule(),
+              "Umowa: 24 miesiące",
+              "Cała umowa z dodatkami: " + money(a.contract),
+              "Dodatki są rozłożone na cały okres umowy; brak osobnej opłaty jednorazowej.",
+            );
+          else
+            lines.push(
+              "Płatność: " +
+                (b.eligible
+                  ? paymentDescription()
+                  : money(b.principal) + " jednorazowo"),
+            );
+          if (b.eligible)
+            lines.push(
+              "Do zapłaty na start: " + decimalMoney(b.initial),
+              remainingPaymentDescription(),
+            );
+          if (p.hosting === "year")
+            lines.push("Hosting po pierwszym roku: cena do ustalenia.");
+          lines.push(
+            "Ceny dodatków są przykładowe. Sesje poprawek i modyfikacje od 69 zł; w makiecie 69 zł/sesję. Kwoty netto; VAT według właściwej stawki.",
+          );
+          return lines.join(String.fromCharCode(10));
+        }
+        q("#ec-lead-form").addEventListener("submit", (event) => {
+          event.preventDefault();
+          const name = q("#ec-client-name"),
+            email = q("#ec-client-email"),
+            phone = q("#ec-client-phone");
+          name.value = name.value.trim();
+          email.value = email.value.trim();
+          phone.value = phone.value.trim();
+          name.setCustomValidity(
+            name.value ? "" : "Podaj imię i nazwisko lub nazwę firmy.",
+          );
+          phone.setCustomValidity(
+            phone.value &&
+              (!/^[+0-9 ()-]+$/.test(phone.value) ||
+                phone.value.replace(/[^0-9]/g, "").length < 7)
+              ? "Podaj poprawny numer telefonu lub pozostaw to pole puste."
+              : "",
+          );
+          const fields = [name, email, phone],
+            invalid = fields.filter((e) => !e.checkValidity());
+          fields.forEach((e) => {
+            if (!e.checkValidity()) e.setAttribute("aria-invalid", "true");
+            else e.removeAttribute("aria-invalid");
+          });
+          q("#ec-send-result").hidden = true;
+          if (invalid.length) {
+            q("#ec-form-error").textContent =
+              "Uzupełnij wymagane dane i sprawdź poprawność adresu e-mail" +
+              (invalid.includes(phone) ? " oraz telefonu." : ".");
+            q("#ec-form-error").hidden = false;
+            invalid[0].focus();
+            return;
+          }
+          q("#ec-form-error").hidden = true;
+          const nl = String.fromCharCode(10),
+            quote = quoteText();
+          q("#ec-quote-payload").value = quote;
+          const message = [
+            "Odbiorca: adres agencji do wskazania przy wdrożeniu",
+            "Temat: Zapytanie — " + current.name,
+            "",
+            "DANE KONTAKTOWE",
+            "Imię i nazwisko / Firma: " + name.value,
+            "E-mail: " + email.value,
+            "Telefon: " + (phone.value || "Nie podano"),
+            "",
+            quote,
+          ].join(nl);
+          q("#ec-message-preview").textContent = message;
+          q("#ec-send-status").textContent =
+            "Dane są poprawne. To podgląd wiadomości — makieta nie wysłała e-maila.";
+          q("#ec-send-result").hidden = false;
+        });
+        all('#ec-lead-form input:not([type="hidden"])').forEach((e) =>
+          e.addEventListener("input", () => {
+            e.setCustomValidity("");
+            e.removeAttribute("aria-invalid");
+            q("#ec-send-result").hidden = true;
+            q("#ec-form-error").hidden = true;
+          }),
+        );
+
+        function miniPlan(billing = states[current.id].billing) {
+          const a = calculate(),
+            annual = billing === "annual",
+            count = annual ? 2 : 24,
+            base = annual ? 64900 : 5900,
+            extraCents = Math.round(a.extra * 100),
+            part = Math.floor(extraCents / count),
+            lastPart = extraCents - part * (count - 1);
+          return {
+            annual,
+            count,
+            regular: (base + part) / 100,
+            last: (base + lastPart) / 100,
+            extraPart: part / 100,
+            contract: (annual ? 1298 : 1416) + a.extra,
+          };
+        }
+        function miniSchedule(billing = states[current.id].billing) {
+          const b = miniPlan(billing);
+          return b.regular === b.last
+            ? b.count +
+                " " +
+                (b.annual ? "płatności roczne" : "raty miesięczne") +
+                " po " +
+                decimalMoney(b.regular)
+            : b.count -
+                1 +
+                " " +
+                (b.annual ? "płatność roczna" : "raty miesięczne") +
+                " po " +
+                decimalMoney(b.regular) +
+                " i ostatnia " +
+                (b.annual ? "płatność " : "rata ") +
+                decimalMoney(b.last);
+        }
+        function update() {
+          singlePaymentUpdate();
+          const mini = current.recurring;
+          q("#ec-extra-label").textContent = mini
+            ? "Dodatki / " +
+              (states[current.id].billing === "annual" ? "rok" : "ratę")
+            : "Dodatki jednorazowe";
+          q("#ec-items-title").textContent = mini
+            ? "Dodatki — wartość za całą umowę"
+            : "Wybrane dodatki";
+          all("[data-extra-cost]").forEach((e) => {
+            e.textContent =
+              e.dataset.extraCost +
+              " · " +
+              (mini ? "wliczone w raty" : "jednorazowo");
+          });
+          if (!mini) return;
+          const a = calculate(),
+            b = miniPlan();
+          q("#ec-base").textContent = decimalMoney(b.regular);
+          q("#ec-period").textContent = b.annual
+            ? "rocznie za pakiet i dodatki"
+            : "miesięcznie za pakiet i dodatki";
+          q("#ec-base-label").textContent = b.annual
+            ? "Baza / rok"
+            : "Rata bazowa";
+          q("#ec-base-cost").textContent = money(b.annual ? 649 : 59);
+          q("#ec-extra").textContent = decimalMoney(b.extraPart);
+          q("#ec-total-label").textContent = "Łącznie za 24 miesiące";
+          q("#ec-total").textContent = decimalMoney(b.contract);
+          q("#ec-paynote").textContent = miniSchedule() + ".";
+          q("#ec-contract").textContent =
+            "Dodatki o wartości " +
+            money(a.extra) +
+            " są rozłożone na cały okres umowy, bez osobnej płatności na start.";
+          const monthly = miniPlan("monthly"),
+            annual = miniPlan("annual");
+          q("#ec-monthly-rate").textContent =
+            decimalMoney(monthly.regular) + " / mies.";
+          q("#ec-monthly-detail").textContent =
+            miniSchedule("monthly") + " za pakiet i dodatki.";
+          q("#ec-annual-rate").textContent =
+            decimalMoney(annual.regular) + " / rok";
+          q("#ec-annual-detail").textContent =
+            miniSchedule("annual") + " za pakiet i dodatki.";
+          all("#ec-modules small").forEach((e) => {
+            e.textContent = e.textContent.replace(
+              "jednorazowo",
+              "wliczone w raty",
+            );
+          });
+          if (!a.items.length) q("#ec-items").textContent = "Brak dodatków.";
+          q("#ec-items").setAttribute(
+            "aria-label",
+            "Łączna wartość dodatków rozłożonych na cały okres umowy",
+          );
+        }
+        function summary(baseChoice) {
+          singlePaymentSummary(baseChoice);
+          if (current.recurring) {
+            const a = calculate(),
+              block = document.createElement("section");
+            block.className = "ec-payment-summary";
+            const h = document.createElement("h3");
+            h.textContent = "Łączna rata Mini Start z dodatkami";
+            const line = document.createElement("p");
+            line.id = "ec-mini-schedule";
+            line.textContent = miniSchedule() + ".";
+            const note = document.createElement("p");
+            note.className = "ec-muted";
+            note.textContent =
+              "Dodatki: " +
+              money(a.extra) +
+              " rozłożone na 24 miesiące. Bez dodatkowej płatności jednorazowej. Ostatnia płatność uwzględnia wyrównanie groszy, jeśli jest potrzebne.";
+            block.append(h, line, note);
+            q("#ec-summary").append(block);
+          }
+          q("#ec-quote-payload").value = quoteText();
+        }
+      })();
+    
+</script>
