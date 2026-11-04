@@ -951,6 +951,98 @@
         #eni-calc .ec-window { border-radius:8px; }
       }
 
+      /* WERSJA 2026-11-04: modal w jednym oknie, kroki zamiast długiego scrollowania */
+      #eni-calc .ec-modal-stage { align-items:center; padding:8px; overflow:hidden; }
+      #eni-calc .ec-window { width:min(1020px,100%); max-width:1020px; height:min(780px,calc(100dvh - 16px)); max-height:calc(100dvh - 16px); display:flex; flex-direction:column; overflow:hidden; }
+      #eni-calc .ec-head { padding:10px 18px 8px; flex-shrink:0; align-items:center; }
+      #eni-calc .ec-head h2 { font-size:23px; margin:2px 0 3px; }
+      #eni-calc .ec-head .ec-muted { font-size:11px; }
+      #eni-calc .ec-steps { flex-shrink:0; gap:6px; justify-content:space-between; padding:9px 16px; flex-wrap:nowrap; }
+      #eni-calc .ec-step { gap:5px; font-size:11px; white-space:nowrap; }
+      #eni-calc .ec-step span { width:19px; height:19px; flex-shrink:0; }
+      #eni-calc .ec-body { flex:1; min-height:0; overflow:hidden; grid-template-columns:minmax(0,1fr) 202px; }
+      #eni-calc .ec-fields { padding:12px 18px; min-height:0; overflow:hidden; display:block; }
+      #eni-calc .ec-pane { display:none; height:100%; overflow:hidden; }
+      #eni-calc .ec-pane.is-active { display:block; }
+      #eni-calc .ec-pane .ec-section { padding:8px 0; }
+      #eni-calc .ec-pane .ec-section h3 { font-size:16px; margin:0 0 3px; }
+      #eni-calc .ec-pane .ec-muted { font-size:11px; }
+      #eni-calc .ec-pane .ec-counter-row { margin-top:8px; }
+      #eni-calc .ec-pane .ec-options { margin-top:7px; gap:6px; grid-template-columns:repeat(2,minmax(0,1fr)); }
+      #eni-calc .ec-pane .ec-option { padding:8px 9px; min-height:42px; gap:6px; }
+      #eni-calc .ec-pane .ec-option strong { font-size:11px; }
+      #eni-calc .ec-pane .ec-option small { font-size:10px; line-height:1.3; }
+      #eni-calc .ec-pane .ec-option .ec-tag { font-size:10px; }
+      #eni-calc .ec-pane .ec-revisions { grid-template-columns:repeat(4,minmax(0,1fr)); }
+      #eni-calc .ec-pane .ec-chips { margin-top:6px; }
+      #eni-calc .ec-bundle-grid { display:grid; grid-template-columns:1.1fr 1fr; gap:16px; padding-top:8px; align-items:start; }
+      #eni-calc .ec-bundle-grid h4 { font-size:12px; margin:0 0 7px; }
+      #eni-calc .ec-bundle-grid .ec-scope { display:grid; gap:1px; margin:0; padding:0; }
+      #eni-calc .ec-bundle-grid .ec-scope label { display:flex; gap:7px; padding:4px 0; font-size:11px; line-height:1.35; align-items:flex-start; }
+      #eni-calc .ec-bundle-grid .ec-scope input { margin:1px 0 0; width:14px; height:14px; flex-shrink:0; }
+      #eni-calc #ec-addons { display:grid; gap:4px; }
+      #eni-calc .ec-addon { display:flex; gap:7px; align-items:center; min-height:32px; padding:5px 7px; background:#f8f9fa; border:1px solid #e4e8ec; border-radius:6px; cursor:pointer; }
+      #eni-calc .ec-addon:has(input:checked) { background:#fff7f7; border-color:#ef9fa1; }
+      #eni-calc .ec-addon input { accent-color:#E20B0C; width:15px; height:15px; margin:0; flex-shrink:0; }
+      #eni-calc .ec-addon span { display:flex; justify-content:space-between; gap:7px; align-items:center; width:100%; font-size:11px; line-height:1.25; }
+      #eni-calc .ec-addon small { color:#6a7582; font-size:10px; white-space:nowrap; }
+      #eni-calc #ec-excluded { display:none; }
+      #eni-calc .ec-aside { overflow:hidden; padding:12px 14px; }
+      #eni-calc .ec-aside .ec-badge { font-size:10px; margin-bottom:9px; }
+      #eni-calc .ec-aside h3 { margin-bottom:4px; font-size:14px; }
+      #eni-calc .ec-aside .ec-total { font-size:24px; }
+      #eni-calc .ec-aside .ec-breakdown { margin:9px 0 0; padding:8px 0; }
+      #eni-calc .ec-aside .ec-line { margin:5px 0; font-size:11px; }
+      #eni-calc .ec-aside .ec-smalltitle { margin-top:10px; font-size:11px; }
+      #eni-calc .ec-aside > p.ec-note, #eni-calc #ec-items, #eni-calc #ec-items-title, #eni-calc #ec-contract, #eni-calc #ec-payment-aside { display:none!important; }
+      #eni-calc .ec-aside #ec-paynote { margin-top:5px!important; font-size:11px; }
+      #eni-calc .ec-foot { padding:10px 18px; gap:10px; min-height:60px; flex-shrink:0; }
+      #eni-calc .ec-foot .ec-muted { max-width:440px; }
+      #eni-calc .ec-foot .ec-action { padding:9px 14px; white-space:nowrap; }
+      #eni-calc .ec-final { flex:1; min-height:0; display:grid; grid-template-columns:1fr 1.05fr; gap:0; overflow:hidden; }
+      #eni-calc .ec-final .ec-summary { padding:13px 18px; min-width:0; overflow:hidden; background:#f7f8fa; }
+      #eni-calc .ec-final .ec-summary h3 { font-size:16px; margin:0 0 9px; }
+      #eni-calc .ec-final .ec-summary .ec-line { padding:5px 0; margin:0; border-color:#e2e6eb; font-size:11px; }
+      #eni-calc .ec-final .ec-summary-total { margin-top:8px; padding:9px 11px; border:1px solid #d9dfe4; background:#fff; }
+      #eni-calc .ec-final .ec-summary-total strong { font-size:17px; }
+      #eni-calc .ec-final .ec-payment-summary { margin:7px 0; padding:9px; }
+      #eni-calc .ec-final .ec-payment-summary h3 { font-size:13px; margin-bottom:4px; }
+      #eni-calc .ec-final .ec-payment-summary p { font-size:11px; }
+      #eni-calc .ec-final .ec-lead { min-width:0; padding:13px 18px; border:0; overflow:hidden; }
+      #eni-calc .ec-final .ec-lead h3 { font-size:18px; margin:3px 0 5px; }
+      #eni-calc .ec-final .ec-lead > .ec-muted { font-size:11px; }
+      #eni-calc .ec-final .ec-form-grid { margin:10px 0 9px; gap:8px 10px; }
+      #eni-calc .ec-final .ec-field input { margin-top:4px; padding:8px 9px; font-size:13px; }
+      #eni-calc .ec-final .ec-send { margin-top:9px; padding:9px 16px; }
+      #eni-calc .ec-final .ec-note { margin-top:6px!important; font-size:10px; }
+      #eni-calc .ec-final #ec-send-result { position:relative; background:#fff; padding:9px; margin-top:8px; max-height:140px; overflow:auto; }
+      #eni-calc .ec-service-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:10px; }
+      #eni-calc .ec-service-list .ec-checkbox { padding:10px; border:1px solid #e3e7ec; border-radius:6px; }
+      #eni-calc .ec-language-select { display:block; width:100%; margin-top:9px; padding:10px 12px; border:1px solid #d9dfe4; background:#fff; border-radius:6px; font:inherit; color:#141719; }
+      #eni-calc .ec-existing-site { margin-top:8px; padding:8px 10px; border:1px solid #e2e6eb; border-radius:6px; font-size:12px; }
+      #eni-calc .ec-existing-site label { display:flex; gap:9px; align-items:center; }
+      #eni-calc .ec-existing-site input[type="checkbox"] { accent-color:#E20B0C; }
+      #eni-calc .ec-existing-site .ec-field { margin-top:8px; }
+      #eni-calc .ec-existing-site .ec-field input { width:100%; }
+      @media (max-width:720px) {
+        #eni-calc .ec-body { grid-template-columns:1fr; }
+        #eni-calc .ec-body .ec-aside { display:none; }
+        #eni-calc .ec-steps { gap:4px; padding:6px; }
+        #eni-calc .ec-step { font-size:0; gap:0; }
+        #eni-calc .ec-step span { font-size:11px; width:24px; height:24px; }
+        #eni-calc .ec-window { height:calc(100dvh - 12px); }
+        #eni-calc .ec-bundle-grid { gap:8px; }
+        #eni-calc .ec-fields { padding:8px 11px; }
+        #eni-calc .ec-final { grid-template-columns:1fr; }
+        #eni-calc .ec-final .ec-summary { display:none; }
+        #eni-calc .ec-final .ec-lead { padding:10px 14px; }
+      }
+      @media(max-height:650px) {
+        /* Na wyjątkowo niskich ekranach zachowujemy dostęp do wszystkich pól. */
+        #eni-calc .ec-fields, #eni-calc .ec-final .ec-lead { overflow-y:auto; }
+        #eni-calc .ec-head h2 { font-size:19px; }
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -995,12 +1087,11 @@
               </button>
             </header>
             <div class="ec-steps" aria-label="Etapy konfiguracji">
-              <div class="ec-step active" id="ec-step1" aria-current="step">
-                <span>1</span>Konfiguracja
-              </div>
-              <div class="ec-step" id="ec-step2">
-                <span>2</span>Podsumowanie
-              </div>
+              <div class="ec-step active" data-ec-nav-step="0" aria-current="step"><span>1</span>Pakiet i dodatki</div>
+              <div class="ec-step" data-ec-nav-step="1"><span>2</span>Struktura i SEO</div>
+              <div class="ec-step" data-ec-nav-step="2"><span>3</span>Kontakt i poprawki</div>
+              <div class="ec-step" data-ec-nav-step="3"><span>4</span>Język i usługi</div>
+              <div class="ec-step" data-ec-nav-step="4"><span>5</span>Podsumowanie</div>
             </div>
             <div class="ec-body" id="ec-config">
               <div class="ec-fields">
@@ -2014,28 +2105,89 @@
               .join("") +
             `<div class="ec-line" style="margin-top:12px"><span>${p.recurring ? "Łącznie za 24 miesiące" : "Do zapłaty na start"}</span><strong>${money(p.recurring ? a.contract : paymentInfo().initial)}</strong></div></div><p class="ec-note">${p.recurring ? "Umowa na 24 miesiące. Łączny koszt umowy z dodatkami: " + money(a.contract) + "." : a.host ? hostingDescription(p) : p.hosting === "year" ? "Hosting i opieka w cenie przez pierwszy rok; dalsza cena do ustalenia." : "Hosting poza bazą pakietu."} Ceny rozszerzeń są przykładowe. Sesje poprawek i modyfikacje od 69 zł — w makiecie 69 zł za sesję. Kwoty netto; VAT według właściwej stawki.</p>`;
         }
-        function step(second, baseChoice = false) {
-          q("#ec-config").hidden = second;
-          q("#ec-summary").hidden = !second;
-          q("#ec-contact-section").hidden = !second;
-          q("#ec-next").hidden = second;
-          q("#ec-back").hidden = !second;
-          q("#ec-title").textContent =
-            (second ? "Podsumowanie: " : "Dopasuj pakiet ") +
-            current.name +
-            (second ? "" : ".");
-          q("#ec-footer-note").textContent = second
-            ? "Podgląd wyceny. Ta makieta nie wysyła zapytania."
-            : current.recurring
-              ? "Mini Start: łączna rata pakietu i dodatków przez 24 miesiące."
-              : "Strona i dodatki płatne jednorazowo. Hosting opcjonalnie: wyłącznie za rok z góry.";
-          [q("#ec-step1"), q("#ec-step2")].forEach((e, i) => {
-            const active = i === (second ? 1 : 0);
-            e.classList.toggle("active", active);
-            if (active) e.setAttribute("aria-current", "step");
-            else e.removeAttribute("aria-current");
+        let wizardStep = 0;
+        let wizardPanes = [];
+        function setupWizardLayout() {
+          const fields = q("#ec-config .ec-fields");
+          const sections = [...fields.children].filter(el => el.classList.contains("ec-section"));
+          if (sections.length !== 9) throw new Error("Nieprawidłowe sekcje konfiguratora");
+          wizardPanes = Array.from({ length: 4 }, (_, i) => {
+            const pane = document.createElement("div");
+            pane.className = "ec-pane";
+            pane.dataset.ecStep = i;
+            fields.append(pane);
+            return pane;
           });
-          if (second) summary(baseChoice);
+          wizardPanes[0].append(sections[0]);
+          wizardPanes[1].append(sections[2], sections[3]);
+          wizardPanes[2].append(sections[4], sections[5], sections[6]);
+          wizardPanes[3].append(sections[1], sections[7]);
+          sections[8].remove(); // Moduły przeniesione do dodatków na kroku 1.
+
+          const bundle = document.createElement("div");
+          bundle.className = "ec-bundle-grid";
+          const scope = q("#ec-scope");
+          scope.before(bundle);
+          const included = document.createElement("div");
+          const title = document.createElement("h4");
+          title.textContent = "W cenie Twojego projektu";
+          included.append(title,scope);
+          bundle.append(included);
+          const extras = document.createElement("div");
+          const extrasTitle = document.createElement("h4");
+          extrasTitle.textContent = "Dodatki do projektu";
+          const toggles = document.createElement("div");
+          toggles.id = "ec-addons";
+          extras.append(extrasTitle,toggles);
+          bundle.append(extras);
+
+          const lang = document.createElement("section");
+          lang.className = "ec-section";
+          lang.innerHTML = '<h3>Dodatkowy język strony</h3><p class="ec-muted">Wybierz jeden dodatkowy język. Cena robocza: 490 zł jednorazowo. Tłumaczenia treści wymagają osobnego uzgodnienia.</p>' +
+            '<select class="ec-language-select" id="ec-language" aria-label="Dodatkowy język strony">' +
+            '<option value="">Bez dodatkowego języka</option><option value="Angielski">Angielski</option>' +
+            '<option value="Niemiecki">Niemiecki</option><option value="Ukraiński">Ukraiński</option>' +
+            '<option value="Francuski">Francuski</option><option value="Hiszpański">Hiszpański</option>' +
+            '<option value="Włoski">Włoski</option><option value="Czeski">Czeski</option>' +
+            '<option value="Niderlandzki">Niderlandzki</option><option value="Portugalski">Portugalski</option>' +
+            '<option value="Szwedzki">Szwedzki</option><option value="Norweski">Norweski</option>' +
+            '<option value="Rosyjski">Rosyjski</option><option value="Chiński">Chiński</option>' +
+            '<option value="Arabski">Arabski</option></select>';
+          wizardPanes[3].insertBefore(lang,sections[7]);
+          sections[7].querySelector("h3").textContent = "Hosting i opieka techniczna — osobne usługi";
+
+          const final = document.createElement("div");
+          final.className = "ec-final";
+          final.id = "ec-final";
+          final.hidden = true;
+          final.append(q("#ec-summary"),q("#ec-contact-section"));
+          q("#ec-window").insertBefore(final,q("#ec-window .ec-foot"));
+        }
+        setupWizardLayout();
+        function step(index = 0, baseChoice = false) {
+          wizardStep = Math.max(0,Math.min(4,index));
+          const last = wizardStep === 4;
+          q("#ec-config").hidden = last;
+          q("#ec-final").hidden = !last;
+          q("#ec-summary").hidden = !last;
+          q("#ec-contact-section").hidden = !last;
+          wizardPanes.forEach((pane,i) => pane.classList.toggle("is-active",i===wizardStep));
+          all("[data-ec-nav-step]").forEach((el,i) => {
+            el.classList.toggle("active",i===wizardStep);
+            if(i===wizardStep) el.setAttribute("aria-current","step");
+            else el.removeAttribute("aria-current");
+          });
+          const labels = ["Zakres w cenie i dodatki","Struktura strony i SEO","Kontakt i poprawki","Język, hosting i opieka","Podsumowanie"];
+          q("#ec-title").textContent = labels[wizardStep] + " — " + current.name;
+          q("#ec-subtitle").textContent = "Krok " + (wizardStep+1) + " z 5";
+          q("#ec-next").hidden = last;
+          q("#ec-next").textContent = wizardStep===3 ? "Podsumowanie →" : "Dalej →";
+          q("#ec-back").hidden = wizardStep===0;
+          q("#ec-back").textContent = "← Wstecz";
+          q("#ec-footer-note").textContent = last
+            ? "Podgląd wyceny. Formularz demonstracyjny."
+            : current.recurring ? "Mini Start: abonament na 24 miesiące." : "Strona i dodatki jednorazowo; usługi roczne płatne z góry.";
+          if(last) summary(baseChoice);
         }
         let scrollBeforeModal = "";
         function open(id, baseChoice, button) {
@@ -2048,7 +2200,7 @@
           document.body.style.overflow = "hidden";
           q("#ec-modal-stage").hidden = false;
           fill();
-          step(baseChoice, baseChoice);
+          step(baseChoice ? 4 : 0, baseChoice);
           q("#ec-modal-stage").scrollTop = 0;
           q("#ec-close").focus();
         }
@@ -2069,11 +2221,11 @@
         q("#ec-close").addEventListener("click", close);
         q("#ec-next").addEventListener("click", () => {
           update();
-          step(true);
-          q("#ec-back").focus();
+          step(wizardStep + 1);
+          if(wizardStep===4) q("#ec-client-name").focus();
         });
         q("#ec-back").addEventListener("click", () => {
-          step(false);
+          step(wizardStep - 1);
           q("#ec-next").focus();
         });
         q("#ec-config").addEventListener("change", update);
