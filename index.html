@@ -1367,6 +1367,19 @@
         #eni-calc .ec-seo-addon { min-height:60px; }
       }
 
+      /* Pierwszy krok Start i wyższych: bardziej kompaktowe okno niż przy SEO (krok 2).
+         Na małych ekranach pozostawiamy pełną wysokość, by nie ucinać treści. */
+      @media (min-width:761px) {
+        #eni-calc .ec-window.ec-compact-start {
+          height:min(900px,calc(100dvh - 80px));
+          max-height:calc(100dvh - 12px);
+        }
+      }
+      /* W kroku 1 separator pod sekcją jest zbędny — łączymy zakres i dodatki wizualnie. */
+      #eni-calc .ec-pane[data-ec-step="0"] > .ec-section {
+        border-bottom:0;
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -2575,6 +2588,9 @@
         function step(index = 0, baseChoice = false) {
           wizardStep = Math.max(0,Math.min(4,index));
           const last = wizardStep === 4;
+          // W pakietach Start i wyższych krok 1 jest krótszy od rozbudowanego kroku 2.
+          // Mini Start i pozostałe kroki zachowują dotychczasową wysokość modala.
+          q("#ec-window").classList.toggle("ec-compact-start", !current.recurring && wizardStep === 0);
           q("#ec-config").hidden = last;
           q("#ec-final").hidden = !last;
           q("#ec-summary").hidden = !last;
