@@ -1491,8 +1491,8 @@
             <div class="ec-steps" aria-label="Etapy konfiguracji">
               <div class="ec-step active" data-ec-nav-step="0" aria-current="step"><span>1</span>Pakiet i dodatki</div>
               <div class="ec-step" data-ec-nav-step="1"><span>2</span>Struktura i SEO</div>
-              <div class="ec-step" data-ec-nav-step="2"><span>3</span>Kontakt, poprawki i szkolenie</div>
-              <div class="ec-step" data-ec-nav-step="3"><span>4</span>Język i usługi</div>
+              <div class="ec-step" data-ec-nav-step="2"><span>3</span>Kontakt i poprawki</div>
+              <div class="ec-step" data-ec-nav-step="3"><span>4</span>Języki, usługi i szkolenia</div>
               <div class="ec-step" data-ec-nav-step="4"><span>5</span>Podsumowanie</div>
             </div>
             <div class="ec-body" id="ec-config">
@@ -1652,8 +1652,8 @@
                     aria-label="Dodatkowe sesje poprawek"
                   ></div>
                 </section>
-                <section class="ec-section" id="ec-training-section" hidden>
-                  <h3>Szkolenie z obsługi strony</h3>
+                <section class="ec-section" id="ec-training-section">
+                  <h3>Szkolenia</h3>
                   <p class="ec-muted" id="ec-training-base"></p>
                   <div
                     class="ec-options"
@@ -2248,43 +2248,40 @@
                 : 0;
         }
         function trainingLabel() {
-          return current.recurring
-            ? "Brak szkolenia"
-            : trainingOptions[states[current.id].training][0];
+          return trainingOptions[states[current.id].training][0];
         }
         function trainingCharge() {
           const p = current;
-          return p.recurring
-            ? 0
-            : Math.max(
-                0,
-                trainingOptions[states[p.id].training][1] -
-                  trainingOptions[trainingBase(p)][1],
-              );
+          return Math.max(
+            0,
+            trainingOptions[states[p.id].training][1] -
+              trainingOptions[trainingBase(p)][1],
+          );
         }
         function fillTraining() {
           const p = current,
-            s = states[p.id],
+            state = states[p.id],
             base = trainingBase(p);
-          q("#ec-training-section").hidden = p.recurring;
-          if (p.recurring) {
-            q("#ec-training").innerHTML = "";
-            return;
-          }
-          q("#ec-training-base").textContent =
-            "W pakiecie: " +
-            trainingOptions[base][0] +
-            "." +
-            (base
-              ? " Wartość szkolenia w bazie: " +
-                money(trainingOptions[base][1]) +
-                "."
-              : "");
+          q("#ec-training-section").hidden = false;
+          q("#ec-training-base").textContent = p.recurring
+            ? "Mini Start: brak szkolenia w bazie. Instrukcja PDF jest dostępna bezpłatnie; możesz wybrać płatne szkolenie."
+            : "W cenie pakietu: " + trainingOptions[base][0] +
+              ". Możesz wybrać inny wariant — dopłata dotyczy tylko wyższej opcji.";
           q("#ec-training").innerHTML = trainingOptions
-            .map((x, i) => {
-              if (i === 0 && base !== 0) return "";
-              const extra = Math.max(0, x[1] - trainingOptions[base][1]);
-              return `<label class="ec-option ec-interactive"><input type="radio" name="ec-training" value="${i}" ${i === s.training ? "checked" : ""}><span><strong>${x[0]}</strong><small>${i === base ? "Domyślnie w pakiecie" : i === 0 ? "Materiały do samodzielnej nauki" : "Wartość szkolenia: " + money(x[1]) + (extra ? " · dopłata za zmianę wariantu" : " · bez obniżenia ceny pakietu")}</small></span><span class="ec-tag">${extra ? "+" + money(extra) : i === base ? "W cenie" : "Bez dopłaty"}</span></label>`;
+            .map((option, i) => {
+              const price = option[1],
+                extra = Math.max(0, price - trainingOptions[base][1]),
+                selected = i === state.training,
+                isBase = i === base,
+                label = isBase
+                  ? (p.recurring ? "Domyślnie · bezpłatnie" : "W cenie pakietu")
+                  : i < base
+                    ? "Wariant krótszy · bez obniżenia ceny pakietu"
+                    : "Cena: " + money(price) + " · dopłata za rozszerzenie";
+              const badge = isBase
+                ? (p.recurring ? "0 zł" : "W cenie")
+                : extra ? "+" + money(extra) : "Bez dopłaty";
+              return `<label class="ec-option ec-interactive"><input type="radio" name="ec-training" value="${i}" ${selected ? "checked" : ""}><span><strong>${option[0]}</strong><small>${label}</small></span><span class="ec-tag">${badge}</span></label>`;
             })
             .join("");
         }
@@ -2494,7 +2491,7 @@
         function read() {
           const p = current,
             s = states[p.id];
-          s.training = p.recurring ? 0 : +val("ec-training");
+          s.training = +val("ec-training");
           s.sections = count("#ec-sections");
           s.pages = count("#ec-pages");
           s.seo = +val("ec-seo");
@@ -2618,8 +2615,9 @@
           // Pozostałe pakiety mają tę sekcję ukrytą przez fill().
           wizardPanes[0].append(sections[0], sections[1]);
           wizardPanes[1].append(sections[2], sections[3]);
-          wizardPanes[2].append(sections[4], sections[5], sections[6]);
-          wizardPanes[3].append(sections[7]);
+          wizardPanes[2].append(sections[4], sections[5]);
+          // Szkolenia przeniesione z kroku 3 do kroku 4, za hostingiem i opieką.
+          wizardPanes[3].append(sections[7], sections[6]);
           // Moduły zostały przeniesione do dodatków w kroku 1.
 
           const bundle = document.createElement("div");
@@ -2672,7 +2670,7 @@
             if(i===wizardStep) el.setAttribute("aria-current","step");
             else el.removeAttribute("aria-current");
           });
-          const labels = ["Zakres w cenie i dodatki","Struktura strony i SEO","Kontakt, poprawki i szkolenie","Język, hosting i opieka","Podsumowanie"];
+          const labels = ["Zakres w cenie i dodatki","Struktura strony i SEO","Kontakt i poprawki","Języki, usługi i szkolenia","Podsumowanie"];
           q("#ec-title").textContent = labels[wizardStep] + " — " + current.name;
           q("#ec-subtitle").textContent = "Krok " + (wizardStep+1) + " z 5";
           q("#ec-next").hidden = last;
