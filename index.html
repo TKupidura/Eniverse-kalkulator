@@ -2528,10 +2528,12 @@
             fields.append(pane);
             return pane;
           });
-          wizardPanes[0].append(sections[0]);
+          // Rozliczenie abonamentu Mini Start jest teraz w kroku 1, pod dodatkami.
+          // Pozostałe pakiety mają tę sekcję ukrytą przez fill().
+          wizardPanes[0].append(sections[0], sections[1]);
           wizardPanes[1].append(sections[2], sections[3]);
           wizardPanes[2].append(sections[4], sections[5], sections[6]);
-          wizardPanes[3].append(sections[1], sections[7]);
+          wizardPanes[3].append(sections[7]);
           // Moduły zostały przeniesione do dodatków w kroku 1.
 
           const bundle = document.createElement("div");
