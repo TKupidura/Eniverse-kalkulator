@@ -1135,7 +1135,8 @@
       }
       #eni-calc .ec-toggle:checked + .ec-toggle-track { background:#E20B0C; }
       #eni-calc .ec-toggle:checked + .ec-toggle-track::after { transform:translateX(20px); }
-      #eni-calc .ec-toggle:disabled + .ec-toggle-track { background:#89a298; }
+      #eni-calc .ec-toggle:disabled + .ec-toggle-track { background:#b8c0c8; }
+      #eni-calc .ec-toggle:checked:disabled + .ec-toggle-track { background:#E20B0C; opacity:1; }
       #eni-calc .ec-toggle:focus-visible + .ec-toggle-track { outline:3px solid #e2a0a1; outline-offset:3px; }
       #eni-calc .ec-aside { padding:22px 20px; }
       #eni-calc .ec-aside .ec-badge { font-size:12px; margin-bottom:18px; }
@@ -1217,6 +1218,58 @@
         #eni-calc .ec-pane.is-active { overflow-y:auto; }
         #eni-calc .ec-final .ec-summary { padding:8px 13px; }
         #eni-calc .ec-final .ec-lead { padding:10px 14px; }
+      }
+
+      /* Boczna wycena Mini Start i suma projektu bez kosztów hostingu. */
+      #eni-calc .ec-mini-rate-comparison {
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:9px;
+        margin:7px 0 0;
+      }
+      #eni-calc .ec-mini-rate-variant {
+        min-width:0;
+        display:flex;
+        flex-direction:column;
+        gap:6px;
+        padding:11px 10px;
+        border-radius:8px;
+        border:1px solid #dde3e8;
+        background:#fff;
+      }
+      #eni-calc .ec-mini-rate-variant.is-selected {
+        border-color:#E20B0C;
+        box-shadow:0 0 0 1px #E20B0C;
+        background:#fffafa;
+      }
+      #eni-calc .ec-mini-rate-variant > span { color:#64717d; font-size:11px; font-weight:600; }
+      #eni-calc .ec-mini-rate-variant > strong {
+        font-size:clamp(16px,1.5vw,22px);
+        font-weight:600;
+        line-height:1.15;
+        letter-spacing:-.04em;
+        white-space:nowrap;
+        font-variant-numeric:tabular-nums;
+      }
+      #eni-calc .ec-mini-rate-footnote { font-size:11px!important; margin-top:9px!important; line-height:1.45; }
+      #eni-calc .ec-aside .ec-line.ec-project-subtotal {
+        align-items:center;
+        border-top:1px solid #dce2e7;
+        margin-top:13px;
+        padding-top:12px;
+        font-weight:700;
+        color:#141719;
+      }
+      #eni-calc .ec-project-subtotal strong {
+        white-space:nowrap;
+        font-size:15px;
+        font-variant-numeric:tabular-nums;
+      }
+      @media (max-width:1150px) {
+        #eni-calc .ec-mini-rate-comparison { grid-template-columns:1fr 1fr; gap:5px; }
+        #eni-calc .ec-mini-rate-variant { padding:9px 6px; }
+        #eni-calc .ec-mini-rate-variant > strong { font-size:17px; }
+        #eni-calc .ec-mini-rate-variant > span { font-size:10px; }
       }
 
 </style>
@@ -1446,6 +1499,17 @@
                 <div aria-live="polite" aria-atomic="true">
                   <div class="ec-total" id="ec-base"></div>
                   <p class="ec-muted" id="ec-period"></p>
+                  <div class="ec-mini-rate-comparison" id="ec-mini-rate-comparison" hidden>
+                    <div class="ec-mini-rate-variant" id="ec-mini-monthly-variant">
+                      <span>Miesięcznie</span>
+                      <strong id="ec-mini-monthly-price">59 zł</strong>
+                    </div>
+                    <div class="ec-mini-rate-variant" id="ec-mini-annual-variant">
+                      <span>Rocznie z góry</span>
+                      <strong id="ec-mini-annual-price">649 zł</strong>
+                    </div>
+                  </div>
+                  <p class="ec-muted ec-mini-rate-footnote" id="ec-mini-rate-footnote" hidden>Kwoty zawierają pakiet i wybrane dodatki.</p>
                   <div class="ec-breakdown">
                     <div class="ec-line">
                       <span id="ec-base-label"></span
@@ -1454,6 +1518,10 @@
                     <div class="ec-line">
                       <span id="ec-extra-label">Dodatki jednorazowe</span
                       ><span id="ec-extra"></span>
+                    </div>
+                    <div class="ec-line ec-project-subtotal" id="ec-project-subtotal-row">
+                      <span id="ec-project-subtotal-label">Pakiet + dodatki</span>
+                      <strong id="ec-project-subtotal">0 zł</strong>
                     </div>
                     <div class="ec-line" id="ec-host-row">
                       <span id="ec-host-label">Hosting / rok</span
@@ -2144,14 +2212,14 @@
             '<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-hosting-check" ' +
             (includedHost || s.hosting ? 'checked ' : '') + (includedHost ? 'disabled ' : '') +
             '><span><strong>Hosting strony</strong><small>' +
-            (includedHost ? 'W cenie pakietu' : money(annualHosting) + ' / rok · z góry') +
+            (includedHost ? 'W cenie pakietu' : money(annualHosting) + ' / rok') +
             '</small></span></label>' +
             '<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-care-check" ' +
             (includedCare || s.care ? 'checked ' : '') + (includedCare ? 'disabled ' : '') +
             '><span><strong>Opieka techniczna</strong><small>' +
             (includedCare ? 'W cenie przez pierwszy rok' :
               p.recurring ? money(annualCare) + ' / rok · za 24 mies. w abonamencie' :
-              money(annualCare) + ' / rok · z góry') +
+              money(annualCare) + ' / rok') +
             '</small></span></label></div>' +
             '<p class="ec-note">Dwie niezależne usługi. W Mini Start hosting jest już częścią abonamentu.</p>';
           update();
@@ -2241,6 +2309,8 @@
             : "Cena bazowa";
           q("#ec-base-cost").textContent = money(a.year);
           q("#ec-extra").textContent = money(a.extra);
+          q("#ec-project-subtotal-label").textContent = "Projekt + dodatki";
+          q("#ec-project-subtotal").textContent = money(p.price + a.extra);
           q("#ec-host-row").hidden = !a.host;
           q("#ec-host-label").textContent = s.hosting && s.care
             ? "Hosting + opieka / rok" : s.hosting ? "Hosting / rok" : "Opieka / rok";
@@ -2805,6 +2875,13 @@
         function update() {
           singlePaymentUpdate();
           const mini = current.recurring;
+          q("#ec-base").hidden = mini;
+          q("#ec-period").hidden = mini;
+          q("#ec-mini-rate-comparison").hidden = !mini;
+          q("#ec-mini-rate-footnote").hidden = !mini;
+          q("#ec-total-label").hidden = mini;
+          q("#ec-total").hidden = mini;
+          q("#ec-paynote").hidden = mini;
           q("#ec-extra-label").textContent = mini
             ? "Dodatki / " +
               (states[current.id].billing === "annual" ? "rok" : "ratę")
@@ -2830,15 +2907,19 @@
             : "Rata bazowa";
           q("#ec-base-cost").textContent = money(b.annual ? 649 : 59);
           q("#ec-extra").textContent = decimalMoney(b.extraPart);
-          q("#ec-total-label").textContent = "Łącznie za 24 miesiące";
-          q("#ec-total").textContent = decimalMoney(b.contract);
-          q("#ec-paynote").textContent = miniSchedule() + ".";
+          q("#ec-project-subtotal-label").textContent = b.annual ? "Pakiet + dodatki / rok" : "Pakiet + dodatki / mies.";
+          q("#ec-project-subtotal").textContent = decimalMoney(b.regular);
           q("#ec-contract").textContent =
             "Dodatki o wartości " +
             money(a.extra) +
             " są rozłożone na cały okres umowy, bez osobnej płatności na start.";
           const monthly = miniPlan("monthly"),
             annual = miniPlan("annual");
+          const ratePrice = amount => Number.isInteger(amount) ? money(amount) : decimalMoney(amount);
+          q("#ec-mini-monthly-price").textContent = ratePrice(monthly.regular);
+          q("#ec-mini-annual-price").textContent = ratePrice(annual.regular);
+          q("#ec-mini-monthly-variant").classList.toggle("is-selected", !b.annual);
+          q("#ec-mini-annual-variant").classList.toggle("is-selected", b.annual);
           q("#ec-monthly-rate").textContent =
             decimalMoney(monthly.regular) + " / mies.";
           q("#ec-monthly-detail").textContent =
