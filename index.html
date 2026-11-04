@@ -867,6 +867,11 @@
       /* Odstęp elastyczny należy do metadanych, a nie do przycisku zakresu.
          Czas realizacji, rundy poprawek i cała grupa przycisków pozostają razem na dole. */
       #eni-calc .ec-package .ec-card-meta { margin: auto 0 0; padding-top: 16px; }
+      /* Gdy rozwijamy zakres, zachowujemy odstęp ponad metadanymi z zamkniętej karty.
+         Dodatkowa treść powiększa kartę WYŁĄCZNIE w dół i przesuwa przyciski pod nią. */
+      #eni-calc .ec-package:has(.ec-card-details[open]) .ec-card-meta {
+        margin-top: var(--ec-meta-fixed-gap, 0px);
+      }
       #eni-calc .ec-package .ec-card-details { margin: 9px 0 9px; }
       #eni-calc .ec-package .ec-card-actions { margin-top:0; display:grid; gap:9px; padding-top:0; }
       #eni-calc .ec-card-actions .ec-action { display:flex; justify-content:space-between; align-items:center; gap:15px; padding:14px 17px; min-height:57px; border:1px solid #7b8792; border-radius:4px; font-size:14px; font-weight:500; text-align:left; background:transparent; color:#141719; line-height:1.4; }
@@ -2008,6 +2013,16 @@
           opened.forEach(details => { details.open = false; });
           const height = Math.ceil(Math.max(...cards.map(card => card.getBoundingClientRect().height)));
           catalog.style.setProperty("--ec-equal-card-height", height + "px");
+          // Po wyrównaniu wysokości zapamiętaj faktyczny pusty odstęp NAD metadanymi.
+          // Przy otwieraniu szczegółów nie może on się zmniejszyć i podciągać przycisków.
+          cards.forEach(card => {
+            const meta = card.querySelector(".ec-card-meta");
+            const preceding = meta?.previousElementSibling;
+            if (!meta || !preceding) return;
+            const freeSpace = Math.max(0,
+              meta.getBoundingClientRect().top - preceding.getBoundingClientRect().bottom);
+            card.style.setProperty("--ec-meta-fixed-gap", freeSpace.toFixed(2) + "px");
+          });
           opened.forEach(details => { details.open = true; });
         }
         function scheduleEqualizePackageHeights() {
