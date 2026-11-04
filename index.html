@@ -810,7 +810,7 @@
       /* Otwarty zakres powiększa wyłącznie swoją kartę, nie sąsiednie wiersza. */
       #eni-calc .ec-packages--entry, #eni-calc .ec-packages--main { align-items:start; }
       #eni-calc .ec-packages--entry > .ec-package, #eni-calc .ec-packages--main > .ec-package { align-self:start; width:100%; }
-      #eni-calc .ec-package { position:relative; background:#fff; border:1px solid #d9dfe4; border-radius:9px; padding:23px 24px 24px; margin:0; max-width:none; display:flex; flex-direction:column; min-width:0; color:#121414; }
+      #eni-calc .ec-package { position:relative; background:#fff; border:1px solid #d9dfe4; border-radius:9px; padding:23px 24px 24px; margin:0; max-width:none; display:flex; flex-direction:column; min-width:0; min-height:var(--ec-equal-card-height, 0px); color:#121414; }
       #eni-calc .ec-package h2 { font-size:29px; font-weight:500; letter-spacing:-.045em; margin:10px 0 10px; line-height:1.12; color:inherit; }
       #eni-calc .ec-package h3 { font-size:18px; letter-spacing:-.035em; font-weight:500; margin:7px 0 5px; color:inherit; }
       #eni-calc .ec-package .ec-kicker { font-size:11px; font-weight:600; letter-spacing:.095em; color:#617080; }
@@ -1666,6 +1666,32 @@
         }
         q("#ec-entry-packages").innerHTML = packages.filter(p => ["mini","start"].includes(p.id)).map(renderCard).join("");
         q("#ec-packages").innerHTML = packages.filter(p => ["one","wiz","firm"].includes(p.id)).map(renderCard).join("");
+        // Ujednolicenie wysokości wszystkich pięciu kart w stanie zwiniętym.
+        // Otwarty szczegół nadal zwiększa tylko wysokość wybranej karty.
+        let equalizeFrame = null;
+        function equalizePackageHeights() {
+          const catalog = q("#ec-catalog");
+          if (q("#ec-demo-page").hidden) return;
+          const cards = all("#ec-catalog .ec-package");
+          if (!cards.length) return;
+          const opened = all("#ec-catalog .ec-card-details[open]");
+          catalog.style.removeProperty("--ec-equal-card-height");
+          opened.forEach(details => { details.open = false; });
+          const height = Math.ceil(Math.max(...cards.map(card => card.getBoundingClientRect().height)));
+          catalog.style.setProperty("--ec-equal-card-height", height + "px");
+          opened.forEach(details => { details.open = true; });
+        }
+        function scheduleEqualizePackageHeights() {
+          if (equalizeFrame !== null) cancelAnimationFrame(equalizeFrame);
+          equalizeFrame = requestAnimationFrame(() => {
+            equalizeFrame = null;
+            equalizePackageHeights();
+          });
+        }
+        scheduleEqualizePackageHeights();
+        window.addEventListener("resize", scheduleEqualizePackageHeights, { passive: true });
+        window.addEventListener("load", scheduleEqualizePackageHeights);
+        if (document.fonts?.ready) document.fonts.ready.then(scheduleEqualizePackageHeights);
         // Dodatkowe zabezpieczenie: tylko jeden zakres jest otwarty naraz.
         q("#ec-catalog").addEventListener("toggle", event => {
           const opened = event.target;
