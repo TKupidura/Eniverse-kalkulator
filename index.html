@@ -1784,6 +1784,11 @@
         const annualHosting = 600;
         const annualCare = 348;
         const languagePrice = 490;
+        const languageChoices = [
+          "Angielski","Niemiecki","Ukraiński","Francuski","Hiszpański",
+          "Włoski","Czeski","Niderlandzki","Portugalski","Szwedzki",
+          "Norweski","Rosyjski","Chiński","Arabski"
+        ];
         const revisionText = (n) =>
           n === 0
             ? "Brak sesji poprawek"
@@ -2017,7 +2022,7 @@
           billing: "monthly",
           hosting: false,
           care: p.hosting === "year",
-          language: "",
+          languages: [],
           maps: false,
           newsletter: false,
           social: false,
@@ -2038,6 +2043,32 @@
               return `<label class="ec-option ec-interactive ${disabled ? "ec-dim" : ""}"><input type="radio" name="${name}" value="${i}" ${i === selected ? "checked" : ""} ${disabled ? "disabled" : ""}><span><strong>${x[0]}</strong><small>${disabled ? "Wariant poniżej bazy pakietu" : x[1]}</small></span><span class="ec-tag">${disabled ? "—" : extra > 0 ? "+" + money(extra) : "W cenie"}</span></label>`;
             })
             .join("");
+        }
+        function renderLanguages() {
+          const selected = states[current.id].languages || [];
+          // Gdy lista jest pusta, pokazujemy pierwszy wyłączony przełącznik.
+          const rows = selected.length ? selected : [null];
+          q("#ec-language-rows").innerHTML = rows.map((language, index) => {
+            const enabled = !!language;
+            const chosen = enabled ? language : languageChoices[0];
+            const choices = languageChoices.filter(name => name === chosen || !selected.includes(name));
+            const options = choices.map(name =>
+              '<option value="' + name + '"' + (name === chosen ? ' selected' : '') + '>' + name + '</option>'
+            ).join('');
+            return '<div class="ec-language-row" data-language-index="' + index + '">' +
+              '<label class="ec-language-switch-label ec-interactive">' +
+              '<input type="checkbox" role="switch" class="ec-language-toggle" aria-label="Dodaj język numer ' +
+              (index + 1) + '" ' + (enabled ? 'checked ' : '') + '>' +
+              '<span class="ec-toggle-track" aria-hidden="true"></span>' +
+              '<span>' + (index ? 'Dodatkowy język ' + (index + 1) : 'Dodaj język') + '</span></label>' +
+              '<select class="ec-language-select ec-language-choice" aria-label="Wybierz język numer ' +
+              (index + 1) + '"' + (enabled ? '' : ' disabled') + '>' + options + '</select>' +
+              '</div>';
+          }).join('');
+          const addButton = q("#ec-add-language");
+          addButton.disabled = !selected.length || selected.length === languageChoices.length;
+          addButton.textContent = selected.length === languageChoices.length
+            ? "Dodano wszystkie dostępne języki" : "+ Dodaj kolejny język";
         }
         function fill() {
           const p = current,
@@ -2101,7 +2132,7 @@
               key + '" ' + (checked ? 'checked ' : '') + (included ? 'disabled ' : '') +
               '><span class="ec-toggle-track" aria-hidden="true"></span></label>';
           }).join("");
-          q("#ec-language").value = s.language || "";
+          renderLanguages();
           const includedHost = p.hosting !== "optional";
           const includedCare = p.hosting === "year";
           q("#ec-hosting").innerHTML =
@@ -2142,8 +2173,9 @@
             items.push(["Dodatkowe sesje × " + s.revisions, s.revisions * 69]);
           if (trainingCharge())
             items.push(["Zmiana szkolenia: " + trainingLabel(), trainingCharge()]);
-          if (s.language)
-            items.push(["Dodatkowy język: " + s.language, languagePrice]);
+          (s.languages || []).forEach(language =>
+            items.push(["Dodatkowy język: " + language, languagePrice])
+          );
           extraServices.forEach(([key,label,price,mayBeIncluded]) => {
             if (s[key] && !(mayBeIncluded && p[key]))
               items.push([label, price]);
@@ -2179,7 +2211,10 @@
           s.hosting =
             p.hosting === "optional" && q("#ec-hosting-check").checked;
           s.care = p.hosting === "year" ? true : q("#ec-care-check").checked;
-          s.language = q("#ec-language").value;
+          s.languages = all("#ec-language-rows .ec-language-row").filter(row =>
+            row.querySelector(".ec-language-toggle").checked
+          ).map(row => row.querySelector(".ec-language-choice").value)
+           .filter((language, index, languages) => language && languages.indexOf(language) === index);
           extraServices.forEach(([key,, ,mayBeIncluded]) => {
             s[key] = (mayBeIncluded && !!p[key]) || q("#ec-addon-" + key).checked;
           });
@@ -2248,7 +2283,7 @@
             ["Zakres", p.structure],
             ["SEO", seo[s.seo][0]],
             ["Kontakt", contacts[s.contact][0]],
-            ["Język obcy", s.language || "Bez dodatkowego języka"],
+            ["Języki obce", (s.languages || []).join(", ") || "Bez dodatkowych języków"],
             ["Wybrane dodatki", a.items.length ? a.items.length + " pozycji" : "Bez dodatków"],
             ["Hosting / opieka", hostingDescription(p)]
           ];
@@ -2305,16 +2340,11 @@
 
           const lang = document.createElement("section");
           lang.className = "ec-section";
-          lang.innerHTML = '<h3>Dodatkowy język strony</h3><p class="ec-muted">Wybierz jeden dodatkowy język. Cena robocza: 490 zł jednorazowo. Tłumaczenia treści wymagają osobnego uzgodnienia.</p>' +
-            '<select class="ec-language-select" id="ec-language" aria-label="Dodatkowy język strony">' +
-            '<option value="">Bez dodatkowego języka</option><option value="Angielski">Angielski</option>' +
-            '<option value="Niemiecki">Niemiecki</option><option value="Ukraiński">Ukraiński</option>' +
-            '<option value="Francuski">Francuski</option><option value="Hiszpański">Hiszpański</option>' +
-            '<option value="Włoski">Włoski</option><option value="Czeski">Czeski</option>' +
-            '<option value="Niderlandzki">Niderlandzki</option><option value="Portugalski">Portugalski</option>' +
-            '<option value="Szwedzki">Szwedzki</option><option value="Norweski">Norweski</option>' +
-            '<option value="Rosyjski">Rosyjski</option><option value="Chiński">Chiński</option>' +
-            '<option value="Arabski">Arabski</option></select>';
+          lang.innerHTML =
+            '<h3>Języki obce na stronie</h3>' +
+            '<p class="ec-muted">Włącz język i wybierz go z listy. Możesz dodać kilka wersji językowych. Cena robocza: 490 zł za każdy język jednorazowo. Tłumaczenie treści jest wyceniane osobno.</p>' +
+            '<div class="ec-language-list" id="ec-language-rows"></div>' +
+            '<button class="ec-language-add ec-interactive" type="button" id="ec-add-language">+ Dodaj kolejny język</button>';
           wizardPanes[3].insertBefore(lang,sections[7]);
           sections[7].querySelector("h3").textContent = "Hosting i opieka techniczna — osobne usługi";
 
@@ -2390,7 +2420,21 @@
           step(wizardStep - 1);
           q("#ec-next").focus();
         });
-        q("#ec-config").addEventListener("change", update);
+        q("#ec-config").addEventListener("change", (event) => {
+          update();
+          // Aktualizacja list po zmianie języka lub stanu przełącznika.
+          if (event.target.closest("#ec-language-rows")) renderLanguages();
+        });
+        q("#ec-add-language").addEventListener("click", () => {
+          // Najpierw zachowaj pozostałe ustawienia; nie resetuj konfiguracji.
+          read();
+          const selected = states[current.id].languages;
+          const nextLanguage = languageChoices.find(language => !selected.includes(language));
+          if (!selected.length || !nextLanguage) return;
+          selected.push(nextLanguage);
+          renderLanguages();
+          update();
+        });
         all("[data-counter]").forEach((b) =>
           b.addEventListener("click", () => {
             const el = q("#ec-" + b.dataset.counter);
@@ -2589,7 +2633,7 @@
               s.revisions +
               " dodatkowych)",
             "Hosting i opieka: " + hostingDescription(p),
-            "Dodatkowy język strony: " + (s.language || "Nie"),
+            "Dodatkowe języki strony: " + ((s.languages || []).join(", ") || "Nie"),
             ...extraServices.map(([key,label,price,mayBeIncluded]) =>
               label + ": " + (s[key] ? ((mayBeIncluded && p[key]) ? "W cenie pakietu" : "Dodane, " + money(price)) : "Nie")),
             "Czy ma stronę/sklep: " + (q("#ec-existing-check").checked ? "Tak" : "Nie"),
