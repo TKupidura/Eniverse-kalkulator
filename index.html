@@ -1367,14 +1367,7 @@
         #eni-calc .ec-seo-addon { min-height:60px; }
       }
 
-      /* Pierwszy krok Start i wyższych: bardziej kompaktowe okno niż przy SEO (krok 2).
-         Na małych ekranach pozostawiamy pełną wysokość, by nie ucinać treści. */
-      @media (min-width:761px) {
-        #eni-calc .ec-window.ec-compact-start {
-          height:min(900px,calc(100dvh - 80px));
-          max-height:calc(100dvh - 12px);
-        }
-      }
+      /* Wysokość modala jest wspólna dla pakietów, ale wynika z zawartości konkretnego kroku. */
       /* W kroku 1 separator pod sekcją jest zbędny — łączymy zakres i dodatki wizualnie. */
       #eni-calc .ec-pane[data-ec-step="0"] > .ec-section {
         border-bottom:0;
@@ -1384,6 +1377,71 @@
         border-top:1px solid var(--ec-line);
         margin-top:14px;
         padding-top:22px;
+      }
+
+      /* AUTO HEIGHT — wszystkie 5 pakietów / wszystkie 5 kroków.
+         Zamiast z góry wypełniać ekran, modal ma wysokość aktywnej zawartości.
+         Max-height ogranicza go do wysokości urządzenia; wyższa zawartość przewija się
+         wewnątrz modala, nie jest ucinana. */
+      #eni-calc .ec-modal-stage { align-items:center; justify-content:center; }
+      #eni-calc .ec-window {
+        height:auto;
+        min-height:0;
+        max-height:calc(100dvh - 12px);
+        display:flex;
+        flex-direction:column;
+      }
+      #eni-calc .ec-head,
+      #eni-calc .ec-steps,
+      #eni-calc .ec-foot { flex:0 0 auto; }
+      #eni-calc .ec-body {
+        flex:0 1 auto;
+        min-height:0;
+        overflow:hidden;
+        align-items:stretch;
+      }
+      #eni-calc .ec-fields {
+        min-height:0;
+        height:auto;
+        overflow-x:hidden;
+        overflow-y:auto;
+        overscroll-behavior:contain;
+        scrollbar-width:thin;
+      }
+      #eni-calc .ec-pane { height:auto; max-height:none; overflow:visible; }
+      #eni-calc .ec-pane.is-active { height:auto; overflow:visible; padding-right:5px; }
+      #eni-calc .ec-aside {
+        min-height:0;
+        height:auto;
+        overflow-x:hidden;
+        overflow-y:auto;
+        overscroll-behavior:contain;
+        scrollbar-width:thin;
+      }
+      #eni-calc .ec-final {
+        flex:0 1 auto;
+        min-height:0;
+        overflow:hidden;
+        align-items:stretch;
+      }
+      #eni-calc .ec-final .ec-summary,
+      #eni-calc .ec-final .ec-lead {
+        min-height:0;
+        overflow-x:hidden;
+        overflow-y:auto;
+        overscroll-behavior:contain;
+        scrollbar-width:thin;
+      }
+      @media (max-width:760px) {
+        #eni-calc .ec-window {
+          height:auto;
+          min-height:0;
+          max-height:calc(100dvh - 12px);
+        }
+        #eni-calc .ec-fields { overflow-y:auto; }
+        #eni-calc .ec-pane.is-active { height:auto; overflow:visible; }
+        #eni-calc .ec-final { flex:0 1 auto; min-height:0; }
+        #eni-calc .ec-final .ec-lead { flex:1 1 auto; min-height:0; overflow-y:auto; }
       }
 
 </style>
@@ -2594,9 +2652,7 @@
         function step(index = 0, baseChoice = false) {
           wizardStep = Math.max(0,Math.min(4,index));
           const last = wizardStep === 4;
-          // W pakietach Start i wyższych krok 1 jest krótszy od rozbudowanego kroku 2.
-          // Mini Start i pozostałe kroki zachowują dotychczasową wysokość modala.
-          q("#ec-window").classList.toggle("ec-compact-start", !current.recurring && wizardStep === 0);
+          // CSS automatycznie dopasowuje wysokość okna do aktywnego kroku i pakietu.
           q("#ec-config").hidden = last;
           q("#ec-final").hidden = !last;
           q("#ec-summary").hidden = !last;
