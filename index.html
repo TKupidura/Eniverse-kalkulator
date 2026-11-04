@@ -1074,6 +1074,147 @@
         #eni-calc .ec-addon span { font-size:10px; }
       }
 
+      /* Eniverse — duży, czytelny konfigurator z dopasowaniem do wysokości okna */
+      #eni-calc .ec-modal-stage { padding:clamp(8px,1.5vh,20px); align-items:center; }
+      #eni-calc .ec-window {
+        width:min(1340px,calc(100vw - 28px)); max-width:none;
+        height:min(890px,calc(100dvh - 28px)); max-height:calc(100dvh - 28px);
+        border-radius:14px;
+      }
+      #eni-calc .ec-head { padding:20px 30px 15px; gap:18px; }
+      #eni-calc .ec-head h2 { font-size:clamp(24px,2vw,29px); margin:5px 0 7px; line-height:1.2; }
+      #eni-calc .ec-head .ec-muted { font-size:13px; }
+      #eni-calc .ec-head .ec-kicker { font-size:12px; }
+      #eni-calc .ec-steps { padding:15px 28px; gap:12px; }
+      #eni-calc .ec-step { font-size:13px; gap:9px; line-height:1.2; }
+      #eni-calc .ec-step span { width:27px; height:27px; font-size:12px; }
+      #eni-calc .ec-body { grid-template-columns:minmax(0,1fr) 280px; }
+      #eni-calc .ec-fields { padding:24px 32px; }
+      #eni-calc .ec-pane.is-active { overflow-x:hidden; overflow-y:auto; scrollbar-width:thin; padding-right:5px; }
+      #eni-calc .ec-pane .ec-section { padding:16px 0 20px; }
+      #eni-calc .ec-pane .ec-section:first-child { padding-top:6px; }
+      #eni-calc .ec-pane .ec-section h3 { font-size:20px; margin:0 0 9px; font-weight:600; }
+      #eni-calc .ec-pane .ec-muted { font-size:13px; line-height:1.55; }
+      #eni-calc .ec-pane .ec-counter-row { margin-top:17px; font-size:14px; }
+      #eni-calc .ec-pane .ec-options { margin-top:13px; gap:12px; }
+      #eni-calc .ec-pane .ec-option { padding:14px 15px; gap:12px; min-height:62px; }
+      #eni-calc .ec-pane .ec-option strong { font-size:14px; }
+      #eni-calc .ec-pane .ec-option small { font-size:12px; line-height:1.4; margin-top:4px; }
+      #eni-calc .ec-pane .ec-option .ec-tag { font-size:12px; }
+      #eni-calc .ec-pane .ec-revisions { grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; }
+      #eni-calc .ec-pane .ec-revisions .ec-option { padding:12px; }
+      #eni-calc .ec-pane .ec-chips { margin-top:13px; gap:8px; }
+      #eni-calc .ec-bundle-grid { grid-template-columns:1.08fr 1fr; gap:34px; padding-top:18px; }
+      #eni-calc .ec-bundle-grid h4 { font-size:15px; margin-bottom:15px; }
+      #eni-calc .ec-bundle-grid .ec-scope { gap:3px; }
+      #eni-calc .ec-bundle-grid .ec-scope label { gap:10px; padding:7px 0; font-size:13px; line-height:1.45; }
+      #eni-calc .ec-bundle-grid .ec-scope input { width:17px; height:17px; margin-top:2px; }
+      #eni-calc #ec-addons { gap:9px; }
+      #eni-calc .ec-addon {
+        position:relative; min-height:59px; padding:12px 14px;
+        display:flex; justify-content:space-between; align-items:center;
+        gap:12px; border-radius:8px; background:#fff; border:1px solid #dfe4e9;
+      }
+      #eni-calc .ec-addon:has(input:checked) { background:#fffafa; border-color:#e6a0a1; }
+      #eni-calc .ec-addon:has(input:disabled) { cursor:default; }
+      #eni-calc .ec-addon-content { display:flex; flex-direction:column; gap:4px; flex:1; min-width:0; }
+      #eni-calc .ec-addon-content strong { font-size:14px; font-weight:600; }
+      #eni-calc .ec-addon-content small { font-size:12px; color:#687684; }
+      #eni-calc .ec-addon .ec-toggle { position:absolute; opacity:0; width:1px; height:1px; pointer-events:none; }
+      #eni-calc .ec-toggle-track {
+        position:relative; display:block; flex-shrink:0; width:45px; height:25px;
+        border-radius:25px; background:#b8c0c8; transition:background .15s ease;
+      }
+      #eni-calc .ec-toggle-track::after {
+        content:""; position:absolute; top:3px; left:3px; width:19px; height:19px;
+        background:#fff; border-radius:50%; box-shadow:0 1px 3px #0002; transition:transform .15s ease;
+      }
+      #eni-calc .ec-toggle:checked + .ec-toggle-track { background:#E20B0C; }
+      #eni-calc .ec-toggle:checked + .ec-toggle-track::after { transform:translateX(20px); }
+      #eni-calc .ec-toggle:disabled + .ec-toggle-track { background:#89a298; }
+      #eni-calc .ec-toggle:focus-visible + .ec-toggle-track { outline:3px solid #e2a0a1; outline-offset:3px; }
+      #eni-calc .ec-aside { padding:22px 20px; }
+      #eni-calc .ec-aside .ec-badge { font-size:12px; margin-bottom:18px; }
+      #eni-calc .ec-aside h3 { font-size:18px; margin-bottom:10px; }
+      #eni-calc .ec-aside .ec-total { font-size:32px; }
+      #eni-calc .ec-aside .ec-breakdown { margin:18px 0 0; padding:15px 0; }
+      #eni-calc .ec-aside .ec-line { margin:10px 0; font-size:13px; }
+      #eni-calc .ec-aside .ec-smalltitle { margin-top:18px; font-size:13px; }
+      #eni-calc .ec-aside #ec-paynote { font-size:12px; line-height:1.5; margin-top:10px!important; }
+      #eni-calc .ec-foot { justify-content:flex-end; gap:12px; padding:18px 30px; min-height:75px; }
+      #eni-calc .ec-foot .ec-muted { max-width:560px; margin-right:auto; font-size:12px; }
+      #eni-calc .ec-foot .ec-action { font-size:15px; padding:12px 24px; min-width:128px; }
+      #eni-calc .ec-foot #ec-next { margin-left:0; }
+      #eni-calc .ec-foot #ec-back { margin-left:0; }
+      #eni-calc .ec-service-list { gap:16px; margin-top:18px; }
+      #eni-calc .ec-service-list .ec-checkbox { padding:16px; border-radius:9px; }
+      #eni-calc .ec-language-list { display:grid; gap:12px; margin:18px 0 12px; }
+      #eni-calc .ec-language-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,1fr); gap:17px; align-items:center; }
+      #eni-calc .ec-language-switch-label {
+        display:flex; align-items:center; gap:13px; min-width:0;
+        cursor:pointer; padding:13px 16px; border:1px solid #e2e6eb;
+        background:#fff; border-radius:8px; min-height:65px;
+      }
+      #eni-calc .ec-language-switch-label .ec-language-toggle { position:absolute; opacity:0; width:1px; height:1px; }
+      #eni-calc .ec-language-switch-label .ec-language-toggle:checked + .ec-toggle-track { background:#E20B0C; }
+      #eni-calc .ec-language-switch-label .ec-language-toggle:checked + .ec-toggle-track::after { transform:translateX(20px); }
+      #eni-calc .ec-language-switch-label .ec-language-toggle:focus-visible + .ec-toggle-track { outline:3px solid #e2a0a1; outline-offset:3px; }
+      #eni-calc .ec-language-switch-label > span:last-child { font-size:14px; font-weight:600; }
+      #eni-calc .ec-language-select { margin:0; height:54px; font-size:14px; padding:13px 15px; }
+      #eni-calc .ec-language-select:disabled { background:#f5f6f7; color:#8b949d; cursor:not-allowed; }
+      #eni-calc .ec-language-add { background:#fff; border:1px dashed #b7c1cb; border-radius:8px; padding:11px 18px; font-size:13px; font-weight:600; color:#344454; }
+      #eni-calc .ec-language-add:hover { border-color:#E20B0C; color:#E20B0C; }
+      #eni-calc .ec-language-add:disabled { opacity:.5; cursor:not-allowed; }
+      #eni-calc .ec-final .ec-summary { padding:25px 28px; }
+      #eni-calc .ec-final .ec-summary h3 { font-size:20px; margin-bottom:15px; }
+      #eni-calc .ec-final .ec-summary .ec-line { font-size:13px; padding:9px 0; }
+      #eni-calc .ec-final .ec-summary-total { padding:15px; margin-top:15px; }
+      #eni-calc .ec-final .ec-summary-total strong { font-size:21px; }
+      #eni-calc .ec-final .ec-payment-summary { margin:15px 0; padding:14px; }
+      #eni-calc .ec-final .ec-payment-summary h3 { font-size:16px; }
+      #eni-calc .ec-final .ec-payment-summary p { font-size:13px; }
+      #eni-calc .ec-final .ec-lead { padding:25px 29px; }
+      #eni-calc .ec-final .ec-lead h3 { font-size:23px; margin:8px 0 11px; }
+      #eni-calc .ec-final .ec-lead > .ec-muted { font-size:13px; }
+      #eni-calc .ec-final .ec-form-grid { gap:16px; margin:18px 0; }
+      #eni-calc .ec-final .ec-field { font-size:13px; }
+      #eni-calc .ec-final .ec-field input { font-size:15px; padding:13px; margin-top:7px; }
+      #eni-calc .ec-final .ec-send { font-size:15px; padding:12px 24px; margin-top:18px; }
+      #eni-calc .ec-final .ec-note { font-size:11px; margin-top:12px!important; }
+      @media(max-width:1150px) {
+        #eni-calc .ec-head { padding:15px 22px 10px; }
+        #eni-calc .ec-head h2 { font-size:24px; }
+        #eni-calc .ec-steps { padding:10px 18px; }
+        #eni-calc .ec-step { font-size:11px; }
+        #eni-calc .ec-fields { padding:16px 20px; }
+        #eni-calc .ec-body { grid-template-columns:minmax(0,1fr) 235px; }
+        #eni-calc .ec-pane .ec-option { padding:10px 12px; }
+        #eni-calc .ec-pane .ec-section { padding:12px 0; }
+        #eni-calc .ec-pane .ec-section h3 { font-size:17px; }
+        #eni-calc .ec-bundle-grid { gap:18px; }
+        #eni-calc .ec-bundle-grid .ec-scope label { padding:5px 0; font-size:12px; }
+        #eni-calc .ec-addon { min-height:46px; padding:8px 10px; }
+        #eni-calc .ec-aside { padding:14px 16px; }
+        #eni-calc .ec-aside .ec-total { font-size:27px; }
+        #eni-calc .ec-final .ec-summary, #eni-calc .ec-final .ec-lead { padding:17px 21px; }
+      }
+      @media(max-width:760px) {
+        #eni-calc .ec-window { width:calc(100vw - 12px); height:calc(100dvh - 12px); max-height:calc(100dvh - 12px); }
+        #eni-calc .ec-body { grid-template-columns:1fr; }
+        #eni-calc .ec-fields { padding:12px 15px; }
+        #eni-calc .ec-pane .ec-revisions { grid-template-columns:repeat(2,minmax(0,1fr)); }
+        #eni-calc .ec-step { font-size:0; }
+        #eni-calc .ec-step span { font-size:12px; }
+        #eni-calc .ec-foot { padding:11px 15px; }
+        #eni-calc .ec-foot .ec-muted { display:none; }
+        #eni-calc .ec-foot .ec-action { font-size:14px; min-width:108px; padding:11px 17px; }
+        #eni-calc .ec-language-row { grid-template-columns:1fr; gap:8px; }
+        #eni-calc .ec-bundle-grid { grid-template-columns:1fr; }
+        #eni-calc .ec-pane.is-active { overflow-y:auto; }
+        #eni-calc .ec-final .ec-summary { padding:8px 13px; }
+        #eni-calc .ec-final .ec-lead { padding:10px 14px; }
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -1120,7 +1261,7 @@
             <div class="ec-steps" aria-label="Etapy konfiguracji">
               <div class="ec-step active" data-ec-nav-step="0" aria-current="step"><span>1</span>Pakiet i dodatki</div>
               <div class="ec-step" data-ec-nav-step="1"><span>2</span>Struktura i SEO</div>
-              <div class="ec-step" data-ec-nav-step="2"><span>3</span>Kontakt i poprawki</div>
+              <div class="ec-step" data-ec-nav-step="2"><span>3</span>Kontakt, poprawki i szkolenie</div>
               <div class="ec-step" data-ec-nav-step="3"><span>4</span>Język i usługi</div>
               <div class="ec-step" data-ec-nav-step="4"><span>5</span>Podsumowanie</div>
             </div>
@@ -1443,19 +1584,18 @@
             <footer class="ec-foot">
               <p class="ec-muted" id="ec-footer-note"></p>
               <button
-                class="ec-action ec-interactive"
-                id="ec-next"
-                type="button"
-              >
-                Podsumowanie →</button
-              ><button
                 class="ec-action ec-secondary ec-interactive"
                 id="ec-back"
                 type="button"
                 hidden
               >
-                ← Wróć do konfiguracji
+                ← Wstecz
               </button>
+              <button
+                class="ec-action ec-interactive"
+                id="ec-next"
+                type="button"
+              >Dalej →</button>
             </footer>
           </section>
         </div>
@@ -1955,10 +2095,11 @@
           q("#ec-addons").innerHTML = extraServices.map(([key,label,price,mayBeIncluded]) => {
             const included = mayBeIncluded && !!p[key];
             const checked = included || !!s[key];
-            return '<label class="ec-addon ec-interactive"><input type="checkbox" id="ec-addon-' +
+            return '<label class="ec-addon ec-interactive"><span class="ec-addon-content"><strong>' +
+              label + '</strong><small>' + (included ? 'W cenie pakietu' : '+' + money(price)) +
+              '</small></span><input class="ec-toggle" type="checkbox" role="switch" id="ec-addon-' +
               key + '" ' + (checked ? 'checked ' : '') + (included ? 'disabled ' : '') +
-              '><span><strong>' + label + '</strong><small>' +
-              (included ? 'W cenie' : '+' + money(price)) + '</small></span></label>';
+              '><span class="ec-toggle-track" aria-hidden="true"></span></label>';
           }).join("");
           q("#ec-language").value = s.language || "";
           const includedHost = p.hosting !== "optional";
@@ -2198,7 +2339,7 @@
             if(i===wizardStep) el.setAttribute("aria-current","step");
             else el.removeAttribute("aria-current");
           });
-          const labels = ["Zakres w cenie i dodatki","Struktura strony i SEO","Kontakt i poprawki","Język, hosting i opieka","Podsumowanie"];
+          const labels = ["Zakres w cenie i dodatki","Struktura strony i SEO","Kontakt, poprawki i szkolenie","Język, hosting i opieka","Podsumowanie"];
           q("#ec-title").textContent = labels[wizardStep] + " — " + current.name;
           q("#ec-subtitle").textContent = "Krok " + (wizardStep+1) + " z 5";
           q("#ec-next").hidden = last;
