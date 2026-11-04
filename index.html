@@ -1277,6 +1277,83 @@
         #eni-calc .ec-mini-rate-variant > span { font-size:10px; }
       }
 
+      /* Większy modal: wykorzystuje niemal całą wysokość i szerokość ekranu.
+         Podsumowanie ma własny bezpieczny obszar, bez obcinania zaliczki. */
+      #eni-calc .ec-modal-stage { padding:6px; }
+      #eni-calc .ec-window {
+        width:min(1560px,calc(100vw - 12px));
+        max-width:none;
+        height:calc(100dvh - 12px);
+        max-height:calc(100dvh - 12px);
+      }
+      #eni-calc .ec-final {
+        grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);
+        min-height:0;
+      }
+      #eni-calc .ec-final .ec-summary {
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:0 20px;
+        align-content:start;
+        min-height:0;
+        overflow-x:hidden;
+        overflow-y:auto;
+        overscroll-behavior:contain;
+        scrollbar-width:thin;
+        padding:18px 24px;
+      }
+      #eni-calc .ec-final .ec-summary > h3,
+      #eni-calc .ec-final .ec-summary-total,
+      #eni-calc .ec-final .ec-payment-summary,
+      #eni-calc .ec-final .ec-summary > .ec-note {
+        grid-column:1 / -1;
+        min-width:0;
+      }
+      #eni-calc .ec-final .ec-summary > .ec-line {
+        min-width:0;
+        padding:7px 0;
+        font-size:12px;
+        overflow-wrap:anywhere;
+      }
+      #eni-calc .ec-final .ec-summary > h3 { margin:0 0 9px; }
+      #eni-calc .ec-final .ec-summary-total { margin:12px 0 0; padding:12px 15px; }
+      #eni-calc .ec-final .ec-payment-summary {
+        margin:11px 0 0;
+        padding:12px 15px;
+        border-radius:7px;
+        background:#fff;
+      }
+      #eni-calc .ec-final .ec-payment-summary h3 { margin:0 0 6px; }
+      #eni-calc .ec-final .ec-payment-summary p { margin:4px 0; line-height:1.45; }
+      #eni-calc .ec-final .ec-summary > .ec-note { margin:9px 0 0!important; }
+      #eni-calc .ec-final .ec-lead {
+        min-height:0;
+        overflow-y:auto;
+        overscroll-behavior:contain;
+        scrollbar-width:thin;
+      }
+      @media (max-width:1150px) {
+        #eni-calc .ec-final .ec-summary { gap:0 12px; padding:14px 17px; }
+        #eni-calc .ec-final .ec-summary > .ec-line { padding:5px 0; }
+        #eni-calc .ec-final .ec-summary-total { padding:9px 11px; }
+        #eni-calc .ec-final .ec-payment-summary { padding:9px 11px; }
+      }
+      @media (max-width:760px) {
+        #eni-calc .ec-final { display:flex; flex-direction:column; }
+        #eni-calc .ec-final .ec-summary {
+          display:block;
+          flex:0 0 auto;
+          max-height:min(37dvh,290px);
+          overflow-y:auto;
+          padding:9px 13px;
+        }
+        #eni-calc .ec-final .ec-lead {
+          flex:1 1 auto;
+          min-height:0;
+          overflow-y:auto;
+        }
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -2624,8 +2701,8 @@
           if (p.recurring)
             return "Hosting w abonamencie" + (s.care ? "; opieka na 24 mies. w ratach" : "; bez dodatkowej opieki");
           const parts = [];
-          if(s.hosting) parts.push("Hosting: " + money(annualHosting) + "/rok z góry");
-          if(s.care) parts.push("Opieka: " + money(annualCare) + "/rok z góry");
+          if(s.hosting) parts.push("Hosting: " + money(annualHosting) + "/rok");
+          if(s.care) parts.push("Opieka: " + money(annualCare) + "/rok");
           return parts.length ? parts.join("; ") : "Bez hostingu i opieki w wycenie";
         }
         function paymentInfo() {
