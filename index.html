@@ -1294,10 +1294,6 @@
                   <h3>Hosting i opieka techniczna</h3>
                   <div id="ec-hosting"></div>
                 </section>
-                <section class="ec-section">
-                  <h3>Moduły i konfiguracja</h3>
-                  <div id="ec-modules"></div>
-                </section>
               </div>
               <aside class="ec-aside" aria-label="Bieżąca wycena">
                 <span class="ec-badge" id="ec-badge"></span>
@@ -2134,7 +2130,7 @@
         function setupWizardLayout() {
           const fields = q("#ec-config .ec-fields");
           const sections = [...fields.children].filter(el => el.classList.contains("ec-section"));
-          if (sections.length !== 9) throw new Error("Nieprawidłowe sekcje konfiguratora");
+          if (sections.length !== 8) throw new Error("Nieprawidłowe sekcje konfiguratora");
           wizardPanes = Array.from({ length: 4 }, (_, i) => {
             const pane = document.createElement("div");
             pane.className = "ec-pane";
@@ -2146,7 +2142,7 @@
           wizardPanes[1].append(sections[2], sections[3]);
           wizardPanes[2].append(sections[4], sections[5], sections[6]);
           wizardPanes[3].append(sections[1], sections[7]);
-          sections[8].remove(); // Moduły przeniesione do dodatków na kroku 1.
+          // Moduły zostały przeniesione do dodatków w kroku 1.
 
           const bundle = document.createElement("div");
           bundle.className = "ec-bundle-grid";
