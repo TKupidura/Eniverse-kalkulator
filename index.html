@@ -2530,7 +2530,7 @@
                   hidden
                 ></p>
                 <p id="ec-mini-template-required" class="ec-mini-template-required" role="status" hidden>
-                  Aby wysłać zapytanie dotyczące Mini Start, najpierw wybierz szablon strony w podsumowaniu.
+                  Aby wysłać zapytanie Mini Start, wybierz szablon albo zaznacz opcję „Szablon wybiorę później” w galerii.
                 </p>
                 <button
                   class="ec-action ec-interactive ec-send"
@@ -3999,7 +3999,7 @@
         q("#ec-lead-form").addEventListener("submit", (event) => {
           event.preventDefault();
           if(current.id==="mini" && !states.mini.templateId){
-            q("#ec-form-error").textContent="Przed wysłaniem zapytania wybierz szablon Mini Start.";
+            q("#ec-form-error").textContent="Przed wysłaniem zapytania wybierz szablon lub opcję „Szablon wybiorę później”.";
             q("#ec-form-error").hidden=false;
             q("#ec-send-result").hidden=true;
             q("[data-ec-summary-template-browse]")?.focus();
