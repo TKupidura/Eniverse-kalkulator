@@ -1875,6 +1875,81 @@
         }
       }
 
+      /* Podsumowanie bezpośrednie: jeden ekran bez kroków, z opcjonalnym
+         przejściem do konfiguratora dopiero na świadomą decyzję klienta. */
+      #eni-calc .ec-direct-summary-switch {
+        grid-column:1/-1;
+        padding:14px 20px;
+        background:#fff;
+        border-bottom:1px solid #e1e5e9;
+      }
+      #eni-calc .ec-direct-summary-configure {
+        display:flex;
+        width:100%;
+        align-items:center;
+        justify-content:space-between;
+        gap:14px;
+        border:1px solid #e7c4c5;
+        border-radius:9px;
+        background:#fff9f9;
+        padding:14px 17px;
+        color:#172027;
+        cursor:pointer;
+        text-align:left;
+        font-size:14px;
+      }
+      #eni-calc .ec-direct-summary-configure strong {
+        color:#E20B0C;
+        font-size:13px;
+        white-space:nowrap;
+      }
+      #eni-calc .ec-direct-summary-configure:hover { border-color:#E20B0C; background:#fff2f2; }
+      #eni-calc .ec-summary-template-row {
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+        margin:12px 0;
+        padding:14px;
+        border:1px solid #e2e6ea;
+        border-radius:8px;
+        background:white;
+      }
+      #eni-calc .ec-summary-template-text { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+      #eni-calc .ec-summary-template-text > span { color:#586676; font-size:13px; }
+      #eni-calc .ec-summary-template-text strong { font-size:13px; color:#14191f; }
+      #eni-calc .ec-summary-template-browse {
+        align-self:flex-start;
+        padding:9px 12px;
+        border:1px solid #E20B0C;
+        border-radius:5px;
+        background:#fff;
+        color:#E20B0C;
+        font-size:12px;
+        font-weight:650;
+        cursor:pointer;
+      }
+      #eni-calc .ec-summary-template-browse:hover { background:#fff4f4; }
+      #eni-calc .ec-mini-template-required {
+        border:1px solid #ecc8c9;
+        background:#fff7f7;
+        color:#a32930;
+        border-radius:6px;
+        padding:10px 12px;
+        margin:12px 0;
+        font-size:12px;
+        line-height:1.5;
+      }
+      #eni-calc .ec-send:disabled { opacity:.48; cursor:not-allowed; }
+      @media(max-width:720px) {
+        #eni-calc .ec-direct-summary-switch { padding:9px 12px; }
+        #eni-calc .ec-direct-summary-configure { flex-direction:column; align-items:flex-start; padding:11px 12px; gap:6px; }
+        #eni-calc .ec-direct-summary-configure strong { white-space:normal; }
+        #eni-calc .ec-summary-template-row { padding:9px 10px; margin:7px 0; gap:6px; }
+        #eni-calc .ec-summary-template-text { gap:5px; }
+        #eni-calc .ec-summary-template-text > span, #eni-calc .ec-summary-template-text strong { font-size:11px; }
+        #eni-calc .ec-summary-template-browse { font-size:11px; padding:7px 9px; }
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -2798,7 +2873,12 @@
           if(wizardVisible && current.id==="mini"){
             renderTemplateSelection();
             update();
-            q("#ec-template-options input:checked")?.focus();
+            if(!q("#ec-final").hidden){
+              summary(directSummaryMode);
+              q("#ec-summary").scrollTop=0;
+            }else{
+              q("#ec-template-options input:checked")?.focus();
+            }
           }else{
             open("mini",false,originalOpener);
             renderTemplateSelection();
@@ -3222,7 +3302,6 @@
           const project = p.price + a.extra;
           const simpleRows = [
             ["Pakiet", p.name],
-            ...(p.recurring ? [["Szablon Mini Start", templateSelectionName(s.templateId)]] : []),
             ["Zakres", p.structure],
             ["SEO", seoName(p,s.seo)],
             ["Dodatkowe usługi SEO", seoServices.filter(([key]) => s[key])
@@ -3234,7 +3313,19 @@
           ];
           const row = (label,value) =>
             '<div class="ec-line"><span>' + label + '</span><span>' + value + '</span></div>';
-          const lines = simpleRows.map(([label,value]) => row(label,value)).join("");
+          const templateRow = p.recurring
+            ? '<div class="ec-summary-template-row">'+
+                '<div class="ec-summary-template-text"><span>Szablon Mini Start</span><strong>'+
+                  (s.templateId ? templateSelectionName(s.templateId) : "Nie wybrano szablonu")+
+                '</strong></div>'+
+                (!s.templateId
+                  ? '<button type="button" class="ec-summary-template-browse" id="ec-summary-template-browse">Przejrzyj szablony <span aria-hidden="true">↗</span></button>'
+                  : '<button type="button" class="ec-summary-template-browse" id="ec-summary-template-browse">Zmień szablon <span aria-hidden="true">↗</span></button>')+
+              '</div>'
+            : '';
+          const lines = simpleRows.map(([label,value]) =>
+            row(label,value) + (label==="Pakiet" ? templateRow : "")
+          ).join("");
           const total = p.recurring ? a.contract : a.total;
           q("#ec-summary").innerHTML =
             '<h3>' + (baseChoice ? "Wybrano pakiet: " : "Twoja konfiguracja: ") + p.name + '</h3>' +
@@ -3247,6 +3338,7 @@
             '<p class="ec-note">Ceny netto. Dodatki i usługi oznaczone jako robocze wymagają potwierdzenia w ofercie.</p>';
         }
         let wizardStep = 0;
+        let directSummaryMode = false;
         let wizardPanes = [];
         function setupWizardLayout() {
           const fields = q("#ec-config .ec-fields");
@@ -3318,7 +3410,12 @@
           final.className = "ec-final";
           final.id = "ec-final";
           final.hidden = true;
-          final.append(q("#ec-summary"),q("#ec-contact-section"));
+          const summarySwitch=document.createElement("div");
+          summarySwitch.id="ec-direct-summary-switch";
+          summarySwitch.className="ec-direct-summary-switch";
+          summarySwitch.hidden=true;
+          summarySwitch.innerHTML='<button type="button" id="ec-direct-summary-configure" class="ec-direct-summary-configure"><span>Potrzebujesz skonfigurować pakiet?</span><strong>Przejdź do konfiguratora <span aria-hidden="true">↗</span></strong></button>';
+          final.append(summarySwitch,q("#ec-summary"),q("#ec-contact-section"));
           q("#ec-window").insertBefore(final,q("#ec-window .ec-foot"));
         }
         setupWizardLayout();
@@ -3355,11 +3452,22 @@
             else el.removeAttribute("aria-current");
           });
           const labels=["Zakres w cenie i dodatki","Struktura strony i SEO","Kontakt i poprawki","Języki, usługi i szkolenia","Podsumowanie"];
-          q("#ec-title").textContent=(mini&&wizardStep===0?"Wybór szablonu":labels[oldStep])+" — "+current.name;
-          q("#ec-subtitle").textContent="Krok "+(wizardStep+1)+" z "+(lastIndex+1);
+          const directOnly=directSummaryMode && last;
+          q("#ec-title").textContent=directOnly
+            ? "Podsumowanie"
+            : (mini&&wizardStep===0?"Wybór szablonu":labels[oldStep])+" — "+current.name;
+          q("#ec-subtitle").textContent=directOnly
+            ? "Wybrany pakiet: "+current.name
+            : "Krok "+(wizardStep+1)+" z "+(lastIndex+1);
+          q("#ec-window .ec-head .ec-kicker").textContent=directOnly
+            ? "Eniverse / Podsumowanie"
+            : "Eniverse / Konfigurator strony";
+          q("#ec-window .ec-steps").hidden=directOnly;
+          q("#ec-window .ec-foot").hidden=directOnly;
+          q("#ec-direct-summary-switch").hidden=!directOnly;
           q("#ec-next").hidden=last;
           q("#ec-next").textContent=wizardStep===lastIndex-1?"Podsumowanie →":"Dalej →";
-          q("#ec-back").hidden=wizardStep===0;
+          q("#ec-back").hidden=directSummaryMode||wizardStep===0;
           q("#ec-back").textContent="← Wstecz";
           q("#ec-footer-note").textContent=last
             ? "Podgląd wyceny. Formularz demonstracyjny."
@@ -3367,12 +3475,21 @@
           q("#ec-config .ec-fields").scrollTop=0;
           if(last)summary(baseChoice);
         }
+        // Galeria Mini Start w podsumowaniu jest częścią trybu wyboru pakietu.
+        // Nie przełączamy kroków po wybraniu szablonu z tej galerii.
+        q("#ec-summary").addEventListener("click",event=>{
+          const button=event.target.closest("#ec-summary-template-browse");
+          if(button && current.id==="mini"){
+            openTemplateDialog(button);
+          }
+        });
         let scrollBeforeModal = "";
         function open(id, baseChoice, button) {
           const target = packages.find((p) => p.id === id);
           if (!target) return;
           current = target;
           opener = button || null;
+          directSummaryMode=!!baseChoice;
           if (baseChoice) states[id] = defaults(current);
           scrollBeforeModal = document.body.style.overflow;
           document.body.style.overflow = "hidden";
@@ -3397,6 +3514,11 @@
             );
         });
         q("#ec-close").addEventListener("click", close);
+        q("#ec-direct-summary-configure").addEventListener("click",()=>{
+          directSummaryMode=false;
+          step(0);
+          q("#ec-window").focus?.();
+        });
         q("#ec-next").addEventListener("click", () => {
           update();
           step(wizardStep + 1);
