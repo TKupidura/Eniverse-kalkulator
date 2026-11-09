@@ -2037,6 +2037,78 @@
         #eni-calc .ec-final .ec-summary .ec-summary-template-name { font-size:11px; }
       }
 
+      /* Kafelek odłożenia wyboru pod listą szablonów w galerii. */
+      #eni-calc .ec-template-sidebar {
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+        min-width:0;
+        min-height:0;
+        overflow:hidden;
+      }
+      #eni-calc .ec-template-sidebar > .ec-template-grid {
+        flex:1 1 auto;
+        margin:0;
+      }
+      #eni-calc .ec-template-defer {
+        display:flex;
+        flex-direction:column;
+        align-items:flex-start;
+        flex:0 0 auto;
+        width:100%;
+        gap:4px;
+        padding:13px 12px;
+        border:1px dashed #aab5c1;
+        border-radius:8px;
+        background:#f7f8fa;
+        color:#273542;
+        text-align:left;
+        cursor:pointer;
+      }
+      #eni-calc .ec-template-defer strong { font-size:13px; font-weight:700; }
+      #eni-calc .ec-template-defer small { font-size:10px; line-height:1.4; color:#64727e; }
+      #eni-calc .ec-template-defer:hover { border-color:#E20B0C; }
+      #eni-calc .ec-template-defer.is-selected {
+        border:1px solid #E20B0C;
+        background:#fff5f5;
+        box-shadow:0 0 0 1px #E20B0C;
+      }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-later {
+        border:1px dashed #aab5c1;
+        background:#f7f8fa;
+        gap:14px;
+      }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-later:has(input:checked) {
+        border:1px solid #E20B0C;
+        background:#fff5f5;
+        box-shadow:0 0 0 1px #E20B0C;
+      }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-later strong {
+        font-size:14px;
+      }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-later small {
+        font-size:11px;
+        line-height:1.55;
+        color:#5d6875;
+        margin-top:5px;
+      }
+      @media(max-width:650px) {
+        #eni-calc .ec-template-sidebar {
+          width:100%;
+          flex:0 0 auto;
+          gap:5px;
+        }
+        #eni-calc .ec-template-sidebar > .ec-template-grid {
+          flex:0 0 auto;
+        }
+        #eni-calc .ec-template-defer {
+          padding:8px 10px;
+          gap:2px;
+        }
+        #eni-calc .ec-template-defer strong { font-size:11px; }
+        #eni-calc .ec-template-defer small { font-size:9px; }
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -2090,7 +2162,13 @@
               <button type="button" class="ec-template-close" id="ec-template-close" aria-label="Zamknij galerię">×</button>
             </header>
             <div class="ec-template-content">
-              <div class="ec-template-grid" id="ec-template-gallery" aria-label="Wybór projektu"></div>
+              <div class="ec-template-sidebar">
+                <div class="ec-template-grid" id="ec-template-gallery" aria-label="Wybór projektu"></div>
+                <button type="button" class="ec-template-defer" id="ec-template-defer" aria-pressed="false">
+                  <strong>Szablon wybiorę później</strong>
+                  <small>Przejdź dalej bez wskazywania konkretnego projektu</small>
+                </button>
+              </div>
               <div class="ec-template-preview">
                 <div class="ec-template-preview-head"><div><span id="ec-template-kind"></span><h3 id="ec-template-name"></h3></div><span class="ec-template-demo-badge">PODGLĄD DEMO</span></div>
                 <div class="ec-template-browser"><div class="ec-template-browser-bar"><span aria-hidden="true">● ● ●</span><span>Podgląd wszystkich 5 sekcji · przewiń stronę w dół ↓</span></div><div id="ec-template-viewport" tabindex="0" role="region" aria-label="Przewijany podgląd pięciu sekcji szablonu"></div></div>
@@ -2888,6 +2966,7 @@
             '</div>';
         }
         function templateSelectionName(id) {
+          if(id==="later")return "Szablon wybiorę później";
           const found=templateSamples.find(t=>t.id===id);
           return found ? found.name+" — "+found.type : "Jeszcze nie wybrano";
         }
@@ -2908,10 +2987,12 @@
                 '<button class="ec-template-preview-action" type="button" data-template-preview="'+t.id+'" aria-label="Zobacz wszystkie sekcje szablonu '+t.name+'">Zobacz podgląd <span aria-hidden="true">↗</span></button>' +
               '</div>'
             ).join('') +
-            '<label class="ec-template-select-option ec-template-select-empty"><input type="radio" name="ec-template-choice" value="" '+(!selected?'checked ':'')+'><span>Wybiorę szablon później</span></label>';
+            '<label class="ec-template-select-option ec-template-select-empty ec-template-select-later">' +
+              '<input type="radio" name="ec-template-choice" value="later" '+(selected==="later"?'checked ':'')+'>' +
+              '<span><strong>Szablon wybiorę później</strong><small>Wybierz tę opcję świadomie, jeśli decyzję podejmiesz później. Formularz zostanie odblokowany.</small></span></label>';
           q("#ec-template-selected").textContent=selected
-            ? "Wybrany szablon: "+templateSelectionName(selected)
-            : "Nie wybrano szablonu. Możesz zdecydować później.";
+            ? (selected==="later" ? "Wybrano: szablon wybiorę później." : "Wybrany szablon: "+templateSelectionName(selected))
+            : "Nie wskazano jeszcze szablonu ani opcji wyboru później.";
         }
         let templateOpener=null, templatePreviousScroll="";
         function showTemplate(index) {
@@ -2939,6 +3020,12 @@
           const selectedId=states.mini.templateId;
           const selectedIndex=templateSamples.findIndex(t=>t.id===selectedId);
           showTemplate(selectedIndex>=0?selectedIndex:visibleTemplateIndex);
+          q("#ec-template-defer").classList.toggle("is-selected",selectedId==="later");
+          q("#ec-template-defer").setAttribute("aria-pressed",String(selectedId==="later"));
+          q("#ec-template-configure").textContent=
+            (!q("#ec-modal-stage").hidden && !q("#ec-final").hidden)
+              ? "Wybierz ten szablon i wróć do podsumowania ↗"
+              : "Wybierz ten szablon i konfiguruj ↗";
           q("#ec-template-close").focus();
         }
         function closeTemplateDialog() {
@@ -2954,9 +3041,9 @@
         q("#ec-template-modal").addEventListener("click",event=>{
           if(event.target===q("#ec-template-modal"))closeTemplateDialog();
         });
-        q("#ec-template-configure").addEventListener("click",()=>{
-          const selected=templateSamples[visibleTemplateIndex];
-          states.mini.templateId=selected.id;
+        function confirmTemplateChoice(id) {
+          // "" oznacza brak decyzji; "later" jej świadome odłożenie.
+          states.mini.templateId=id;
           const wizardVisible=!q("#ec-modal-stage").hidden;
           const originalOpener=templateOpener;
           closeTemplateDialog();
@@ -2973,6 +3060,12 @@
             open("mini",false,originalOpener);
             renderTemplateSelection();
           }
+        }
+        q("#ec-template-configure").addEventListener("click",()=>{
+          confirmTemplateChoice(templateSamples[visibleTemplateIndex].id);
+        });
+        q("#ec-template-defer").addEventListener("click",()=>{
+          confirmTemplateChoice("later");
         });
         document.addEventListener("keydown",event=>{
           if(q("#ec-template-modal").hidden)return;
@@ -3629,7 +3722,7 @@
             const id=states.mini.templateId;
             q("#ec-template-selected").textContent=id
               ? "Wybrany szablon: "+templateSelectionName(id)
-              : "Szablon można wybrać teraz lub później.";
+              : "Nie wybrano jeszcze szablonu ani opcji wyboru później.";
           }
           // Aktualizacja list po zmianie języka lub stanu przełącznika.
           if (event.target.closest("#ec-language-rows")) renderLanguages();
@@ -4111,7 +4204,10 @@
               money(a.extra) +
               " rozłożone na 24 miesiące. Bez dodatkowej płatności jednorazowej. Ostatnia płatność uwzględnia wyrównanie groszy, jeśli jest potrzebne.";
             block.append(h, line, note);
-            q("#ec-summary").append(block);
+            // Najpierw suma i rata, bezpośrednio niżej szczegóły raty.
+            const totalBox=q("#ec-summary .ec-summary-total");
+            if(totalBox) totalBox.insertAdjacentElement("afterend",block);
+            else q("#ec-summary").append(block);
           }
           q("#ec-quote-payload").value = quoteText();
           syncMiniTemplateSubmit();
