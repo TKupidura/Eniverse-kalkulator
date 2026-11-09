@@ -1857,8 +1857,9 @@
         display:block; margin-top:10px; font-size:12px; line-height:1.55; color:#53616d;
       }
       #eni-calc .ec-template-preview-action {
-        display:flex; justify-content:space-between; align-items:center; gap:9px;
-        margin:0 14px 14px; width:calc(100% - 28px); padding:10px 12px;
+        display:inline-flex; justify-content:center; align-items:center; gap:9px;
+        align-self:flex-start; width:auto; max-width:calc(100% - 28px);
+        margin:0 14px 14px; padding:9px 12px;
         border:1px solid #E20B0C; color:#E20B0C; background:#fff;
         border-radius:5px; font-size:12px; font-weight:650; cursor:pointer;
       }
@@ -1950,12 +1951,15 @@
         #eni-calc .ec-summary-template-browse { font-size:11px; padding:7px 9px; }
       }
 
-      /* Podsumowanie po „Wybieram pakiet”: cena > drobny link > co wybrano.
-         Standardowy konfigurator zachowuje kolejność swoich elementów. */
+      /* We wszystkich pięciu pakietach (po „Wybieram pakiet”) link pod
+         szczegółami ma 10 px odstępu wewnętrznego od góry. */
       #eni-calc .ec-final .ec-summary > .ec-direct-summary-switch {
         grid-column:1/-1;
         margin:0 0 14px;
-        padding:10px 0 0;
+        padding-top:10px;
+        padding-right:0;
+        padding-bottom:0;
+        padding-left:0;
         background:transparent;
         border:0;
       }
