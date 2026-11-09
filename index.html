@@ -1511,7 +1511,28 @@
            <p class="ec-pricing-note">Ceny dodatków są przykładowe, a końcowy zakres i termin realizacji wymagają zatwierdzenia. Wysłanie formularza w tej wersji jest demonstracyjne.</p>
         </section>
       </div><!-- Koniec widoku demonstracyjnego. Elementor ukrywa ten widok, jeśli znajdzie istniejące karty .enp-card. -->
-        <div class="ec-modal-stage" id="ec-modal-stage" hidden>
+                <!-- Galeria demonstracyjnych szablonów Mini Start (osobny modal). -->
+        <div class="ec-template-overlay" id="ec-template-modal" hidden>
+          <section class="ec-template-dialog" role="dialog" aria-modal="true" aria-labelledby="ec-template-title" aria-describedby="ec-template-intro">
+            <header class="ec-template-header">
+              <div><span class="ec-template-kicker">MINI START / SZABLONY</span>
+                <h2 id="ec-template-title">Zobacz, jak może wyglądać Twoja strona.</h2>
+                <p id="ec-template-intro">Cztery przykładowe projekty. Gotowe szablony Eniverse dodamy tutaj w kolejnym etapie.</p>
+              </div>
+              <button type="button" class="ec-template-close" id="ec-template-close" aria-label="Zamknij galerię">×</button>
+            </header>
+            <div class="ec-template-content">
+              <div class="ec-template-grid" id="ec-template-gallery" aria-label="Wybór projektu"></div>
+              <div class="ec-template-preview">
+                <div class="ec-template-preview-head"><div><span id="ec-template-kind"></span><h3 id="ec-template-name"></h3></div><span class="ec-template-demo-badge">PODGLĄD DEMO</span></div>
+                <div class="ec-template-browser"><div class="ec-template-browser-bar">● ● ● &nbsp;&nbsp; Przykładowa strona / Mini Start</div><div id="ec-template-viewport"></div></div>
+                <p id="ec-template-description"></p>
+              </div>
+            </div>
+            <footer class="ec-template-footer"><span>Wizualizacje poglądowe, nie gotowe strony klientów.</span><button type="button" id="ec-template-configure">Skonfiguruj Mini Start ↗</button></footer>
+          </section>
+        </div>
+<div class="ec-modal-stage" id="ec-modal-stage" hidden>
           <section
             class="ec-window"
             id="ec-window"
@@ -2228,7 +2249,7 @@
             ${featured ? '<div class="ec-featured-badge">Wyróżniony pakiet</div>' : ''}
             <div class="ec-card-header"><span class="ec-kicker">${kicker}</span><h2 id="ec-plan-${p.id}">${p.name}</h2><p class="ec-card-description">${description}</p></div>
             <div class="ec-card-budget">${price}${p.recurring ? '<p class="ec-mini-saving">Przy płatności za rok z góry zyskujesz 1 miesiąc gratis.</p><p class="ec-muted ec-mini-small">Hosting w cenie · umowa na 24 miesiące</p>' : '<p class="ec-muted">Jednorazowa opłata za wykonanie strony</p>'}</div>
-            <div class="ec-project-scale">${projectIcon(p)}<h3>${scale}</h3><p>${scaleNote}</p></div>
+            <div class="ec-project-scale">${projectIcon(p)}<h3>${scale}</h3><p>${scaleNote}</p>${starter ? '<button type="button" class="ec-template-launch ec-interactive" data-templates-open aria-haspopup="dialog">Przejrzyj szablony Mini Start <span aria-hidden="true">↗</span></button>' : ''}</div>
             <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul>${benefits}${originalPlan ? "" : cardRows(excluded)}</ul></div>
             <dl class="ec-card-meta"><div><dt><span class="ec-meta-icon" aria-hidden="true">▢</span><span class="ec-dotted">Czas realizacji</span></dt><dd>${p.days ? `Do ${p.days} dni roboczych` : "Do zatwierdzenia"}</dd></div><div><dt><span class="ec-meta-icon" aria-hidden="true">♢</span><span class="ec-dotted">Rundy poprawek</span></dt><dd>${p.revisions ? p.revisions + " w cenie" : "Brak w cenie"}</dd></div>${p.recurring ? '<div><dt><span class="ec-meta-icon" aria-hidden="true">◷</span><span class="ec-dotted">Abonament</span></dt><dd>24 miesiące</dd></div>' : ''}</dl>
             <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><span class="ec-details-copy"><strong>Pełen zakres pakietu</strong><small>Sprawdź, co dokładnie zawiera cena</small></span></summary>${cardDetails(p)}</details>
@@ -2238,7 +2259,75 @@
         }
         q("#ec-entry-packages").innerHTML = packages.filter(p => ["mini","start"].includes(p.id)).map(renderCard).join("");
         q("#ec-packages").innerHTML = packages.filter(p => ["one","wiz","firm"].includes(p.id)).map(renderCard).join("");
-        // Ujednolicenie wysokości wszystkich pięciu kart w stanie zwiniętym.
+        
+        // Poglądowe makiety: docelowe miniatury i projekty można podmienić tutaj.
+        const templateSamples = [
+          {id:"foto",name:"Atelier",type:"Fotografia",brand:"ATELIER.",headline:"Chwile, które zostają.",sub:"Naturalne sesje i opowieści zamknięte w kadrach.",cta:"Zobacz portfolio",details:"Minimalistyczny szablon fotografa z mocnym portfolio i szybkim kontaktem.",footer:"Portrety / Reportaż / Sesje rodzinne"},
+          {id:"food",name:"Półmisek",type:"Restauracja",brand:"półmisek.",headline:"Dobrze być przy stole.",sub:"Świeża kuchnia, lokalne składniki i dobre spotkania.",cta:"Sprawdź menu",details:"Ciepły projekt restauracji z menu, informacjami o lokalu i kontaktem.",footer:"Nasza kuchnia / Menu / Kontakt"},
+          {id:"beauty",name:"Lumina",type:"Salon beauty",brand:"LUMINA",headline:"Czas tylko dla Ciebie.",sub:"Zabiegi, pielęgnacja i chwila codziennego spokoju.",cta:"Umów wizytę",details:"Subtelny szablon beauty z ofertą zabiegów i przyciskiem rezerwacji.",footer:"Zabiegi / Cennik / Rezerwacja"},
+          {id:"trade",name:"Voltix",type:"Elektryk / usługi",brand:"VOLTIX",headline:"Fachowa pomoc. Bez kompromisów.",sub:"Instalacje elektryczne, pomiary i naprawy.",cta:"Skontaktuj się",details:"Konkretny szablon usługowy z widoczną ofertą i szybkim kontaktem.",footer:"Instalacje / Naprawy / Pomiary"}
+        ];
+        function templateScene(t) {
+          return '<div class="ec-template-scene ec-template-scene--'+t.id+'"><div class="ec-template-site-nav"><strong>'+t.brand+'</strong><span>O nas &nbsp; Oferta &nbsp; Kontakt</span></div>' +
+            '<div class="ec-template-hero"><div class="ec-template-copy"><small>'+t.type+'</small><div class="ec-template-headline">'+t.headline+'</div><p>'+t.sub+'</p><span class="ec-template-cta">'+t.cta+' &nbsp;↗</span></div>' +
+            '<div class="ec-template-art" aria-hidden="true"><span></span><i></i></div></div>' +
+            '<div class="ec-template-site-footer"><span>'+t.footer+'</span><span>01 / 03</span></div></div>';
+        }
+        let templateOpener=null, templatePreviousScroll="";
+        function showTemplate(index) {
+          const t=templateSamples[index];if(!t)return;
+          q("#ec-template-viewport").innerHTML=templateScene(t);
+          q("#ec-template-kind").textContent=t.type;
+          q("#ec-template-name").textContent=t.name;
+          q("#ec-template-description").textContent=t.details;
+          all("#ec-template-gallery .ec-template-choice").forEach((button,i)=>{
+            button.classList.toggle("is-active",i===index);
+            button.setAttribute("aria-pressed",String(i===index));
+          });
+        }
+        q("#ec-template-gallery").innerHTML=templateSamples.map((t,i)=>
+          '<button type="button" class="ec-template-choice" data-template-index="'+i+'" aria-pressed="'+(i===0)+'"><span class="ec-template-thumb">'+templateScene(t)+'</span><span class="ec-template-choice-label"><strong>'+t.name+'</strong><small>'+t.type+'</small></span></button>'
+        ).join("");
+        showTemplate(0);
+        function openTemplateDialog(button) {
+          templateOpener=button||null;
+          templatePreviousScroll=document.body.style.overflow;
+          document.body.style.overflow="hidden";
+          q("#ec-template-modal").hidden=false;
+          q("#ec-template-close").focus();
+        }
+        function closeTemplateDialog() {
+          q("#ec-template-modal").hidden=true;
+          document.body.style.overflow=templatePreviousScroll;
+          templateOpener?.focus();
+        }
+        q("#ec-template-gallery").addEventListener("click",event=>{
+          const button=event.target.closest("[data-template-index]");
+          if(button)showTemplate(+button.dataset.templateIndex);
+        });
+        q("#ec-template-close").addEventListener("click",closeTemplateDialog);
+        q("#ec-template-modal").addEventListener("click",event=>{
+          if(event.target===q("#ec-template-modal"))closeTemplateDialog();
+        });
+        q("#ec-template-configure").addEventListener("click",()=>{
+          closeTemplateDialog();
+          open("mini",false,templateOpener);
+        });
+        document.addEventListener("keydown",event=>{
+          if(q("#ec-template-modal").hidden)return;
+          if(event.key==="Escape"){event.preventDefault();closeTemplateDialog();return;}
+          if(event.key!=="Tab")return;
+          const buttons=all("#ec-template-modal button:not([disabled])").filter(el=>el.getClientRects().length>0);
+          const first=buttons[0],last=buttons[buttons.length-1];
+          if(!first||!last)return;
+          if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+          else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+        });
+        q("#ec-catalog").addEventListener("click",event=>{
+          const button=event.target.closest("[data-templates-open]");
+          if(button)openTemplateDialog(button);
+        });
+// Ujednolicenie wysokości wszystkich pięciu kart w stanie zwiniętym.
         // Otwarty szczegół nadal zwiększa tylko wysokość wybranej karty.
         let equalizeFrame = null;
         function equalizePackageHeights() {
@@ -2848,7 +2937,16 @@
             if (!plan) return;
             card.dataset.eniPlan = plan;
             matched.push(card);
-            const existing = card.querySelector('.ec-elementor-configure');
+            if (plan==="mini" && !card.querySelector("[data-templates-open]")) {
+              const button=document.createElement("button");
+              button.type="button";
+              button.className="ec-elementor-configure ec-elementor-templates";
+              button.textContent="Przejrzyj szablony ↗";
+              button.dataset.templatesOpen="";
+              card.append(button);
+              button.addEventListener("click",()=>openTemplateDialog(button));
+            }
+            const existing = card.querySelector('.ec-elementor-configure:not(.ec-elementor-templates)');
             if (existing) return;
             const link = card.querySelector('.enp-btn, a[data-enp-package]');
             const button = document.createElement('button');
