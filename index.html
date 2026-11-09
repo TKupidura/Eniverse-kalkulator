@@ -1798,8 +1798,6 @@
       #eni-calc .ec-template-select-dot--trade { background:linear-gradient(135deg,#45637b,#d9a73e); }
       #eni-calc .ec-template-select-footer { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:9px; margin-top:11px; }
       #eni-calc #ec-template-selected { font-size:12px; color:#63717e; }
-      #eni-calc .ec-template-open-wizard { padding:10px 12px; border:1px solid #E20B0C; color:#E20B0C; background:#fff; border-radius:5px; font-size:12px; font-weight:650; cursor:pointer; }
-      #eni-calc .ec-template-open-wizard:hover { background:#fff6f6; }
       @media(max-width:850px) {
         #eni-calc .ec-template-content { grid-template-columns:175px minmax(0,1fr); }
         #eni-calc .ec-template-thumb, #eni-calc .ec-template-thumb .ec-template-scene { height:90px; min-height:90px; }
@@ -2742,7 +2740,7 @@
                 '<span class="ec-template-select-dot ec-template-select-dot--'+t.id+'" aria-hidden="true"></span>'+
                 '<span class="ec-template-tile-text"><strong>'+t.name+'</strong><small>'+t.type+'</small>'+
                 '<span class="ec-template-select-description">'+t.details+'</span></span></label>' +
-                '<button class="ec-template-preview-action" type="button" data-template-preview="'+t.id+'" aria-label="Zobacz wszystkie sekcje szablonu '+t.name+'">Zobacz 5 sekcji <span aria-hidden="true">↗</span></button>' +
+                '<button class="ec-template-preview-action" type="button" data-template-preview="'+t.id+'" aria-label="Zobacz wszystkie sekcje szablonu '+t.name+'">Zobacz podgląd <span aria-hidden="true">↗</span></button>' +
               '</div>'
             ).join('') +
             '<label class="ec-template-select-option ec-template-select-empty"><input type="radio" name="ec-template-choice" value="" '+(!selected?'checked ':'')+'><span>Wybiorę szablon później</span></label>';
@@ -3303,8 +3301,7 @@
             '<h3>Wybierz szablon swojej strony</h3>'+
             '<p class="ec-muted">Zobacz cztery propozycje i krótkie opisy. Kliknij podgląd, aby obejrzeć wszystkie pięć sekcji strony. Wybór szablonu nie zmienia ceny.</p>'+
             '<div class="ec-template-select-options" id="ec-template-options" role="group" aria-label="Wybór szablonu Mini Start"></div>'+
-            '<div class="ec-template-select-footer"><span id="ec-template-selected"></span>'+
-            '<button type="button" id="ec-template-open-wizard" class="ec-template-open-wizard">Zobacz pełne podglądy ↗</button></div>';
+            '<div class="ec-template-select-footer"><span id="ec-template-selected"></span></div>';
           templatePane.append(templateSection);
 
           const lang = document.createElement("section");
@@ -3325,10 +3322,6 @@
           q("#ec-window").insertBefore(final,q("#ec-window .ec-foot"));
         }
         setupWizardLayout();
-        q("#ec-template-open-wizard").addEventListener("click",event=>{
-          read();
-          openTemplateDialog(event.currentTarget);
-        });
         q("#ec-template-options").addEventListener("click",event=>{
           const preview=event.target.closest("[data-template-preview]");
           if(!preview)return;
