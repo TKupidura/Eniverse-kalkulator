@@ -1950,6 +1950,81 @@
         #eni-calc .ec-summary-template-browse { font-size:11px; padding:7px 9px; }
       }
 
+      /* Podsumowanie po „Wybieram pakiet”: cena > drobny link > co wybrano.
+         Standardowy konfigurator zachowuje kolejność swoich elementów. */
+      #eni-calc .ec-final .ec-summary > .ec-direct-summary-switch {
+        grid-column:1/-1;
+        margin:0 0 14px;
+        padding:0;
+        background:transparent;
+        border:0;
+      }
+      #eni-calc .ec-final .ec-summary .ec-direct-summary-configure {
+        display:inline-flex;
+        align-items:baseline;
+        justify-content:flex-start;
+        flex-wrap:wrap;
+        gap:4px 7px;
+        width:auto;
+        max-width:100%;
+        padding:0;
+        margin:0;
+        color:#65717d;
+        background:transparent;
+        border:0;
+        border-radius:0;
+        font-size:12px;
+        font-weight:400;
+        line-height:1.5;
+        text-align:left;
+        cursor:pointer;
+      }
+      #eni-calc .ec-final .ec-summary .ec-direct-summary-configure strong {
+        color:#E20B0C;
+        font-size:12px;
+        font-weight:650;
+        white-space:normal;
+        text-decoration:underline;
+        text-underline-offset:3px;
+      }
+      #eni-calc .ec-final .ec-summary .ec-direct-summary-configure:hover,
+      #eni-calc .ec-final .ec-summary .ec-direct-summary-configure:hover strong { color:#b3090b; }
+      #eni-calc .ec-final .ec-summary > .ec-summary-template-line {
+        display:flex;
+        justify-content:space-between;
+        align-items:baseline;
+        gap:10px;
+        min-width:0;
+      }
+      #eni-calc .ec-final .ec-summary .ec-summary-template-name {
+        flex:0 1 auto;
+        min-width:0;
+        border:0;
+        background:transparent;
+        color:#E20B0C;
+        font:inherit;
+        font-size:12px;
+        font-weight:650;
+        text-align:right;
+        overflow-wrap:anywhere;
+        padding:0;
+        cursor:pointer;
+        text-decoration:underline;
+        text-underline-offset:3px;
+      }
+      #eni-calc .ec-final .ec-summary .ec-summary-template-name:hover { color:#af070a; }
+      #eni-calc .ec-final .ec-summary .ec-summary-template-name:focus-visible,
+      #eni-calc .ec-final .ec-summary .ec-direct-summary-configure:focus-visible {
+        outline:2px solid #E20B0C;
+        outline-offset:3px;
+      }
+      @media(max-width:760px) {
+        #eni-calc .ec-final .ec-summary > .ec-direct-summary-switch { margin:8px 0 13px; }
+        #eni-calc .ec-final .ec-summary .ec-direct-summary-configure { font-size:11px; }
+        #eni-calc .ec-final .ec-summary .ec-direct-summary-configure strong { font-size:11px; }
+        #eni-calc .ec-final .ec-summary .ec-summary-template-name { font-size:11px; }
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -3317,27 +3392,35 @@
           const row = (label,value) =>
             '<div class="ec-line"><span>' + label + '</span><span>' + value + '</span></div>';
           const templateRow = p.recurring
-            ? '<div class="ec-summary-template-row">'+
-                '<div class="ec-summary-template-text"><span>Szablon Mini Start</span><strong>'+
-                  (s.templateId ? templateSelectionName(s.templateId) : "Nie wybrano szablonu")+
-                '</strong></div>'+
-                (!s.templateId
-                  ? '<button type="button" class="ec-summary-template-browse" data-ec-summary-template-browse>Przejrzyj szablony <span aria-hidden="true">↗</span></button>'
-                  : '<button type="button" class="ec-summary-template-browse" data-ec-summary-template-browse>Zmień szablon <span aria-hidden="true">↗</span></button>')+
-              '</div>'
+            ? '<div class="ec-line ec-summary-template-line">' +
+                '<span>Szablon Mini Start</span>' +
+                '<button type="button" class="ec-summary-template-name ' +
+                  (s.templateId ? 'is-selected' : 'is-required') +
+                  '" data-ec-summary-template-browse aria-label="' +
+                  (s.templateId ? 'Zmień wybrany szablon Mini Start' : 'Wybierz szablon Mini Start') +
+                  '">' +
+                  (s.templateId ? templateSelectionName(s.templateId) : 'Wybierz szablon') +
+                '</button></div>'
             : '';
           const lines = simpleRows.map(([label,value]) =>
             row(label,value) + (label==="Pakiet" ? templateRow : "")
           ).join("");
           const total = p.recurring ? a.contract : a.total;
-          q("#ec-summary").innerHTML =
-            '<h3>' + (baseChoice ? "Wybrano pakiet: " : "Twoja konfiguracja: ") + p.name + '</h3>' +
-            lines + '<div class="ec-summary-total">' +
+          const totalBlock = '<div class="ec-summary-total">' +
             row(p.recurring ? "Łącznie za 24 miesiące" : "Projekt i usługi łącznie",money(total)) +
             (p.recurring ? row("Rata pakietu i dodatków",miniSchedule()) :
               row("Wartość projektu z dodatkami",money(project)) +
               (a.host ? row("Usługi roczne z góry",money(a.host)) : "")) +
-            '</div>' +
+            '</div>';
+          const compactConfigureLink = directSummaryMode
+            ? '<div class="ec-direct-summary-switch"><button type="button" id="ec-direct-summary-configure" class="ec-direct-summary-configure">' +
+              '<span>Potrzebujesz skonfigurować pakiet?</span> <strong>Przejdź do konfiguratora ↗</strong>' +
+              '</button></div>'
+            : '';
+          const detailsHeading = '<h3>' + (directSummaryMode ? 'Co wybrano — ' : 'Twoja konfiguracja: ') + p.name + '</h3>';
+          q("#ec-summary").innerHTML = (directSummaryMode
+              ? totalBlock + compactConfigureLink + detailsHeading + lines
+              : detailsHeading + lines + totalBlock) +
             '<p class="ec-note">Ceny netto. Dodatki i usługi oznaczone jako robocze wymagają potwierdzenia w ofercie.</p>';
         }
         let wizardStep = 0;
@@ -3413,12 +3496,7 @@
           final.className = "ec-final";
           final.id = "ec-final";
           final.hidden = true;
-          const summarySwitch=document.createElement("div");
-          summarySwitch.id="ec-direct-summary-switch";
-          summarySwitch.className="ec-direct-summary-switch";
-          summarySwitch.hidden=true;
-          summarySwitch.innerHTML='<button type="button" id="ec-direct-summary-configure" class="ec-direct-summary-configure"><span>Potrzebujesz skonfigurować pakiet?</span><strong>Przejdź do konfiguratora <span aria-hidden="true">↗</span></strong></button>';
-          final.append(summarySwitch,q("#ec-summary"),q("#ec-contact-section"));
+          final.append(q("#ec-summary"),q("#ec-contact-section"));
           q("#ec-window").insertBefore(final,q("#ec-window .ec-foot"));
         }
         setupWizardLayout();
@@ -3467,7 +3545,6 @@
             : "Eniverse / Konfigurator strony";
           q("#ec-window .ec-steps").hidden=directOnly;
           q("#ec-window .ec-foot").hidden=directOnly;
-          q("#ec-direct-summary-switch").hidden=!directOnly;
           q("#ec-next").hidden=last;
           q("#ec-next").textContent=wizardStep===lastIndex-1?"Podsumowanie →":"Dalej →";
           q("#ec-back").hidden=directSummaryMode||wizardStep===0;
@@ -3481,9 +3558,15 @@
         // Galeria Mini Start w podsumowaniu jest częścią trybu wyboru pakietu.
         // Nie przełączamy kroków po wybraniu szablonu z tej galerii.
         q("#ec-summary").addEventListener("click",event=>{
-          const button=event.target.closest("[data-ec-summary-template-browse]");
-          if(button && current.id==="mini"){
-            openTemplateDialog(button);
+          const configure=event.target.closest("#ec-direct-summary-configure");
+          if(configure && directSummaryMode){
+            directSummaryMode=false;
+            step(0);
+            return;
+          }
+          const templateLink=event.target.closest("[data-ec-summary-template-browse]");
+          if(templateLink && current.id==="mini"){
+            openTemplateDialog(templateLink);
           }
         });
         let scrollBeforeModal = "";
@@ -3517,11 +3600,6 @@
             );
         });
         q("#ec-close").addEventListener("click", close);
-        q("#ec-direct-summary-configure").addEventListener("click",()=>{
-          directSummaryMode=false;
-          step(0);
-          q("#ec-window").focus?.();
-        });
         q("#ec-next").addEventListener("click", () => {
           update();
           step(wizardStep + 1);
