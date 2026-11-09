@@ -1485,6 +1485,129 @@
         #eni-calc .ec-packages-overview .ec-mini-price { flex-direction:row; align-items:baseline; }
       }
 
+
+      /* Mini Start: przycisk galerii i galeria wzorów stron. */
+      #eni-calc .ec-template-launch {
+        margin-top:14px; width:100%; display:flex; align-items:center; justify-content:space-between;
+        gap:9px; padding:12px 11px; border:1px solid #E20B0C; border-radius:5px;
+        background:#fff; color:#E20B0C; font-size:12px; font-weight:650; text-align:left;
+      }
+      #eni-calc .ec-template-launch:hover { background:#fff3f3; }
+      #eni-calc .ec-elementor-templates { color:#E20B0C!important; border-color:#E20B0C!important; }
+      #eni-calc .ec-template-overlay {
+        position:fixed; z-index:2147481200; inset:0; padding:12px; display:flex;
+        align-items:center; justify-content:center; background:rgba(8,12,17,.8); overflow-y:auto;
+      }
+      #eni-calc .ec-template-dialog {
+        width:min(1220px,100%); max-height:calc(100dvh - 24px);
+        display:flex; flex-direction:column; overflow:hidden;
+        border-radius:14px; background:#fff; color:#172027;
+        box-shadow:0 22px 80px #0007;
+      }
+      #eni-calc .ec-template-header {
+        padding:20px 26px; display:flex; justify-content:space-between; align-items:flex-start;
+        gap:18px; border-bottom:1px solid #e2e7ea; flex:0 0 auto;
+      }
+      #eni-calc .ec-template-header h2 { font-size:clamp(22px,2.2vw,30px); line-height:1.16; letter-spacing:-.04em; font-weight:650; margin:6px 0 9px; }
+      #eni-calc .ec-template-header p { font-size:13px; color:#62707d; margin:0; line-height:1.5; }
+      #eni-calc .ec-template-kicker { font-size:11px; letter-spacing:.12em; font-weight:750; color:#E20B0C; }
+      #eni-calc .ec-template-close {
+        flex:0 0 39px; width:39px; height:39px; border:1px solid #d9e0e5;
+        border-radius:50%; background:white; font-size:26px; cursor:pointer;
+      }
+      #eni-calc .ec-template-close:hover { background:#f3f5f6; }
+      #eni-calc .ec-template-content { min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; padding:19px 26px; }
+      #eni-calc .ec-template-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:23px; }
+      #eni-calc .ec-template-choice { border:1px solid #dce3e8; background:white; border-radius:9px; padding:7px; cursor:pointer; text-align:left; min-width:0; transition:border-color .15s; }
+      #eni-calc .ec-template-choice:hover { border-color:#df9f9f; }
+      #eni-calc .ec-template-choice.is-active { border-color:#E20B0C; box-shadow:0 0 0 1px #E20B0C; }
+      #eni-calc .ec-template-choice:focus-visible { outline:3px solid #E20B0C; outline-offset:2px; }
+      #eni-calc .ec-template-thumb { display:block; height:124px; overflow:hidden; border-radius:5px; }
+      #eni-calc .ec-template-choice-label { display:flex; justify-content:space-between; gap:7px; align-items:center; padding:10px 5px 3px; }
+      #eni-calc .ec-template-choice-label strong { font-size:14px; font-weight:700; }
+      #eni-calc .ec-template-choice-label small { font-size:11px; color:#697a86; text-align:right; }
+      #eni-calc .ec-template-preview { padding:14px; background:#f5f7f8; border:1px solid #e1e5e9; border-radius:10px; }
+      #eni-calc .ec-template-preview-head { display:flex; justify-content:space-between; align-items:center; gap:14px; margin-bottom:13px; }
+      #eni-calc #ec-template-kind { font-size:11px; color:#7a8790; }
+      #eni-calc .ec-template-preview h3 { font-size:21px; font-weight:650; margin:4px 0 0; }
+      #eni-calc .ec-template-demo-badge { padding:7px 9px; font-size:10px; letter-spacing:.07em; font-weight:750; color:#61717e; border:1px solid #cfd7dd; border-radius:4px; white-space:nowrap; }
+      #eni-calc .ec-template-browser { overflow:hidden; border:1px solid #d9e0e5; border-radius:7px; }
+      #eni-calc .ec-template-browser-bar { padding:9px 14px; background:#e9edf0; color:#798690; font-size:11px; }
+      #eni-calc #ec-template-description { margin:12px 0 0; color:#586674; font-size:13px; line-height:1.5; }
+      #eni-calc .ec-template-footer { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:15px 26px; border-top:1px solid #e2e6ea; flex:0 0 auto; }
+      #eni-calc .ec-template-footer > span { font-size:11px; color:#77838e; line-height:1.5; }
+      #eni-calc #ec-template-configure { padding:12px 17px; border:1px solid #E20B0C; border-radius:5px; background:#E20B0C; color:white; font-size:13px; font-weight:700; cursor:pointer; }
+      #eni-calc #ec-template-configure:hover { background:#b60909; }
+      /* Samowystarczalne miniatury — cztery stylistycznie różne koncepcje. */
+      #eni-calc .ec-template-scene {
+        --demo-bg:#efeae2; --demo-ink:#282e29; --demo-accent:#657067;
+        --demo-art1:#cdb6a1; --demo-art2:#616c68;
+        min-height:350px; display:flex; flex-direction:column; overflow:hidden;
+        background:var(--demo-bg); color:var(--demo-ink);
+      }
+      #eni-calc .ec-template-scene--food { --demo-bg:#faf0dd; --demo-ink:#4a3625; --demo-accent:#bd842a; --demo-art1:#d7b978; --demo-art2:#738452; }
+      #eni-calc .ec-template-scene--beauty { --demo-bg:#f8e9e7; --demo-ink:#4d3037; --demo-accent:#bc8490; --demo-art1:#e6c0b9; --demo-art2:#a16b7c; }
+      #eni-calc .ec-template-scene--trade { --demo-bg:#192d40; --demo-ink:#f5f8fa; --demo-accent:#efc552; --demo-art1:#45637b; --demo-art2:#d9a73e; }
+      #eni-calc .ec-template-site-nav { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:18px 27px 11px; }
+      #eni-calc .ec-template-site-nav strong { font-size:18px; letter-spacing:.04em; }
+      #eni-calc .ec-template-site-nav span { font-size:11px; opacity:.75; }
+      #eni-calc .ec-template-hero { display:grid; grid-template-columns:1.06fr .94fr; align-items:center; gap:28px; padding:12px 42px 28px; flex:1; }
+      #eni-calc .ec-template-copy small { font-size:12px; letter-spacing:.12em; color:var(--demo-accent); font-weight:700; text-transform:uppercase; }
+      #eni-calc .ec-template-headline { margin:12px 0; font-size:clamp(28px,3.7vw,53px); line-height:1.04; letter-spacing:-.06em; font-weight:670; }
+      #eni-calc .ec-template-copy p { font-size:14px; line-height:1.5; opacity:.85; }
+      #eni-calc .ec-template-cta { display:inline-flex; margin-top:16px; padding:11px 16px; font-size:12px; font-weight:700; border:1px solid currentColor; }
+      #eni-calc .ec-template-scene--food .ec-template-cta, #eni-calc .ec-template-scene--trade .ec-template-cta { color:var(--demo-bg); background:var(--demo-accent); border-color:var(--demo-accent); }
+      #eni-calc .ec-template-art { position:relative; overflow:hidden; align-self:stretch; min-height:225px; background:linear-gradient(140deg,var(--demo-art1),var(--demo-art2)); border-radius:130px 130px 6px 6px; }
+      #eni-calc .ec-template-art span { position:absolute; display:block; left:23%; top:20%; width:58%; height:65%; border-radius:50%; background:radial-gradient(circle at 30% 30%,#fffa,var(--demo-art2)); border:8px solid #fff6; box-shadow:0 12px 32px #0002; }
+      #eni-calc .ec-template-art i { position:absolute; display:block; right:-7%; bottom:-8%; width:38%; height:28%; border-radius:50%; background:var(--demo-accent); opacity:.62; }
+      #eni-calc .ec-template-scene--foto .ec-template-art, #eni-calc .ec-template-scene--trade .ec-template-art { border-radius:5px; }
+      #eni-calc .ec-template-scene--food .ec-template-art { border-radius:50%; }
+      #eni-calc .ec-template-scene--trade .ec-template-art span { border-radius:4px; transform:rotate(27deg); }
+      #eni-calc .ec-template-site-footer { display:flex; justify-content:space-between; gap:14px; padding:12px 27px; border-top:1px solid currentColor; opacity:.68; font-size:11px; }
+      /* Ta sama struktura strony, pomniejszona do miniatur. */
+      #eni-calc .ec-template-thumb .ec-template-scene { min-height:124px; height:124px; }
+      #eni-calc .ec-template-thumb .ec-template-site-nav { padding:8px 11px 3px; }
+      #eni-calc .ec-template-thumb .ec-template-site-nav strong { font-size:10px; }
+      #eni-calc .ec-template-thumb .ec-template-site-nav span { font-size:5px; }
+      #eni-calc .ec-template-thumb .ec-template-hero { gap:7px; padding:4px 11px 9px; }
+      #eni-calc .ec-template-thumb .ec-template-copy small { font-size:6px; }
+      #eni-calc .ec-template-thumb .ec-template-headline { font-size:16px; margin:5px 0; }
+      #eni-calc .ec-template-thumb .ec-template-copy p { font-size:6px; line-height:1.3; }
+      #eni-calc .ec-template-thumb .ec-template-cta { padding:4px 6px; margin-top:3px; font-size:6px; }
+      #eni-calc .ec-template-thumb .ec-template-art { min-height:68px; }
+      #eni-calc .ec-template-thumb .ec-template-art span { border-width:3px; }
+      #eni-calc .ec-template-thumb .ec-template-site-footer { padding:5px 11px; font-size:6px; }
+      @media(max-width:800px) {
+        #eni-calc .ec-template-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+        #eni-calc .ec-template-header, #eni-calc .ec-template-footer { padding:16px; }
+        #eni-calc .ec-template-content { padding:15px; }
+        #eni-calc .ec-template-hero { padding:14px 23px 24px; gap:15px; }
+      }
+      @media(max-width:550px) {
+        #eni-calc .ec-template-overlay { padding:5px; }
+        #eni-calc .ec-template-dialog { max-height:calc(100dvh - 10px); }
+        #eni-calc .ec-template-header h2 { font-size:20px; }
+        #eni-calc .ec-template-header p { font-size:11px; }
+        #eni-calc .ec-template-grid { gap:8px; }
+        #eni-calc .ec-template-thumb, #eni-calc .ec-template-thumb .ec-template-scene { height:95px; min-height:95px; }
+        #eni-calc .ec-template-choice-label { display:block; padding:7px 3px 3px; }
+        #eni-calc .ec-template-choice-label strong { display:block; font-size:12px; }
+        #eni-calc .ec-template-choice-label small { display:block; text-align:left; font-size:10px; }
+        #eni-calc .ec-template-site-nav { padding:10px; }
+        #eni-calc .ec-template-site-nav strong { font-size:12px; }
+        #eni-calc .ec-template-site-nav span { font-size:7px; }
+        #eni-calc .ec-template-hero { padding:10px 14px 18px; gap:10px; }
+        #eni-calc .ec-template-headline { font-size:21px; }
+        #eni-calc .ec-template-copy p { font-size:10px; }
+        #eni-calc .ec-template-copy small { font-size:9px; }
+        #eni-calc .ec-template-cta { font-size:9px; padding:7px 9px; }
+        #eni-calc .ec-template-art { min-height:135px; }
+        #eni-calc .ec-template-scene { min-height:260px; }
+        #eni-calc .ec-template-site-footer { padding:9px 12px; font-size:8px; }
+        #eni-calc .ec-template-footer { flex-direction:column; align-items:stretch; gap:10px; }
+        #eni-calc #ec-template-configure { width:100%; }
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
