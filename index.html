@@ -2108,6 +2108,10 @@
         #eni-calc .ec-template-defer strong { font-size:11px; }
         #eni-calc .ec-template-defer small { font-size:9px; }
       }
+      /* Bez dolnego separatora za „Hosting / opieka” w podsumowaniu. */
+      #eni-calc .ec-final .ec-summary > .ec-line.ec-summary-hosting-line {
+        border-bottom:0;
+      }
 
 </style>
 
@@ -3495,7 +3499,8 @@
             ["Hosting / opieka", hostingDescription(p)]
           ];
           const row = (label,value) =>
-            '<div class="ec-line"><span>' + label + '</span><span>' + value + '</span></div>';
+            '<div class="ec-line' + (label==="Hosting / opieka" ? ' ec-summary-hosting-line' : '') +
+            '"><span>' + label + '</span><span>' + value + '</span></div>';
           const templateRow = p.recurring
             ? '<div class="ec-line ec-summary-template-line">' +
                 '<span>Szablon Mini Start</span>' +
