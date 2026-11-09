@@ -2018,6 +2018,16 @@
         outline:2px solid #E20B0C;
         outline-offset:3px;
       }
+      @media(max-width:720px) {
+        /* Na telefonach inne wiersze podsumowania bywają ukryte,
+           ale wybór szablonu musi pozostać dostępny, inaczej nie można wysłać zapytania. */
+        #eni-calc .ec-final .ec-summary > .ec-line.ec-summary-template-line {
+          display:flex;
+          padding:9px 0;
+          margin:9px 0;
+          border-top:1px solid #e2e6eb;
+        }
+      }
       @media(max-width:760px) {
         #eni-calc .ec-final .ec-summary > .ec-direct-summary-switch { margin:8px 0 13px; }
         #eni-calc .ec-final .ec-summary .ec-direct-summary-configure { font-size:11px; }
