@@ -1857,13 +1857,32 @@
         display:block; margin-top:10px; font-size:12px; line-height:1.55; color:#53616d;
       }
       #eni-calc .ec-template-preview-action {
-        display:inline-flex; justify-content:center; align-items:center; gap:9px;
-        align-self:flex-start; width:auto; max-width:calc(100% - 28px);
-        margin:0 14px 14px; padding:9px 12px;
-        border:1px solid #E20B0C; color:#E20B0C; background:#fff;
-        border-radius:5px; font-size:12px; font-weight:650; cursor:pointer;
+        display:inline;
+        align-self:flex-start;
+        width:auto;
+        max-width:calc(100% - 28px);
+        margin:0 14px 14px;
+        padding:0;
+        border:0;
+        border-radius:0;
+        background:transparent;
+        color:#E20B0C;
+        font-size:12px;
+        font-weight:650;
+        text-align:left;
+        text-decoration:none;
+        cursor:pointer;
       }
-      #eni-calc .ec-template-preview-action:hover { background:#fff4f4; }
+      #eni-calc .ec-template-preview-action:hover {
+        color:#E20B0C;
+        background:transparent;
+        text-decoration:underline;
+        text-underline-offset:3px;
+      }
+      #eni-calc .ec-template-preview-action:focus-visible {
+        outline:2px solid #E20B0C;
+        outline-offset:4px;
+      }
       #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-empty {
         grid-column:1/-1; padding:13px 16px;
       }
@@ -2992,7 +3011,7 @@
                 '<span class="ec-template-select-dot ec-template-select-dot--'+t.id+'" aria-hidden="true"></span>'+
                 '<span class="ec-template-tile-text"><strong>'+t.name+'</strong><small>'+t.type+'</small>'+
                 '<span class="ec-template-select-description">'+t.details+'</span></span></label>' +
-                '<button class="ec-template-preview-action" type="button" data-template-preview="'+t.id+'" aria-label="Zobacz wszystkie sekcje szablonu '+t.name+'">Zobacz podgląd <span aria-hidden="true">↗</span></button>' +
+                '<button class="ec-template-preview-action" type="button" data-template-preview="'+t.id+'" aria-label="Zobacz wszystkie sekcje szablonu '+t.name+'">Zobacz podgląd</button>' +
               '</div>'
             ).join('') +
             '<label class="ec-template-select-option ec-template-select-empty ec-template-select-later">' +
