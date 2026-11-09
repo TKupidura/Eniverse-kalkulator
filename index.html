@@ -3338,6 +3338,13 @@
         });
         q("#ec-config").addEventListener("change", (event) => {
           update();
+          // Natychmiastowe odświeżenie podpisu po wyborze szablonu Mini Start.
+          if (event.target.closest("#ec-template-options")) {
+            const id=states.mini.templateId;
+            q("#ec-template-selected").textContent=id
+              ? "Wybrany szablon: "+templateSelectionName(id)
+              : "Szablon można wybrać teraz lub później.";
+          }
           // Aktualizacja list po zmianie języka lub stanu przełącznika.
           if (event.target.closest("#ec-language-rows")) renderLanguages();
         });
