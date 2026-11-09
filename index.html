@@ -1686,6 +1686,151 @@
         #eni-calc .ec-brace-svg { height:30px; }
       }
 
+      /* Pełnoekranowa galeria; tylko wnętrze strony ma pionowy scroll. */
+      #eni-calc .ec-template-overlay { padding:5px; overflow:hidden; align-items:center; }
+      #eni-calc .ec-template-dialog {
+        width:min(1660px,calc(100vw - 10px));
+        height:calc(100dvh - 10px);
+        max-height:calc(100dvh - 10px);
+        border-radius:10px;
+      }
+      #eni-calc .ec-template-header { padding:13px 21px; }
+      #eni-calc .ec-template-header h2 { font-size:clamp(19px,1.8vw,25px); margin:4px 0 5px; }
+      #eni-calc .ec-template-header p { font-size:12px; }
+      #eni-calc .ec-template-content {
+        display:grid;
+        grid-template-columns:235px minmax(0,1fr);
+        gap:15px;
+        flex:1 1 auto;
+        min-height:0;
+        overflow:hidden;
+        padding:13px 17px;
+      }
+      #eni-calc .ec-template-grid {
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+        min-width:0;
+        min-height:0;
+        overflow-y:auto;
+        overscroll-behavior:contain;
+        margin:0;
+        padding:2px 5px 2px 2px;
+      }
+      #eni-calc .ec-template-thumb { height:103px; }
+      #eni-calc .ec-template-thumb .ec-template-scene { height:103px; min-height:103px; }
+      #eni-calc .ec-template-preview {
+        display:flex; flex-direction:column; gap:0;
+        min-height:0; overflow:hidden; padding:11px 12px 12px;
+      }
+      #eni-calc .ec-template-preview-head { flex:0 0 auto; margin-bottom:9px; }
+      #eni-calc .ec-template-browser {
+        flex:1 1 auto;
+        display:flex; flex-direction:column;
+        min-height:0; overflow:hidden;
+      }
+      #eni-calc .ec-template-browser-bar {
+        display:flex; align-items:center; gap:16px; flex:0 0 auto;
+        padding:8px 12px;
+      }
+      #eni-calc .ec-template-browser-bar span:first-child { color:#e07f7f; white-space:nowrap; }
+      #eni-calc #ec-template-viewport {
+        display:block;
+        flex:1 1 auto;
+        min-height:0;
+        height:100%;
+        overflow-y:auto;
+        overflow-x:hidden;
+        overscroll-behavior:contain;
+        scrollbar-width:thin;
+        scrollbar-color:#aab3bd transparent;
+        background:#fff;
+      }
+      #eni-calc #ec-template-viewport:focus-visible { outline:2px solid #E20B0C; outline-offset:-3px; }
+      #eni-calc #ec-template-description { display:none; }
+      #eni-calc .ec-template-footer { padding:10px 19px; }
+      #eni-calc .ec-template-scene--full { min-height:500px; }
+      #eni-calc .ec-template-scene--full .ec-template-hero { min-height:405px; padding:26px 6% 44px; }
+      #eni-calc .ec-template-scene--full .ec-template-headline { font-size:clamp(38px,4vw,72px); }
+      #eni-calc .ec-template-fullpage { --demo-bg:#efeae2; --demo-ink:#282e29; --demo-accent:#657067; --demo-art1:#cdb6a1; --demo-art2:#616c68; color:var(--demo-ink); background:var(--demo-bg); }
+      #eni-calc .ec-template-fullpage.ec-template-scene--food { --demo-bg:#faf0dd; --demo-ink:#4a3625; --demo-accent:#bd842a; --demo-art1:#d7b978; --demo-art2:#738452; }
+      #eni-calc .ec-template-fullpage.ec-template-scene--beauty { --demo-bg:#f8e9e7; --demo-ink:#4d3037; --demo-accent:#bc8490; --demo-art1:#e6c0b9; --demo-art2:#a16b7c; }
+      #eni-calc .ec-template-fullpage.ec-template-scene--trade { --demo-bg:#192d40; --demo-ink:#f5f8fa; --demo-accent:#efc552; --demo-art1:#45637b; --demo-art2:#d9a73e; }
+      #eni-calc .ec-template-demo-section { padding:55px 7%; min-height:350px; }
+      #eni-calc .ec-template-demo-index { font-size:11px; color:var(--demo-accent); font-weight:750; letter-spacing:.12em; margin-bottom:25px; }
+      #eni-calc .ec-template-demo-section h2 { font-size:clamp(27px,3.3vw,46px); letter-spacing:-.048em; line-height:1.1; margin:7px 0 17px; font-weight:650; color:inherit; }
+      #eni-calc .ec-template-demo-section p { font-size:15px; line-height:1.75; max-width:580px; }
+      #eni-calc .ec-template-demo-about { background:#fff; color:#283139; }
+      #eni-calc .ec-template-demo-about-grid { display:grid; grid-template-columns:1fr .76fr; gap:7%; align-items:center; }
+      #eni-calc .ec-template-demo-about-grid small { color:var(--demo-accent); text-transform:uppercase; font-size:11px; font-weight:700; letter-spacing:.12em; }
+      #eni-calc .ec-template-demo-image { position:relative; min-height:245px; overflow:hidden; border-radius:6px 90px 6px 6px; background:linear-gradient(145deg,var(--demo-art1),var(--demo-art2)); }
+      #eni-calc .ec-template-demo-image span { position:absolute; display:block; width:48%; height:65%; left:28%; top:21%; background:#fff5; border-radius:50%; box-shadow:20px 20px 60px #0002; transform:rotate(18deg); }
+      #eni-calc .ec-template-demo-offer { background:var(--demo-bg); color:var(--demo-ink); }
+      #eni-calc .ec-template-demo-cards { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:30px; }
+      #eni-calc .ec-template-demo-card { padding:11px 12px 19px; border:1px solid currentColor; border-color:#86868645; background:#ffffff12; }
+      #eni-calc .ec-template-demo-card > span { display:block; font-size:11px; color:var(--demo-accent); font-weight:750; }
+      #eni-calc .ec-template-demo-card-art { height:112px; margin:12px 0; background:linear-gradient(145deg,var(--demo-art1),var(--demo-art2)); opacity:.88; }
+      #eni-calc .ec-template-demo-card:nth-child(2) .ec-template-demo-card-art { border-radius:60px 60px 0 0; }
+      #eni-calc .ec-template-demo-card:nth-child(3) .ec-template-demo-card-art { border-radius:50%; }
+      #eni-calc .ec-template-demo-card h4 { margin:0 0 8px; font-size:18px; color:inherit; }
+      #eni-calc .ec-template-demo-card p { margin:0; font-size:12px; line-height:1.6; }
+      #eni-calc .ec-template-demo-proof { text-align:center; color:#1e2930; background:#f1f4f3; min-height:310px; }
+      #eni-calc .ec-template-demo-proof h2 { max-width:650px; margin:0 auto 25px; }
+      #eni-calc .ec-template-demo-proof blockquote { margin:0 auto; padding:0; border:0; font-size:clamp(17px,1.8vw,23px); max-width:710px; line-height:1.5; font-style:italic; }
+      #eni-calc .ec-template-demo-stars { margin-top:24px; letter-spacing:6px; color:#b48344; }
+      #eni-calc .ec-template-demo-contact { min-height:395px; text-align:center; color:var(--demo-ink); background:var(--demo-bg); padding-bottom:0; }
+      #eni-calc .ec-template-demo-contact h2, #eni-calc .ec-template-demo-contact p { margin-left:auto; margin-right:auto; }
+      #eni-calc .ec-template-demo-contact-button { display:inline-block; padding:13px 20px; margin:20px 0 40px; background:var(--demo-accent); color:#fff; font-size:13px; font-weight:700; }
+      #eni-calc .ec-template-demo-contact-end { display:flex; justify-content:space-between; gap:10px; padding:19px 0; border-top:1px solid #8886; font-size:12px; }
+      /* Wybór projektu w pierwszym kroku Mini Start */
+      #eni-calc .ec-template-section { border-top:1px solid var(--ec-line); padding-top:19px; }
+      #eni-calc .ec-template-select-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:14px 0 10px; }
+      #eni-calc .ec-template-select-option { display:flex; gap:10px; align-items:center; padding:12px; border:1px solid #dce3e8; border-radius:7px; background:#fff; cursor:pointer; min-width:0; }
+      #eni-calc .ec-template-select-option:has(input:checked) { border-color:#E20B0C; background:#fff9f9; box-shadow:0 0 0 1px #E20B0C; }
+      #eni-calc .ec-template-select-option input { accent-color:#E20B0C; flex:0 0 auto; }
+      #eni-calc .ec-template-select-option strong, #eni-calc .ec-template-select-option small { display:block; }
+      #eni-calc .ec-template-select-option strong { font-size:13px; }
+      #eni-calc .ec-template-select-option small { color:#6b7781; font-size:11px; margin-top:3px; }
+      #eni-calc .ec-template-select-empty { grid-column:1/-1; }
+      #eni-calc .ec-template-select-dot { width:30px; height:30px; flex:0 0 30px; border-radius:5px; background:linear-gradient(135deg,#cdb6a1,#616c68); }
+      #eni-calc .ec-template-select-dot--food { background:linear-gradient(135deg,#d7b978,#738452); }
+      #eni-calc .ec-template-select-dot--beauty { background:linear-gradient(135deg,#e6c0b9,#a16b7c); }
+      #eni-calc .ec-template-select-dot--trade { background:linear-gradient(135deg,#45637b,#d9a73e); }
+      #eni-calc .ec-template-select-footer { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:9px; margin-top:11px; }
+      #eni-calc #ec-template-selected { font-size:12px; color:#63717e; }
+      #eni-calc .ec-template-open-wizard { padding:10px 12px; border:1px solid #E20B0C; color:#E20B0C; background:#fff; border-radius:5px; font-size:12px; font-weight:650; cursor:pointer; }
+      #eni-calc .ec-template-open-wizard:hover { background:#fff6f6; }
+      @media(max-width:850px) {
+        #eni-calc .ec-template-content { grid-template-columns:175px minmax(0,1fr); }
+        #eni-calc .ec-template-thumb, #eni-calc .ec-template-thumb .ec-template-scene { height:90px; min-height:90px; }
+        #eni-calc .ec-template-choice-label { flex-direction:column; align-items:flex-start; }
+        #eni-calc .ec-template-demo-section { padding:40px 5%; }
+        #eni-calc .ec-template-demo-cards { gap:8px; }
+      }
+      @media(max-width:650px) {
+        #eni-calc .ec-template-content { display:flex; flex-direction:column; gap:9px; padding:8px; }
+        #eni-calc .ec-template-grid { display:flex; flex-direction:row; overflow-x:auto; overflow-y:hidden; flex:0 0 auto; padding:2px 2px 6px; gap:8px; }
+        #eni-calc .ec-template-choice { flex:0 0 122px; }
+        #eni-calc .ec-template-thumb, #eni-calc .ec-template-thumb .ec-template-scene { height:65px; min-height:65px; }
+        #eni-calc .ec-template-choice-label { padding:5px 2px 0; gap:2px; }
+        #eni-calc .ec-template-choice-label strong { font-size:11px; }
+        #eni-calc .ec-template-choice-label small { font-size:9px; }
+        #eni-calc .ec-template-preview { flex:1 1 auto; min-height:0; padding:8px; }
+        #eni-calc .ec-template-preview-head { margin-bottom:5px; }
+        #eni-calc .ec-template-preview h3 { font-size:16px; }
+        #eni-calc .ec-template-demo-badge { font-size:9px; padding:5px; }
+        #eni-calc .ec-template-scene--full .ec-template-hero { min-height:290px; padding:15px; }
+        #eni-calc .ec-template-scene--full .ec-template-headline { font-size:clamp(26px,6vw,43px); }
+        #eni-calc .ec-template-scene--full .ec-template-art { min-height:150px; }
+        #eni-calc .ec-template-demo-about-grid { grid-template-columns:1fr; }
+        #eni-calc .ec-template-demo-image { min-height:145px; }
+        #eni-calc .ec-template-demo-section { min-height:280px; padding:30px 18px; }
+        #eni-calc .ec-template-demo-cards { grid-template-columns:1fr; }
+        #eni-calc .ec-template-demo-card-art { height:65px; }
+        #eni-calc .ec-template-demo-contact-end { font-size:10px; }
+        #eni-calc .ec-template-select-options { grid-template-columns:1fr; }
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -1734,7 +1879,7 @@
             <header class="ec-template-header">
               <div><span class="ec-template-kicker">MINI START / SZABLONY</span>
                 <h2 id="ec-template-title">Zobacz, jak może wyglądać Twoja strona.</h2>
-                <p id="ec-template-intro">Cztery przykładowe projekty. Gotowe szablony Eniverse dodamy tutaj w kolejnym etapie.</p>
+                <p id="ec-template-intro">Cztery demonstracyjne strony z pięcioma sekcjami. Przewijaj podgląd strony, aby zobaczyć cały układ. Gotowe szablony Eniverse dodamy później.</p>
               </div>
               <button type="button" class="ec-template-close" id="ec-template-close" aria-label="Zamknij galerię">×</button>
             </header>
@@ -1742,11 +1887,11 @@
               <div class="ec-template-grid" id="ec-template-gallery" aria-label="Wybór projektu"></div>
               <div class="ec-template-preview">
                 <div class="ec-template-preview-head"><div><span id="ec-template-kind"></span><h3 id="ec-template-name"></h3></div><span class="ec-template-demo-badge">PODGLĄD DEMO</span></div>
-                <div class="ec-template-browser"><div class="ec-template-browser-bar">● ● ● &nbsp;&nbsp; Przykładowa strona / Mini Start</div><div id="ec-template-viewport"></div></div>
+                <div class="ec-template-browser"><div class="ec-template-browser-bar"><span aria-hidden="true">● ● ●</span><span>Podgląd wszystkich 5 sekcji · przewiń stronę w dół ↓</span></div><div id="ec-template-viewport" tabindex="0" role="region" aria-label="Przewijany podgląd pięciu sekcji szablonu"></div></div>
                 <p id="ec-template-description"></p>
               </div>
             </div>
-            <footer class="ec-template-footer"><span>Wizualizacje poglądowe, nie gotowe strony klientów.</span><button type="button" id="ec-template-configure">Skonfiguruj Mini Start ↗</button></footer>
+            <footer class="ec-template-footer"><span>Wizualizacje poglądowe, nie gotowe strony klientów.</span><button type="button" id="ec-template-configure">Wybierz ten szablon i konfiguruj ↗</button></footer>
           </section>
         </div>
 <div class="ec-modal-stage" id="ec-modal-stage" hidden>
@@ -2484,16 +2629,81 @@
           {id:"beauty",name:"Lumina",type:"Salon beauty",brand:"LUMINA",headline:"Czas tylko dla Ciebie.",sub:"Zabiegi, pielęgnacja i chwila codziennego spokoju.",cta:"Umów wizytę",details:"Subtelny szablon beauty z ofertą zabiegów i przyciskiem rezerwacji.",footer:"Zabiegi / Cennik / Rezerwacja"},
           {id:"trade",name:"Voltix",type:"Elektryk / usługi",brand:"VOLTIX",headline:"Fachowa pomoc. Bez kompromisów.",sub:"Instalacje elektryczne, pomiary i naprawy.",cta:"Skontaktuj się",details:"Konkretny szablon usługowy z widoczną ofertą i szybkim kontaktem.",footer:"Instalacje / Naprawy / Pomiary"}
         ];
-        function templateScene(t) {
-          return '<div class="ec-template-scene ec-template-scene--'+t.id+'"><div class="ec-template-site-nav"><strong>'+t.brand+'</strong><span>O nas &nbsp; Oferta &nbsp; Kontakt</span></div>' +
+        // Teksty wszystkich pięciu sekcji są przykładowe i można je podmienić
+        // na gotowe szablony bez zmiany mechanizmu galerii oraz konfiguratora.
+        const templateDetails = {
+          foto: {
+            eyebrow:"Fotografia z emocjami",aboutTitle:"Wasza historia. Moje spojrzenie.",
+            about:"Każda sesja to inne emocje i historia. Tworzę fotografie bez sztucznych póz, z uwagą na gesty, relacje i prawdziwe chwile.",
+            cards:[["Portrety","Naturalne zdjęcia w Twoim stylu."],["Sesje rodzinne","Wspólne momenty, które warto zachować."],["Reportaże","Autentyczna historia ważnego dnia."]],
+            proofTitle:"Kadry, do których się wraca.",proof:"„Atmosfera sesji była swobodna, a zdjęcia dokładnie takie, jak marzyliśmy.”",
+            contactTitle:"Opowiedz mi o swoim pomyśle.",contact:"Napisz, jaką sesję planujesz. Razem stworzymy coś osobistego."
+          },
+          food: {
+            eyebrow:"Nasza restauracja",aboutTitle:"Smak zaczyna się od pasji.",
+            about:"Gotujemy z sezonowych składników i w dobrym towarzystwie. Nasze menu łączy proste receptury z nieoczywistymi pomysłami.",
+            cards:[["Przystawki","Mały początek wielkich smaków."],["Dania główne","Sezonowa kuchnia pełna charakteru."],["Desery","Słodkie zakończenie spotkania."]],
+            proofTitle:"Miejsce na dobre spotkania.",proof:"„Pyszne jedzenie, świetna atmosfera. Wracamy przy każdej okazji!”",
+            contactTitle:"Zarezerwuj miejsce przy stole.",contact:"Zapraszamy na lunch, kolację i wspólne świętowanie."
+          },
+          beauty: {
+            eyebrow:"Poznaj nasz salon",aboutTitle:"Pielęgnacja z uważnością.",
+            about:"Tworzymy przestrzeń, w której można zwolnić i zatroszczyć się o siebie. Łączymy sprawdzone zabiegi z indywidualnym podejściem.",
+            cards:[["Pielęgnacja twarzy","Naturalny blask i odnowa."],["Stylizacja","Detale, które robią różnicę."],["Rytuały relaksu","Chwila tylko dla Ciebie."]],
+            proofTitle:"Twoje dobre samopoczucie.",proof:"„Przepiękne miejsce i cudowna atmosfera. Wrócę na pewno!”",
+            contactTitle:"Znajdź chwilę dla siebie.",contact:"Zadzwoń lub napisz i wybierz dogodny termin wizyty."
+          },
+          trade: {
+            eyebrow:"Poznaj Voltix",aboutTitle:"Solidność w każdym połączeniu.",
+            about:"Zapewniamy wsparcie przy instalacjach, modernizacjach i awariach. Stawiamy na jasne zasady, porządną pracę i terminowość.",
+            cards:[["Instalacje","Nowe i modernizowane instalacje elektryczne."],["Naprawy","Sprawna diagnostyka i usuwanie usterek."],["Pomiary","Kontrole i niezbędna dokumentacja."]],
+            proofTitle:"Fachowo, terminowo, bez niespodzianek.",proof:"„Kontakt był szybki, wszystko wykonane starannie. Polecam!”",
+            contactTitle:"Potrzebujesz elektryka?",contact:"Opisz zlecenie i zostaw numer telefonu. Oddzwonimy."
+          }
+        };
+        function templateScene(t, full = false) {
+          const d=templateDetails[t.id];
+          const hero='<section class="ec-template-scene ec-template-scene--'+t.id+(full?' ec-template-scene--full':'')+'">' +
+            '<div class="ec-template-site-nav"><strong>'+t.brand+'</strong><span>O nas &nbsp; Oferta &nbsp; Kontakt</span></div>' +
             '<div class="ec-template-hero"><div class="ec-template-copy"><small>'+t.type+'</small><div class="ec-template-headline">'+t.headline+'</div><p>'+t.sub+'</p><span class="ec-template-cta">'+t.cta+' &nbsp;↗</span></div>' +
             '<div class="ec-template-art" aria-hidden="true"><span></span><i></i></div></div>' +
-            '<div class="ec-template-site-footer"><span>'+t.footer+'</span><span>01 / 03</span></div></div>';
+            '<div class="ec-template-site-footer"><span>'+t.footer+'</span><span>01 / 05</span></div></section>';
+          if (!full) return hero;
+          const services=d.cards.map((card,i)=>'<article class="ec-template-demo-card"><span>0'+(i+1)+'</span><div class="ec-template-demo-card-art" aria-hidden="true"></div><h4>'+card[0]+'</h4><p>'+card[1]+'</p></article>').join('');
+          return '<div class="ec-template-fullpage ec-template-scene--'+t.id+'">' + hero +
+            '<section class="ec-template-demo-section ec-template-demo-about"><div class="ec-template-demo-index">02 / O NAS</div><div class="ec-template-demo-about-grid"><div><small>'+d.eyebrow+'</small><h2>'+d.aboutTitle+'</h2><p>'+d.about+'</p></div><div class="ec-template-demo-image" aria-hidden="true"><span></span></div></div></section>' +
+            '<section class="ec-template-demo-section ec-template-demo-offer"><div class="ec-template-demo-index">03 / OFERTA</div><h2>Co możemy dla Ciebie zrobić?</h2><div class="ec-template-demo-cards">'+services+'</div></section>' +
+            '<section class="ec-template-demo-section ec-template-demo-proof"><div class="ec-template-demo-index">04 / OPINIE</div><h2>'+d.proofTitle+'</h2><blockquote>'+d.proof+'</blockquote><div class="ec-template-demo-stars" aria-hidden="true">★★★★★</div></section>' +
+            '<section class="ec-template-demo-section ec-template-demo-contact"><div class="ec-template-demo-index">05 / KONTAKT</div><h2>'+d.contactTitle+'</h2><p>'+d.contact+'</p><span class="ec-template-demo-contact-button">'+t.cta+' &nbsp;↗</span><div class="ec-template-demo-contact-end">'+t.brand+' <span>Przykładowy szablon / Eniverse</span></div></section>' +
+            '</div>';
+        }
+        function templateSelectionName(id) {
+          const found=templateSamples.find(t=>t.id===id);
+          return found ? found.name+" — "+found.type : "Jeszcze nie wybrano";
+        }
+        let visibleTemplateIndex=0;
+        function renderTemplateSelection() {
+          const section=q("#ec-template-section");
+          if(!section) return;
+          section.hidden=current.id!=="mini";
+          if(section.hidden)return;
+          const selected=states.mini.templateId||"";
+          q("#ec-template-options").innerHTML =
+            '<label class="ec-template-select-option ec-template-select-empty"><input type="radio" name="ec-template-choice" value="" '+(!selected?'checked ':'')+'><span>Wybiorę szablon później</span></label>' +
+            templateSamples.map(t=>
+              '<label class="ec-template-select-option"><input type="radio" name="ec-template-choice" value="'+t.id+'" '+(selected===t.id?'checked ':'')+'>'+
+              '<span class="ec-template-select-dot ec-template-select-dot--'+t.id+'" aria-hidden="true"></span><span><strong>'+t.name+'</strong><small>'+t.type+'</small></span></label>'
+            ).join('');
+          q("#ec-template-selected").textContent=selected
+            ? "Wybrany szablon: "+templateSelectionName(selected)
+            : "Szablon można wybrać teraz lub później.";
         }
         let templateOpener=null, templatePreviousScroll="";
         function showTemplate(index) {
           const t=templateSamples[index];if(!t)return;
-          q("#ec-template-viewport").innerHTML=templateScene(t);
+          visibleTemplateIndex=index;
+          q("#ec-template-viewport").innerHTML=templateScene(t,true);
+          q("#ec-template-viewport").scrollTop=0;
           q("#ec-template-kind").textContent=t.type;
           q("#ec-template-name").textContent=t.name;
           q("#ec-template-description").textContent=t.details;
@@ -2511,6 +2721,9 @@
           templatePreviousScroll=document.body.style.overflow;
           document.body.style.overflow="hidden";
           q("#ec-template-modal").hidden=false;
+          const selectedId=states.mini.templateId;
+          const selectedIndex=templateSamples.findIndex(t=>t.id===selectedId);
+          showTemplate(selectedIndex>=0?selectedIndex:visibleTemplateIndex);
           q("#ec-template-close").focus();
         }
         function closeTemplateDialog() {
@@ -2527,8 +2740,19 @@
           if(event.target===q("#ec-template-modal"))closeTemplateDialog();
         });
         q("#ec-template-configure").addEventListener("click",()=>{
+          const selected=templateSamples[visibleTemplateIndex];
+          states.mini.templateId=selected.id;
+          const wizardVisible=!q("#ec-modal-stage").hidden;
+          const originalOpener=templateOpener;
           closeTemplateDialog();
-          open("mini",false,templateOpener);
+          if(wizardVisible && current.id==="mini"){
+            renderTemplateSelection();
+            update();
+            q("#ec-template-options input:checked")?.focus();
+          }else{
+            open("mini",false,originalOpener);
+            renderTemplateSelection();
+          }
         });
         document.addEventListener("keydown",event=>{
           if(q("#ec-template-modal").hidden)return;
@@ -2667,6 +2891,7 @@
           hosting: false,
           care: p.hosting === "year",
           languages: [],
+          templateId: "",
           maps: false,
           newsletter: false,
           social: false,
@@ -2743,6 +2968,7 @@
             (fixed(p).some((x) => !x[1])
               ? "."
               : "brak dodatkowych wyłączeń w tej sekcji.");
+          renderTemplateSelection();
           q("#ec-billing-section").hidden = !p.recurring;
           q("#ec-structure").textContent =
             p.structure + ". Dodatki naliczane ponad zakres bazowy.";
@@ -2862,6 +3088,7 @@
           const p = current,
             s = states[p.id];
           s.training = +val("ec-training");
+          if(p.id==="mini") s.templateId=q('#ec-template-options input[name="ec-template-choice"]:checked')?.value||"";
           s.sections = count("#ec-sections");
           s.pages = count("#ec-pages");
           s.seo = +val("ec-seo");
@@ -2945,6 +3172,7 @@
           const project = p.price + a.extra;
           const simpleRows = [
             ["Pakiet", p.name],
+            ...(p.recurring ? [["Szablon Mini Start", templateSelectionName(s.templateId)]] : []),
             ["Zakres", p.structure],
             ["SEO", seoName(p,s.seo)],
             ["Dodatkowe usługi SEO", seoServices.filter(([key]) => s[key])
@@ -3008,6 +3236,19 @@
           extras.append(extrasTitle,toggles);
           bundle.append(extras);
 
+          // Wybór z galerii dostępny tylko dla Mini Start, po zakresie projektu.
+          const templateSection=document.createElement("section");
+          templateSection.className="ec-section ec-template-section";
+          templateSection.id="ec-template-section";
+          templateSection.hidden=true;
+          templateSection.innerHTML=
+            '<h3>Wybierz szablon Mini Start</h3>'+
+            '<p class="ec-muted">Wybierz przykładowy projekt lub przejrzyj wszystkie pięć sekcji w galerii. Wybór nie zmienia ceny.</p>'+
+            '<div class="ec-template-select-options" id="ec-template-options" role="group" aria-label="Wybór szablonu Mini Start"></div>'+
+            '<div class="ec-template-select-footer"><span id="ec-template-selected"></span>'+
+            '<button type="button" id="ec-template-open-wizard" class="ec-template-open-wizard">Zobacz pełne podglądy ↗</button></div>';
+          wizardPanes[0].insertBefore(templateSection,sections[1]);
+
           const lang = document.createElement("section");
           lang.className = "ec-section";
           lang.innerHTML =
@@ -3026,6 +3267,10 @@
           q("#ec-window").insertBefore(final,q("#ec-window .ec-foot"));
         }
         setupWizardLayout();
+        q("#ec-template-open-wizard").addEventListener("click",event=>{
+          read();
+          openTemplateDialog(event.currentTarget);
+        });
         function step(index = 0, baseChoice = false) {
           wizardStep = Math.max(0,Math.min(4,index));
           const last = wizardStep === 4;
@@ -3117,7 +3362,7 @@
           if (e.target === q("#ec-modal-stage")) close();
         });
         document.addEventListener("keydown", (e) => {
-          if (q("#ec-modal-stage").hidden) return;
+          if (q("#ec-modal-stage").hidden || !q("#ec-template-modal").hidden) return;
           if (e.key === "Escape") {
             e.preventDefault();
             close();
@@ -3296,6 +3541,7 @@
           const lines = [
             "ZAPYTANIE O STRONĘ — ENIVERSE",
             "Pakiet: " + p.name,
+            ...(p.recurring ? ["Szablon Mini Start: "+templateSelectionName(s.templateId)] : []),
             "Zakres: " +
               p.structure +
               (p.chips.length ? " — " + p.chips.join(", ") : ""),
