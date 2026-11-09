@@ -1831,6 +1831,52 @@
         #eni-calc .ec-template-select-options { grid-template-columns:1fr; }
       }
 
+      /* Tylko Mini Start: osobny krok wyboru szablonu, bez sekcji zakresu i abonamentu. */
+      #eni-calc .ec-pane[data-ec-step="template"] > .ec-template-section {
+        border:0; margin:0; padding:6px 0 12px;
+      }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-options {
+        display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin:18px 0 12px;
+      }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-card {
+        display:flex; flex-direction:column; min-width:0; overflow:hidden;
+        border:1px solid #dce3e8; border-radius:10px; background:#fff;
+      }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-card:has(input:checked) {
+        border-color:#E20B0C; box-shadow:0 0 0 1px #E20B0C; background:#fff8f8;
+      }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-card > .ec-template-select-option {
+        border:0; box-shadow:none; background:transparent; border-radius:0;
+        align-items:flex-start; flex:1 1 auto; padding:16px 14px 10px;
+      }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-dot {
+        width:54px; height:60px; flex:0 0 54px; border-radius:6px;
+      }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-tile-text { min-width:0; }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-tile-text strong { font-size:17px; line-height:1.2; }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-tile-text small { font-size:12px; margin-top:5px; }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-description {
+        display:block; margin-top:10px; font-size:12px; line-height:1.55; color:#53616d;
+      }
+      #eni-calc .ec-template-preview-action {
+        display:flex; justify-content:space-between; align-items:center; gap:9px;
+        margin:0 14px 14px; width:calc(100% - 28px); padding:10px 12px;
+        border:1px solid #E20B0C; color:#E20B0C; background:#fff;
+        border-radius:5px; font-size:12px; font-weight:650; cursor:pointer;
+      }
+      #eni-calc .ec-template-preview-action:hover { background:#fff4f4; }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-empty {
+        grid-column:1/-1; padding:13px 16px;
+      }
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-footer {
+        margin-top:15px; padding-top:16px; border-top:1px solid #e1e5e9;
+      }
+      @media(max-width:720px) {
+        #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-options {
+          grid-template-columns:1fr; gap:10px;
+        }
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -1920,7 +1966,8 @@
               </button>
             </header>
             <div class="ec-steps" aria-label="Etapy konfiguracji">
-              <div class="ec-step active" data-ec-nav-step="0" aria-current="step"><span>1</span>Pakiet i dodatki</div>
+              <div class="ec-step" data-ec-nav-template hidden><span>1</span>Wybór szablonu</div>
+               <div class="ec-step active" data-ec-nav-step="0" aria-current="step"><span>1</span>Pakiet i dodatki</div>
               <div class="ec-step" data-ec-nav-step="1"><span>2</span>Struktura i SEO</div>
               <div class="ec-step" data-ec-nav-step="2"><span>3</span>Kontakt i poprawki</div>
               <div class="ec-step" data-ec-nav-step="3"><span>4</span>Języki, usługi i szkolenia</div>
@@ -2684,19 +2731,24 @@
         let visibleTemplateIndex=0;
         function renderTemplateSelection() {
           const section=q("#ec-template-section");
-          if(!section) return;
+          if(!section)return;
           section.hidden=current.id!=="mini";
           if(section.hidden)return;
           const selected=states.mini.templateId||"";
           q("#ec-template-options").innerHTML =
-            '<label class="ec-template-select-option ec-template-select-empty"><input type="radio" name="ec-template-choice" value="" '+(!selected?'checked ':'')+'><span>Wybiorę szablon później</span></label>' +
             templateSamples.map(t=>
-              '<label class="ec-template-select-option"><input type="radio" name="ec-template-choice" value="'+t.id+'" '+(selected===t.id?'checked ':'')+'>'+
-              '<span class="ec-template-select-dot ec-template-select-dot--'+t.id+'" aria-hidden="true"></span><span><strong>'+t.name+'</strong><small>'+t.type+'</small></span></label>'
-            ).join('');
+              '<div class="ec-template-select-card">' +
+                '<label class="ec-template-select-option"><input type="radio" name="ec-template-choice" value="'+t.id+'" '+(selected===t.id?'checked ':'')+'>' +
+                '<span class="ec-template-select-dot ec-template-select-dot--'+t.id+'" aria-hidden="true"></span>'+
+                '<span class="ec-template-tile-text"><strong>'+t.name+'</strong><small>'+t.type+'</small>'+
+                '<span class="ec-template-select-description">'+t.details+'</span></span></label>' +
+                '<button class="ec-template-preview-action" type="button" data-template-preview="'+t.id+'" aria-label="Zobacz wszystkie sekcje szablonu '+t.name+'">Zobacz 5 sekcji <span aria-hidden="true">↗</span></button>' +
+              '</div>'
+            ).join('') +
+            '<label class="ec-template-select-option ec-template-select-empty"><input type="radio" name="ec-template-choice" value="" '+(!selected?'checked ':'')+'><span>Wybiorę szablon później</span></label>';
           q("#ec-template-selected").textContent=selected
             ? "Wybrany szablon: "+templateSelectionName(selected)
-            : "Szablon można wybrać teraz lub później.";
+            : "Nie wybrano szablonu. Możesz zdecydować później.";
         }
         let templateOpener=null, templatePreviousScroll="";
         function showTemplate(index) {
@@ -3236,18 +3288,24 @@
           extras.append(extrasTitle,toggles);
           bundle.append(extras);
 
-          // Wybór z galerii dostępny tylko dla Mini Start, po zakresie projektu.
+          // Osobny pierwszy krok Mini Start, pozostałe cztery panele bez zmian.
+          const templatePane=document.createElement("div");
+          templatePane.id="ec-mini-template-pane";
+          templatePane.className="ec-pane ec-template-pane";
+          templatePane.dataset.ecStep="template";
+          fields.insertBefore(templatePane,wizardPanes[0]);
+          // Wybór z galerii dostępny tylko dla Mini Start, w pierwszym kroku.
           const templateSection=document.createElement("section");
           templateSection.className="ec-section ec-template-section";
           templateSection.id="ec-template-section";
           templateSection.hidden=true;
           templateSection.innerHTML=
-            '<h3>Wybierz szablon Mini Start</h3>'+
-            '<p class="ec-muted">Wybierz przykładowy projekt lub przejrzyj wszystkie pięć sekcji w galerii. Wybór nie zmienia ceny.</p>'+
+            '<h3>Wybierz szablon swojej strony</h3>'+
+            '<p class="ec-muted">Zobacz cztery propozycje i krótkie opisy. Kliknij podgląd, aby obejrzeć wszystkie pięć sekcji strony. Wybór szablonu nie zmienia ceny.</p>'+
             '<div class="ec-template-select-options" id="ec-template-options" role="group" aria-label="Wybór szablonu Mini Start"></div>'+
             '<div class="ec-template-select-footer"><span id="ec-template-selected"></span>'+
             '<button type="button" id="ec-template-open-wizard" class="ec-template-open-wizard">Zobacz pełne podglądy ↗</button></div>';
-          wizardPanes[0].insertBefore(templateSection,sections[1]);
+          templatePane.append(templateSection);
 
           const lang = document.createElement("section");
           lang.className = "ec-section";
@@ -3271,31 +3329,50 @@
           read();
           openTemplateDialog(event.currentTarget);
         });
+        q("#ec-template-options").addEventListener("click",event=>{
+          const preview=event.target.closest("[data-template-preview]");
+          if(!preview)return;
+          read();
+          openTemplateDialog(preview);
+          const index=templateSamples.findIndex(t=>t.id===preview.dataset.templatePreview);
+          if(index>=0)showTemplate(index);
+        });
         function step(index = 0, baseChoice = false) {
-          wizardStep = Math.max(0,Math.min(4,index));
-          const last = wizardStep === 4;
-          // CSS automatycznie dopasowuje wysokość okna do aktywnego kroku i pakietu.
-          q("#ec-config").hidden = last;
-          q("#ec-final").hidden = !last;
-          q("#ec-summary").hidden = !last;
-          q("#ec-contact-section").hidden = !last;
-          wizardPanes.forEach((pane,i) => pane.classList.toggle("is-active",i===wizardStep));
-          all("[data-ec-nav-step]").forEach((el,i) => {
-            el.classList.toggle("active",i===wizardStep);
-            if(i===wizardStep) el.setAttribute("aria-current","step");
+          const mini=current.id==="mini";
+          const lastIndex=mini?5:4;
+          wizardStep=Math.max(0,Math.min(lastIndex,index));
+          const last=wizardStep===lastIndex;
+          const oldStep=mini?wizardStep-1:wizardStep;
+          q("#ec-config").hidden=last;
+          q("#ec-final").hidden=!last;
+          q("#ec-summary").hidden=!last;
+          q("#ec-contact-section").hidden=!last;
+          q("#ec-mini-template-pane").classList.toggle("is-active",mini&&wizardStep===0);
+          wizardPanes.forEach((pane,i)=>pane.classList.toggle("is-active",!last&&i===oldStep));
+          const templateNav=q("[data-ec-nav-template]");
+          templateNav.hidden=!mini;
+          templateNav.classList.toggle("active",mini&&wizardStep===0);
+          if(mini&&wizardStep===0)templateNav.setAttribute("aria-current","step");
+          else templateNav.removeAttribute("aria-current");
+          all("[data-ec-nav-step]").forEach((el,i)=>{
+            const active=oldStep===i;
+            el.classList.toggle("active",active);
+            el.querySelector("span").textContent=String(i+1+(mini?1:0));
+            if(active)el.setAttribute("aria-current","step");
             else el.removeAttribute("aria-current");
           });
-          const labels = ["Zakres w cenie i dodatki","Struktura strony i SEO","Kontakt i poprawki","Języki, usługi i szkolenia","Podsumowanie"];
-          q("#ec-title").textContent = labels[wizardStep] + " — " + current.name;
-          q("#ec-subtitle").textContent = "Krok " + (wizardStep+1) + " z 5";
-          q("#ec-next").hidden = last;
-          q("#ec-next").textContent = wizardStep===3 ? "Podsumowanie →" : "Dalej →";
-          q("#ec-back").hidden = wizardStep===0;
-          q("#ec-back").textContent = "← Wstecz";
-          q("#ec-footer-note").textContent = last
+          const labels=["Zakres w cenie i dodatki","Struktura strony i SEO","Kontakt i poprawki","Języki, usługi i szkolenia","Podsumowanie"];
+          q("#ec-title").textContent=(mini&&wizardStep===0?"Wybór szablonu":labels[oldStep])+" — "+current.name;
+          q("#ec-subtitle").textContent="Krok "+(wizardStep+1)+" z "+(lastIndex+1);
+          q("#ec-next").hidden=last;
+          q("#ec-next").textContent=wizardStep===lastIndex-1?"Podsumowanie →":"Dalej →";
+          q("#ec-back").hidden=wizardStep===0;
+          q("#ec-back").textContent="← Wstecz";
+          q("#ec-footer-note").textContent=last
             ? "Podgląd wyceny. Formularz demonstracyjny."
-            : current.recurring ? "Mini Start: abonament na 24 miesiące." : "Strona i dodatki jednorazowo; usługi roczne płatne z góry.";
-          if(last) summary(baseChoice);
+            : mini?"Mini Start: abonament na 24 miesiące.":"Strona i dodatki jednorazowo; usługi roczne płatne z góry.";
+          q("#ec-config .ec-fields").scrollTop=0;
+          if(last)summary(baseChoice);
         }
         let scrollBeforeModal = "";
         function open(id, baseChoice, button) {
@@ -3308,7 +3385,7 @@
           document.body.style.overflow = "hidden";
           q("#ec-modal-stage").hidden = false;
           fill();
-          step(baseChoice ? 4 : 0, baseChoice);
+          step(baseChoice ? (current.id==="mini"?5:4) : 0, baseChoice);
           q("#ec-modal-stage").scrollTop = 0;
           q("#ec-close").focus();
         }
@@ -3330,7 +3407,7 @@
         q("#ec-next").addEventListener("click", () => {
           update();
           step(wizardStep + 1);
-          if(wizardStep===4) q("#ec-client-name").focus();
+          if(wizardStep===(current.id==="mini"?5:4)) q("#ec-client-name").focus();
         });
         q("#ec-back").addEventListener("click", () => {
           step(wizardStep - 1);
