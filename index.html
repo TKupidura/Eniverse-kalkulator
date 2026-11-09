@@ -1608,6 +1608,83 @@
         #eni-calc #ec-template-configure { width:100%; }
       }
 
+      /* Poziome „klamry” nad każdą z dwóch grup kart.
+         Wewnątrz podpis grupy i liczba pakietów; klamra wskazuje obszar poniżej. */
+      #eni-calc .ec-package-group .ec-group-label.ec-group-label--brace {
+        display:flex;
+        flex-direction:column;
+        align-items:stretch;
+        justify-content:flex-end;
+        gap:4px;
+        min-height:96px;
+        margin:0 0 15px;
+        padding:0;
+        border:0;
+      }
+      #eni-calc .ec-brace-copy {
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:11px;
+        padding:0 12px;
+        text-align:left;
+      }
+      #eni-calc .ec-brace-number {
+        flex:0 0 auto;
+        display:grid;
+        place-items:center;
+        width:33px;
+        height:33px;
+        border:1px solid #ecc9ca;
+        border-radius:50%;
+        color:#E20B0C;
+        background:#fff8f8;
+        font-size:11px;
+        font-weight:750;
+        font-variant-numeric:tabular-nums;
+      }
+      #eni-calc .ec-brace-text {
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        gap:4px;
+        min-width:0;
+      }
+      #eni-calc .ec-package-group .ec-brace-text strong {
+        color:#172027;
+        font-size:17px;
+        line-height:1.2;
+        font-weight:720;
+        letter-spacing:-.025em;
+      }
+      #eni-calc .ec-package-group .ec-brace-text small {
+        color:#667481;
+        font-size:11px;
+        line-height:1.25;
+        font-weight:400;
+      }
+      #eni-calc .ec-brace-svg {
+        display:block;
+        width:100%;
+        height:36px;
+        overflow:visible;
+        fill:none;
+        stroke:#8e9ba5;
+        stroke-width:1.6px;
+        stroke-linecap:round;
+        stroke-linejoin:round;
+      }
+      #eni-calc .ec-brace-svg path { vector-effect:non-scaling-stroke; }
+      #eni-calc .ec-package-group--entry .ec-brace-svg { stroke:#a4afb8; }
+      #eni-calc .ec-package-group--main .ec-brace-svg { stroke:#a4afb8; }
+      @media (max-width:580px) {
+        #eni-calc .ec-package-group .ec-group-label.ec-group-label--brace { min-height:90px; }
+        #eni-calc .ec-brace-copy { padding:0 4px; }
+        #eni-calc .ec-brace-text strong { font-size:16px; }
+        #eni-calc .ec-brace-text small { font-size:10px; }
+        #eni-calc .ec-brace-svg { height:30px; }
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -1622,11 +1699,27 @@
           <div class="ec-packages-wide-scroll">
              <div class="ec-packages-overview">
                <div class="ec-package-group ec-package-group--entry">
-                 <div class="ec-group-label"><span>Pakiety na start</span><span>Prosty start w internecie</span></div>
+                 <div class="ec-group-label ec-group-label--brace">
+                  <div class="ec-brace-copy">
+                    <span class="ec-brace-number">02</span>
+                    <div class="ec-brace-text"><strong>Pakiety na start</strong><small>Mini Start i Start · prosta strona dla firmy</small></div>
+                  </div>
+                  <svg class="ec-brace-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 38" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                    <path d="M 2 3 C 2 17 11 24 26 24 H 458 C 479 24 490 29 500 36 C 510 29 521 24 542 24 H 974 C 989 24 998 17 998 3" />
+                  </svg>
+                </div>
                  <div class="ec-packages ec-packages--entry" id="ec-entry-packages"></div>
                </div>
                <div class="ec-package-group ec-package-group--main">
-                 <div class="ec-group-label ec-group-label--main"><span>Strony WordPress</span><span>Rozbudowane strony i możliwości</span></div>
+                 <div class="ec-group-label ec-group-label--brace">
+                  <div class="ec-brace-copy">
+                    <span class="ec-brace-number">03</span>
+                    <div class="ec-brace-text"><strong>Strony WordPress</strong><small>One Page, Wizytówka i Strona Firmowa</small></div>
+                  </div>
+                  <svg class="ec-brace-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 38" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                    <path d="M 2 3 C 2 17 11 24 26 24 H 458 C 479 24 490 29 500 36 C 510 29 521 24 542 24 H 974 C 989 24 998 17 998 3" />
+                  </svg>
+                </div>
                  <div class="ec-packages ec-packages--main" id="ec-packages"></div>
                </div>
              </div>
