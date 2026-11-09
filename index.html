@@ -1445,6 +1445,46 @@
         #eni-calc .ec-final .ec-lead { flex:1 1 auto; min-height:0; overflow-y:auto; }
       }
 
+
+      /* Jedna linia pięciu pakietów bez wciskania ich w dawny kontener 3 kart. */
+      #eni-calc { max-width:1920px; }
+      #eni-calc .ec-preview-page { padding-left:clamp(12px,1.5vw,28px); padding-right:clamp(12px,1.5vw,28px); }
+      #eni-calc .ec-packages-wide-scroll { width:100%; max-width:100%; overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:thin; padding:12px 0 18px; }
+      #eni-calc .ec-packages-overview { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(0,3fr); gap:16px; align-items:start; min-width:1450px; }
+      #eni-calc .ec-package-group { min-width:0; }
+      #eni-calc .ec-package-group .ec-group-label { margin:0 0 15px; min-height:50px; align-items:flex-end; padding-bottom:9px; }
+      #eni-calc .ec-package-group .ec-group-label span:first-child { font-size:15px; }
+      #eni-calc .ec-package-group .ec-group-label span:last-child { font-size:10px; text-align:right; }
+      #eni-calc .ec-packages-overview .ec-packages--entry { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+      #eni-calc .ec-packages-overview .ec-packages--main { grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+      #eni-calc .ec-packages-overview .ec-package { padding:22px 15px 23px; }
+      #eni-calc .ec-packages-overview .ec-card-header { min-height:150px; }
+      #eni-calc .ec-packages-overview .ec-package h2 { font-size:clamp(23px,1.65vw,29px); }
+      #eni-calc .ec-packages-overview .ec-card-description { font-size:13px; }
+      #eni-calc .ec-packages-overview .ec-features li { font-size:12px; }
+      #eni-calc .ec-packages-overview .ec-mini-prices { grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; }
+      #eni-calc .ec-packages-overview .ec-mini-price { display:flex; flex-direction:column; gap:2px; align-items:flex-start; }
+      #eni-calc .ec-packages-overview .ec-mini-price strong { font-size:clamp(30px,2.6vw,43px); }
+      #eni-calc .ec-packages-overview .ec-card-price strong { font-size:clamp(35px,2.7vw,47px); }
+      #eni-calc .ec-packages-overview .ec-card-actions .ec-action { font-size:12px; padding:12px 10px; }
+      #eni-calc .ec-packages-overview .ec-card-actions .ec-configure { font-size:11px; }
+      @media (max-width:1199px) {
+        #eni-calc .ec-packages-overview { min-width:0; display:grid; grid-template-columns:1fr; gap:28px; }
+        #eni-calc .ec-package-group .ec-group-label { min-height:0; }
+        #eni-calc .ec-packages-overview .ec-packages--entry { grid-template-columns:repeat(2,minmax(0,1fr)); }
+        #eni-calc .ec-packages-overview .ec-packages--main { grid-template-columns:repeat(3,minmax(0,1fr)); }
+      }
+      @media (max-width:750px) {
+        #eni-calc .ec-packages-overview .ec-packages--main { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      }
+      @media (max-width:580px) {
+        #eni-calc .ec-packages-overview .ec-packages--entry,
+        #eni-calc .ec-packages-overview .ec-packages--main { grid-template-columns:1fr; }
+        #eni-calc .ec-packages-wide-scroll { overflow:visible; }
+        #eni-calc .ec-packages-overview .ec-package { padding:22px 19px; }
+        #eni-calc .ec-packages-overview .ec-mini-price { flex-direction:row; align-items:baseline; }
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -1456,11 +1496,19 @@
             <h1 class="ec-page-title">Wybierz stronę dla swojej firmy.</h1>
             <p class="ec-intro">Porównaj pakiety i dopasuj wycenę. Ceny i zakresy bazowe pochodzą z pliku źródłowego kalkulatora.</p>
           </div>
-          <div class="ec-group-label"><span>Pakiety na start</span><span>Prosty sposób na obecność w sieci</span></div>
-          <div class="ec-packages ec-packages--entry" id="ec-entry-packages"></div>
-          <div class="ec-group-label ec-group-label--main"><span>Strony WordPress</span><span>Układ wizualny dopasowany do strony Eniverse</span></div>
-          <div class="ec-packages ec-packages--main" id="ec-packages"></div>
-          <p class="ec-pricing-note">Ceny dodatków są przykładowe, a końcowy zakres i termin realizacji wymagają zatwierdzenia. Wysłanie formularza w tej wersji jest demonstracyjne.</p>
+          <div class="ec-packages-wide-scroll">
+             <div class="ec-packages-overview">
+               <div class="ec-package-group ec-package-group--entry">
+                 <div class="ec-group-label"><span>Pakiety na start</span><span>Prosty start w internecie</span></div>
+                 <div class="ec-packages ec-packages--entry" id="ec-entry-packages"></div>
+               </div>
+               <div class="ec-package-group ec-package-group--main">
+                 <div class="ec-group-label ec-group-label--main"><span>Strony WordPress</span><span>Rozbudowane strony i możliwości</span></div>
+                 <div class="ec-packages ec-packages--main" id="ec-packages"></div>
+               </div>
+             </div>
+           </div>
+           <p class="ec-pricing-note">Ceny dodatków są przykładowe, a końcowy zakres i termin realizacji wymagają zatwierdzenia. Wysłanie formularza w tej wersji jest demonstracyjne.</p>
         </section>
       </div><!-- Koniec widoku demonstracyjnego. Elementor ukrywa ten widok, jeśli znajdzie istniejące karty .enp-card. -->
         <div class="ec-modal-stage" id="ec-modal-stage" hidden>
