@@ -2364,6 +2364,9 @@
                   role="alert"
                   hidden
                 ></p>
+                <p id="ec-mini-template-required" class="ec-mini-template-required" role="status" hidden>
+                  Aby wysłać zapytanie dotyczące Mini Start, najpierw wybierz szablon strony w podsumowaniu.
+                </p>
                 <button
                   class="ec-action ec-interactive ec-send"
                   type="submit"
@@ -3319,8 +3322,8 @@
                   (s.templateId ? templateSelectionName(s.templateId) : "Nie wybrano szablonu")+
                 '</strong></div>'+
                 (!s.templateId
-                  ? '<button type="button" class="ec-summary-template-browse" id="ec-summary-template-browse">Przejrzyj szablony <span aria-hidden="true">↗</span></button>'
-                  : '<button type="button" class="ec-summary-template-browse" id="ec-summary-template-browse">Zmień szablon <span aria-hidden="true">↗</span></button>')+
+                  ? '<button type="button" class="ec-summary-template-browse" data-ec-summary-template-browse>Przejrzyj szablony <span aria-hidden="true">↗</span></button>'
+                  : '<button type="button" class="ec-summary-template-browse" data-ec-summary-template-browse>Zmień szablon <span aria-hidden="true">↗</span></button>')+
               '</div>'
             : '';
           const lines = simpleRows.map(([label,value]) =>
@@ -3478,7 +3481,7 @@
         // Galeria Mini Start w podsumowaniu jest częścią trybu wyboru pakietu.
         // Nie przełączamy kroków po wybraniu szablonu z tej galerii.
         q("#ec-summary").addEventListener("click",event=>{
-          const button=event.target.closest("#ec-summary-template-browse");
+          const button=event.target.closest("[data-ec-summary-template-browse]");
           if(button && current.id==="mini"){
             openTemplateDialog(button);
           }
@@ -3811,6 +3814,13 @@
         }
         q("#ec-lead-form").addEventListener("submit", (event) => {
           event.preventDefault();
+          if(current.id==="mini" && !states.mini.templateId){
+            q("#ec-form-error").textContent="Przed wysłaniem zapytania wybierz szablon Mini Start.";
+            q("#ec-form-error").hidden=false;
+            q("#ec-send-result").hidden=true;
+            q("[data-ec-summary-template-browse]")?.focus();
+            return;
+          }
           const name = q("#ec-client-name"),
             email = q("#ec-client-email"),
             phone = q("#ec-client-phone"),
@@ -3987,6 +3997,11 @@
             "Łączna wartość dodatków rozłożonych na cały okres umowy",
           );
         }
+        function syncMiniTemplateSubmit() {
+          const templateMissing=current.id==="mini" && !states.mini.templateId;
+          q("#ec-mini-template-required").hidden=!templateMissing;
+          q("#ec-lead-form button[type='submit']").disabled=templateMissing;
+        }
         function summary(baseChoice) {
           singlePaymentSummary(baseChoice);
           if (current.recurring) {
@@ -4008,6 +4023,7 @@
             q("#ec-summary").append(block);
           }
           q("#ec-quote-payload").value = quoteText();
+          syncMiniTemplateSubmit();
         }
       })();
     
