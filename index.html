@@ -3524,8 +3524,12 @@
               '</div>'
             : '';
           const detailsHeading = '<h3>' + (directSummaryMode ? 'Co wybrano — ' : 'Twoja konfiguracja: ') + p.name + '</h3>';
+          // Podsumowanie po „Wybieram pakiet”: najpierw pełne „Co wybrano”
+          // (w tym klikalny wybór szablonu Mini Start), następnie niewielki
+          // link do konfiguratora i na końcu blok rozliczenia.
+          // Standardowe podsumowanie zachowuje swoją dotychczasową strukturę.
           q("#ec-summary").innerHTML = (directSummaryMode
-              ? detailsHeading + compactConfigureLink + totalBlock + lines
+              ? detailsHeading + lines + compactConfigureLink + totalBlock
               : detailsHeading + lines + totalBlock) +
             '<p class="ec-note">Ceny netto. Dodatki i usługi oznaczone jako robocze wymagają potwierdzenia w ofercie.</p>';
         }
