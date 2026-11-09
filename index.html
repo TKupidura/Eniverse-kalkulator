@@ -1959,36 +1959,35 @@
         background:transparent;
         border:0;
       }
+      #eni-calc .ec-final .ec-summary .ec-direct-summary-prompt {
+        color:#65717d;
+        font-size:12px;
+        font-weight:400;
+        line-height:1.5;
+      }
       #eni-calc .ec-final .ec-summary .ec-direct-summary-configure {
-        display:inline-flex;
-        align-items:baseline;
-        justify-content:flex-start;
-        flex-wrap:wrap;
-        gap:4px 7px;
+        display:inline;
         width:auto;
         max-width:100%;
         padding:0;
         margin:0;
-        color:#65717d;
+        color:#E20B0C;
         background:transparent;
         border:0;
         border-radius:0;
         font-size:12px;
-        font-weight:400;
+        font-weight:650;
         line-height:1.5;
         text-align:left;
+        white-space:normal;
+        text-decoration:none;
         cursor:pointer;
       }
-      #eni-calc .ec-final .ec-summary .ec-direct-summary-configure strong {
+      #eni-calc .ec-final .ec-summary .ec-direct-summary-configure:hover {
         color:#E20B0C;
-        font-size:12px;
-        font-weight:650;
-        white-space:normal;
         text-decoration:underline;
         text-underline-offset:3px;
       }
-      #eni-calc .ec-final .ec-summary .ec-direct-summary-configure:hover,
-      #eni-calc .ec-final .ec-summary .ec-direct-summary-configure:hover strong { color:#b3090b; }
       #eni-calc .ec-final .ec-summary > .ec-summary-template-line {
         display:flex;
         justify-content:space-between;
@@ -2009,10 +2008,13 @@
         overflow-wrap:anywhere;
         padding:0;
         cursor:pointer;
-        text-decoration:underline;
+        text-decoration:none;
         text-underline-offset:3px;
       }
-      #eni-calc .ec-final .ec-summary .ec-summary-template-name:hover { color:#af070a; }
+      #eni-calc .ec-final .ec-summary .ec-summary-template-name:hover {
+        color:#E20B0C;
+        text-decoration:underline;
+      }
       #eni-calc .ec-final .ec-summary .ec-summary-template-name:focus-visible,
       #eni-calc .ec-final .ec-summary .ec-direct-summary-configure:focus-visible {
         outline:2px solid #E20B0C;
@@ -2030,8 +2032,8 @@
       }
       @media(max-width:760px) {
         #eni-calc .ec-final .ec-summary > .ec-direct-summary-switch { margin:8px 0 13px; }
+        #eni-calc .ec-final .ec-summary .ec-direct-summary-prompt,
         #eni-calc .ec-final .ec-summary .ec-direct-summary-configure { font-size:11px; }
-        #eni-calc .ec-final .ec-summary .ec-direct-summary-configure strong { font-size:11px; }
         #eni-calc .ec-final .ec-summary .ec-summary-template-name { font-size:11px; }
       }
 
@@ -3423,13 +3425,14 @@
               (a.host ? row("Usługi roczne z góry",money(a.host)) : "")) +
             '</div>';
           const compactConfigureLink = directSummaryMode
-            ? '<div class="ec-direct-summary-switch"><button type="button" id="ec-direct-summary-configure" class="ec-direct-summary-configure">' +
-              '<span>Potrzebujesz skonfigurować pakiet?</span> <strong>Przejdź do konfiguratora ↗</strong>' +
-              '</button></div>'
+            ? '<div class="ec-direct-summary-switch">' +
+                '<span class="ec-direct-summary-prompt">Potrzebujesz skonfigurować pakiet?</span> ' +
+                '<button type="button" id="ec-direct-summary-configure" class="ec-direct-summary-configure">Przejdź do konfiguratora ↗</button>' +
+              '</div>'
             : '';
           const detailsHeading = '<h3>' + (directSummaryMode ? 'Co wybrano — ' : 'Twoja konfiguracja: ') + p.name + '</h3>';
           q("#ec-summary").innerHTML = (directSummaryMode
-              ? totalBlock + compactConfigureLink + detailsHeading + lines
+              ? detailsHeading + compactConfigureLink + totalBlock + lines
               : detailsHeading + lines + totalBlock) +
             '<p class="ec-note">Ceny netto. Dodatki i usługi oznaczone jako robocze wymagają potwierdzenia w ofercie.</p>';
         }
