@@ -2324,6 +2324,35 @@
         text-decoration:none;
       }
 
+      /* Brak wyboru szablonu Mini Start jest błędem dopiero po próbie wysłania. */
+      #eni-calc .ec-final .ec-summary > .ec-line.ec-summary-template-line.is-invalid {
+        display:flex;
+        flex-wrap:wrap;
+        align-items:baseline;
+        border:1px solid #E20B0C;
+        border-radius:7px;
+        padding:10px 12px;
+        margin:7px 0;
+        background:#fff3f3;
+        color:#a1090b;
+      }
+      #eni-calc .ec-final .ec-summary .ec-summary-template-line.is-invalid > span:first-child,
+      #eni-calc .ec-final .ec-summary .ec-summary-template-line.is-invalid .ec-summary-template-name {
+        color:#bd080a;
+        font-weight:700;
+      }
+      #eni-calc .ec-final .ec-summary .ec-summary-template-validation {
+        flex:1 0 100%;
+        display:block;
+        margin-top:7px;
+        font-size:11px;
+        font-weight:650;
+        line-height:1.45;
+        color:#bd080a;
+      }
+      #eni-calc .ec-final .ec-summary .ec-summary-template-validation[hidden] { display:none!important; }
+      #eni-calc .ec-lead .ec-send:disabled { opacity:1; cursor:pointer; }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -3722,7 +3751,9 @@
                   (s.templateId ? 'Zmień wybrany szablon Mini Start' : 'Wybierz szablon Mini Start') +
                   '">' +
                   (s.templateId ? templateSelectionName(s.templateId) : 'Wybierz szablon') +
-                '</button></div>'
+                '</button>' +
+                '<span class="ec-summary-template-validation" role="alert" hidden>Pole wymagane — wybierz szablon lub zaznacz „Szablon wybiorę później”.</span>' +
+              '</div>'
             : '';
           const lines = simpleRows.map(([label,value]) =>
             row(label,value) + (label==="Pakiet" ? templateRow : "")
@@ -4220,10 +4251,22 @@
         q("#ec-lead-form").addEventListener("submit", (event) => {
           event.preventDefault();
           if(current.id==="mini" && !states.mini.templateId){
-            q("#ec-form-error").textContent="Przed wysłaniem zapytania wybierz szablon lub opcję „Szablon wybiorę później”.";
+            // Przycisk Wyślij jest aktywny, lecz nie pozwalamy wysłać bez
+            // świadomego wyboru szablonu lub opcji "później".
+            const templateLine=q("#ec-summary .ec-summary-template-line");
+            if(templateLine){
+              templateLine.classList.add("is-invalid");
+              const message=templateLine.querySelector(".ec-summary-template-validation");
+              if(message)message.hidden=false;
+              const browse=templateLine.querySelector("[data-ec-summary-template-browse]");
+              browse?.setAttribute("aria-invalid","true");
+              templateLine.scrollIntoView({block:"center",behavior:"smooth"});
+              browse?.focus({preventScroll:true});
+            }
+            q("#ec-form-error").textContent="Pole wymagane: wybierz szablon Mini Start lub opcję „Szablon wybiorę później”.";
             q("#ec-form-error").hidden=false;
+            q("#ec-mini-template-required").hidden=false;
             q("#ec-send-result").hidden=true;
-            q("[data-ec-summary-template-browse]")?.focus();
             return;
           }
           const name = q("#ec-client-name"),
@@ -4403,9 +4446,18 @@
           );
         }
         function syncMiniTemplateSubmit() {
-          const templateMissing=current.id==="mini" && !states.mini.templateId;
-          q("#ec-mini-template-required").hidden=!templateMissing;
-          q("#ec-lead-form button[type='submit']").disabled=templateMissing;
+          // Aktywne Wyślij we wszystkich pakietach. Walidacja szablonu następuje
+          // przy próbie wysłania, nie przez blokadę przycisku.
+          q("#ec-lead-form button[type='submit']").disabled=false;
+          q("#ec-mini-template-required").hidden=true;
+          const templateLine=q("#ec-summary .ec-summary-template-line");
+          if(templateLine && states.mini.templateId){
+            templateLine.classList.remove("is-invalid");
+            templateLine.querySelector(".ec-summary-template-validation")?.setAttribute("hidden","");
+            templateLine.querySelector("[data-ec-summary-template-browse]")?.removeAttribute("aria-invalid");
+          }
+          // Po dokonaniu wyboru usuń poprzedni komunikat z formularza.
+          if(current.id==="mini" && states.mini.templateId)q("#ec-form-error").hidden=true;
         }
         function summary(baseChoice) {
           singlePaymentSummary(baseChoice);
