@@ -2381,10 +2381,22 @@
       #eni-calc .ec-final .ec-summary .ec-summary-template-validation[hidden] { display:none!important; }
       #eni-calc .ec-lead .ec-send:disabled { opacity:1; cursor:pointer; }
 
+      /* Miniatury i zewnętrzne podglądy WordPress. */
+      #eni-calc .ec-template-thumb .ec-template-real-thumbnail {display:block;width:100%;height:100%;object-fit:cover;object-position:top;}
+      #eni-calc .ec-template-real-placeholder {display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-height:65px;padding:9px;box-sizing:border-box;background:#e9ecf0;color:#34414f;font-size:12px;font-weight:700;text-align:center;}
+      #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-dot img {display:block;width:100%;height:100%;object-fit:cover;object-position:top;border-radius:inherit;}
+      #eni-calc .ec-template-real-preview {display:flex;flex-direction:column;align-items:center;gap:17px;min-height:100%;padding:22px;background:#f5f6f8;box-sizing:border-box;}
+      #eni-calc .ec-template-real-intro {width:100%;display:flex;flex-wrap:wrap;justify-content:space-between;gap:7px;align-items:center;font-size:13px;color:#546170;}
+      #eni-calc .ec-template-real-intro strong {color:#151719;font-size:16px;}
+      #eni-calc .ec-template-real-image {display:block;width:min(100%,720px);height:auto;object-fit:contain;border-radius:5px;box-shadow:0 5px 24px rgba(21,26,30,.12);}
+      #eni-calc .ec-template-real-open {display:inline-flex;align-items:center;gap:9px;align-self:center;padding:11px 16px;border:1px solid #E20B0C;border-radius:5px;background:#fff;color:#E20B0C;font-size:13px;font-weight:700;text-decoration:none;}
+      #eni-calc .ec-template-real-open:hover {background:#fff1f1;text-decoration:none;}
+      #eni-calc .ec-template-unavailable {padding:15px 16px;margin:0;font-size:12px;line-height:1.55;color:#576573;}
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
-    <div id="eni-calc">
+    <div id="eni-calc" data-templates-api="https://eniverse.pl/wp-json/eniverse/v1/templates">
       <div class="ec-page ec-preview-page" id="ec-demo-page">
         <section id="ec-catalog" aria-label="Cennik Eniverse — podgląd">
           <div class="ec-preview-heading">
@@ -3184,7 +3196,7 @@
         q("#ec-packages").innerHTML = packages.filter(p => ["one","wiz","firm"].includes(p.id)).map(renderCard).join("");
         
         // Poglądowe makiety: docelowe miniatury i projekty można podmienić tutaj.
-        const templateSamples = [
+        let templateSamples = [
           {id:"foto",name:"Atelier",type:"Fotografia",brand:"ATELIER.",headline:"Chwile, które zostają.",sub:"Naturalne sesje i opowieści zamknięte w kadrach.",cta:"Zobacz portfolio",details:"Minimalistyczny szablon fotografa z mocnym portfolio i szybkim kontaktem.",footer:"Portrety / Reportaż / Sesje rodzinne"},
           {id:"food",name:"Półmisek",type:"Restauracja",brand:"półmisek.",headline:"Dobrze być przy stole.",sub:"Świeża kuchnia, lokalne składniki i dobre spotkania.",cta:"Sprawdź menu",details:"Ciepły projekt restauracji z menu, informacjami o lokalu i kontaktem.",footer:"Nasza kuchnia / Menu / Kontakt"},
           {id:"beauty",name:"Lumina",type:"Salon beauty",brand:"LUMINA",headline:"Czas tylko dla Ciebie.",sub:"Zabiegi, pielęgnacja i chwila codziennego spokoju.",cta:"Umów wizytę",details:"Subtelny szablon beauty z ofertą zabiegów i przyciskiem rezerwacji.",footer:"Zabiegi / Cennik / Rezerwacja"},
@@ -3222,7 +3234,31 @@
             contactTitle:"Potrzebujesz elektryka?",contact:"Opisz zlecenie i zostaw numer telefonu. Oddzwonimy."
           }
         };
+        function escapeTemplateText(value) {
+          return String(value==null?"":value).replace(/[&<>"']/g,ch=>({
+            "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+          })[ch]);
+        }
+        function templateHttpsUrl(value) {
+          if(typeof value!=="string"||!value)return "";
+          try {
+            const url=new URL(value);
+            return url.protocol==="https:"&&!url.username&&!url.password?url.href:"";
+          } catch {return "";}
+        }
         function templateScene(t, full = false) {
+          if(t.isRemote) {
+            const image=templateHttpsUrl(t.thumbnail_url);
+            const preview=templateHttpsUrl(t.preview_url);
+            if(!full) return image
+              ? '<img class="ec-template-real-thumbnail" loading="lazy" src="'+escapeTemplateText(image)+'" alt="Podgląd '+escapeTemplateText(t.name)+'">'
+              : '<span class="ec-template-real-placeholder">'+escapeTemplateText(t.name)+'</span>';
+            return '<div class="ec-template-real-preview">'+
+              '<div class="ec-template-real-intro"><strong>'+escapeTemplateText(t.name)+'</strong><span>'+escapeTemplateText(t.type)+'</span></div>'+
+              (image?'<img class="ec-template-real-image" src="'+escapeTemplateText(image)+'" alt="Miniatura szablonu '+escapeTemplateText(t.name)+'">':'<p>Miniatura nie została jeszcze dodana.</p>')+
+              (preview?'<a class="ec-template-real-open" href="'+escapeTemplateText(preview)+'" target="_blank" rel="noopener noreferrer">Otwórz pełny podgląd strony ↗</a>':'<p>Pełny podgląd strony nie został jeszcze opublikowany.</p>')+
+              '</div>';
+          }
           const d=templateDetails[t.id];
           const hero='<section class="ec-template-scene ec-template-scene--'+t.id+(full?' ec-template-scene--full':'')+'">' +
             '<div class="ec-template-site-nav"><strong>'+t.brand+'</strong><span>O nas &nbsp; Oferta &nbsp; Kontakt</span></div>' +
@@ -3251,13 +3287,14 @@
           if(section.hidden)return;
           const selected=states.mini.templateId||"";
           q("#ec-template-options").innerHTML =
+            (templateSamples.length?"":'<p class="ec-template-unavailable">Aktualnie brak opublikowanych szablonów. Możesz zaznaczyć „Szablon wybiorę później”.</p>')+
             templateSamples.map(t=>
               '<div class="ec-template-select-card">' +
                 '<label class="ec-template-select-option"><input type="radio" name="ec-template-choice" value="'+t.id+'" '+(selected===t.id?'checked ':'')+'>' +
-                '<span class="ec-template-select-dot ec-template-select-dot--'+t.id+'" aria-hidden="true"></span>'+
-                '<span class="ec-template-tile-text"><strong>'+t.name+'</strong><small>'+t.type+'</small>'+
-                '<span class="ec-template-select-description">'+t.details+'</span></span></label>' +
-                '<button class="ec-template-preview-action" type="button" data-template-preview="'+t.id+'" aria-label="Zobacz wszystkie sekcje szablonu '+t.name+'">Zobacz podgląd</button>' +
+                '<span class="ec-template-select-dot ec-template-select-dot--'+t.id+'" aria-hidden="true">'+(t.isRemote&&templateHttpsUrl(t.thumbnail_url)?'<img src="'+escapeTemplateText(templateHttpsUrl(t.thumbnail_url))+'" alt="">':'')+'</span>'+
+                '<span class="ec-template-tile-text"><strong>'+escapeTemplateText(t.name)+'</strong><small>'+escapeTemplateText(t.type)+'</small>'+
+                '<span class="ec-template-select-description">'+escapeTemplateText(t.details)+'</span></span></label>' +
+                '<button class="ec-template-preview-action" type="button" data-template-preview="'+t.id+'" aria-label="Zobacz podgląd szablonu '+escapeTemplateText(t.name)+'">Zobacz podgląd</button>' +
               '</div>'
             ).join('') +
             '<label class="ec-template-select-option ec-template-select-empty ec-template-select-later">' +
