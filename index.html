@@ -3306,7 +3306,17 @@
         }
         let templateOpener=null, templatePreviousScroll="";
         function showTemplate(index) {
-          const t=templateSamples[index];if(!t)return;
+          const t=templateSamples[index];
+          if(!t){
+            visibleTemplateIndex=-1;
+            q("#ec-template-viewport").innerHTML='<p class="ec-template-unavailable">Aktualnie brak opublikowanych szablonów. Wybierz opcję „Szablon wybiorę później”.</p>';
+            q("#ec-template-kind").textContent="";
+            q("#ec-template-name").textContent="Katalog szablonów";
+            q("#ec-template-description").textContent="";
+            q("#ec-template-configure").hidden=true;
+            return;
+          }
+          q("#ec-template-configure").hidden=false;
           visibleTemplateIndex=index;
           q("#ec-template-viewport").innerHTML=templateScene(t,true);
           q("#ec-template-viewport").scrollTop=0;
@@ -3318,10 +3328,66 @@
             button.setAttribute("aria-pressed",String(i===index));
           });
         }
-        q("#ec-template-gallery").innerHTML=templateSamples.map((t,i)=>
-          '<button type="button" class="ec-template-choice" data-template-index="'+i+'" aria-pressed="'+(i===0)+'"><span class="ec-template-thumb">'+templateScene(t)+'</span><span class="ec-template-choice-label"><strong>'+t.name+'</strong><small>'+t.type+'</small></span></button>'
-        ).join("");
-        showTemplate(0);
+        function renderTemplateGallery() {
+          const live=templateSamples.some(t=>t.isRemote);
+          q("#ec-template-gallery").innerHTML=templateSamples.map((t,i)=>
+            '<button type="button" class="ec-template-choice" data-template-index="'+i+'" aria-pressed="'+(i===0)+'"><span class="ec-template-thumb">'+templateScene(t)+'</span><span class="ec-template-choice-label"><strong>'+escapeTemplateText(t.name)+'</strong><small>'+escapeTemplateText(t.type)+'</small></span></button>'
+          ).join("");
+          q("#ec-template-intro").textContent=!templateSamples.length
+            ?"Aktualnie brak opublikowanych szablonów Mini Start. Możesz wybrać szablon później."
+            :live
+              ?"Wybierz szablon Eniverse. Kliknij miniaturę, aby zobaczyć szczegóły, a następnie otwórz pełny podgląd strony."
+              :"Demonstracyjne układy stron. Po aktywacji Eniverse Templates Manager lista będzie pobierana z WordPressa.";
+          q("#ec-template-modal .ec-template-demo-badge").textContent=live?"SZABLON ENIVERSE":"PODGLĄD DEMO";
+          q("#ec-template-modal .ec-template-browser-bar span:last-child").textContent=live
+            ?"Miniatura i link do pełnego podglądu strony"
+            :"Podgląd wszystkich 5 sekcji · przewiń stronę w dół ↓";
+          q("#ec-template-modal .ec-template-footer > span").textContent=live
+            ?"Szablony opublikowane w panelu WordPress Eniverse."
+            :"Wizualizacje poglądowe, nie gotowe strony klientów.";
+          showTemplate(0);
+        }
+        renderTemplateGallery();
+        // Publiczny katalog WordPress: bez tokenów i adresów archiwów ZIP.
+        // Niedostępne API -> awaryjne makiety. Pusty katalog -> brak makiet.
+        async function loadWordPressTemplates() {
+          const apiUrl=q("#eni-calc").dataset.templatesApi ||
+            window.ENIVERSE_TEMPLATES_API ||
+            "https://eniverse.pl/wp-json/eniverse/v1/templates";
+          if(!templateHttpsUrl(apiUrl))return;
+          const controller=new AbortController();
+          const timeout=setTimeout(()=>controller.abort(),6000);
+          try {
+            const response=await fetch(apiUrl,{method:"GET",mode:"cors",credentials:"omit",cache:"no-store",signal:controller.signal});
+            if(!response.ok)throw new Error("API WordPress HTTP "+response.status);
+            const payload=await response.json();
+            const data=Array.isArray(payload)?payload:payload?.templates;
+            if(!Array.isArray(data))throw new Error("Niepoprawny format API szablonów");
+            const next=data.slice(0,100)
+              .filter(t=>t&&typeof t.id==="string"&&/^wp-\d+$/.test(t.id)&&typeof t.name==="string"&&t.name.trim())
+              .map(t=>({
+                id:t.id,
+                name:t.name.trim().slice(0,120),
+                type:String(t.type||"Strona internetowa").slice(0,100),
+                details:String(t.details||"Szablon z biblioteki Eniverse.").slice(0,500),
+                thumbnail_url:templateHttpsUrl(t.thumbnail_url),
+                preview_url:templateHttpsUrl(t.preview_url),
+                isRemote:true
+              }));
+            templateSamples=next;
+            const selected=states.mini.templateId;
+            if(selected&&selected!=="later"&&!next.some(t=>t.id===selected))
+              states.mini.templateId="";
+            renderTemplateGallery();
+            if(current.id==="mini"&&!q("#ec-modal-stage").hidden){
+              renderTemplateSelection();
+              if(!q("#ec-final").hidden)summary(directSummaryMode);
+            }
+          } catch(error) {
+            console.warn("Eniverse: nie udało się pobrać szablonów z WordPress — pozostają makiety demonstracyjne.",error);
+          } finally {clearTimeout(timeout);}
+        }
+        loadWordPressTemplates();
         function openTemplateDialog(button) {
           templateOpener=button||null;
           templatePreviousScroll=document.body.style.overflow;
@@ -3372,7 +3438,8 @@
           }
         }
         q("#ec-template-configure").addEventListener("click",()=>{
-          confirmTemplateChoice(templateSamples[visibleTemplateIndex].id);
+          const t=templateSamples[visibleTemplateIndex];
+          if(t)confirmTemplateChoice(t.id);
         });
         q("#ec-template-defer").addEventListener("click",()=>{
           confirmTemplateChoice("later");
