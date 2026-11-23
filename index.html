@@ -2526,6 +2526,168 @@
         text-decoration:line-through;
       }
 
+      /* Abo: uporządkowana oferta 3-kolumnowa. Każdy blok jest jedną całością:
+         wprowadzenie/cena | zakres/korzyści | warunki/CTA. */
+      #eni-calc .ec-packages-overview .ec-package.ec-package--abo {
+        display:grid;
+        grid-template-columns:minmax(0,1.12fr) minmax(0,1fr) minmax(250px,.78fr);
+        grid-template-rows:auto;
+        gap:0;
+        align-items:stretch;
+        min-height:0;
+        padding:28px 30px;
+        background:#fff;
+      }
+      #eni-calc .ec-package--abo > .ec-abo-intro,
+      #eni-calc .ec-package--abo > .ec-abo-details,
+      #eni-calc .ec-package--abo > .ec-abo-side {
+        display:flex;
+        flex-direction:column;
+        min-width:0;
+      }
+      #eni-calc .ec-package--abo > .ec-abo-intro {
+        grid-column:1;grid-row:1;
+        padding-right:27px;
+      }
+      #eni-calc .ec-package--abo > .ec-abo-details {
+        grid-column:2;grid-row:1;
+        padding:0 27px;
+        border-left:1px solid #e4e8ec;
+      }
+      #eni-calc .ec-package--abo > .ec-abo-side {
+        grid-column:3;grid-row:1;
+        padding-left:27px;
+        border-left:1px solid #e4e8ec;
+        gap:22px;
+        justify-content:space-between;
+      }
+      #eni-calc .ec-package--abo .ec-card-header {
+        min-height:0;
+      }
+      #eni-calc .ec-package--abo .ec-card-header h2 {
+        font-size:clamp(33px,3vw,41px);
+        margin:9px 0 12px;
+        font-weight:600;
+      }
+      #eni-calc .ec-package--abo .ec-card-description {
+        min-height:0;
+        max-width:360px;
+        line-height:1.55;
+      }
+      #eni-calc .ec-package--abo .ec-card-budget {
+        margin-top:26px;
+        padding:0;
+      }
+      #eni-calc .ec-package--abo .ec-project-scale {
+        display:grid;
+        grid-template-columns:54px minmax(0,1fr);
+        grid-template-rows:auto auto auto;
+        align-items:center;
+        gap:1px 14px;
+        min-height:0;
+        border:0;
+        padding:0;
+      }
+      #eni-calc .ec-package--abo .ec-project-page {
+        grid-column:1;grid-row:1 / span 2;
+        margin:0;
+      }
+      #eni-calc .ec-package--abo .ec-project-scale h3 {
+        grid-column:2;grid-row:1;
+        margin:0;
+        font-size:17px;
+        line-height:1.35;
+      }
+      #eni-calc .ec-package--abo .ec-project-scale p {
+        grid-column:2;grid-row:2;
+        margin:2px 0 0;
+      }
+      #eni-calc .ec-package--abo .ec-template-launch {
+        grid-column:1 / -1;
+        grid-row:3;
+        justify-self:start;
+        margin-top:16px;
+        padding:11px 13px;
+      }
+      #eni-calc .ec-package--abo .ec-features {
+        border-top:1px solid #e4e8ec;
+        padding-top:18px;
+        margin-top:22px;
+        min-height:0;
+      }
+      #eni-calc .ec-package--abo .ec-features ul { margin-top:9px; }
+      #eni-calc .ec-package--abo .ec-features li { padding:4px 0; }
+      #eni-calc .ec-package--abo .ec-card-meta {
+        margin:0;
+        padding:0;
+      }
+      #eni-calc .ec-package--abo .ec-card-meta div {
+        gap:10px;
+        margin:0 0 13px;
+      }
+      #eni-calc .ec-package--abo .ec-card-meta dt {
+        flex-shrink:0;
+      }
+      #eni-calc .ec-package--abo .ec-card-actions {
+        margin-top:auto;
+        gap:10px;
+        width:100%;
+      }
+      #eni-calc .ec-package--abo:has(.ec-card-details[open]) .ec-card-meta {
+        margin:0;
+      }
+      @media (max-width:1150px) {
+        #eni-calc .ec-packages-overview .ec-package.ec-package--abo {
+          grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+          gap:23px 0;
+        }
+        #eni-calc .ec-package--abo > .ec-abo-intro {
+          grid-column:1 / -1;grid-row:1;
+          display:grid;
+          grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+          gap:24px;
+          padding:0 0 22px;
+          border-bottom:1px solid #e4e8ec;
+        }
+        #eni-calc .ec-package--abo .ec-card-budget {
+          margin-top:0;
+        }
+        #eni-calc .ec-package--abo > .ec-abo-details {
+          grid-column:1;grid-row:2;
+          border:0;padding:0 26px 0 0;
+        }
+        #eni-calc .ec-package--abo > .ec-abo-side {
+          grid-column:2;grid-row:2;
+          padding-left:26px;
+        }
+      }
+      @media (max-width:700px) {
+        #eni-calc .ec-packages-overview .ec-package.ec-package--abo {
+          display:flex;
+          flex-direction:column;
+          gap:20px;
+          padding:23px 20px;
+        }
+        #eni-calc .ec-package--abo > .ec-abo-intro {
+          display:flex;
+          flex-direction:column;
+          gap:0;
+          padding:0 0 19px;
+        }
+        #eni-calc .ec-package--abo .ec-card-budget {margin-top:20px;}
+        #eni-calc .ec-package--abo > .ec-abo-details {
+          border-bottom:1px solid #e4e8ec;
+          padding:0 0 20px;
+        }
+        #eni-calc .ec-package--abo > .ec-abo-side {
+          border:0;
+          padding:0;
+          gap:15px;
+        }
+        #eni-calc .ec-package--abo .ec-card-actions {margin-top:4px;}
+        #eni-calc .ec-package--abo .ec-card-header h2 {font-size:34px;}
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -3297,17 +3459,21 @@
           const price = p.recurring
             ? `<div class="ec-mini-prices"><div class="ec-mini-price"><strong>${aboPricing.monthly}</strong><span>zł / mies.</span></div><span class="ec-mini-or">lub</span><div class="ec-mini-price ec-mini-price--annual"><div class="ec-annual-promo-line"><strong>${aboPricing.annual}</strong><del aria-label="Cena regularna ${aboPricing.regularAnnual} zł">${aboPricing.regularAnnual} zł</del></div><span>zł / rok <em class="ec-annual-promo-label">PROMOCJA</em></span></div></div>`
             : `<div class="ec-card-price"><small></small><strong>${money(p.price).replace(" zł", "")}</strong><span>zł</span></div>`;
-          return `<article class="ec-package ${featured ? "ec-package--featured" : ""}" data-ec-plan="${p.id}" aria-labelledby="ec-plan-${p.id}">
+          return `<article class="ec-package ${featured ? "ec-package--featured" : ""} ${starter ? "ec-package--abo" : ""}" data-ec-plan="${p.id}" aria-labelledby="ec-plan-${p.id}">
             ${featured ? '<div class="ec-featured-badge">Wyróżniony pakiet</div>' : ''}
+            ${starter ? '<div class="ec-abo-intro">' : ''}
             <div class="ec-card-header"><span class="ec-kicker">${kicker}</span><h2 id="ec-plan-${p.id}">${p.name}</h2><p class="ec-card-description">${description}</p></div>
             <div class="ec-card-budget">${price}${p.recurring ? '<p class="ec-mini-saving">Oszczędzasz 238 zł rocznie w porównaniu z płatnościami miesięcznymi.</p><p class="ec-muted ec-mini-small">Cena promocyjna na cały 12-miesięczny okres umowy · hosting w cenie</p>' : '<p class="ec-muted">Jednorazowa opłata za wykonanie strony</p>'}</div>
+            ${starter ? '</div><div class="ec-abo-details">' : ''}
             <div class="ec-project-scale">${projectIcon(p)}<h3>${scale}</h3><p>${scaleNote}</p>${starter ? '<button type="button" class="ec-template-launch ec-interactive" data-templates-open aria-haspopup="dialog">Przejrzyj szablony Abo <span aria-hidden="true">↗</span></button>' : ''}</div>
             <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul>${benefits}${originalPlan ? "" : cardRows(excluded)}</ul>
               <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary>${cardDetails(p)}</details>
             </div>
+            ${starter ? '</div><div class="ec-abo-side">' : ''}
             <dl class="ec-card-meta"><div><dt><span class="ec-meta-icon" aria-hidden="true">▢</span><span class="ec-dotted">Czas realizacji</span></dt><dd>${p.days ? `Do ${p.days} dni roboczych` : "Do zatwierdzenia"}</dd></div><div><dt><span class="ec-meta-icon" aria-hidden="true">♢</span><span class="ec-dotted">Rundy poprawek</span></dt><dd>${p.revisions ? p.revisions + " w cenie" : "Brak w cenie"}</dd></div>${p.recurring ? '<div><dt><span class="ec-meta-icon" aria-hidden="true">◷</span><span class="ec-dotted">Abonament</span></dt><dd>12 miesięcy</dd></div>' : ''}</dl>
             <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="${p.id}"><span>${p.id === "firm" ? "Wybieram Firmowy" : "Wybieram " + (p.id === "wiz" ? "Wizytówkę" : p.name)}</span><span aria-hidden="true">↗</span></button>
             <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="${p.id}">Skonfiguruj pakiet <span aria-hidden="true">⚙</span></button></div>
+            ${starter ? '</div>' : ''}
           </article>`;
         }
         q("#ec-entry-packages").innerHTML = packages.filter(p => p.id==="mini").map(renderCard).join("");
