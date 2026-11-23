@@ -822,7 +822,7 @@
       #eni-calc .ec-card-price strong { font-size:47px; font-weight:500; letter-spacing:-.065em; line-height:1.15; font-variant-numeric:tabular-nums; }
       #eni-calc .ec-card-price span { font-size:12px; }
       #eni-calc .ec-card-budget .ec-muted { margin-top:8px; font-size:12px; }
-      /* Abo: dwie czytelne ceny w jednym wierszu. */
+      /* Abonament: dwie czytelne ceny w jednym wierszu. */
       #eni-calc .ec-mini-prices { display:grid; grid-template-columns:max-content max-content max-content; justify-content:start; align-items:baseline; column-gap:clamp(6px,.8vw,12px); row-gap:5px; max-width:100%; }
       #eni-calc .ec-mini-price { min-width:0; display:flex; align-items:baseline; flex-wrap:wrap; column-gap:5px; row-gap:0; }
       #eni-calc .ec-mini-price strong { font-size:clamp(31px,3.2vw,47px); font-weight:500; line-height:1.14; letter-spacing:-.065em; font-variant-numeric:tabular-nums; white-space:nowrap; }
@@ -1226,7 +1226,7 @@
         #eni-calc .ec-final .ec-lead { padding:10px 14px; }
       }
 
-      /* Boczna wycena Abo i suma projektu bez kosztów hostingu. */
+      /* Boczna wycena Abonament i suma projektu bez kosztów hostingu. */
       #eni-calc .ec-mini-rate-comparison {
         display:grid;
         grid-template-columns:repeat(2,minmax(0,1fr));
@@ -1373,7 +1373,7 @@
       #eni-calc .ec-pane[data-ec-step="0"] > .ec-section {
         border-bottom:0;
       }
-      /* Abo: separator tylko między zakresem pakietu a rozliczeniem abonamentu. */
+      /* Abonament: separator tylko między zakresem pakietu a rozliczeniem abonamentu. */
       #eni-calc .ec-pane[data-ec-step="0"] > #ec-billing-section:not([hidden]) {
         border-top:1px solid var(--ec-line);
         margin-top:14px;
@@ -1486,7 +1486,7 @@
       }
 
 
-      /* Abo: przycisk galerii i galeria wzorów stron. */
+      /* Abonament: przycisk galerii i galeria wzorów stron. */
       #eni-calc .ec-template-launch {
         margin-top:14px; width:100%; display:flex; align-items:center; justify-content:space-between;
         gap:9px; padding:12px 11px; border:1px solid #E20B0C; border-radius:5px;
@@ -1782,7 +1782,7 @@
       #eni-calc .ec-template-demo-contact h2, #eni-calc .ec-template-demo-contact p { margin-left:auto; margin-right:auto; }
       #eni-calc .ec-template-demo-contact-button { display:inline-block; padding:13px 20px; margin:20px 0 40px; background:var(--demo-accent); color:#fff; font-size:13px; font-weight:700; }
       #eni-calc .ec-template-demo-contact-end { display:flex; justify-content:space-between; gap:10px; padding:19px 0; border-top:1px solid #8886; font-size:12px; }
-      /* Wybór projektu w pierwszym kroku Abo */
+      /* Wybór projektu w pierwszym kroku pakietu Abonament */
       #eni-calc .ec-template-section { border-top:1px solid var(--ec-line); padding-top:19px; }
       #eni-calc .ec-template-select-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:14px 0 10px; }
       #eni-calc .ec-template-select-option { display:flex; gap:10px; align-items:center; padding:12px; border:1px solid #dce3e8; border-radius:7px; background:#fff; cursor:pointer; min-width:0; }
@@ -1829,7 +1829,7 @@
         #eni-calc .ec-template-select-options { grid-template-columns:1fr; }
       }
 
-      /* Tylko Abo: osobny krok wyboru szablonu, bez sekcji zakresu i abonamentu. */
+      /* Tylko pakiet Abonament: osobny krok wyboru szablonu, bez sekcji zakresu i abonamentu. */
       #eni-calc .ec-pane[data-ec-step="template"] > .ec-template-section {
         border:0; margin:0; padding:6px 0 12px;
       }
@@ -2293,7 +2293,7 @@
         filter:none;
       }
 
-      /* Ceny Abo: 69 zł/mies. lub promocyjnie 590 zł/rok zamiast 790 zł. */
+      /* Ceny Abonament: 69 zł/mies. lub promocyjnie 590 zł/rok zamiast 790 zł. */
       #eni-calc .ec-packages-overview .ec-mini-prices {
         display:grid;
         grid-template-columns:max-content max-content max-content;
@@ -2352,7 +2352,7 @@
         text-decoration:none;
       }
 
-      /* Brak wyboru szablonu Abo jest błędem dopiero po próbie wysłania. */
+      /* Brak wyboru szablonu Abonament jest błędem dopiero po próbie wysłania. */
       #eni-calc .ec-final .ec-summary > .ec-line.ec-summary-template-line.is-invalid {
         display:flex;
         flex-wrap:wrap;
@@ -2393,7 +2393,7 @@
       #eni-calc .ec-template-real-open:hover {background:#fff1f1;text-decoration:none;}
       #eni-calc .ec-template-unavailable {padding:15px 16px;margin:0;font-size:12px;line-height:1.55;color:#576573;}
 
-      /* Nowy układ: Abo w poziomym boksie nad czterema pakietami. */
+      /* Nowy układ: Abonament w poziomym boksie nad czterema pakietami. */
       #eni-calc .ec-packages-overview {
         display:grid;grid-template-columns:minmax(0,1fr);width:100%;min-width:0;
         align-items:start;gap:28px;
@@ -2526,7 +2526,7 @@
         text-decoration:line-through;
       }
 
-      /* Abo: uporządkowana oferta 3-kolumnowa. Każdy blok jest jedną całością:
+      /* Abonament: uporządkowana oferta 3-kolumnowa. Każdy blok jest jedną całością:
          wprowadzenie/cena | zakres/korzyści | warunki/CTA. */
       #eni-calc .ec-packages-overview .ec-package.ec-package--abo {
         display:grid;
@@ -2745,7 +2745,7 @@
           <div class="ec-preview-heading">
             <div class="ec-kicker">Eniverse / Cennik i konfigurator</div>
             <h1 class="ec-page-title">Wybierz stronę dla swojej firmy.</h1>
-            <p class="ec-intro">Porównaj pakiety i skonfiguruj swoją stronę. Sprawdź promocyjny abonament Abo oraz pakiety z płatnością jednorazową.</p>
+            <p class="ec-intro">Porównaj pakiety i skonfiguruj swoją stronę. Sprawdź promocyjny pakiet Abonament oraz pakiety z płatnością jednorazową.</p>
           </div>
           <div class="ec-packages-wide-scroll">
              <div class="ec-packages-overview">
@@ -2762,7 +2762,7 @@
            <p class="ec-pricing-note">Ceny dodatków są przykładowe, a końcowy zakres i termin realizacji wymagają zatwierdzenia. Wysłanie formularza w tej wersji jest demonstracyjne.</p>
         </section>
       </div><!-- Koniec widoku demonstracyjnego. Elementor ukrywa ten widok, jeśli znajdzie istniejące karty .enp-card. -->
-                <!-- Galeria demonstracyjnych szablonów Abo (osobny modal). -->
+                <!-- Galeria demonstracyjnych szablonów pakietu Abonament (osobny modal). -->
         <div class="ec-template-overlay" id="ec-template-modal" hidden>
           <section class="ec-template-dialog" role="dialog" aria-modal="true" aria-labelledby="ec-template-title" aria-describedby="ec-template-intro">
             <header class="ec-template-header">
@@ -2843,7 +2843,7 @@
                         value="monthly"
                         checked
                       /><span
-                        ><strong>Miesięcznie — tylko Abo</strong
+                        ><strong>Miesięcznie — tylko Abonament</strong
                         ><small id="ec-monthly-detail"
                           >12 rat za pakiet i dodatki</small
                         ></span
@@ -3142,7 +3142,7 @@
                   hidden
                 ></p>
                 <p id="ec-mini-template-required" class="ec-mini-template-required" role="status" hidden>
-                  Aby wysłać zapytanie Abo, wybierz szablon albo zaznacz opcję „Szablon wybiorę później” w galerii.
+                  Aby wysłać zapytanie dotyczące pakietu Abonament, wybierz szablon albo zaznacz opcję „Szablon wybiorę później” w galerii.
                 </p>
                 <button
                   class="ec-action ec-interactive ec-send"
@@ -3198,7 +3198,7 @@
         const packages = [
           {
             id: "mini",
-            name: "Abo",
+            name: "Abonament",
             price: 69,
             recurring: true,
             structure: "Strona główna do 5 sekcji",
@@ -3426,7 +3426,7 @@
           mini: {
             kicker: "PROSTY START W INTERNECIE",
             description: "Dla osób, które chcą prostej strony bez dużej opłaty początkowej.",
-            scale: "Strona Abo · do 5 sekcji",
+            scale: "Strona w pakiecie Abonament · do 5 sekcji",
             scaleNote: "Gotowy szablon HTML i CSS.",
             benefits: ["Gotowy wygląd i wersja mobilna", "Hosting przez okres umowy", "Strona z Twoimi gotowymi materiałami"],
             icon: "page",
@@ -3513,7 +3513,7 @@
             <div class="ec-card-header"><span class="ec-kicker">${kicker}</span><h2 id="ec-plan-${p.id}">${p.name}</h2><p class="ec-card-description">${description}</p></div>
             <div class="ec-card-budget">${price}${p.recurring ? '<p class="ec-mini-saving">Oszczędzasz 238 zł rocznie w porównaniu z płatnościami miesięcznymi.</p><p class="ec-muted ec-mini-small">Cena promocyjna na cały 12-miesięczny okres umowy · hosting w cenie</p>' : '<p class="ec-muted">Jednorazowa opłata za wykonanie strony</p>'}</div>
             ${starter ? '</div><div class="ec-abo-details">' : ''}
-            <div class="ec-project-scale">${projectIcon(p)}<h3>${scale}</h3><p>${scaleNote}</p>${starter ? '<button type="button" class="ec-template-launch ec-interactive" data-templates-open aria-haspopup="dialog">Przejrzyj szablony Abo <span aria-hidden="true">↗</span></button>' : ''}</div>
+            <div class="ec-project-scale">${projectIcon(p)}<h3>${scale}</h3><p>${scaleNote}</p>${starter ? '<button type="button" class="ec-template-launch ec-interactive" data-templates-open aria-haspopup="dialog">Przejrzyj szablony pakietu Abonament <span aria-hidden="true">↗</span></button>' : ''}</div>
             <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul>${benefits}${originalPlan ? "" : cardRows(excluded)}</ul>
               <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary>${cardDetails(p)}</details>
             </div>
@@ -3666,7 +3666,7 @@
             '<button type="button" class="ec-template-choice" data-template-index="'+i+'" aria-pressed="'+(i===0)+'"><span class="ec-template-thumb">'+templateScene(t)+'</span><span class="ec-template-choice-label"><strong>'+escapeTemplateText(t.name)+'</strong><small>'+escapeTemplateText(t.type)+'</small></span></button>'
           ).join("");
           q("#ec-template-intro").textContent=!templateSamples.length
-            ?"Aktualnie brak opublikowanych szablonów Abo. Możesz wybrać szablon później."
+            ?"Aktualnie brak opublikowanych szablonów pakietu Abonament. Możesz wybrać szablon później."
             :live
               ?"Wybierz szablon Eniverse. Kliknij miniaturę, aby zobaczyć szczegóły, a następnie otwórz pełny podgląd strony."
               :"Demonstracyjne układy stron. Po aktywacji Eniverse Templates Manager lista będzie pobierana z WordPressa.";
@@ -3801,7 +3801,7 @@
           const opened = all("#ec-catalog .ec-card-details[open]");
           catalog.style.removeProperty("--ec-equal-card-height");
           opened.forEach(details => { details.open = false; });
-          // Osobna karta Abo ma poziomy układ i nie uczestniczy w wyrównywaniu.
+          // Osobna karta Abonament ma poziomy układ i nie uczestniczy w wyrównywaniu.
           const height = Math.ceil(Math.max(...cards.map(card => card.getBoundingClientRect().height)));
           catalog.style.setProperty("--ec-equal-card-height", height + "px");
           // Po wyrównaniu wysokości zapamiętaj faktyczny pusty odstęp NAD metadanymi.
@@ -3865,7 +3865,7 @@
             base = trainingBase(p);
           q("#ec-training-section").hidden = false;
           q("#ec-training-base").textContent = p.recurring
-            ? "Abo: brak szkolenia w bazie. Instrukcja PDF jest dostępna bezpłatnie; możesz wybrać płatne szkolenie."
+            ? "Abonament: brak szkolenia w bazie. Instrukcja PDF jest dostępna bezpłatnie; możesz wybrać płatne szkolenie."
             : "W cenie pakietu: " + trainingOptions[base][0] +
               ". Możesz wybrać inny wariant — dopłata dotyczy tylko wyższej opcji.";
           q("#ec-training").innerHTML = trainingOptions
@@ -4039,7 +4039,7 @@
               p.recurring ? money(annualCare) + ' / rok · za 12 mies. w abonamencie' :
               money(annualCare) + ' / rok') +
             '</small></span></label></div>' +
-            '<p class="ec-note">Dwie niezależne usługi. W Abo hosting jest już częścią abonamentu.</p>';
+            '<p class="ec-note">Dwie niezależne usługi. W pakiecie Abonament hosting jest już częścią abonamentu.</p>';
           update();
         }
         function count(id) {
@@ -4073,7 +4073,7 @@
           seoServices.forEach(([key,label,price]) => {
             if (s[key]) items.push([label, price]);
           });
-          // W Abo opieka jest opłacana za 12 miesięcy w ramach abonamentu.
+          // W pakiecie Abonament opieka jest opłacana za 12 miesięcy w ramach abonamentu.
           if (p.recurring && s.care)
             items.push(["Opieka techniczna na 12 miesięcy", annualCare]);
           const extra = items.reduce((sum,item) => sum + item[1], 0);
@@ -4180,7 +4180,7 @@
           const simpleRows = [
             ["Pakiet", p.name],
             ["Zakres", p.structure],
-            ...(p.recurring && s.billing==="annual" ? [["Promocja Abo", "590 zł/rok zamiast 790 zł/rok"]] : []),
+            ...(p.recurring && s.billing==="annual" ? [["Promocja pakietu Abonament", "590 zł/rok zamiast 790 zł/rok"]] : []),
             ["SEO", seoName(p,s.seo)],
             ["Dodatkowe usługi SEO", seoServices.filter(([key]) => s[key])
               .map(([,label]) => label).join(", ") || "Bez dodatkowych usług"],
@@ -4194,11 +4194,11 @@
             '"><span>' + label + '</span><span>' + value + '</span></div>';
           const templateRow = p.recurring
             ? '<div class="ec-line ec-summary-template-line">' +
-                '<span>Szablon Abo</span>' +
+                '<span>Szablon pakietu Abonament</span>' +
                 '<button type="button" class="ec-summary-template-name ' +
                   (s.templateId ? 'is-selected' : 'is-required') +
                   '" data-ec-summary-template-browse aria-label="' +
-                  (s.templateId ? 'Zmień wybrany szablon Abo' : 'Wybierz szablon Abo') +
+                  (s.templateId ? 'Zmień wybrany szablon pakietu Abonament' : 'Wybierz szablon pakietu Abonament') +
                   '">' +
                   (s.templateId ? templateSelectionName(s.templateId) : 'Wybierz szablon') +
                 '</button>' +
@@ -4223,7 +4223,7 @@
             : '';
           const detailsHeading = '<h3>' + (directSummaryMode ? 'Co wybrano — ' : 'Twoja konfiguracja: ') + p.name + '</h3>';
           // Podsumowanie po „Wybieram pakiet”: najpierw pełne „Co wybrano”
-          // (w tym klikalny wybór szablonu Abo), następnie niewielki
+          // (w tym klikalny wybór szablonu Abonament), następnie niewielki
           // link do konfiguratora i na końcu blok rozliczenia.
           // Standardowe podsumowanie zachowuje swoją dotychczasową strukturę.
           q("#ec-summary").innerHTML = (directSummaryMode
@@ -4245,7 +4245,7 @@
             fields.append(pane);
             return pane;
           });
-          // Rozliczenie abonamentu Abo jest teraz w kroku 1, pod dodatkami.
+          // Rozliczenie pakietu Abonament jest teraz w kroku 1, pod dodatkami.
           // Pozostałe pakiety mają tę sekcję ukrytą przez fill().
           wizardPanes[0].append(sections[0], sections[1]);
           wizardPanes[1].append(sections[2], sections[3]);
@@ -4272,13 +4272,13 @@
           extras.append(extrasTitle,toggles);
           bundle.append(extras);
 
-          // Osobny pierwszy krok Abo, pozostałe cztery panele bez zmian.
+          // Osobny pierwszy krok Abonament, pozostałe cztery panele bez zmian.
           const templatePane=document.createElement("div");
           templatePane.id="ec-mini-template-pane";
           templatePane.className="ec-pane ec-template-pane";
           templatePane.dataset.ecStep="template";
           fields.insertBefore(templatePane,wizardPanes[0]);
-          // Wybór z galerii dostępny tylko dla Abo, w pierwszym kroku.
+          // Wybór z galerii dostępny tylko dla pakietu Abonament, w pierwszym kroku.
           const templateSection=document.createElement("section");
           templateSection.className="ec-section ec-template-section";
           templateSection.id="ec-template-section";
@@ -4286,7 +4286,7 @@
           templateSection.innerHTML=
             '<h3>Wybierz szablon swojej strony</h3>'+
             '<p class="ec-muted">Zobacz cztery propozycje i krótkie opisy. Kliknij podgląd, aby obejrzeć wszystkie pięć sekcji strony. Wybór szablonu nie zmienia ceny.</p>'+
-            '<div class="ec-template-select-options" id="ec-template-options" role="group" aria-label="Wybór szablonu Abo"></div>'+
+            '<div class="ec-template-select-options" id="ec-template-options" role="group" aria-label="Wybór szablonu pakietu Abonament"></div>'+
             '<div class="ec-template-select-footer"><span id="ec-template-selected"></span></div>';
           templatePane.append(templateSection);
 
@@ -4359,11 +4359,11 @@
           q("#ec-back").textContent="← Wstecz";
           q("#ec-footer-note").textContent=last
             ? "Podgląd wyceny. Formularz demonstracyjny."
-            : mini?"Abo: abonament na 12 miesięcy.":"Strona i dodatki jednorazowo; usługi roczne płatne z góry.";
+            : mini?"Abonament: umowa na 12 miesięcy.":"Strona i dodatki jednorazowo; usługi roczne płatne z góry.";
           q("#ec-config .ec-fields").scrollTop=0;
           if(last)summary(baseChoice);
         }
-        // Galeria Abo w podsumowaniu jest częścią trybu wyboru pakietu.
+        // Galeria Abonament w podsumowaniu jest częścią trybu wyboru pakietu.
         // Nie przełączamy kroków po wybraniu szablonu z tej galerii.
         q("#ec-summary").addEventListener("click",event=>{
           const configure=event.target.closest("#ec-direct-summary-configure");
@@ -4419,7 +4419,7 @@
         });
         q("#ec-config").addEventListener("change", (event) => {
           update();
-          // Natychmiastowe odświeżenie podpisu po wyborze szablonu Abo.
+          // Natychmiastowe odświeżenie podpisu po wyborze szablonu Abonament.
           if (event.target.closest("#ec-template-options")) {
             const id=states.mini.templateId;
             q("#ec-template-selected").textContent=id
@@ -4629,7 +4629,7 @@
           const lines = [
             "ZAPYTANIE O STRONĘ — ENIVERSE",
             "Pakiet: " + p.name,
-            ...(p.recurring ? ["Szablon Abo: "+templateSelectionName(s.templateId)] : []),
+            ...(p.recurring ? ["Szablon pakietu Abonament: "+templateSelectionName(s.templateId)] : []),
             "Zakres: " +
               p.structure +
               (p.chips.length ? " — " + p.chips.join(", ") : ""),
@@ -4713,7 +4713,7 @@
               templateLine.scrollIntoView({block:"center",behavior:"smooth"});
               browse?.focus({preventScroll:true});
             }
-            q("#ec-form-error").textContent="Pole wymagane: wybierz szablon Abo lub opcję „Szablon wybiorę później”.";
+            q("#ec-form-error").textContent="Pole wymagane: wybierz szablon pakietu Abonament lub opcję „Szablon wybiorę później”.";
             q("#ec-form-error").hidden=false;
             q("#ec-mini-template-required").hidden=false;
             q("#ec-send-result").hidden=true;
@@ -4917,7 +4917,7 @@
               block = document.createElement("section");
             block.className = "ec-payment-summary";
             const h = document.createElement("h3");
-            h.textContent = "Łączna rata Abo z dodatkami";
+            h.textContent = "Łączna rata pakietu Abonament z dodatkami";
             const line = document.createElement("p");
             line.id = "ec-mini-schedule";
             line.textContent = miniSchedule() + ".";
