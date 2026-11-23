@@ -822,7 +822,7 @@
       #eni-calc .ec-card-price strong { font-size:47px; font-weight:500; letter-spacing:-.065em; line-height:1.15; font-variant-numeric:tabular-nums; }
       #eni-calc .ec-card-price span { font-size:12px; }
       #eni-calc .ec-card-budget .ec-muted { margin-top:8px; font-size:12px; }
-      /* Mini Start: dwie czytelne ceny w jednym wierszu. */
+      /* Abo: dwie czytelne ceny w jednym wierszu. */
       #eni-calc .ec-mini-prices { display:grid; grid-template-columns:max-content max-content max-content; justify-content:start; align-items:baseline; column-gap:clamp(6px,.8vw,12px); row-gap:5px; max-width:100%; }
       #eni-calc .ec-mini-price { min-width:0; display:flex; align-items:baseline; flex-wrap:wrap; column-gap:5px; row-gap:0; }
       #eni-calc .ec-mini-price strong { font-size:clamp(31px,3.2vw,47px); font-weight:500; line-height:1.14; letter-spacing:-.065em; font-variant-numeric:tabular-nums; white-space:nowrap; }
@@ -1226,7 +1226,7 @@
         #eni-calc .ec-final .ec-lead { padding:10px 14px; }
       }
 
-      /* Boczna wycena Mini Start i suma projektu bez kosztów hostingu. */
+      /* Boczna wycena Abo i suma projektu bez kosztów hostingu. */
       #eni-calc .ec-mini-rate-comparison {
         display:grid;
         grid-template-columns:repeat(2,minmax(0,1fr));
@@ -1373,7 +1373,7 @@
       #eni-calc .ec-pane[data-ec-step="0"] > .ec-section {
         border-bottom:0;
       }
-      /* Mini Start: separator tylko między zakresem pakietu a rozliczeniem abonamentu. */
+      /* Abo: separator tylko między zakresem pakietu a rozliczeniem abonamentu. */
       #eni-calc .ec-pane[data-ec-step="0"] > #ec-billing-section:not([hidden]) {
         border-top:1px solid var(--ec-line);
         margin-top:14px;
@@ -1486,7 +1486,7 @@
       }
 
 
-      /* Mini Start: przycisk galerii i galeria wzorów stron. */
+      /* Abo: przycisk galerii i galeria wzorów stron. */
       #eni-calc .ec-template-launch {
         margin-top:14px; width:100%; display:flex; align-items:center; justify-content:space-between;
         gap:9px; padding:12px 11px; border:1px solid #E20B0C; border-radius:5px;
@@ -1782,7 +1782,7 @@
       #eni-calc .ec-template-demo-contact h2, #eni-calc .ec-template-demo-contact p { margin-left:auto; margin-right:auto; }
       #eni-calc .ec-template-demo-contact-button { display:inline-block; padding:13px 20px; margin:20px 0 40px; background:var(--demo-accent); color:#fff; font-size:13px; font-weight:700; }
       #eni-calc .ec-template-demo-contact-end { display:flex; justify-content:space-between; gap:10px; padding:19px 0; border-top:1px solid #8886; font-size:12px; }
-      /* Wybór projektu w pierwszym kroku Mini Start */
+      /* Wybór projektu w pierwszym kroku Abo */
       #eni-calc .ec-template-section { border-top:1px solid var(--ec-line); padding-top:19px; }
       #eni-calc .ec-template-select-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:14px 0 10px; }
       #eni-calc .ec-template-select-option { display:flex; gap:10px; align-items:center; padding:12px; border:1px solid #dce3e8; border-radius:7px; background:#fff; cursor:pointer; min-width:0; }
@@ -1829,7 +1829,7 @@
         #eni-calc .ec-template-select-options { grid-template-columns:1fr; }
       }
 
-      /* Tylko Mini Start: osobny krok wyboru szablonu, bez sekcji zakresu i abonamentu. */
+      /* Tylko Abo: osobny krok wyboru szablonu, bez sekcji zakresu i abonamentu. */
       #eni-calc .ec-pane[data-ec-step="template"] > .ec-template-section {
         border:0; margin:0; padding:6px 0 12px;
       }
@@ -2352,7 +2352,7 @@
         text-decoration:none;
       }
 
-      /* Brak wyboru szablonu Mini Start jest błędem dopiero po próbie wysłania. */
+      /* Brak wyboru szablonu Abo jest błędem dopiero po próbie wysłania. */
       #eni-calc .ec-final .ec-summary > .ec-line.ec-summary-template-line.is-invalid {
         display:flex;
         flex-wrap:wrap;
@@ -2410,7 +2410,7 @@
                  <div class="ec-group-label ec-group-label--brace">
                   <div class="ec-brace-copy">
                     <span class="ec-brace-number">02</span>
-                    <div class="ec-brace-text"><strong>Pakiety na start</strong><small>Mini Start i Start · prosta strona dla firmy</small></div>
+                    <div class="ec-brace-text"><strong>Pakiety na start</strong><small>Abo i Start · prosta strona dla firmy</small></div>
                   </div>
                   <svg class="ec-brace-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 38" preserveAspectRatio="none" aria-hidden="true" focusable="false">
                     <path d="M 2 3 C 2 17 11 24 26 24 H 458 C 479 24 490 29 500 36 C 510 29 521 24 542 24 H 974 C 989 24 998 17 998 3" />
@@ -2435,7 +2435,7 @@
            <p class="ec-pricing-note">Ceny dodatków są przykładowe, a końcowy zakres i termin realizacji wymagają zatwierdzenia. Wysłanie formularza w tej wersji jest demonstracyjne.</p>
         </section>
       </div><!-- Koniec widoku demonstracyjnego. Elementor ukrywa ten widok, jeśli znajdzie istniejące karty .enp-card. -->
-                <!-- Galeria demonstracyjnych szablonów Mini Start (osobny modal). -->
+                <!-- Galeria demonstracyjnych szablonów Abo (osobny modal). -->
         <div class="ec-template-overlay" id="ec-template-modal" hidden>
           <section class="ec-template-dialog" role="dialog" aria-modal="true" aria-labelledby="ec-template-title" aria-describedby="ec-template-intro">
             <header class="ec-template-header">
@@ -2516,12 +2516,12 @@
                         value="monthly"
                         checked
                       /><span
-                        ><strong>Miesięcznie — tylko Mini Start</strong
+                        ><strong>Miesięcznie — tylko Abo</strong
                         ><small id="ec-monthly-detail"
                           >24 raty za pakiet i dodatki</small
                         ></span
                       ><span class="ec-tag" id="ec-monthly-rate"
-                        >59 zł / mies.</span
+                        >69 zł / mies.</span
                       ></label
                     ><label class="ec-option ec-interactive"
                       ><input
@@ -2534,7 +2534,7 @@
                           >2 płatności za pakiet i dodatki</small
                         ></span
                       ><span class="ec-tag" id="ec-annual-rate"
-                        >649 zł / rok</span
+                        >590 zł / rok · promocja</span
                       ></label
                     >
                   </div>
@@ -2546,8 +2546,8 @@
                   <div class="ec-counter-row">
                     <div>
                       Dodatkowe sekcje
-                      <div class="ec-muted" data-extra-cost="+99 zł / sekcję">
-                        +99 zł / sekcję · jednorazowo
+                      <div class="ec-muted" data-extra-cost="+90 zł / sekcję">
+                        +90 zł / sekcję · jednorazowo
                       </div>
                     </div>
                     <div class="ec-counter">
@@ -2582,9 +2582,9 @@
                       Dodatkowe podstrony
                       <div
                         class="ec-muted"
-                        data-extra-cost="+199 zł / podstronę"
+                        data-extra-cost="+190 zł / podstronę"
                       >
-                        +199 zł / podstronę · jednorazowo
+                        +190 zł / podstronę · jednorazowo
                       </div>
                     </div>
                     <div class="ec-counter">
@@ -2681,11 +2681,11 @@
                   <div class="ec-mini-rate-comparison" id="ec-mini-rate-comparison" hidden>
                     <div class="ec-mini-rate-variant" id="ec-mini-monthly-variant">
                       <span>Miesięcznie</span>
-                      <strong id="ec-mini-monthly-price">59 zł</strong>
+                      <strong id="ec-mini-monthly-price">69 zł</strong>
                     </div>
                     <div class="ec-mini-rate-variant" id="ec-mini-annual-variant">
                       <span>Rocznie z góry</span>
-                      <strong id="ec-mini-annual-price">649 zł</strong>
+                      <strong id="ec-mini-annual-price">590 zł</strong>
                     </div>
                   </div>
                   <p class="ec-muted ec-mini-rate-footnote" id="ec-mini-rate-footnote" hidden>Kwoty zawierają pakiet i wybrane dodatki.</p>
@@ -2814,7 +2814,7 @@
                   hidden
                 ></p>
                 <p id="ec-mini-template-required" class="ec-mini-template-required" role="status" hidden>
-                  Aby wysłać zapytanie Mini Start, wybierz szablon albo zaznacz opcję „Szablon wybiorę później” w galerii.
+                  Aby wysłać zapytanie Abo, wybierz szablon albo zaznacz opcję „Szablon wybiorę później” w galerii.
                 </p>
                 <button
                   class="ec-action ec-interactive ec-send"
@@ -2863,18 +2863,18 @@
           q = (s) => root.querySelector(s),
           all = (s) => [...root.querySelectorAll(s)],
           money = (n) => new Intl.NumberFormat("pl-PL", {useGrouping:"always"}).format(n) + " zł";
-        const sections3 = ["Hero", "O nas / Oferta", "Kontakt"],
-          sections5 = ["Hero", "O nas", "Oferta", "Opinie", "Kontakt"];
+        const sections5 = ["Hero", "O nas", "Oferta", "Opinie", "Kontakt"];
+        const aboPricing = {monthly:69, annual:590, regularAnnual:790};
         const rights =
           "Prawa do indywidualnie wykonanych elementów — zgodnie z umową i licencjami";
         const packages = [
           {
             id: "mini",
-            name: "Mini Start",
-            price: 59,
+            name: "Abo",
+            price: 69,
             recurring: true,
-            structure: "Strona główna do 3 sekcji",
-            chips: sections3,
+            structure: "Strona główna do 5 sekcji",
+            chips: sections5,
             seo: 0,
             contact: 0,
             revisions: 0,
@@ -2895,7 +2895,7 @@
           {
             id: "start",
             name: "Start",
-            price: 1299,
+            price: 1290,
             recurring: false,
             structure: "Strona główna do 5 sekcji",
             chips: sections5,
@@ -2920,7 +2920,7 @@
           {
             id: "one",
             name: "One Page",
-            price: 1699,
+            price: 1690,
             recurring: false,
             structure: "Strona główna do 5 sekcji",
             chips: sections5,
@@ -2945,7 +2945,7 @@
           {
             id: "wiz",
             name: "Wizytówka",
-            price: 2499,
+            price: 2490,
             recurring: false,
             structure: "Do 5 podstron",
             chips: [],
@@ -2969,8 +2969,8 @@
           },
           {
             id: "firm",
-            name: "Strona Firmowa",
-            price: 3599,
+            name: "Firmowy",
+            price: 3590,
             recurring: false,
             structure: "Do 10 podstron",
             chips: [],
@@ -3003,12 +3003,12 @@
           [
             "Podstawowe SEO na start",
             "Według warunków SEO; dalsze usługi wyceniane osobno",
-            299,
+            290,
           ],
           [
             "Rozszerzone SEO",
             "Według warunków SEO; dalsze usługi wyceniane osobno",
-            499,
+            490,
           ],
         ];
         // Wyświetlana nazwa SEO tylko w pakietach One Page i Wizytówka.
@@ -3021,11 +3021,11 @@
         }
         const contacts = [
           ["Kontakt podstawowy", "Przyciski kontaktowe: telefon i e-mail", 0],
-          ["Formularz kontaktowy", "Standardowy formularz kontaktowy", 99],
+          ["Formularz kontaktowy", "Standardowy formularz kontaktowy", 90],
           [
             "Formularz kontaktowy rozszerzony",
             "Rozbudowane pola i opcje formularza",
-            199,
+            190,
           ],
         ];
         const hostingText = (p) =>
@@ -3040,7 +3040,7 @@
           ["newsletter", "Newsletter", 300, false],
           ["social", "Integracja z social media", 50, false],
           ["analytics", "Google Analytics", 200, false],
-          ["gsc", "Google Search Console", 99, true],
+          ["gsc", "Google Search Console", 90, true],
           ["blog", "Blog / Realizacje", 249, true],
           ["logoAi", "Logo stworzone przy pomocy AI", 190, false],
         ];
@@ -3098,7 +3098,7 @@
           mini: {
             kicker: "PROSTY START W INTERNECIE",
             description: "Dla osób, które chcą prostej strony bez dużej opłaty początkowej.",
-            scale: "Strona Mini · do 3 sekcji",
+            scale: "Strona Abo · do 5 sekcji",
             scaleNote: "Gotowy szablon HTML i CSS.",
             benefits: ["Gotowy wygląd i wersja mobilna", "Hosting przez okres umowy", "Strona z Twoimi gotowymi materiałami"],
             icon: "page",
@@ -3183,12 +3183,12 @@
             ${featured ? '<div class="ec-featured-badge">Wyróżniony pakiet</div>' : ''}
             <div class="ec-card-header"><span class="ec-kicker">${kicker}</span><h2 id="ec-plan-${p.id}">${p.name}</h2><p class="ec-card-description">${description}</p></div>
             <div class="ec-card-budget">${price}${p.recurring ? '<p class="ec-mini-saving">Przy płatności za rok z góry zyskujesz 1 miesiąc gratis.</p><p class="ec-muted ec-mini-small">Hosting w cenie · umowa na 24 miesiące</p>' : '<p class="ec-muted">Jednorazowa opłata za wykonanie strony</p>'}</div>
-            <div class="ec-project-scale">${projectIcon(p)}<h3>${scale}</h3><p>${scaleNote}</p>${starter ? '<button type="button" class="ec-template-launch ec-interactive" data-templates-open aria-haspopup="dialog">Przejrzyj szablony Mini Start <span aria-hidden="true">↗</span></button>' : ''}</div>
+            <div class="ec-project-scale">${projectIcon(p)}<h3>${scale}</h3><p>${scaleNote}</p>${starter ? '<button type="button" class="ec-template-launch ec-interactive" data-templates-open aria-haspopup="dialog">Przejrzyj szablony Abo <span aria-hidden="true">↗</span></button>' : ''}</div>
             <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul>${benefits}${originalPlan ? "" : cardRows(excluded)}</ul>
               <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary>${cardDetails(p)}</details>
             </div>
             <dl class="ec-card-meta"><div><dt><span class="ec-meta-icon" aria-hidden="true">▢</span><span class="ec-dotted">Czas realizacji</span></dt><dd>${p.days ? `Do ${p.days} dni roboczych` : "Do zatwierdzenia"}</dd></div><div><dt><span class="ec-meta-icon" aria-hidden="true">♢</span><span class="ec-dotted">Rundy poprawek</span></dt><dd>${p.revisions ? p.revisions + " w cenie" : "Brak w cenie"}</dd></div>${p.recurring ? '<div><dt><span class="ec-meta-icon" aria-hidden="true">◷</span><span class="ec-dotted">Abonament</span></dt><dd>24 miesiące</dd></div>' : ''}</dl>
-            <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="${p.id}"><span>${p.id === "firm" ? "Wybieram Stronę Firmową" : "Wybieram " + (p.id === "wiz" ? "Wizytówkę" : p.name)}</span><span aria-hidden="true">↗</span></button>
+            <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="${p.id}"><span>${p.id === "firm" ? "Wybieram Firmowy" : "Wybieram " + (p.id === "wiz" ? "Wizytówkę" : p.name)}</span><span aria-hidden="true">↗</span></button>
             <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="${p.id}">Skonfiguruj pakiet <span aria-hidden="true">⚙</span></button></div>
           </article>`;
         }
@@ -3334,7 +3334,7 @@
             '<button type="button" class="ec-template-choice" data-template-index="'+i+'" aria-pressed="'+(i===0)+'"><span class="ec-template-thumb">'+templateScene(t)+'</span><span class="ec-template-choice-label"><strong>'+escapeTemplateText(t.name)+'</strong><small>'+escapeTemplateText(t.type)+'</small></span></button>'
           ).join("");
           q("#ec-template-intro").textContent=!templateSamples.length
-            ?"Aktualnie brak opublikowanych szablonów Mini Start. Możesz wybrać szablon później."
+            ?"Aktualnie brak opublikowanych szablonów Abo. Możesz wybrać szablon później."
             :live
               ?"Wybierz szablon Eniverse. Kliknij miniaturę, aby zobaczyć szczegóły, a następnie otwórz pełny podgląd strony."
               :"Demonstracyjne układy stron. Po aktywacji Eniverse Templates Manager lista będzie pobierana z WordPressa.";
@@ -3469,7 +3469,7 @@
           const opened = all("#ec-catalog .ec-card-details[open]");
           catalog.style.removeProperty("--ec-equal-card-height");
           opened.forEach(details => { details.open = false; });
-          // Mini Start ma dwa warianty ceny i dodatkowe objaśnienia, więc jego
+          // Abo ma dwa warianty ceny i dodatkowe objaśnienia, więc jego
           // część cenowa jest wyższa niż w Start. Wyrównujemy wysokości kolejnych
           // bloków obu kart, aby „1 strona · do 3/5 sekcji” zaczynało się równo,
           // podobnie jak nagłówki „Co zyskujesz” i dolne przyciski.
@@ -3519,7 +3519,7 @@
         const trainingOptions = [
           ["Instrukcja PDF", 0],
           ["Szkolenie 30 min", 49],
-          ["Szkolenie 1 h", 99],
+          ["Szkolenie 1 h", 90],
           ["Szkolenie 2 h", 179],
         ];
         function trainingBase(p) {
@@ -3548,7 +3548,7 @@
             base = trainingBase(p);
           q("#ec-training-section").hidden = false;
           q("#ec-training-base").textContent = p.recurring
-            ? "Mini Start: brak szkolenia w bazie. Instrukcja PDF jest dostępna bezpłatnie; możesz wybrać płatne szkolenie."
+            ? "Abo: brak szkolenia w bazie. Instrukcja PDF jest dostępna bezpłatnie; możesz wybrać płatne szkolenie."
             : "W cenie pakietu: " + trainingOptions[base][0] +
               ". Możesz wybrać inny wariant — dopłata dotyczy tylko wyższej opcji.";
           q("#ec-training").innerHTML = trainingOptions
@@ -3722,7 +3722,7 @@
               p.recurring ? money(annualCare) + ' / rok · za 24 mies. w abonamencie' :
               money(annualCare) + ' / rok') +
             '</small></span></label></div>' +
-            '<p class="ec-note">Dwie niezależne usługi. W Mini Start hosting jest już częścią abonamentu.</p>';
+            '<p class="ec-note">Dwie niezależne usługi. W Abo hosting jest już częścią abonamentu.</p>';
           update();
         }
         function count(id) {
@@ -3735,9 +3735,9 @@
         function calculate() {
           const p = current, s = states[p.id], items = [];
           if (s.sections)
-            items.push(["Dodatkowe sekcje × " + s.sections, s.sections * 99]);
+            items.push(["Dodatkowe sekcje × " + s.sections, s.sections * 90]);
           if (s.pages)
-            items.push(["Dodatkowe podstrony × " + s.pages, s.pages * 199]);
+            items.push(["Dodatkowe podstrony × " + s.pages, s.pages * 190]);
           if (s.seo > p.seo)
             items.push([seoName(p,s.seo), seo[s.seo][2] - seo[p.seo][2]]);
           if (s.contact > p.contact)
@@ -3756,22 +3756,22 @@
           seoServices.forEach(([key,label,price]) => {
             if (s[key]) items.push([label, price]);
           });
-          // W Mini Start opieka jest opłacana za 2 lata w ramach abonamentu.
+          // W Abo opieka jest opłacana za 2 lata w ramach abonamentu.
           if (p.recurring && s.care)
             items.push(["Opieka techniczna na 24 miesiące", annualCare * 2]);
           const extra = items.reduce((sum,item) => sum + item[1], 0);
-          const year = p.recurring ? (s.billing === "annual" ? 649 : 708) : p.price;
+          const year = p.recurring ? (s.billing === "annual" ? aboPricing.annual : aboPricing.monthly * 12) : p.price;
           const host = p.hosting === "optional"
             ? (s.hosting ? annualHosting : 0) + (s.care ? annualCare : 0)
             : 0;
           const total = p.recurring
             ? s.billing === "annual"
-              ? 649 + extra / 2
-              : ((5900 + Math.floor((extra * 100) / 24)) * 12) / 100
+              ? aboPricing.annual + extra / 2
+              : ((aboPricing.monthly * 100 + Math.floor((extra * 100) / 24)) * 12) / 100
             : year + extra + host;
           return {
             items, extra, year, host, total,
-            contract: p.recurring ? (s.billing === "annual" ? 1298 : 1416) + extra : null
+            contract: p.recurring ? (s.billing === "annual" ? aboPricing.annual * 2 : aboPricing.monthly * 24) + extra : null
           };
         }
         function read() {
@@ -3805,7 +3805,7 @@
             s = states[p.id],
             a = calculate();
           q("#ec-base").textContent = money(
-            p.recurring ? (s.billing === "annual" ? 649 : 59) : p.price,
+            p.recurring ? (s.billing === "annual" ? aboPricing.annual : aboPricing.monthly) : p.price,
           );
           q("#ec-period").textContent = p.recurring
             ? s.billing === "annual"
@@ -3830,8 +3830,8 @@
           q("#ec-total").textContent = money(a.total);
           q("#ec-paynote").textContent = p.recurring
             ? s.billing === "annual"
-              ? "649 zł / rok + dodatki jednorazowe."
-              : "12 × 59 zł + dodatki jednorazowe."
+              ? "590 zł / rok promocyjnie + dodatki rozłożone na raty."
+              : "12 × 69 zł + dodatki rozłożone na raty."
             : a.host
               ? "Projekt, dodatki i wybrane usługi roczne płatne z góry."
               : p.hosting === "year"
@@ -3876,11 +3876,11 @@
             '"><span>' + label + '</span><span>' + value + '</span></div>';
           const templateRow = p.recurring
             ? '<div class="ec-line ec-summary-template-line">' +
-                '<span>Szablon Mini Start</span>' +
+                '<span>Szablon Abo</span>' +
                 '<button type="button" class="ec-summary-template-name ' +
                   (s.templateId ? 'is-selected' : 'is-required') +
                   '" data-ec-summary-template-browse aria-label="' +
-                  (s.templateId ? 'Zmień wybrany szablon Mini Start' : 'Wybierz szablon Mini Start') +
+                  (s.templateId ? 'Zmień wybrany szablon Abo' : 'Wybierz szablon Abo') +
                   '">' +
                   (s.templateId ? templateSelectionName(s.templateId) : 'Wybierz szablon') +
                 '</button>' +
@@ -3905,7 +3905,7 @@
             : '';
           const detailsHeading = '<h3>' + (directSummaryMode ? 'Co wybrano — ' : 'Twoja konfiguracja: ') + p.name + '</h3>';
           // Podsumowanie po „Wybieram pakiet”: najpierw pełne „Co wybrano”
-          // (w tym klikalny wybór szablonu Mini Start), następnie niewielki
+          // (w tym klikalny wybór szablonu Abo), następnie niewielki
           // link do konfiguratora i na końcu blok rozliczenia.
           // Standardowe podsumowanie zachowuje swoją dotychczasową strukturę.
           q("#ec-summary").innerHTML = (directSummaryMode
@@ -3927,7 +3927,7 @@
             fields.append(pane);
             return pane;
           });
-          // Rozliczenie abonamentu Mini Start jest teraz w kroku 1, pod dodatkami.
+          // Rozliczenie abonamentu Abo jest teraz w kroku 1, pod dodatkami.
           // Pozostałe pakiety mają tę sekcję ukrytą przez fill().
           wizardPanes[0].append(sections[0], sections[1]);
           wizardPanes[1].append(sections[2], sections[3]);
@@ -3954,13 +3954,13 @@
           extras.append(extrasTitle,toggles);
           bundle.append(extras);
 
-          // Osobny pierwszy krok Mini Start, pozostałe cztery panele bez zmian.
+          // Osobny pierwszy krok Abo, pozostałe cztery panele bez zmian.
           const templatePane=document.createElement("div");
           templatePane.id="ec-mini-template-pane";
           templatePane.className="ec-pane ec-template-pane";
           templatePane.dataset.ecStep="template";
           fields.insertBefore(templatePane,wizardPanes[0]);
-          // Wybór z galerii dostępny tylko dla Mini Start, w pierwszym kroku.
+          // Wybór z galerii dostępny tylko dla Abo, w pierwszym kroku.
           const templateSection=document.createElement("section");
           templateSection.className="ec-section ec-template-section";
           templateSection.id="ec-template-section";
@@ -3968,7 +3968,7 @@
           templateSection.innerHTML=
             '<h3>Wybierz szablon swojej strony</h3>'+
             '<p class="ec-muted">Zobacz cztery propozycje i krótkie opisy. Kliknij podgląd, aby obejrzeć wszystkie pięć sekcji strony. Wybór szablonu nie zmienia ceny.</p>'+
-            '<div class="ec-template-select-options" id="ec-template-options" role="group" aria-label="Wybór szablonu Mini Start"></div>'+
+            '<div class="ec-template-select-options" id="ec-template-options" role="group" aria-label="Wybór szablonu Abo"></div>'+
             '<div class="ec-template-select-footer"><span id="ec-template-selected"></span></div>';
           templatePane.append(templateSection);
 
@@ -4041,11 +4041,11 @@
           q("#ec-back").textContent="← Wstecz";
           q("#ec-footer-note").textContent=last
             ? "Podgląd wyceny. Formularz demonstracyjny."
-            : mini?"Mini Start: abonament na 24 miesiące.":"Strona i dodatki jednorazowo; usługi roczne płatne z góry.";
+            : mini?"Abo: abonament na 24 miesiące.":"Strona i dodatki jednorazowo; usługi roczne płatne z góry.";
           q("#ec-config .ec-fields").scrollTop=0;
           if(last)summary(baseChoice);
         }
-        // Galeria Mini Start w podsumowaniu jest częścią trybu wyboru pakietu.
+        // Galeria Abo w podsumowaniu jest częścią trybu wyboru pakietu.
         // Nie przełączamy kroków po wybraniu szablonu z tej galerii.
         q("#ec-summary").addEventListener("click",event=>{
           const configure=event.target.closest("#ec-direct-summary-configure");
@@ -4101,7 +4101,7 @@
         });
         q("#ec-config").addEventListener("change", (event) => {
           update();
-          // Natychmiastowe odświeżenie podpisu po wyborze szablonu Mini Start.
+          // Natychmiastowe odświeżenie podpisu po wyborze szablonu Abo.
           if (event.target.closest("#ec-template-options")) {
             const id=states.mini.templateId;
             q("#ec-template-selected").textContent=id
@@ -4157,8 +4157,8 @@
             const n = (name || '').toLocaleLowerCase('pl-PL');
             if (n.includes('wizytówk')) return 'wiz';
             if (n.includes('one page')) return 'one';
-            if (n.includes('strona firmowa')) return 'firm';
-            if (n.includes('mini start')) return 'mini';
+            if (n.includes('strona firmowa') || n.includes('firmowy')) return 'firm';
+            if (n.includes('mini start') || n.startsWith('abo')) return 'mini';
             if (n.includes('start')) return 'start';
             return null;
           };
@@ -4311,7 +4311,7 @@
           const lines = [
             "ZAPYTANIE O STRONĘ — ENIVERSE",
             "Pakiet: " + p.name,
-            ...(p.recurring ? ["Szablon Mini Start: "+templateSelectionName(s.templateId)] : []),
+            ...(p.recurring ? ["Szablon Abo: "+templateSelectionName(s.templateId)] : []),
             "Zakres: " +
               p.structure +
               (p.chips.length ? " — " + p.chips.join(", ") : ""),
@@ -4395,7 +4395,7 @@
               templateLine.scrollIntoView({block:"center",behavior:"smooth"});
               browse?.focus({preventScroll:true});
             }
-            q("#ec-form-error").textContent="Pole wymagane: wybierz szablon Mini Start lub opcję „Szablon wybiorę później”.";
+            q("#ec-form-error").textContent="Pole wymagane: wybierz szablon Abo lub opcję „Szablon wybiorę później”.";
             q("#ec-form-error").hidden=false;
             q("#ec-mini-template-required").hidden=false;
             q("#ec-send-result").hidden=true;
@@ -4484,7 +4484,7 @@
           const a = calculate(),
             annual = billing === "annual",
             count = annual ? 2 : 24,
-            base = annual ? 64900 : 5900,
+            base = annual ? aboPricing.annual * 100 : aboPricing.monthly * 100,
             extraCents = Math.round(a.extra * 100),
             part = Math.floor(extraCents / count),
             lastPart = extraCents - part * (count - 1);
@@ -4494,7 +4494,7 @@
             regular: (base + part) / 100,
             last: (base + lastPart) / 100,
             extraPart: part / 100,
-            contract: (annual ? 1298 : 1416) + a.extra,
+            contract: (annual ? aboPricing.annual * 2 : aboPricing.monthly * 24) + a.extra,
           };
         }
         function miniSchedule(billing = states[current.id].billing) {
@@ -4548,7 +4548,7 @@
           q("#ec-base-label").textContent = b.annual
             ? "Baza / rok"
             : "Rata bazowa";
-          q("#ec-base-cost").textContent = money(b.annual ? 649 : 59);
+          q("#ec-base-cost").textContent = money(b.annual ? aboPricing.annual : aboPricing.monthly);
           q("#ec-extra").textContent = decimalMoney(b.extraPart);
           q("#ec-project-subtotal-label").textContent = b.annual ? "Pakiet + dodatki / rok" : "Pakiet + dodatki / mies.";
           q("#ec-project-subtotal").textContent = decimalMoney(b.regular);
@@ -4598,7 +4598,7 @@
               block = document.createElement("section");
             block.className = "ec-payment-summary";
             const h = document.createElement("h3");
-            h.textContent = "Łączna rata Mini Start z dodatkami";
+            h.textContent = "Łączna rata Abo z dodatkami";
             const line = document.createElement("p");
             line.id = "ec-mini-schedule";
             line.textContent = miniSchedule() + ".";
