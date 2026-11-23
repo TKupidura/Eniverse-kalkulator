@@ -2513,6 +2513,19 @@
         #eni-calc .ec-package[data-ec-plan="mini"] .ec-annual-promo-line del {font-size:15px;}
       }
 
+      /* Cena przekreślona w porównaniu płatności w konfiguratorze. */
+      #eni-calc .ec-mini-rate-variant .ec-abo-regular-price {
+        display:block;
+        margin-top:4px;
+        font-size:10px;
+        line-height:1.45;
+        color:#64717c;
+      }
+      #eni-calc .ec-mini-rate-variant .ec-abo-regular-price del {
+        color:#8e99a4;
+        text-decoration:line-through;
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -2522,7 +2535,7 @@
           <div class="ec-preview-heading">
             <div class="ec-kicker">Eniverse / Cennik i konfigurator</div>
             <h1 class="ec-page-title">Wybierz stronę dla swojej firmy.</h1>
-            <p class="ec-intro">Porównaj pakiety i dopasuj wycenę. Ceny i zakresy bazowe pochodzą z pliku źródłowego kalkulatora.</p>
+            <p class="ec-intro">Porównaj pakiety i skonfiguruj swoją stronę. Sprawdź promocyjny abonament Abo oraz pakiety z płatnością jednorazową.</p>
           </div>
           <div class="ec-packages-wide-scroll">
              <div class="ec-packages-overview">
@@ -2790,6 +2803,7 @@
                     <div class="ec-mini-rate-variant" id="ec-mini-annual-variant">
                       <span>Rocznie z góry</span>
                       <strong id="ec-mini-annual-price">590 zł</strong>
+                      <small class="ec-abo-regular-price"><del>790 zł</del> — regularna cena samego pakietu</small>
                     </div>
                   </div>
                   <p class="ec-muted ec-mini-rate-footnote" id="ec-mini-rate-footnote" hidden>Kwoty zawierają pakiet i wybrane dodatki.</p>
@@ -3952,6 +3966,7 @@
           const simpleRows = [
             ["Pakiet", p.name],
             ["Zakres", p.structure],
+            ...(p.recurring && s.billing==="annual" ? [["Promocja Abo", "590 zł/rok zamiast 790 zł/rok"]] : []),
             ["SEO", seoName(p,s.seo)],
             ["Dodatkowe usługi SEO", seoServices.filter(([key]) => s[key])
               .map(([,label]) => label).join(", ") || "Bez dodatkowych usług"],
@@ -4659,7 +4674,7 @@
           q("#ec-annual-rate").textContent =
             decimalMoney(annual.regular) + " / rok";
           q("#ec-annual-detail").textContent =
-            miniSchedule("annual") + " za pakiet i dodatki.";
+            miniSchedule("annual") + " za pakiet i dodatki. Promocja: 590 zł zamiast regularnych 790 zł rocznie za sam pakiet.";
           if (!a.items.length) q("#ec-items").textContent = "Brak dodatków.";
           q("#ec-items").setAttribute(
             "aria-label",
