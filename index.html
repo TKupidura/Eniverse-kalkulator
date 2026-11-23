@@ -2624,7 +2624,7 @@
                 </section>
                 <section class="ec-section" id="ec-billing-section">
                   <h3>Rozliczenie abonamentu</h3>
-                  <p class="ec-muted">Umowa na 24 miesiące.</p>
+                  <p class="ec-muted">Umowa na 12 miesięcy.</p>
                   <div class="ec-options" role="group" aria-label="Rozliczenie">
                     <label class="ec-option ec-interactive"
                       ><input
@@ -2635,7 +2635,7 @@
                       /><span
                         ><strong>Miesięcznie — tylko Abo</strong
                         ><small id="ec-monthly-detail"
-                          >24 raty za pakiet i dodatki</small
+                          >12 rat za pakiet i dodatki</small
                         ></span
                       ><span class="ec-tag" id="ec-monthly-rate"
                         >69 zł / mies.</span
@@ -3006,7 +3006,7 @@
               "Klient dostarcza gotowe treści, dopasowane do wybranego szablonu.",
             panel: false,
             rights: "Korzystanie ze strony w ramach abonamentu",
-            terms: "Umowa abonamentowa na 24 miesiące",
+            terms: "Umowa abonamentowa na 12 miesięcy",
             training: "Brak szkolenia",
             nav: false,
           },
@@ -3300,12 +3300,12 @@
           return `<article class="ec-package ${featured ? "ec-package--featured" : ""}" data-ec-plan="${p.id}" aria-labelledby="ec-plan-${p.id}">
             ${featured ? '<div class="ec-featured-badge">Wyróżniony pakiet</div>' : ''}
             <div class="ec-card-header"><span class="ec-kicker">${kicker}</span><h2 id="ec-plan-${p.id}">${p.name}</h2><p class="ec-card-description">${description}</p></div>
-            <div class="ec-card-budget">${price}${p.recurring ? '<p class="ec-mini-saving">Oszczędzasz 238 zł rocznie w porównaniu z płatnościami miesięcznymi.</p><p class="ec-muted ec-mini-small">Cena promocyjna obowiązuje za każdy rok umowy · hosting w cenie · umowa na 24 miesiące</p>' : '<p class="ec-muted">Jednorazowa opłata za wykonanie strony</p>'}</div>
+            <div class="ec-card-budget">${price}${p.recurring ? '<p class="ec-mini-saving">Oszczędzasz 238 zł rocznie w porównaniu z płatnościami miesięcznymi.</p><p class="ec-muted ec-mini-small">Cena promocyjna na cały 12-miesięczny okres umowy · hosting w cenie</p>' : '<p class="ec-muted">Jednorazowa opłata za wykonanie strony</p>'}</div>
             <div class="ec-project-scale">${projectIcon(p)}<h3>${scale}</h3><p>${scaleNote}</p>${starter ? '<button type="button" class="ec-template-launch ec-interactive" data-templates-open aria-haspopup="dialog">Przejrzyj szablony Abo <span aria-hidden="true">↗</span></button>' : ''}</div>
             <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul>${benefits}${originalPlan ? "" : cardRows(excluded)}</ul>
               <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary>${cardDetails(p)}</details>
             </div>
-            <dl class="ec-card-meta"><div><dt><span class="ec-meta-icon" aria-hidden="true">▢</span><span class="ec-dotted">Czas realizacji</span></dt><dd>${p.days ? `Do ${p.days} dni roboczych` : "Do zatwierdzenia"}</dd></div><div><dt><span class="ec-meta-icon" aria-hidden="true">♢</span><span class="ec-dotted">Rundy poprawek</span></dt><dd>${p.revisions ? p.revisions + " w cenie" : "Brak w cenie"}</dd></div>${p.recurring ? '<div><dt><span class="ec-meta-icon" aria-hidden="true">◷</span><span class="ec-dotted">Abonament</span></dt><dd>24 miesiące</dd></div>' : ''}</dl>
+            <dl class="ec-card-meta"><div><dt><span class="ec-meta-icon" aria-hidden="true">▢</span><span class="ec-dotted">Czas realizacji</span></dt><dd>${p.days ? `Do ${p.days} dni roboczych` : "Do zatwierdzenia"}</dd></div><div><dt><span class="ec-meta-icon" aria-hidden="true">♢</span><span class="ec-dotted">Rundy poprawek</span></dt><dd>${p.revisions ? p.revisions + " w cenie" : "Brak w cenie"}</dd></div>${p.recurring ? '<div><dt><span class="ec-meta-icon" aria-hidden="true">◷</span><span class="ec-dotted">Abonament</span></dt><dd>12 miesięcy</dd></div>' : ''}</dl>
             <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="${p.id}"><span>${p.id === "firm" ? "Wybieram Firmowy" : "Wybieram " + (p.id === "wiz" ? "Wizytówkę" : p.name)}</span><span aria-hidden="true">↗</span></button>
             <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="${p.id}">Skonfiguruj pakiet <span aria-hidden="true">⚙</span></button></div>
           </article>`;
@@ -3822,7 +3822,7 @@
             (includedCare || s.care ? 'checked ' : '') + (includedCare ? 'disabled ' : '') +
             '><span><strong>Opieka techniczna</strong><small>' +
             (includedCare ? 'W cenie przez pierwszy rok' :
-              p.recurring ? money(annualCare) + ' / rok · za 24 mies. w abonamencie' :
+              p.recurring ? money(annualCare) + ' / rok · za 12 mies. w abonamencie' :
               money(annualCare) + ' / rok') +
             '</small></span></label></div>' +
             '<p class="ec-note">Dwie niezależne usługi. W Abo hosting jest już częścią abonamentu.</p>';
@@ -3859,9 +3859,9 @@
           seoServices.forEach(([key,label,price]) => {
             if (s[key]) items.push([label, price]);
           });
-          // W Abo opieka jest opłacana za 2 lata w ramach abonamentu.
+          // W Abo opieka jest opłacana za 12 miesięcy w ramach abonamentu.
           if (p.recurring && s.care)
-            items.push(["Opieka techniczna na 24 miesiące", annualCare * 2]);
+            items.push(["Opieka techniczna na 12 miesięcy", annualCare]);
           const extra = items.reduce((sum,item) => sum + item[1], 0);
           const year = p.recurring ? (s.billing === "annual" ? aboPricing.annual : aboPricing.monthly * 12) : p.price;
           const host = p.hosting === "optional"
@@ -3869,12 +3869,12 @@
             : 0;
           const total = p.recurring
             ? s.billing === "annual"
-              ? aboPricing.annual + extra / 2
-              : ((aboPricing.monthly * 100 + Math.floor((extra * 100) / 24)) * 12) / 100
+              ? aboPricing.annual + extra
+              : aboPricing.monthly * 12 + extra
             : year + extra + host;
           return {
             items, extra, year, host, total,
-            contract: p.recurring ? (s.billing === "annual" ? aboPricing.annual * 2 : aboPricing.monthly * 24) + extra : null
+            contract: p.recurring ? (s.billing === "annual" ? aboPricing.annual : aboPricing.monthly * 12) + extra : null
           };
         }
         function read() {
@@ -3941,7 +3941,7 @@
                 ? "Hosting i opieka w cenie na pierwszy rok."
                 : "Hosting i opieka techniczna nie są doliczone.";
           q("#ec-contract").textContent = p.recurring
-            ? "Koszt umowy na 24 miesiące z dodatkami: " +
+            ? "Koszt umowy na 12 miesięcy z dodatkami: " +
               money(a.contract) +
               "."
             : p.hosting === "year"
@@ -3996,7 +3996,7 @@
           ).join("");
           const total = p.recurring ? a.contract : a.total;
           const totalBlock = '<div class="ec-summary-total">' +
-            row(p.recurring ? "Łącznie za 24 miesiące" : "Projekt i usługi łącznie",money(total)) +
+            row(p.recurring ? "Łącznie za 12 miesięcy" : "Projekt i usługi łącznie",money(total)) +
             (p.recurring ? row("Rata pakietu i dodatków",miniSchedule()) :
               row("Wartość projektu z dodatkami",money(project)) +
               (a.host ? row("Usługi roczne z góry",money(a.host)) : "")) +
@@ -4145,7 +4145,7 @@
           q("#ec-back").textContent="← Wstecz";
           q("#ec-footer-note").textContent=last
             ? "Podgląd wyceny. Formularz demonstracyjny."
-            : mini?"Abo: abonament na 24 miesiące.":"Strona i dodatki jednorazowo; usługi roczne płatne z góry.";
+            : mini?"Abo: abonament na 12 miesięcy.":"Strona i dodatki jednorazowo; usługi roczne płatne z góry.";
           q("#ec-config .ec-fields").scrollTop=0;
           if(last)summary(baseChoice);
         }
@@ -4332,7 +4332,7 @@
           const s = states[p.id];
           if (p.hosting === "year") return "Hosting i opieka w cenie na 1 rok";
           if (p.recurring)
-            return "Hosting w abonamencie" + (s.care ? "; opieka na 24 mies. w ratach" : "; bez dodatkowej opieki");
+            return "Hosting w abonamencie" + (s.care ? "; opieka na 12 mies. w ratach" : "; bez dodatkowej opieki");
           const parts = [];
           if(s.hosting) parts.push("Hosting: " + money(annualHosting) + "/rok");
           if(s.care) parts.push("Opieka: " + money(annualCare) + "/rok");
@@ -4459,7 +4459,7 @@
           if (p.recurring)
             lines.push(
               "Łączna płatność za pakiet i dodatki: " + miniSchedule(),
-              "Umowa: 24 miesiące",
+              "Umowa: 12 miesięcy",
               "Cała umowa z dodatkami: " + money(a.contract),
               "Dodatki są rozłożone na cały okres umowy; brak osobnej opłaty jednorazowej.",
             );
@@ -4587,7 +4587,7 @@
         function miniPlan(billing = states[current.id].billing) {
           const a = calculate(),
             annual = billing === "annual",
-            count = annual ? 2 : 24,
+            count = annual ? 1 : 12,
             base = annual ? aboPricing.annual * 100 : aboPricing.monthly * 100,
             extraCents = Math.round(a.extra * 100),
             part = Math.floor(extraCents / count),
@@ -4598,11 +4598,12 @@
             regular: (base + part) / 100,
             last: (base + lastPart) / 100,
             extraPart: part / 100,
-            contract: (annual ? aboPricing.annual * 2 : aboPricing.monthly * 24) + a.extra,
+            contract: (annual ? aboPricing.annual : aboPricing.monthly * 12) + a.extra,
           };
         }
         function miniSchedule(billing = states[current.id].billing) {
           const b = miniPlan(billing);
+          if (b.count === 1) return "1 płatność roczna w wysokości " + decimalMoney(b.regular);
           return b.regular === b.last
             ? b.count +
                 " " +
@@ -4711,7 +4712,7 @@
             note.textContent =
               "Dodatki: " +
               money(a.extra) +
-              " rozłożone na 24 miesiące. Bez dodatkowej płatności jednorazowej. Ostatnia płatność uwzględnia wyrównanie groszy, jeśli jest potrzebne.";
+              " rozłożone na 12 miesięcy. Bez dodatkowej płatności jednorazowej. Ostatnia płatność uwzględnia wyrównanie groszy, jeśli jest potrzebne.";
             block.append(h, line, note);
             // Najpierw suma i rata, bezpośrednio niżej szczegóły raty.
             const totalBox=q("#ec-summary .ec-summary-total");
