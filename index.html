@@ -2858,7 +2858,7 @@
                       /><span
                         ><strong>Rocznie z góry</strong
                         ><small id="ec-annual-detail"
-                          >2 płatności za pakiet i dodatki</small
+                          >1 płatność za pakiet i dodatki</small
                         ></span
                       ><span class="ec-tag" id="ec-annual-rate"
                         >590 zł / rok · promocja</span
@@ -4294,7 +4294,7 @@
           templateSection.innerHTML=
             '<h3>Wybierz szablon swojej strony</h3>'+
             '<p class="ec-muted">Wybierz projekt z biblioteki Eniverse i zobacz pełny podgląd. Wybór szablonu nie zmienia ceny pakietu.</p>'+
-            '<div class="ec-template-select-options" id="ec-template-options" role="group" aria-label="Wybór szablonu pakietu Abonament"></div>'+
+            '<div class="ec-template-select-options" id="ec-template-options" role="group" aria-label="Wybór szablonu strony"></div>'+
             '<div class="ec-template-select-footer"><span id="ec-template-selected"></span></div>';
           templatePane.append(templateSection);
 
@@ -4910,6 +4910,7 @@
           // przy próbie wysłania, nie przez blokadę przycisku.
           q("#ec-lead-form button[type='submit']").disabled=false;
           q("#ec-mini-template-required").hidden=true;
+          q("#ec-mini-template-required").textContent="Aby wysłać zapytanie dotyczące pakietu "+current.name+", wybierz szablon albo zaznacz opcję „Szablon wybiorę później” w galerii.";
           const templateLine=q("#ec-summary .ec-summary-template-line");
           if(templateLine && hasTemplateLibrary(current) && states[current.id].templateId){
             templateLine.classList.remove("is-invalid");
