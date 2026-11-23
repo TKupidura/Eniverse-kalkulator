@@ -2736,6 +2736,48 @@
         }
       }
 
+      /* Abonament: "Pełen zakres pakietu" otwiera się nad układem,
+         wyłącznie na szerokość środkowej kolumny. Nie rozciąga karty. */
+      #eni-calc .ec-packages-wide-scroll {
+        overflow-x:clip;
+        overflow-y:visible;
+      }
+      #eni-calc .ec-package-group--entry:has(.ec-card-details[open]) {
+        position:relative;
+        z-index:20;
+      }
+      #eni-calc .ec-packages-overview .ec-package.ec-package--abo:has(.ec-card-details[open]) {
+        z-index:21;
+      }
+      #eni-calc .ec-package.ec-package--abo .ec-features .ec-card-details {
+        position:relative;
+      }
+      #eni-calc .ec-package.ec-package--abo .ec-features .ec-card-details[open] > .ec-details-list {
+        position:absolute;
+        inset-inline:0;
+        top:calc(100% + 8px);
+        width:100%;
+        box-sizing:border-box;
+        z-index:25;
+        max-height:min(310px,48dvh);
+        overflow-y:auto;
+        overscroll-behavior:contain;
+        scrollbar-width:thin;
+        margin:0;
+        padding:12px 14px;
+        background:#fff;
+        border:1px solid #dce2e7;
+        border-radius:7px;
+        color:#16191c;
+        box-shadow:0 14px 28px rgba(20,26,32,.16);
+      }
+      @media (max-width:700px) {
+        #eni-calc .ec-package.ec-package--abo .ec-features .ec-card-details[open] > .ec-details-list {
+          max-height:min(270px,42dvh);
+          padding:11px 12px;
+        }
+      }
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -3477,7 +3519,7 @@
             [p.terms, true],
             ["Zaplanowanie nawigacji i ścieżek kontaktu", p.nav],
           ].filter(x => x[1]);
-          return `<ul class="ec-details-list">${cardRows(included)}</ul>`;
+          return `<ul class="ec-details-list"${p.id==="mini" ? ' tabindex="0" aria-label="Rozwinięty zakres pakietu Abonament"' : ''}>${cardRows(included)}</ul>`;
         }
         function hasTemplateLibrary(p) { return !!p && (p.id === "mini" || p.id === "start"); }
         function renderCard(p) {
@@ -3836,6 +3878,11 @@
         window.addEventListener("load", scheduleEqualizePackageHeights);
         if (document.fonts?.ready) document.fonts.ready.then(scheduleEqualizePackageHeights);
         // Dodatkowe zabezpieczenie: tylko jeden zakres jest otwarty naraz.
+        // Po kliknięciu poza rozwiniętą listą Abonament zamknij ją bez zmiany rozmiaru karty.
+        q("#ec-catalog").addEventListener("click", event => {
+          const details=q("#ec-entry-packages .ec-card-details");
+          if(details?.open && !details.contains(event.target)) details.open=false;
+        });
         q("#ec-catalog").addEventListener("toggle", event => {
           const opened = event.target;
           if (!opened.matches?.(".ec-card-details") || !opened.open) return;
