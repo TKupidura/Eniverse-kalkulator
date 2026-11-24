@@ -2917,7 +2917,8 @@
 #eni-calc #ec-catalog .ec-package .ec-features .ec-tick {position:absolute;left:2px;top:.5em;width:8px;height:5px;min-width:0;display:block;line-height:0;}
 #eni-calc #ec-catalog .ec-package .ec-features li:not(.ec-off) > .ec-tick::before {content:"";position:absolute;inset:0;width:8px;height:5px;border-left:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);}
 #eni-calc #ec-catalog .ec-package .ec-features li.ec-off {color:var(--ec-muted);}
-#eni-calc #ec-catalog .ec-package .ec-features li.ec-off > .ec-tick {width:9px;height:0;top:.72em;border-top:1.5px solid currentColor;font-size:0;}
+#eni-calc #ec-catalog .ec-package .ec-features li.ec-off > .ec-tick {left:0;top:0;width:14px;height:21px;border:0;font-size:0;line-height:0;}
+#eni-calc #ec-catalog .ec-package .ec-features li.ec-off > .ec-tick::before {content:"";position:absolute;left:2px;top:50%;width:10px;height:1.5px;background:currentColor;border:0;border-radius:1px;transform:translateY(-50%);}
 #eni-calc #ec-catalog .ec-package .ec-features .ec-card-details > summary {width:100%;display:flex;justify-content:space-between;min-height:35px;font-size:14px;line-height:1.5;padding:3px 0;color:inherit;}
 #eni-calc #ec-catalog .ec-package .ec-features .ec-card-details > .ec-details-list {padding-top:9px;margin-top:10px;border-top:1px solid var(--ec-line);}
 #eni-calc #ec-catalog .ec-package .ec-card-meta {display:grid;gap:4px;margin-bottom:17px;font-size:12px;line-height:1.5;padding-top:0;}
