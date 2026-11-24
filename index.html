@@ -2815,11 +2815,10 @@
       </div><!-- Koniec widoku demonstracyjnego. Elementor ukrywa ten widok, jeśli znajdzie istniejące karty .enp-card. -->
                 <!-- Wspólna galeria szablonów pakietów Abonament i Start. -->
         <div class="ec-template-overlay" id="ec-template-modal" hidden>
-          <section class="ec-template-dialog" role="dialog" aria-modal="true" aria-labelledby="ec-template-title" aria-describedby="ec-template-intro">
+          <section class="ec-template-dialog" role="dialog" aria-modal="true" aria-labelledby="ec-template-title">
             <header class="ec-template-header">
               <div><span class="ec-template-kicker">SZABLONY ENIVERSE</span>
                 <h2 id="ec-template-title">Zobacz, jak może wyglądać Twoja strona.</h2>
-                <p id="ec-template-intro">Cztery demonstracyjne strony z pięcioma sekcjami. Przewijaj podgląd strony, aby zobaczyć cały układ. Gotowe szablony Eniverse dodamy później.</p>
               </div>
               <button type="button" class="ec-template-close" id="ec-template-close" aria-label="Zamknij galerię">×</button>
             </header>
@@ -3739,13 +3738,6 @@
           q("#ec-template-gallery").innerHTML=templateSamples.map((t,i)=>
             '<button type="button" class="ec-template-choice" data-template-index="'+i+'" aria-pressed="'+(i===0)+'"><span class="ec-template-thumb">'+templateScene(t)+'</span><span class="ec-template-choice-label"><strong>'+escapeTemplateText(t.name)+'</strong><small>'+escapeTemplateText(t.type)+'</small></span></button>'
           ).join("");
-          q("#ec-template-intro").textContent=!templateSamples.length
-            ?"Aktualnie brak opublikowanych szablonów Eniverse. Możesz wybrać szablon później."
-            :live
-              ?"Przeglądaj projekty Eniverse. Opublikowane szablony mają link do pełnej strony; pozostałe pozycje to podglądy z ZIP-ów."
-              :bundled
-                ?""
-                :"Po aktywacji Eniverse Templates Manager lista będzie pobierana z WordPressa.";
           // Oznaczenie podglądu ustawiane osobno przez showTemplate().
           q("#ec-template-modal .ec-template-browser-bar span:last-child").textContent=live
             ?"Opublikowane szablony: pełny podgląd · pozostałe: grafika ZIP"
