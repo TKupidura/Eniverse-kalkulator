@@ -4183,13 +4183,11 @@
             ? (s.hosting ? annualHosting : 0) + (s.care ? annualCare : 0)
             : 0;
           const total = p.recurring
-            ? s.billing === "annual"
-              ? aboPricing.annual + extra
-              : aboPricing.monthly * 12 + extra
+            ? installmentPlan(extra, s.billing).contract
             : year + extra + host;
           return {
             items, extra, year, host, total,
-            contract: p.recurring ? (s.billing === "annual" ? aboPricing.annual : aboPricing.monthly * 12) + extra : null
+            contract: p.recurring ? total : null
           };
         }
         function read() {
@@ -4918,22 +4916,26 @@
           }),
         );
 
-        function miniPlan(billing = states[current.id].billing) {
-          const a = calculate(),
-            annual = billing === "annual",
+        function installmentPlan(extra, billing) {
+          const annual = billing === "annual",
             count = annual ? 1 : 12,
-            base = annual ? aboPricing.annual * 100 : aboPricing.monthly * 100,
-            extraCents = Math.round(a.extra * 100),
+            base = Math.round((annual ? aboPricing.annual : aboPricing.monthly) * 100),
+            extraCents = Math.round(extra * 100),
             part = Math.floor(extraCents / count),
-            lastPart = extraCents - part * (count - 1);
+            difference = extraCents - part * count,
+            // Wyrównanie ostatniej raty tylko wtedy, gdy różnica przekracza 1 zł.
+            lastPart = part + (difference > 100 ? difference : 0);
           return {
             annual,
             count,
             regular: (base + part) / 100,
             last: (base + lastPart) / 100,
             extraPart: part / 100,
-            contract: (annual ? aboPricing.annual : aboPricing.monthly * 12) + a.extra,
+            contract: ((base + part) * (count - 1) + base + lastPart) / 100,
           };
+        }
+        function miniPlan(billing = states[current.id].billing) {
+          return installmentPlan(calculate().extra, billing);
         }
         function miniSchedule(billing = states[current.id].billing) {
           const b = miniPlan(billing);
