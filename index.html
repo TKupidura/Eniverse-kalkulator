@@ -3224,6 +3224,27 @@
   #eni-calc #ec-demo-page {padding:32px 16px;}
 }
 
+
+/* Nagłówek cennika zgodny z referencją; zachowana szerokość 1200 px. */
+#eni-calc #ec-catalog .ec-preview-heading {
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,64px);
+  align-items:center;margin:0 0 34px;
+}
+#eni-calc #ec-catalog .ec-preview-heading .ec-page-title {
+  max-width:none;margin:0;font-size:clamp(34px,4vw,48px);font-weight:500;
+  line-height:1.18;letter-spacing:-.045em;color:var(--ec-ink);
+}
+#eni-calc #ec-catalog .ec-preview-heading .ec-page-title span {color:var(--ec-red);}
+#eni-calc #ec-catalog .ec-preview-heading .ec-intro {
+  max-width:none;margin:0;font-size:18px;line-height:1.65;font-weight:400;color:var(--ec-muted);
+}
+#eni-calc #ec-catalog .ec-preview-heading .ec-intro strong {font-weight:600;color:var(--ec-ink);}
+@media(max-width:767px) {
+  #eni-calc #ec-catalog .ec-preview-heading {grid-template-columns:1fr;gap:16px;margin-bottom:24px;}
+  #eni-calc #ec-catalog .ec-preview-heading .ec-page-title {font-size:clamp(30px,6vw,42px);}
+  #eni-calc #ec-catalog .ec-preview-heading .ec-intro {font-size:16px;}
+}
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -3231,9 +3252,8 @@
       <div class="ec-page ec-preview-page" id="ec-demo-page">
         <section id="ec-catalog" aria-label="Cennik Eniverse — podgląd">
           <div class="ec-preview-heading">
-            <div class="ec-kicker">Eniverse / Cennik i konfigurator</div>
-            <h1 class="ec-page-title">Wybierz stronę dla swojej firmy.</h1>
-            <p class="ec-intro">Porównaj pakiety i skonfiguruj swoją stronę. Sprawdź promocyjny pakiet Abonament oraz pakiety z płatnością jednorazową.</p>
+            <h1 class="ec-page-title">Strona dopasowana<br>do Twojego <span>biznesu.</span></h1>
+            <p class="ec-intro">Wybierz skalę strony, której potrzebuje Twoja firma. Zacznij od prostej strony w abonamencie lub wybierz <strong>szablon WordPress dopasowany do marki.</strong> Szczegółowy zakres projektów WordPress ustalamy w wycenie.</p>
           </div>
           <div class="ec-packages-wide-scroll">
              <div class="ec-packages-overview">
