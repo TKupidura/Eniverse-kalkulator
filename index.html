@@ -1530,7 +1530,6 @@
       #eni-calc .ec-template-preview-head { display:flex; justify-content:space-between; align-items:center; gap:14px; margin-bottom:13px; }
       #eni-calc #ec-template-kind { font-size:11px; color:#7a8790; }
       #eni-calc .ec-template-preview h3 { font-size:21px; font-weight:650; margin:4px 0 0; }
-      #eni-calc .ec-template-demo-badge { padding:7px 9px; font-size:10px; letter-spacing:.07em; font-weight:750; color:#61717e; border:1px solid #cfd7dd; border-radius:4px; white-space:nowrap; }
       #eni-calc .ec-template-browser { overflow:hidden; border:1px solid #d9e0e5; border-radius:7px; }
       #eni-calc .ec-template-browser-bar { padding:9px 14px; background:#e9edf0; color:#798690; font-size:11px; }
       #eni-calc #ec-template-description { margin:12px 0 0; color:#586674; font-size:13px; line-height:1.5; }
@@ -1816,7 +1815,6 @@
         #eni-calc .ec-template-preview { flex:1 1 auto; min-height:0; padding:8px; }
         #eni-calc .ec-template-preview-head { margin-bottom:5px; }
         #eni-calc .ec-template-preview h3 { font-size:16px; }
-        #eni-calc .ec-template-demo-badge { font-size:9px; padding:5px; }
         #eni-calc .ec-template-scene--full .ec-template-hero { min-height:290px; padding:15px; }
         #eni-calc .ec-template-scene--full .ec-template-headline { font-size:clamp(26px,6vw,43px); }
         #eni-calc .ec-template-scene--full .ec-template-art { min-height:150px; }
@@ -2834,7 +2832,7 @@
                 </button>
               </div>
               <div class="ec-template-preview">
-                <div class="ec-template-preview-head"><div><span id="ec-template-kind"></span><h3 id="ec-template-name"></h3></div><span class="ec-template-demo-badge">PODGLĄD DEMO</span></div>
+                <div class="ec-template-preview-head"><div><span id="ec-template-kind"></span><h3 id="ec-template-name"></h3></div></div>
                 <div class="ec-template-browser"><div class="ec-template-browser-bar"><span aria-hidden="true">● ● ●</span><span>Podgląd wszystkich 5 sekcji · przewiń stronę w dół ↓</span></div><div id="ec-template-viewport" tabindex="0" role="region" aria-label="Przewijany podgląd pięciu sekcji szablonu"></div></div>
                 <p id="ec-template-description"></p>
               </div>
@@ -3729,7 +3727,7 @@
           q("#ec-template-kind").textContent=t.type;
           q("#ec-template-name").textContent=t.name;
           q("#ec-template-description").textContent=t.details;
-          q("#ec-template-modal .ec-template-demo-badge").textContent=t.isRemote?"SZABLON ENIVERSE":t.isBundled?"Z PACZKI ZIP":"PODGLĄD DEMO";
+          
           all("#ec-template-gallery .ec-template-choice").forEach((button,i)=>{
             button.classList.toggle("is-active",i===index);
             button.setAttribute("aria-pressed",String(i===index));
