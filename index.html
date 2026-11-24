@@ -3145,6 +3145,34 @@
 #eni-calc #ec-abo-reference button:focus-visible {outline:3px solid var(--enp-red);outline-offset:4px;}
 #eni-calc #ec-abo-reference .enp-feature-list li {margin:0;}
 
+
+/* Ujednolicone przyciski pakietów i zakres bez separatora po rozwinięciu. */
+#eni-calc #ec-catalog .ec-package .ec-features .ec-card-details[open] > .ec-details-list {
+  border-top:0;
+  padding-top:0;
+  margin-top:9px;
+}
+#eni-calc #ec-abo-reference .enp-abo-details[open] {border-top-color:transparent;}
+#eni-calc #ec-catalog .ec-package .ec-card-actions,
+#eni-calc #ec-abo-reference .enp-abo-actions {
+  grid-template-columns:minmax(0,1fr);
+  grid-auto-rows:1fr;
+}
+#eni-calc #ec-catalog .ec-package .ec-card-actions .ec-action,
+#eni-calc #ec-catalog .ec-package .ec-card-actions .ec-configure,
+#eni-calc #ec-abo-reference .enp-abo-actions .enp-btn,
+#eni-calc #ec-abo-reference .enp-abo-actions .enp-btn-secondary {
+  box-sizing:border-box;
+  width:100%;
+  min-height:58px;
+  height:100%;
+  padding:13px 18px;
+  font-size:15px;
+  font-weight:500;
+  line-height:1.4;
+  gap:12px;
+}
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
