@@ -3675,7 +3675,7 @@
             templateSamples.map(t=>
               '<div class="ec-template-select-card">' +
                 '<label class="ec-template-select-option"><input type="radio" name="ec-template-choice" value="'+t.id+'" '+(selected===t.id?'checked ':'')+'>' +
-                '<span class="ec-template-select-dot ec-template-select-dot--'+t.id+'" aria-hidden="true">'+(t.isRemote&&templateHttpsUrl(t.thumbnail_url)?'<img src="'+escapeTemplateText(templateHttpsUrl(t.thumbnail_url))+'" alt="">':'')+'</span>'+
+                '<span class="ec-template-select-dot ec-template-select-dot--'+t.id+'" aria-hidden="true">'+(t.isBundled?'<img src="'+t.image+'" alt="">':t.isRemote&&templateHttpsUrl(t.thumbnail_url)?'<img src="'+escapeTemplateText(templateHttpsUrl(t.thumbnail_url))+'" alt="">':'')+'</span>'+
                 '<span class="ec-template-tile-text"><strong>'+escapeTemplateText(t.name)+'</strong><small>'+escapeTemplateText(t.type)+'</small>'+
                 '<span class="ec-template-select-description">'+escapeTemplateText(t.details)+'</span></span></label>' +
                 '<button class="ec-template-preview-action" type="button" data-template-preview="'+t.id+'" aria-label="Zobacz podgląd szablonu '+escapeTemplateText(t.name)+'">Zobacz podgląd</button>' +
