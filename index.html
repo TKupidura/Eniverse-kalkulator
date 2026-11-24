@@ -2836,7 +2836,52 @@
         #eni-calc .ec-aside .ec-total { font-size:29px; }
       }
 
-    </style>
+    
+      /* Kierunek wizualny z eniverse-cennik-abonament-final.html.
+         Tylko typografia, kolorystyka, obramowania i ikony; istniejąca siatka i logika zostają. */
+      #eni-calc { font-family:"DM Sans",sans-serif; --ec-ink:#101112; --ec-muted:#5f6973; --ec-line:#dce0e3; --ec-soft:#f7f8fa; }
+      #eni-calc .ec-preview-page { background:linear-gradient(#f7f8fa,#fff 900px); }
+      #eni-calc .ec-page-title { font-size:clamp(32px,4.1vw,48px); font-weight:500; letter-spacing:-.045em; line-height:1.15; }
+      #eni-calc .ec-preview-heading .ec-kicker { font-size:12px; font-weight:600; letter-spacing:.11em; }
+      #eni-calc .ec-preview-heading .ec-kicker::before { content:""; display:inline-block; width:7px; height:7px; margin-right:12px; border-radius:50%; background:#E20B0C; vertical-align:2px; }
+      #eni-calc .ec-packages-overview .ec-package { border-radius:8px; box-shadow:0 12px 38px #19212904; }
+      #eni-calc .ec-packages-overview .ec-package .ec-card-header h2 { font-size:29px; font-weight:500; letter-spacing:-.045em; line-height:1.15; }
+      #eni-calc .ec-packages-overview .ec-package.ec-package--abo .ec-card-header h2 { font-size:clamp(32px,3vw,41px); }
+      #eni-calc .ec-packages-overview .ec-package .ec-kicker { font-size:12px; font-weight:600; letter-spacing:.08em; line-height:1.6; }
+      #eni-calc .ec-packages-overview .ec-package .ec-card-description { font-size:15px; line-height:1.5; }
+      #eni-calc .ec-packages-overview .ec-card-price strong { font-size:clamp(35px,3.1vw,46px); font-weight:500; letter-spacing:-.055em; line-height:1.1; }
+      #eni-calc .ec-packages-overview .ec-package .ec-card-price span { font-size:14px; }
+      #eni-calc .ec-packages-overview .ec-package[data-ec-plan="mini"] .ec-mini-price strong { letter-spacing:-.055em; font-weight:500; }
+      #eni-calc .ec-packages-overview .ec-package .ec-section-label { font-size:11px; letter-spacing:.075em; font-weight:600; }
+      #eni-calc .ec-packages-overview .ec-package .ec-features li { font-size:14px; line-height:1.5; padding-block:3px; }
+      #eni-calc .ec-features .ec-tick { position:relative; display:inline-block; width:12px; min-width:12px; flex:0 0 12px; height:20px; }
+      #eni-calc .ec-features li:not(.ec-off) > .ec-tick::before { content:""; position:absolute; left:2px; top:7px; width:8px; height:5px; border-left:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:rotate(-45deg); }
+      #eni-calc .ec-card-meta .ec-meta-icon { width:14px; height:14px; flex:0 0 14px; }
+      #eni-calc .ec-packages-overview .ec-package .ec-card-meta dt { font-weight:400; }
+      #eni-calc .ec-packages-overview .ec-package .ec-card-meta dd { font-weight:500; }
+      #eni-calc .ec-project-page { gap:2px; padding:4px; border-color:#acb7c0; border-radius:3px; background:#fff; }
+      #eni-calc .ec-project-page i { flex:1; min-height:4px; background:#e7ecef; }
+      #eni-calc .ec-project-page i:first-child { background:#101112; }
+      #eni-calc .ec-project-tiles i { border-color:#b7c0c8; border-radius:2px; background:#f1f4f6; }
+      #eni-calc .ec-package--featured .ec-project-tiles i { border-color:#69757e; background:#30383e; }
+      #eni-calc .ec-package--featured .ec-project-tiles i.is-active { background:#E20B0C; border-color:#E20B0C; }
+      #eni-calc .ec-packages-overview .ec-package .ec-card-actions .ec-action { font-size:14px; font-weight:500; border-radius:4px; }
+      #eni-calc .ec-packages-overview .ec-package .ec-template-launch { font-size:13px; font-weight:500; border-radius:4px; }
+      #eni-calc .ec-packages-overview .ec-package .ec-card-details > summary { font-size:14px; font-weight:500; }
+      #eni-calc .ec-package .ec-features .ec-card-details > summary strong { font-weight:600; }
+      #eni-calc .ec-window, #eni-calc .ec-template-dialog { font-family:"DM Sans",sans-serif; border-radius:8px; }
+      #eni-calc .ec-window .ec-head h2, #eni-calc .ec-template-header h2 { letter-spacing:-.045em; font-weight:500; line-height:1.15; }
+      #eni-calc .ec-pane .ec-section h3 { font-weight:500; letter-spacing:-.025em; }
+      #eni-calc .ec-window .ec-action, #eni-calc .ec-template-configure { border-radius:4px; font-weight:500; }
+      #eni-calc .ec-window .ec-option { border-radius:4px; }
+      #eni-calc .ec-window .ec-option strong { font-weight:500; }
+      #eni-calc .ec-aside .ec-total { letter-spacing:-.055em; font-weight:500; }
+      @media(max-width:650px) {
+        #eni-calc .ec-packages-overview .ec-package .ec-card-header h2 { font-size:28px; }
+        #eni-calc .ec-packages-overview .ec-package .ec-card-description { font-size:14px; }
+      }
+
+</style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
     <div id="eni-calc" data-templates-api="https://eniverse.pl/wp-json/eniverse/v1/templates">
@@ -3545,7 +3590,7 @@
         function cardRows(rows) {
           // Najpierw świadczenia w cenie, dopiero po nich wyłączenia oznaczone minusem.
           return [...rows].sort((a, b) => Number(a[1] === false) - Number(b[1] === false))
-            .map((x) => `<li class="${x[1] === false ? "ec-off" : ""}"><span class="ec-tick" aria-hidden="true">${x[1] === false ? "−" : "✓"}</span><span>${x[0]}</span></li>`)
+            .map((x) => `<li class="${x[1] === false ? "ec-off" : ""}"><span class="ec-tick" aria-hidden="true">${x[1] === false ? "−" : ""}</span><span>${x[0]}</span></li>`)
             .join("");
         }
         function projectIcon(p) {
@@ -3589,7 +3634,7 @@
           ];
           const benefits = originalPlan
             ? cardRows(core)
-            : c.benefits.map(benefit => `<li><span class="ec-tick" aria-hidden="true">✓</span><span>${benefit}</span></li>`).join("");
+            : c.benefits.map(benefit => `<li><span class="ec-tick" aria-hidden="true"></span><span>${benefit}</span></li>`).join("");
           const excluded = [];
           if (starter) excluded.push(["Panel administracyjny WordPress", false]);
           if (p.id === "start") excluded.push(["Szkolenie na żywo", false]);
@@ -3611,7 +3656,7 @@
               <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary>${cardDetails(p)}</details>
             </div>
             ${starter ? '</div><div class="ec-abo-side">' : ''}
-            <dl class="ec-card-meta"><div><dt><span class="ec-meta-icon" aria-hidden="true">▢</span><span class="ec-dotted">Czas realizacji</span></dt><dd>${p.days ? `Do ${p.days} dni roboczych` : "Do zatwierdzenia"}</dd></div><div><dt><span class="ec-meta-icon" aria-hidden="true">♢</span><span class="ec-dotted">Rundy poprawek</span></dt><dd>${p.revisions ? p.revisions + " w cenie" : "Brak w cenie"}</dd></div>${p.recurring ? '<div><dt><span class="ec-meta-icon" aria-hidden="true">◷</span><span class="ec-dotted">Abonament</span></dt><dd>12 miesięcy</dd></div>' : ''}</dl>
+            <dl class="ec-card-meta"><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><span class="ec-dotted">Czas realizacji</span></dt><dd>${p.days ? `Do ${p.days} dni roboczych` : "Do zatwierdzenia"}</dd></div><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></svg><span class="ec-dotted">Rundy poprawek</span></dt><dd>${p.revisions ? p.revisions + " w cenie" : "Brak w cenie"}</dd></div>${p.recurring ? '<div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="ec-dotted">Abonament</span></dt><dd>12 miesięcy</dd></div>' : ''}</dl>
             <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="${p.id}"><span>${p.id === "firm" ? "Wybieram Firmowy" : "Wybieram " + (p.id === "wiz" ? "Wizytówkę" : p.name)}</span><span aria-hidden="true">↗</span></button>
             <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="${p.id}">Skonfiguruj pakiet</button></div>
             ${starter ? '</div>' : ''}
