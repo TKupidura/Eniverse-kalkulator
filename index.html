@@ -1,5 +1,6 @@
 <!-- Eniverse — kalkulator HTML/CSS/JS. Wersja Elementor; źródłem ofert i cen jest eniverse-cennik.html od użytkownika. -->
 <!-- Ten fragment działa też jako samodzielny plik .html; nie wklejaj go jako pełnego dokumentu <html>. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap">
 <style>
 
       #eni-calc {
@@ -2881,6 +2882,107 @@
         #eni-calc .ec-packages-overview .ec-package .ec-card-description { font-size:14px; }
       }
 
+
+/* Referencja eniverse-cennik-abonament-final.html: parametry enp-card, enp-abonament (stone),
+   abo-compact-options, enp-price, enp-features, enp-meta, enp-btn.
+   Zachowana siatka 1+4 i funkcje kalkulatora. */
+#eni-calc #ec-catalog {font:400 17px/1.65 "DM Sans",sans-serif; --ec-red:#dd0429; --ec-ink:#101112; --ec-muted:#5f6973; --ec-line:#dce0e3; --ec-soft:#f7f8fa;}
+#eni-calc #ec-catalog .ec-package {font:inherit; color:var(--ec-ink); padding:24px; border:1px solid var(--ec-line);border-radius:8px;background:#fff;box-shadow:0 12px 38px #19212904;min-width:0;}
+#eni-calc #ec-catalog .ec-packages--main {gap:20px;}
+#eni-calc #ec-catalog .ec-package--featured {background:#101112;color:#fff;border-color:#101112;--ec-muted:#c6cbd0;--ec-line:#42464a;box-shadow:0 16px 40px #11111115;}
+#eni-calc #ec-catalog .ec-featured-badge {right:18px;top:-14px;font-size:11px;line-height:1.45;font-weight:600;padding:6px 9px;border-radius:4px;background:#dd0429;}
+#eni-calc #ec-catalog .ec-package .ec-card-header h2 {font-size:29px;font-weight:500;letter-spacing:-.045em;line-height:1.15;margin:10px 0 0;color:inherit;}
+#eni-calc #ec-catalog .ec-package .ec-kicker {display:block;font-size:12px;line-height:1.6;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ec-muted);}
+#eni-calc #ec-catalog .ec-package .ec-card-description {font-size:15px;line-height:1.5;color:var(--ec-muted);margin-top:10px;min-height:68px;}
+#eni-calc #ec-catalog .ec-package .ec-card-budget {margin-top:16px;padding-bottom:16px;border-bottom:1px solid var(--ec-line);}
+#eni-calc #ec-catalog .ec-package .ec-card-price {display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;line-height:1.1;letter-spacing:-.02em;}
+#eni-calc #ec-catalog .ec-package .ec-card-price strong {font-size:46px;line-height:1.1;letter-spacing:-.055em;font-weight:500;white-space:nowrap;}
+#eni-calc #ec-catalog .ec-package .ec-card-price span {font-size:14px;letter-spacing:0;white-space:nowrap;}
+#eni-calc #ec-catalog .ec-package .ec-card-budget .ec-muted {font-size:13px;color:var(--ec-muted);margin-top:8px;}
+#eni-calc #ec-catalog .ec-package .ec-project-scale {padding:14px 0;margin-bottom:15px;border-top:0;border-bottom:1px solid var(--ec-line);}
+#eni-calc #ec-catalog .ec-package .ec-project-scale h3 {font-size:18px;font-weight:500;letter-spacing:-.02em;line-height:1.4;margin:0 0 5px;color:inherit;}
+#eni-calc #ec-catalog .ec-package .ec-project-scale p {font-size:13px;line-height:1.5;color:var(--ec-muted);min-height:39px;}
+#eni-calc #ec-catalog .ec-project-page {display:flex;flex-direction:column;gap:2px;width:54px;height:46px;border:1px solid #acb7c0;border-radius:3px;background:#fff;padding:4px;margin:0 0 8px;}
+#eni-calc #ec-catalog .ec-project-page i {display:block;flex:1;min-height:4px;background:#e7ecef;border-radius:1px;}
+#eni-calc #ec-catalog .ec-project-page i:first-child {background:#101112;}
+#eni-calc #ec-catalog .ec-project-tiles {width:174px;max-width:100%;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;align-content:center;min-height:46px;margin:0 0 8px;}
+#eni-calc #ec-catalog .ec-project-tiles i {display:block;width:auto;height:12px;border:1px solid #b7c0c8;border-radius:2px;background:#f1f4f6;}
+#eni-calc #ec-catalog .ec-project-tiles i.is-active {background:#101112;border-color:#101112;}
+#eni-calc #ec-catalog .ec-package--featured .ec-project-tiles i {border-color:#69757e;background:#30383e;}
+#eni-calc #ec-catalog .ec-package--featured .ec-project-tiles i.is-active {background:#dd0429;border-color:#dd0429;}
+#eni-calc #ec-catalog .ec-package .ec-features {flex:1 0 auto;border-top:0;padding-top:0;padding-bottom:17px;}
+#eni-calc #ec-catalog .ec-package .ec-section-label {font-size:11px;letter-spacing:.075em;text-transform:uppercase;font-weight:600;color:var(--ec-muted);margin-bottom:9px;}
+#eni-calc #ec-catalog .ec-package .ec-features ul {list-style:none;display:grid;gap:6px;font-size:14px;line-height:1.5;margin:0;padding:0;}
+#eni-calc #ec-catalog .ec-package .ec-features li {position:relative;display:block;padding:0 0 0 20px;font-size:14px;line-height:1.5;}
+#eni-calc #ec-catalog .ec-package .ec-features .ec-tick {position:absolute;left:2px;top:.5em;width:8px;height:5px;min-width:0;display:block;line-height:0;}
+#eni-calc #ec-catalog .ec-package .ec-features li:not(.ec-off) > .ec-tick::before {content:"";position:absolute;inset:0;width:8px;height:5px;border-left:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);}
+#eni-calc #ec-catalog .ec-package .ec-features li.ec-off {color:var(--ec-muted);}
+#eni-calc #ec-catalog .ec-package .ec-features li.ec-off > .ec-tick {width:9px;height:0;top:.72em;border-top:1.5px solid currentColor;font-size:0;}
+#eni-calc #ec-catalog .ec-package .ec-features .ec-card-details > summary {width:100%;display:flex;justify-content:space-between;min-height:35px;font-size:14px;line-height:1.5;padding:3px 0;color:inherit;}
+#eni-calc #ec-catalog .ec-package .ec-features .ec-card-details > .ec-details-list {padding-top:9px;margin-top:10px;border-top:1px solid var(--ec-line);}
+#eni-calc #ec-catalog .ec-package .ec-card-meta {display:grid;gap:4px;margin-bottom:17px;font-size:12px;line-height:1.5;padding-top:0;}
+#eni-calc #ec-catalog .ec-package .ec-card-meta > div {display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;font-size:12px;line-height:1.5;margin:0;}
+#eni-calc #ec-catalog .ec-package .ec-card-meta dt {display:flex;align-items:center;gap:6px;color:var(--ec-muted);font-weight:400;white-space:nowrap;}
+#eni-calc #ec-catalog .ec-package .ec-card-meta dd {text-align:right;font-weight:500;white-space:normal;}
+#eni-calc #ec-catalog .ec-package .ec-meta-icon {display:block;flex:none;width:14px;height:14px;}
+#eni-calc #ec-catalog .ec-package .ec-card-actions {display:grid;gap:10px;padding-top:0;}
+#eni-calc #ec-catalog .ec-package .ec-card-actions .ec-action {width:100%;height:auto;min-height:68px;display:inline-flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 18px;background:#101112;border:1px solid #101112;border-radius:4px;color:#fff;font-size:15px;line-height:1.4;font-weight:500;text-align:left;transition:background .18s,color .18s,border-color .18s;}
+#eni-calc #ec-catalog .ec-package .ec-card-actions .ec-action span[aria-hidden] {font-size:20px;line-height:1;flex:none;}
+#eni-calc #ec-catalog .ec-package:not(.ec-package--featured) .ec-card-actions .ec-choose:hover {background:#dd0429;border-color:#dd0429;color:#fff;}
+#eni-calc #ec-catalog .ec-package .ec-card-actions .ec-configure {min-height:48px;background:#fff;color:#101112;border-color:#c8ced3;}
+#eni-calc #ec-catalog .ec-package .ec-card-actions .ec-configure:hover {background:#f4f6f8;border-color:#101112;color:#101112;}
+#eni-calc #ec-catalog .ec-package--featured .ec-card-actions .ec-configure {background:transparent;color:#fff;border-color:#818b95;}
+#eni-calc #ec-catalog .ec-package--featured .ec-card-actions .ec-configure:hover {background:#373f47;border-color:#f5f6f7;color:#fff;}
+#eni-calc #ec-catalog .ec-package .ec-template-launch {width:100%;display:inline-flex;align-items:center;justify-content:space-between;gap:9px;font-size:13px;font-weight:600;color:#dd0429;margin-top:14px;line-height:1.45;min-height:42px;padding:10px 14px;border:1px solid #dd0429;border-radius:5px;background:#fff;max-width:100%;transition:background .18s,color .18s,border-color .18s;}
+#eni-calc #ec-catalog .ec-package .ec-template-launch:hover {background:#dd0429;color:#fff;}
+/* Poziomy wariant abo-v1, paleta stone, kompaktowe kafelki miesięczny/roczny. */
+#eni-calc #ec-catalog .ec-package.ec-package--abo {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:stretch;padding:24px;border:0;background:#eef1f3;--ec-line:#cbd2d8;--ec-muted:#515e68;--ec-soft:#e3e8ec;min-height:0;}
+#eni-calc #ec-catalog .ec-package--abo > .ec-abo-intro {grid-column:1;grid-row:1;display:block;padding:0;border:0;}
+#eni-calc #ec-catalog .ec-package--abo > .ec-abo-details {grid-column:2;grid-row:1;padding:0 0 0 24px;border:0;border-left:1px solid var(--ec-line);}
+#eni-calc #ec-catalog .ec-package--abo > .ec-abo-side {grid-column:3;grid-row:1;padding:0 0 0 24px;border:0;border-left:1px solid var(--ec-line);gap:18px;}
+#eni-calc #ec-catalog .ec-package--abo .ec-card-header,#eni-calc #ec-catalog .ec-package--abo .ec-card-description {min-height:0;}
+#eni-calc #ec-catalog .ec-package--abo .ec-card-budget {margin-top:18px;padding:0;border:0;}
+#eni-calc #ec-catalog .ec-package--abo .ec-project-scale {padding:0;border:0;margin:0;min-height:0;gap:3px 12px;}
+#eni-calc #ec-catalog .ec-package--abo .ec-project-scale p {min-height:0;}
+#eni-calc #ec-catalog .ec-package--abo .ec-project-page {margin:0;}
+#eni-calc #ec-catalog .ec-package--abo .ec-features {margin-top:12px;padding:0;border:0;min-height:0;}
+#eni-calc #ec-catalog .ec-package--abo .ec-card-meta {margin:0;gap:9px;padding-top:3px;}
+#eni-calc #ec-catalog .ec-package--abo .ec-card-actions .ec-choose {min-height:54px;}
+#eni-calc #ec-catalog .ec-package--abo .ec-card-actions .ec-configure {min-height:48px;}
+#eni-calc #ec-catalog .ec-package--abo .ec-features .ec-card-details[open] > .ec-details-list {position:absolute;inset-inline:0;top:calc(100% + 8px);padding:12px 14px;background:#fff;border:1px solid var(--ec-line);border-radius:6px;margin:0;box-shadow:0 8px 28px #10111226;}
+#eni-calc #ec-catalog .ec-abo-reference-prices {display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1.25fr);gap:7px;align-items:stretch;container-type:inline-size;}
+#eni-calc #ec-catalog .ec-abo-reference-option {background:#fff;border:1px solid var(--ec-line);border-radius:4px;padding:10px;min-width:0;display:flex;flex-direction:column;align-items:flex-start;}
+#eni-calc #ec-catalog .ec-abo-reference-year {border-color:#dd04296b;}
+#eni-calc #ec-catalog .ec-abo-reference-label {font-size:10px;line-height:1.6;letter-spacing:.045em;font-weight:600;text-transform:uppercase;color:var(--ec-muted);margin-bottom:6px;}
+#eni-calc #ec-catalog .ec-abo-reference-year .ec-abo-reference-label,#eni-calc #ec-catalog .ec-abo-reference-year .ec-abo-reference-amount strong {color:#E20B0C;}
+#eni-calc #ec-catalog .ec-abo-reference-amount {display:flex;align-items:baseline;flex-wrap:nowrap;gap:3px;line-height:1.1;}
+#eni-calc #ec-catalog .ec-abo-reference-amount strong {font-size:clamp(23px,10cqi,40px);font-weight:500;letter-spacing:-.06em;line-height:1.1;}
+#eni-calc #ec-catalog .ec-abo-reference-amount del {font-size:clamp(10px,3.8cqi,16px);line-height:1.2;font-weight:400;color:#7a858f;white-space:nowrap;text-decoration-thickness:1px;letter-spacing:-.025em;}
+#eni-calc #ec-catalog .ec-abo-reference-unit {font-size:12px;line-height:1.45;margin-top:4px;}
+#eni-calc #ec-catalog .ec-abo-reference-or {font-size:14px;line-height:1;color:var(--ec-muted);font-weight:500;align-self:center;justify-self:center;}
+#eni-calc #ec-catalog .ec-abo-reference-promo {font-size:10px;letter-spacing:.045em;margin-top:5px;color:#E20B0C;font-weight:600;}
+#eni-calc #ec-catalog .ec-package--abo .ec-mini-saving {font-size:13px;line-height:1.5;color:var(--ec-muted);margin-top:10px;}
+#eni-calc #ec-catalog .ec-package--abo .ec-mini-small {font-size:13px;line-height:1.5;color:var(--ec-muted);margin-top:8px;}
+@media(min-width:900px) and (max-width:1100px) {
+ #eni-calc #ec-catalog .ec-package.ec-package--abo {padding:22px 18px;gap:16px;}
+ #eni-calc #ec-catalog .ec-package--abo > .ec-abo-details,#eni-calc #ec-catalog .ec-package--abo > .ec-abo-side {padding-left:16px;}
+ #eni-calc #ec-catalog .ec-abo-reference-option {padding:8px;}
+}
+@media(max-width:899px) {
+ #eni-calc #ec-catalog .ec-package.ec-package--abo {grid-template-columns:1fr 1fr;gap:20px;}
+ #eni-calc #ec-catalog .ec-package--abo > .ec-abo-side {grid-column:1/-1;grid-row:2;border-left:0;border-top:1px solid var(--ec-line);padding:18px 0 0;display:grid;grid-template-columns:1fr 1fr;align-items:end;}
+}
+@media(max-width:580px) {
+ #eni-calc #ec-catalog .ec-package.ec-package--abo {display:flex;flex-direction:column;gap:20px;padding:24px;}
+ #eni-calc #ec-catalog .ec-package--abo > .ec-abo-details,#eni-calc #ec-catalog .ec-package--abo > .ec-abo-side {border-left:0;border-top:1px solid var(--ec-line);padding:18px 0 0;display:flex;flex-direction:column;align-items:stretch;}
+ #eni-calc #ec-catalog .ec-package--abo > .ec-abo-details {display:block;}
+ #eni-calc #ec-catalog .ec-package .ec-card-actions .ec-action {min-height:48px;}
+}
+@media(max-width:359px) {
+ #eni-calc #ec-catalog .ec-package {padding:20px;}
+ #eni-calc #ec-catalog .ec-abo-reference-option {padding:8px;}
+}
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -3599,7 +3701,7 @@
             const n = parseInt(p.structure.match(/\d+/)?.[0] || "0", 10);
             return `<div class="ec-project-tiles ${p.id === "wiz" ? "ec-project-tiles--single" : ""}" aria-hidden="true">${Array.from({length:n},(_,i)=>`<i class="${i===0?'is-active':''}"></i>`).join('')}</div>`;
           }
-          return `<div class="ec-project-page" aria-hidden="true"><i></i><i></i><i></i><i></i></div>`;
+          return `<div class="ec-project-page" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>`;
         }
         function cardDetails(p) {
           // Uzupełnienie głównej listy i metadanych karty, bez powielania świadczeń.
@@ -3643,8 +3745,8 @@
           const scale = originalPlan ? p.structure : c.scale;
           const scaleNote = originalPlan ? (p.chips.length ? p.chips.join(", ") : "") : c.scaleNote;
           const price = p.recurring
-            ? `<div class="ec-mini-prices"><div class="ec-mini-price"><strong>${aboPricing.monthly}</strong><span>zł / mies.</span></div><span class="ec-mini-or">lub</span><div class="ec-mini-price ec-mini-price--annual"><div class="ec-annual-promo-line"><strong>${aboPricing.annual}</strong><del aria-label="Cena regularna ${aboPricing.regularAnnual} zł">${aboPricing.regularAnnual} zł</del></div><span>zł / rok <em class="ec-annual-promo-label">PROMOCJA</em></span></div></div>`
-            : `<div class="ec-card-price"><small></small><strong>${money(p.price).replace(" zł", "")}</strong><span>zł</span></div>`;
+            ? `<div class="ec-abo-reference-prices"><div class="ec-abo-reference-option"><span class="ec-abo-reference-label">Miesięcznie</span><div class="ec-abo-reference-amount"><strong>${aboPricing.monthly}</strong></div><span class="ec-abo-reference-unit">zł netto / mies.</span></div><span class="ec-abo-reference-or">lub</span><div class="ec-abo-reference-option ec-abo-reference-year"><span class="ec-abo-reference-label">Rocznie</span><div class="ec-abo-reference-amount"><strong>${aboPricing.annual}</strong><del aria-label="Cena regularna ${aboPricing.regularAnnual} zł">${aboPricing.regularAnnual} zł</del></div><span class="ec-abo-reference-unit">zł netto / rok</span><span class="ec-abo-reference-promo">PROMOCJA</span></div></div>`
+            : `<div class="ec-card-price"><strong>${money(p.price).replace(" zł", "")}</strong><span>zł</span></div>`;
           return `<article class="ec-package ${featured ? "ec-package--featured" : ""} ${starter ? "ec-package--abo" : ""}" data-ec-plan="${p.id}" aria-labelledby="ec-plan-${p.id}">
             ${featured ? '<div class="ec-featured-badge">Wyróżniony pakiet</div>' : ''}
             ${starter ? '<div class="ec-abo-intro">' : ''}
@@ -3658,7 +3760,7 @@
             ${starter ? '</div><div class="ec-abo-side">' : ''}
             <dl class="ec-card-meta"><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><span class="ec-dotted">Czas realizacji</span></dt><dd>${p.days ? `Do ${p.days} dni roboczych` : "Do zatwierdzenia"}</dd></div><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></svg><span class="ec-dotted">Rundy poprawek</span></dt><dd>${p.revisions ? p.revisions + " w cenie" : "Brak w cenie"}</dd></div>${p.recurring ? '<div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="ec-dotted">Abonament</span></dt><dd>12 miesięcy</dd></div>' : ''}</dl>
             <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="${p.id}"><span>${p.id === "firm" ? "Wybieram Firmowy" : "Wybieram " + (p.id === "wiz" ? "Wizytówkę" : p.name)}</span><span aria-hidden="true">↗</span></button>
-            <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="${p.id}">Skonfiguruj pakiet</button></div>
+            <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="${p.id}"><span>Skonfiguruj pakiet</span><span aria-hidden="true">↗</span></button></div>
             ${starter ? '</div>' : ''}
           </article>`;
         }
