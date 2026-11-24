@@ -3206,6 +3206,24 @@
 #eni-calc #ec-catalog .ec-package:has(.ec-meta-tip:hover,.ec-meta-tip:focus-within),
 #eni-calc #ec-abo-reference:has(.ec-meta-tip:hover,.ec-meta-tip:focus-within) {position:relative;z-index:30;}
 
+
+/* Kontener cennika 1200 px; gradient dokładnie z pliku referencyjnego. */
+#eni-calc #ec-demo-page {
+  width:100%;
+  max-width:none;
+  padding:54px 20px;
+  background:linear-gradient(#f7f8fa,#fff 900px);
+}
+#eni-calc #ec-demo-page > #ec-catalog {
+  width:100%;
+  max-width:1200px;
+  margin-inline:auto;
+  min-width:0;
+}
+@media(max-width:650px) {
+  #eni-calc #ec-demo-page {padding:32px 16px;}
+}
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
