@@ -2787,7 +2787,23 @@
       @media(max-width:650px){
         #eni-calc .ec-template-bundled-frame { height:54dvh; min-height:300px; }
       }
-</style>
+
+      /* Abonament — wybór rozliczenia w kolumnie wyceny, od wyboru szablonu. */
+      #eni-calc .ec-aside #ec-billing-section { padding:0 0 14px; margin:12px 0 0; border-bottom:1px solid var(--ec-line); }
+      #eni-calc .ec-aside #ec-billing-section[hidden], #eni-calc #ec-mini-rate-comparison[hidden] { display:none!important; }
+      #eni-calc .ec-aside #ec-billing-section h3 { font-size:14px; margin:0 0 4px; }
+      #eni-calc .ec-aside #ec-billing-section .ec-options { grid-template-columns:1fr; gap:8px; margin-top:9px; }
+      #eni-calc .ec-aside #ec-billing-section .ec-option { display:grid; grid-template-columns:16px minmax(0,1fr); gap:4px 8px; padding:10px; background:#fff; cursor:pointer; align-items:start; }
+      #eni-calc .ec-aside #ec-billing-section .ec-option:has(input:checked) { border-color:var(--ec-red); background:#fff7f8; }
+      #eni-calc .ec-aside #ec-billing-section .ec-option input { grid-column:1; grid-row:1; margin-top:3px; }
+      #eni-calc .ec-aside #ec-billing-section .ec-option > span:not(.ec-tag) { grid-column:2; min-width:0; }
+      #eni-calc .ec-aside #ec-billing-section .ec-option strong { font-size:13px; }
+      #eni-calc .ec-aside #ec-billing-section .ec-option small { font-size:10px; line-height:1.4; white-space:normal; }
+      #eni-calc .ec-aside #ec-billing-section .ec-tag { grid-column:2; margin:0; font-size:16px; font-weight:650; color:var(--ec-ink); white-space:normal; }
+      #eni-calc .ec-aside #ec-billing-section .ec-billing-promo { grid-column:2; color:var(--ec-muted); }
+      #eni-calc .ec-aside #ec-billing-section .ec-billing-promo del { color:#84909a; }
+
+    </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
     <div id="eni-calc" data-templates-api="https://eniverse.pl/wp-json/eniverse/v1/templates">
@@ -2893,7 +2909,7 @@
                         value="monthly"
                         checked
                       /><span
-                        ><strong>Miesięcznie — tylko Abonament</strong
+                        ><strong>Miesięcznie</strong
                         ><small id="ec-monthly-detail"
                           >12 rat za pakiet i dodatki</small
                         ></span
@@ -2912,7 +2928,7 @@
                         ></span
                       ><span class="ec-tag" id="ec-annual-rate"
                         >590 zł / rok · promocja</span
-                      ></label
+                      ><small class="ec-billing-promo">Cena promocyjna pakietu: <del>790 zł</del> 590 zł / rok</small></label
                     >
                   </div>
                 </section>
@@ -4326,9 +4342,10 @@
             fields.append(pane);
             return pane;
           });
-          // Rozliczenie pakietu Abonament jest teraz w kroku 1, pod dodatkami.
-          // Pozostałe pakiety mają tę sekcję ukrytą przez fill().
-          wizardPanes[0].append(sections[0], sections[1]);
+          // Rozliczenie pakietu Abonament w prawej kolumnie; pozostałe pakiety ukrywa fill().
+          wizardPanes[0].append(sections[0]);
+          // Jeden wybór rozliczenia, dostępny od pierwszego kroku w prawej kolumnie.
+          q("#ec-config .ec-aside > [aria-live]").before(sections[1]);
           wizardPanes[1].append(sections[2], sections[3]);
           wizardPanes[2].append(sections[4], sections[5]);
           // Szkolenia przeniesione z kroku 3 do kroku 4, za hostingiem i opieką.
@@ -4921,7 +4938,7 @@
           const mini = current.recurring;
           q("#ec-base").hidden = mini;
           q("#ec-period").hidden = mini;
-          q("#ec-mini-rate-comparison").hidden = !mini;
+          q("#ec-mini-rate-comparison").hidden = true;
           q("#ec-mini-rate-footnote").hidden = !mini;
           q("#ec-total-label").hidden = mini;
           q("#ec-total").hidden = mini;
@@ -4971,7 +4988,7 @@
           q("#ec-annual-rate").textContent =
             decimalMoney(annual.regular) + " / rok";
           q("#ec-annual-detail").textContent =
-            miniSchedule("annual") + " za pakiet i dodatki. Promocja: 590 zł zamiast regularnych 790 zł rocznie za sam pakiet.";
+            miniSchedule("annual") + " za pakiet i dodatki.";
           if (!a.items.length) q("#ec-items").textContent = "Brak dodatków.";
           q("#ec-items").setAttribute(
             "aria-label",
