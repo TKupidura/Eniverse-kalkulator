@@ -7,7 +7,7 @@ Katalog zawiera siedem niezależnych, samodzielnych stron HTML przygotowanych z 
 - `restauracja.html` — Półmisek
 - `fachowcy.html` — OBWÓD
 - `salon-spa.html` — Otulina
-- `nieruchomosci.html` — Mosiężna 14
+- `trener-personalny.html` — Morawa · Trener personalny
 - `agent-nieruchomosci.html` — Ida Rolewska
 
 Strona główna `../index.html` używa tych projektów w galerii Abonament i Start oraz w kroku wyboru szablonu. Podglądy otwierają się wewnątrz ramki i w nowej karcie. Zdjęcia wbudowane w dema są zoptymalizowane; edytowalne oryginały pozostają w źródłowych ZIP-ach. Aby udostępnić publiczny link, włącz GitHub Pages dla gałęzi `main` z katalogu głównego (`/`).
