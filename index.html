@@ -3535,7 +3535,7 @@
             description: "Dla małej działalności, która potrzebuje strony WordPress do samodzielnej edycji.",
             scale: "Strona z szablonu · do 5 sekcji",
             scaleNote: "Np. Hero, O nas, Oferta, Opinie i Kontakt.",
-            benefits: ["WordPress i edycja własnych treści", "Dopasowanie szablonu do marki", "Wprowadzenie dostarczonych treści", "Instrukcja obsługi PDF"],
+            benefits: ["WordPress i panel do samodzielnej edycji tekstów i zdjęć", "Dopasowanie szablonu do marki", "Wprowadzenie dostarczonych treści", "Instrukcja obsługi PDF"],
             icon: "page",
           },
           one: { icon: "page" },
@@ -3557,24 +3557,17 @@
           return `<div class="ec-project-page" aria-hidden="true"><i></i><i></i><i></i><i></i></div>`;
         }
         function cardDetails(p) {
-          // Rozwijany zakres zawiera TYLKO funkcje dostępne w danym pakiecie.
-          // Nie pokazujemy nieobecnych funkcji ani ofert dopiero do dokupienia.
+          // Uzupełnienie głównej listy i metadanych karty, bez powielania świadczeń.
+          const entry = p.id === "mini" || p.id === "start";
           const included = [
-            ["Dostosowanie do urządzeń mobilnych", true],
-            [p.tech, true],
-            [p.design, true],
-            [p.content, true],
-            ["Panel administracyjny", p.panel],
-            ["Samodzielna edycja tekstów i zdjęć", p.panel],
+            ["Dostosowanie do urządzeń mobilnych", p.id === "start"],
+            ["Panel administracyjny — samodzielna edycja tekstów i zdjęć", !entry && p.panel],
             [p.rights, true],
-            [revisionText(p.revisions), p.revisions > 0],
-            [hostingText(p), p.hosting !== "optional"],
             ["Moduł bloga lub realizacji", p.blog],
             ["Konfiguracja Google Search Console", p.gsc],
-            [p.training, p.training !== "Brak szkolenia"],
-            [p.days ? `Realizacja: do ${p.days} dni roboczych od kompletu materiałów` : "Czas realizacji: do zatwierdzenia w wycenie", true],
-            [p.terms, true],
-            ["Zaplanowanie nawigacji i ścieżek kontaktu", p.nav],
+            [p.training, !entry && p.training !== "Brak szkolenia"],
+            ["Czas realizacji liczony od otrzymania kompletu materiałów", !!p.days],
+            ["Zaplanowanie nawigacji", p.nav],
           ].filter(x => x[1]);
           return `<ul class="ec-details-list"${p.id==="mini" ? ' tabindex="0" aria-label="Rozwinięty zakres pakietu Abonament"' : ''}>${cardRows(included)}</ul>`;
         }
