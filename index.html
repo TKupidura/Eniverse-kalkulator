@@ -3245,6 +3245,14 @@
   #eni-calc #ec-catalog .ec-preview-heading .ec-intro {font-size:16px;}
 }
 
+
+/* Niedostępne elementy Abonamentu: minus zamiast znacznika wyboru. */
+#eni-calc #ec-abo-reference .enp-feature-list li.enp-off {color:var(--enp-muted);}
+#eni-calc #ec-abo-reference .enp-feature-list li.enp-off::before {
+  content:"";position:absolute;left:2px;top:10.5px;width:10px;height:1.5px;
+  background:currentColor;border:0;border-radius:1px;transform:translateY(-50%);
+}
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -4035,7 +4043,7 @@
 <div class="enp-abo-scopecol">
 <div class="enp-abo-scale"><div aria-hidden="true" class="enp-scale-visual"><div class="enp-scale-map enp-scale-one"><i></i><i></i><i></i><i></i><i></i></div></div><div><p class="enp-scope">1 strona · do 5 sekcji</p><p class="enp-scope-note">Gotowy szablon HTML i CSS</p></div></div>
 <button type="button" class="enp-abo-template" data-templates-open data-template-plan="mini" aria-haspopup="dialog">Przejrzyj szablony pakietu Abonament <span aria-hidden="true">↗</span></button>
-<div class="enp-features"><h4 class="enp-group-title">Co zyskujesz</h4><ul class="enp-feature-list"><li>Gotowy wygląd i wersja mobilna</li><li>Hosting przez okres umowy</li><li>Strona z dostarczonymi materiałami</li></ul></div>
+<div class="enp-features"><h4 class="enp-group-title">Co zyskujesz</h4><ul class="enp-feature-list"><li>Gotowy wygląd i wersja mobilna</li><li>Hosting przez okres umowy</li><li>Strona z Twoimi gotowymi materiałami</li><li class="enp-off">Panel administracyjny WordPress</li><li class="enp-off">Samodzielna edycja treści</li><li class="enp-off">Przekazanie praw do szablonu</li></ul></div>
 </div>
 <div class="enp-abo-actioncol">
 <dl class="enp-meta">
