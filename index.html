@@ -2807,6 +2807,11 @@
       #eni-calc .ec-template-required { color:#c81020; font-size:13px; font-weight:600; margin:10px 0; padding:9px 12px; border:1px solid #efb8bd; border-radius:6px; background:#fff5f6; }
       #eni-calc .ec-template-required[hidden] { display:none!important; }
       #eni-calc #ec-template-options[aria-invalid="true"] .ec-template-select-option { border-color:#e8a2a9; }
+    
+      #eni-calc .ec-packages-overview .ec-mini-price--annual .ec-annual-promo-line > strong,
+      #eni-calc .ec-aside #ec-billing-section .ec-promo-price,
+      #eni-calc .ec-aside #ec-billing-section .ec-tag.ec-promo-price { color:#E20B0C; }
+      #eni-calc .ec-aside #ec-billing-section .ec-billing-promo .ec-promo-price { font-size:inherit; }
     </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -2932,7 +2937,7 @@
                         ></span
                       ><span class="ec-tag" id="ec-annual-rate"
                         >590 zł / rok · promocja</span
-                      ><small class="ec-billing-promo">Cena promocyjna pakietu: <del>790 zł</del> 590 zł / rok</small></label
+                      ><small class="ec-billing-promo">Cena promocyjna pakietu: <del>790 zł</del> <strong class="ec-promo-price">590 zł / rok</strong></small></label
                     >
                   </div>
                 </section>
@@ -5010,6 +5015,7 @@
             miniSchedule("monthly") + " za pakiet i dodatki.";
           q("#ec-annual-rate").textContent =
             decimalMoney(annual.regular) + " / rok";
+          q("#ec-annual-rate").classList.toggle("ec-promo-price", a.extra === 0);
           q("#ec-annual-detail").textContent =
             miniSchedule("annual") + " za pakiet i dodatki.";
           if (!a.items.length) q("#ec-items").textContent = "Brak dodatków.";
