@@ -4308,7 +4308,7 @@
           const total = p.recurring ? a.contract : a.total;
           const totalBlock = '<div class="ec-summary-total">' +
             row(p.recurring ? "Łącznie za 12 miesięcy" : "Projekt i usługi łącznie",money(total)) +
-            (p.recurring ? row("Rata pakietu i dodatków",miniSchedule()) :
+            (p.recurring ? row("Suma dodatków",money(a.extra)) + row("Rata pakietu i dodatków",miniSchedule()) :
               row("Wartość projektu z dodatkami",money(project)) +
               (a.host ? row("Usługi roczne z góry",money(a.host)) : "")) +
             '</div>';
@@ -5012,27 +5012,6 @@
         }
         function summary(baseChoice) {
           singlePaymentSummary(baseChoice);
-          if (current.recurring) {
-            const a = calculate(),
-              block = document.createElement("section");
-            block.className = "ec-payment-summary";
-            const h = document.createElement("h3");
-            h.textContent = "Łączna rata pakietu Abonament z dodatkami";
-            const line = document.createElement("p");
-            line.id = "ec-mini-schedule";
-            line.textContent = miniSchedule() + ".";
-            const note = document.createElement("p");
-            note.className = "ec-muted";
-            note.textContent =
-              "Dodatki: " +
-              money(a.extra) +
-              " rozłożone na 12 miesięcy. Bez dodatkowej płatności jednorazowej. Ostatnia płatność uwzględnia wyrównanie groszy, jeśli jest potrzebne.";
-            block.append(h, line, note);
-            // Najpierw suma i rata, bezpośrednio niżej szczegóły raty.
-            const totalBox=q("#ec-summary .ec-summary-total");
-            if(totalBox) totalBox.insertAdjacentElement("afterend",block);
-            else q("#ec-summary").append(block);
-          }
           q("#ec-quote-payload").value = quoteText();
           syncMiniTemplateSubmit();
         }
