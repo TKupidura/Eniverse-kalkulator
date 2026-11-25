@@ -1,18 +1,18 @@
 /** ENIVERSE — CENTRUM ZARZĄDZANIA OFERTĄ STRON INTERNETOWYCH
  * Ceny netto PLN; grosze z kropką. Nazwy są wyświetlane w kalkulatorze.
- * Każda pozycja listy ma unikalne id. Nie zmieniaj id, jeżeli tylko zmieniasz nazwę.
- * Dodaj lub usuń cały obiekt z listy, aby dodać lub usunąć pozycję.
- * Pakiety: skopiuj cały pakiet jednorazowy i nadaj nowe id. Abonament (mini)
- * ma specjalny układ i własne stawki platnosc; maksymalnie jeden abonament.
- * Pole wPakietach dodatku to lista id pakietów, które mają go w cenie.
+ * ID pakietu musi odpowiadać data-ec-plan w HTML. Nie zmieniaj ID przy zmianie nazwy.
+ * Nowy pakiet: dodaj obiekt oraz box HTML z tym samym ID; usuń obiekt, aby ukryć box.
+ * mini = specjalny abonament. Opisy marketingowe, ikony i wyróżnienie edytuj w HTML.
+ * Dodatki, marketing, uslugiRoczne: dodaj/usuń obiekt, aby dodać/usunąć opcję.
+ * dostepneWPakietach: opcjonalna lista ID pakietów, w których opcja jest dostępna.
+ * wPakietach: opcjonalna lista ID pakietów, w których opcja jest w cenie.
+ * Brak obu pól = płatna opcja dostępna wszędzie. Hosting/care zachowują reguły bazowe.
  * SEO, kontakt, szkolenia: warianty uporządkowane wg ceny, dopłata od bazy.
- * Rozbudowa: cztery nazwane mechanizmy (liczniki, języki, poprawki); usuń
- * właściwy klucz, aby ukryć mechanizm. Nowe zwykłe opcje dodawaj do dodatki.
- * hosting i care mają specjalne reguły świadczeń w cenie pakietu.
- * Nowa usługa roczna: dodaj obiekt z innym id do uslugiRoczne.
+ * Rozbudowa: cztery mechanizmy z własnymi kontrolkami. Usuń klucz, aby ukryć.
  * Po zmianie wyczyść cache. Szczegóły: INSTRUKCJA-WDROZENIA.md.
  */
 window.ENIVERSE_CENNIK = {
+  // 01. Pakiety — ID odpowiadają boxom HTML
   "pakiety": [
     {
       "id": "mini",
@@ -41,23 +41,12 @@ window.ENIVERSE_CENNIK = {
       "rights": "Korzystanie ze strony w ramach abonamentu",
       "terms": "Umowa abonamentowa",
       "nav": false,
-      "seo": "brak",
-      "kontakt": "podstawowy",
+      // 04. SEO — warianty
+  "seo": "brak",
+      // 06. Kontakt
+  "kontakt": "podstawowy",
       "szkolenie": "instrukcjaPDF",
-      "galeria": true,
-      "wyrozniony": false,
-      "karta": {
-        "kicker": "PROSTY START W INTERNECIE",
-        "description": "Dla osób, które chcą prostej strony bez dużej opłaty początkowej.",
-        "scale": "Strona w pakiecie Abonament · do 5 sekcji",
-        "scaleNote": "Gotowy szablon HTML i CSS.",
-        "benefits": [
-          "Gotowy wygląd i wersja mobilna",
-          "Hosting przez okres umowy",
-          "Strona z Twoimi gotowymi materiałami"
-        ],
-        "icon": "page"
-      }
+      "galeria": true
     },
     {
       "id": "start",
@@ -85,21 +74,7 @@ window.ENIVERSE_CENNIK = {
       "seo": "brak",
       "kontakt": "podstawowy",
       "szkolenie": "instrukcjaPDF",
-      "galeria": true,
-      "wyrozniony": false,
-      "karta": {
-        "kicker": "STRONA NA DOBRY POCZĄTEK",
-        "description": "Dla małej działalności, która potrzebuje strony WordPress do samodzielnej edycji.",
-        "scale": "Strona z szablonu · do 5 sekcji",
-        "scaleNote": "Np. Hero, O nas, Oferta, Opinie i Kontakt.",
-        "benefits": [
-          "WordPress i panel do samodzielnej edycji tekstów i zdjęć",
-          "Dopasowanie szablonu do marki",
-          "Wprowadzenie dostarczonych treści",
-          "Instrukcja obsługi PDF"
-        ],
-        "icon": "page"
-      }
+      "galeria": true
     },
     {
       "id": "one",
@@ -127,13 +102,7 @@ window.ENIVERSE_CENNIK = {
       "seo": "techniczne",
       "kontakt": "formularz",
       "szkolenie": "szkolenie30min",
-      "galeria": false,
-      "wyrozniony": false,
-      "karta": {
-        "icon": "page",
-        "kicker": "PROSTA OBECNOŚĆ W SIECI",
-        "description": "Dla freelancera i mikrofirmy. Przedstaw ofertę jasno, na jednej przewijanej stronie."
-      }
+      "galeria": false
     },
     {
       "id": "wiz",
@@ -155,13 +124,7 @@ window.ENIVERSE_CENNIK = {
       "seo": "podstawowe",
       "kontakt": "formularz",
       "szkolenie": "szkolenie1h",
-      "galeria": false,
-      "wyrozniony": true,
-      "karta": {
-        "icon": "pages",
-        "kicker": "WIĘCEJ MIEJSCA NA OFERTĘ",
-        "description": "Dla małej firmy, która potrzebuje kilku podstron na usługi, realizacje i kontakt."
-      }
+      "galeria": false
     },
     {
       "id": "firm",
@@ -183,15 +146,10 @@ window.ENIVERSE_CENNIK = {
       "seo": "rozszerzone",
       "kontakt": "formularz",
       "szkolenie": "szkolenie2h",
-      "galeria": false,
-      "wyrozniony": false,
-      "karta": {
-        "icon": "many",
-        "kicker": "PEŁNA PREZENTACJA FIRMY",
-        "description": "Dla firmy z rozbudowaną ofertą. Miejsce na usługi, realizacje i regularne publikacje."
-      }
+      "galeria": false
     }
   ],
+  // 02. Rozbudowa strony
   "rozbudowa": {
     "dodatkowaSekcja": {
       "nazwa": "Dodatkowe sekcje",
@@ -236,6 +194,7 @@ window.ENIVERSE_CENNIK = {
       "cena": 490
     }
   ],
+  // 03. Dodatki do projektu
   "dodatki": [
     {
       "id": "maps",
@@ -280,6 +239,7 @@ window.ENIVERSE_CENNIK = {
       "cena": 190
     }
   ],
+  // 05. Marketing i dodatkowe SEO
   "marketing": [
     {
       "id": "contentEdit",
@@ -326,6 +286,7 @@ window.ENIVERSE_CENNIK = {
       "cena": 190
     }
   ],
+  // 07. Szkolenia
   "szkolenia": [
     {
       "id": "instrukcjaPDF",
@@ -348,6 +309,7 @@ window.ENIVERSE_CENNIK = {
       "cena": 179
     }
   ],
+  // 08. Usługi roczne
   "uslugiRoczne": [
     {
       "id": "hosting",
@@ -360,12 +322,11 @@ window.ENIVERSE_CENNIK = {
       "cena": 348
     }
   ],
-
-  // Ustawienia rozliczeń — wspólne dla całego kalkulatora.
+  // 09. Ustawienia globalne rozliczeń
   ustawienia: {
-    okresAbonamentu: 12,
-    zaliczkaProcent: 50,
-    zaokraglanieRat: true,
-    progZaokraglania: 0.50
+    "okresAbonamentu": 12,
+    "zaliczkaProcent": 50,
+    "zaokraglanieRat": true,
+    "progZaokraglania": 0.5
   }
 };

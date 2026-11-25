@@ -24,17 +24,21 @@
           for(const k of ["pakiety","dodatki","marketing","uslugiRoczne"])list(k);
           for(const k of ["seo","kontakt","szkolenia"])list(k,true);
           for(const p of c.pakiety){
-            if(typeof p.structure!=="string" || !Array.isArray(p.chips) || !p.karta || !Number.isInteger(p.revisions) || p.revisions<0 || !["subscription","optional","year"].includes(p.hosting)) throw Error("Niepoprawny zakres pakietu: "+p.id);
+            if(typeof p.structure!=="string" || !Array.isArray(p.chips) || !Number.isInteger(p.revisions) || p.revisions<0 || !["subscription","optional","year"].includes(p.hosting)) throw Error("Niepoprawny zakres pakietu: "+p.id);
             if(p.recurring){
               const a=p.platnosc;
               if(p.id!=="mini" || !a || !priceOK(a.miesiecznie)||!Number.isInteger(a.miesiecznie)||!priceOK(a.roczniePromocja)||!priceOK(a.rocznieRegularna)||a.roczniePromocja>a.rocznieRegularna) throw Error("Niepoprawne stawki abonamentu");
             } else if(p.id==="mini")throw Error("Id mini jest zarezerwowane dla abonamentu");
           }
-          const reserved=new Set(["training","sections","pages","seo","contact","revisions","billing","hosting","care","languages","templateId"]);
+          const reserved=new Set(["training","sections","pages","seo","contact","revisions","billing","hosting","care","languages","templateId","annual"]);
           for(const x of [...c.dodatki,...c.marketing]){
             if(reserved.has(x.id)) throw Error("Powtórzone lub zarezerwowane id: "+x.id);
-            if(x.wPakietach!==undefined&&(!Array.isArray(x.wPakietach)||x.wPakietach.some(id=>!idOK(id))))throw Error("Niepoprawne wPakietach: "+x.id);
             reserved.add(x.id);
+          }
+          for(const x of [...c.dodatki,...c.marketing,...c.uslugiRoczne]){
+            for(const key of ["wPakietach","dostepneWPakietach"])
+              if(x[key]!==undefined&&(!Array.isArray(x[key])||x[key].some(id=>!idOK(id))))throw Error("Niepoprawne "+key+": "+x.id);
+            if(x.dostepneWPakietach&&x.wPakietach?.some(id=>!x.dostepneWPakietach.includes(id)))throw Error("Usługa w cenie musi być dostępna: "+x.id);
           }
           if(!c.rozbudowa || typeof c.rozbudowa!=="object") throw Error("Brak rozbudowy");
           for(const [key,x] of Object.entries(c.rozbudowa))if(!["dodatkowaSekcja","dodatkowaPodstrona","dodatkowyJezyk","dodatkowaRundaPoprawek"].includes(key)||!x||!nameOK(x.nazwa)||!priceOK(x.cena))throw Error("Niepoprawna rozbudowa: "+key+"; nowe usługi dodawaj do dodatki");
@@ -52,7 +56,10 @@
           root.innerHTML='<p role="alert" class="ec-pricing-error">Kalkulator jest chwilowo niedostępny. Skontaktuj się z nami w sprawie wyceny.</p>';
           return;
         }
-        if(!cennik.pakiety.length){
+        const cardElements=all("#ec-catalog [data-ec-plan]");
+        const cardIds=new Set(cardElements.map(c=>c.dataset.ecPlan));
+        const activePricing=cennik.pakiety.filter(p=>cardIds.has(p.id));
+        if(!activePricing.length){
           root.innerHTML='<p class="ec-pricing-error">Aktualnie brak dostępnych pakietów.</p>';
           return;
         }
@@ -81,7 +88,7 @@
         const trainingOptions=trainingConfig.map(x=>[x.nazwa,x.cena]);
         const abo=cennik.pakiety.find(p=>p.recurring)?.platnosc;
         const aboPricing={monthly:abo?.miesiecznie??0,annual:abo?.roczniePromocja??0,regularAnnual:abo?.rocznieRegularna??0};
-        const packages=cennik.pakiety.map(p=>({
+        const packages=activePricing.map(p=>({
           ...p,name:p.nazwa,price:p.recurring?aboPricing.monthly:p.cena,
           terms:p.recurring?p.terms+" na "+contractPeriod:p.terms,
           seo:indexOfVariant(seoConfig,p.seo),contact:indexOfVariant(contactConfig,p.kontakt),
@@ -89,7 +96,6 @@
           training:p.recurring?"Brak szkolenia":trainingOptions[indexOfVariant(trainingConfig,p.szkolenie)][0],
           includedAddons:Object.fromEntries(cennik.dodatki.map(x=>[x.id,(x.wPakietach||[]).includes(p.id)]))
         }));
-        const cardContent=Object.fromEntries(packages.map(p=>[p.id,p.karta]));
         // Wyświetlana nazwa SEO tylko w pakietach One Page i Wizytówka.
         // Ceny oraz zakres wariantów pozostają niezmienione.
         function seoName(p, index) {
@@ -101,16 +107,20 @@
         const hostingText = p => {
           const base=annualServices.filter(x=>annualIncluded(p,x.id));
           if(base.length) return base.map(x=>x.nazwa).join(" + ")+(p.recurring?" na okres abonamentu":" w cenie na pierwszy rok");
-          return annualServices.length?"Usługi roczne opcjonalne, płatne z góry":"";
+          return annualServices.some(x=>annualAvailable(p,x.id))?"Usługi roczne opcjonalne, płatne z góry":"";
         };
         // Ceny dodatków: stawki robocze netto, do potwierdzenia przed wdrożeniem.
         const extraServices=cennik.dodatki.map(x=>[x.id,x.nazwa,x.cena,Array.isArray(x.wPakietach)]);
         const seoServices=cennik.marketing.map(x=>[x.id,x.nazwa,x.cena,x.opis||""]);
+        const serviceConfigs=new Map([...cennik.dodatki,...cennik.marketing].map(x=>[x.id,x]));
+        const serviceIncluded=(p,id)=>!!serviceConfigs.get(id)?.wPakietach?.includes(p.id);
+        const serviceAvailable=(p,id)=>serviceIncluded(p,id)||!serviceConfigs.get(id)?.dostepneWPakietach||serviceConfigs.get(id).dostepneWPakietach.includes(p.id);
         const annualServices=cennik.uslugiRoczne;
         const annualHosting=annualServices.find(x=>x.id==="hosting")?.cena??0;
         const annualCare=annualServices.find(x=>x.id==="care")?.cena??0;
-        const annualIncluded=(p,id)=>id==="hosting"?p.hosting!=="optional":id==="care"&&p.hosting==="year";
-        const annualSelected=(p,st,id)=>annualIncluded(p,id)||!!st.annual[id];
+        const annualIncluded=(p,id)=>!!annualServices.find(x=>x.id===id)?.wPakietach?.includes(p.id)||(annualServices.some(x=>x.id===id)&&(id==="hosting"?p.hosting!=="optional":id==="care"&&p.hosting==="year"));
+        const annualAvailable=(p,id)=>annualIncluded(p,id)||!annualServices.find(x=>x.id===id)?.dostepneWPakietach||annualServices.find(x=>x.id===id).dostepneWPakietach.includes(p.id);
+        const annualSelected=(p,st,id)=>annualAvailable(p,id)&&(annualIncluded(p,id)||!!st.annual[id]);
         const annualExtras=(p,st)=>annualServices.filter(x=>annualSelected(p,st,x.id)&&!annualIncluded(p,x.id));
         const annualName=(id,fallback)=>annualServices.find(x=>x.id===id)?.nazwa||fallback;
         const expansion=cennik.rozbudowa;
@@ -174,101 +184,91 @@
             .map((x) => `<li class="${x[1] === false ? "ec-off" : ""}"><span class="ec-tick" aria-hidden="true">${x[1] === false ? "−" : ""}</span><span>${escapeTemplateText(x[0])}</span></li>`)
             .join("");
         }
-        function projectIcon(p) {
-          if (["pages","many"].includes(p.karta.icon)) {
-            // Diagram nie może sugerować liczby podstron ze starego cennika.
-            const n = parseInt(p.structure.match(/\d+/)?.[0] || "0", 10);
-            return `<div class="ec-project-tiles ${p.karta.icon === "pages" ? "ec-project-tiles--single" : ""}" aria-hidden="true">${Array.from({length:n},(_,i)=>`<i class="${i===0?'is-active':''}"></i>`).join('')}</div>`;
-          }
-          return `<div class="ec-project-page" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>`;
-        }
-        function cardDetails(p) {
-          // Uzupełnienie głównej listy i metadanych karty, bez powielania świadczeń.
-          const entry = p.id === "mini" || p.id === "start";
-          const included = [
-            ["Dostosowanie do urządzeń mobilnych", p.id === "start"],
-            ["Panel administracyjny — samodzielna edycja tekstów i zdjęć", !entry && p.panel],
-            [p.rights, true],
-            ...extraServices.filter(([, , ,included])=>included).map(([id,label])=>[label,!!p.includedAddons[id]]),
-            [p.training, !entry && p.training !== "Brak szkolenia"],
-            ["Czas realizacji liczony od otrzymania kompletu materiałów", !!p.days],
-            ["Zaplanowanie nawigacji", p.nav],
-          ].filter(x => x[1]);
-          return `<ul class="ec-details-list"${p.id==="mini" ? ' tabindex="0" aria-label="Rozwinięty zakres pakietu Abonament"' : ''}>${cardRows(included)}</ul>`;
-        }
+        // Struktura boxów znajduje się wyłącznie w HTML. JS uzupełnia pola i listy świadczeń.
         function hasTemplateLibrary(p) { return !!p && !!packages.find(x=>x.id===p.id)?.galeria; }
-        function renderCard(p) {
-          const c = cardContent[p.id], featured = !!p.wyrozniony, starter = p.recurring, templateEnabled = hasTemplateLibrary(p);
-          // Dla One Page / Wizytówka / Strona Firmowa widoczny zakres karty
-          // odpowiada 1:1 liście z pierwotnego eniverse-cennik.html.
-          const originalPlan = !Array.isArray(c.benefits);
-          const core = [
-            [p.structure + (p.chips.length ? " (" + p.chips.join(", ") + ")" : ""), true],
-            [p.tech, true],
-            ["Dostosowanie do urządzeń mobilnych", true],
-            ...(annualServices.length?[[hostingText(p),annualServices.some(x=>annualIncluded(p,x.id))]]:[]),
-            [p.design, true],
+        function cardCore(p) {
+          const annual=annualServices.filter(x=>annualAvailable(p,x.id));
+          return cardRows([
+            [p.structure+(p.chips.length?" ("+p.chips.join(", ")+")":""),true],
+            [p.tech,true],["Dostosowanie do urządzeń mobilnych",true],
+            ...(annual.length?[[hostingText(p),annual.some(x=>annualIncluded(p,x.id))]]:[]),
+            [p.design,true],
             ...(cennik.seo.length?[[seoName(p,p.seo),p.seo!==0]]:[]),
             ...(cennik.kontakt.length?[[contacts[p.contact][0],true]]:[]),
-            [revisionText(p.revisions), p.revisions !== 0],
-          ];
-          const benefits = originalPlan
-            ? cardRows(core)
-            : (c.benefits||[]).map(benefit => `<li><span class="ec-tick" aria-hidden="true"></span><span>${benefit}</span></li>`).join("");
-          const excluded = [];
-          if (starter) excluded.push(["Panel administracyjny WordPress", false]);
-          if (p.id === "start") excluded.push(["Szkolenie na żywo", false]);
-          const kicker = c.kicker;
-          const description = c.description;
-          const scale = originalPlan ? p.structure : (c.scale||p.structure);
-          const scaleNote = originalPlan ? (p.chips.length ? p.chips.join(", ") : "") : (c.scaleNote||"");
-          const price = p.recurring
-            ? `<div class="ec-abo-reference-prices"><div class="ec-abo-reference-option"><span class="ec-abo-reference-label">Miesięcznie</span><div class="ec-abo-reference-amount"><strong>${aboPricing.monthly}</strong></div><span class="ec-abo-reference-unit">zł netto / mies.</span></div><span class="ec-abo-reference-or">lub</span><div class="ec-abo-reference-option ec-abo-reference-year"><span class="ec-abo-reference-label">Rocznie</span><div class="ec-abo-reference-amount"><strong>${aboPricing.annual}</strong><del aria-label="Cena regularna ${aboPricing.regularAnnual} zł">${aboPricing.regularAnnual} zł</del></div><span class="ec-abo-reference-unit">zł netto / rok</span><span class="ec-abo-reference-promo">PROMOCJA</span></div></div>`
-            : `<div class="ec-card-price"><small>od</small><strong>${money(p.price).replace(" zł", "")}</strong><span>zł netto</span></div>`;
-          return `<article class="ec-package ${featured ? "ec-package--featured" : ""} ${starter ? "ec-package--abo" : ""}" data-ec-plan="${p.id}" aria-labelledby="ec-plan-${p.id}">
-            ${featured ? '<div class="ec-featured-badge">Dla rozwijających się firm</div>' : ''}
-            ${starter ? '<div class="ec-abo-intro">' : ''}
-            <div class="ec-card-header"><span class="ec-kicker">${kicker}</span><h2 id="ec-plan-${p.id}">${escapeTemplateText(p.name)}</h2><p class="ec-card-description">${description}</p></div>
-            <div class="ec-card-budget">${price}${p.recurring ? '<p class="ec-mini-saving">Oszczędzasz ' + money(aboPricing.monthly * 12 - aboPricing.annual) + ' rocznie w porównaniu z płatnościami miesięcznymi.</p><p class="ec-muted ec-mini-small">Cena promocyjna w pierwszym roku · hosting w cenie</p>' : '<p class="ec-muted">Realizacja na szablonie WordPress</p>'}</div>
-            ${starter ? '</div><div class="ec-abo-details">' : ''}
-            <div class="ec-project-scale">${projectIcon(p)}<h3>${scale}</h3><p>${scaleNote}</p>${templateEnabled ? `<button type="button" class="ec-template-launch ec-interactive" data-templates-open data-template-plan="${p.id}" aria-haspopup="dialog">${p.id==="start"&&p.name==="Start"?"Przejrzyj szablony Start":"Przejrzyj szablony pakietu "+escapeTemplateText(p.name)} <span aria-hidden="true">↗</span></button>` : ''}</div>
-            <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul>${benefits}${originalPlan ? "" : cardRows(excluded)}</ul>
-              <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary>${cardDetails(p)}</details>
-            </div>
-            ${starter ? '</div><div class="ec-abo-side">' : ''}
-            <dl class="ec-card-meta"><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-${p.id}">Czas realizacji</button><span id="ec-tip-time-${p.id}" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd>${p.days ? `Do ${p.days} dni roboczych` : "Do zatwierdzenia"}</dd></div><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-${p.id}">Rundy poprawek</button><span id="ec-tip-revisions-${p.id}" role="tooltip" class="ec-meta-tip-content">Jedna runda poprawek to jeden zbiorczy zestaw uwag do przedstawionej wersji strony. Liczba rund w cenie zależy od wybranego pakietu.</span></span></dt><dd>${p.revisions ? p.revisions + " w cenie" : "Brak w cenie"}</dd></div>${p.recurring ? '<div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="ec-dotted">Abonament</span></dt><dd>${contractPeriod}</dd></div>' : ''}</dl>
-            <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="${p.id}"><span>${p.id==="firm"&&p.name==="Strona firmowa"?"Wybieram stronę firmową":"Wybieram "+(p.id==="wiz"&&p.name==="Wizytówka"?"Wizytówkę":escapeTemplateText(p.name))}</span><span aria-hidden="true">↗</span></button>
-            <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="${p.id}"><span>Skonfiguruj pakiet</span><span aria-hidden="true">↗</span></button></div>
-            ${starter ? '</div>' : ''}
-          </article>`;
+            [revisionText(p.revisions),p.revisions!==0]
+          ]);
         }
-        const miniPackage=packages.find(p=>p.recurring);
-        q("#ec-entry-packages").innerHTML = miniPackage ? `<div id="ec-abo-reference" data-abo-palette="stone">
-<article aria-labelledby="enp-plan-abonament-1" class="enp-abonament abo-v1" data-ec-plan="mini">
-<div class="enp-abo-pricecol">
-<header><span class="enp-eyebrow">Prosty start w internecie</span><h3 id="enp-plan-abonament-1">${escapeTemplateText(miniPackage.name)}</h3><p class="enp-card-desc">Profesjonalna strona internetowa bez dużej inwestycji na start.</p></header>
-<div class="abo-price-view" data-price-view="b"><div class="abo-pay-options abo-compact-options"><div class="abo-pay-option"><span class="enp-eyebrow">Miesięcznie</span><p class="enp-price"><strong>${aboPricing.monthly}</strong></p><p class="enp-abo-unit">zł netto / mies.</p></div><div class="abo-pay-separator">lub</div><div class="abo-pay-option abo-pay-year"><span class="enp-eyebrow enp-red">Rocznie</span><p class="enp-price enp-red abo-year-price"><strong>${aboPricing.annual}</strong><del aria-label="Poprzednia cena: ${aboPricing.regularAnnual} zł netto za rok" class="abo-previous-price">${aboPricing.regularAnnual} zł</del></p><p class="enp-abo-unit">zł netto / rok</p></div></div></div>
-<p class="enp-price-note abo-hosting-note">Umowa na ${contractPeriod} · hosting w cenie</p>
-</div>
-<div class="enp-abo-scopecol">
-<div class="enp-abo-scale"><div aria-hidden="true" class="enp-scale-visual"><div class="enp-scale-map enp-scale-one"><i></i><i></i><i></i><i></i><i></i></div></div><div><p class="enp-scope">1 strona · do 5 sekcji</p><p class="enp-scope-note">Gotowy szablon HTML i CSS</p></div></div>
-${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templates-open data-template-plan="mini" aria-haspopup="dialog">Przejrzyj szablony pakietu ${escapeTemplateText(miniPackage.name)} <span aria-hidden="true">↗</span></button>`:""}
-<div class="enp-features"><h4 class="enp-group-title">Co zyskujesz</h4><ul class="enp-feature-list"><li>Gotowy wygląd i wersja mobilna</li><li>Hosting przez okres umowy</li><li>Strona z Twoimi gotowymi materiałami</li><li class="enp-off">Panel administracyjny WordPress</li><li class="enp-off">Samodzielna edycja treści</li><li class="enp-off">Przekazanie praw do szablonu</li></ul></div>
-</div>
-<div class="enp-abo-actioncol">
-<dl class="enp-meta">
-<div><dt><svg aria-hidden="true" class="enp-meta-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="5"></rect><path d="M7 3v4m10-4v4M3 11h18"></path></svg> <span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-mini">Czas realizacji</button><span id="ec-tip-time-mini" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd>Do 3 dni roboczych</dd></div>
-<div><dt><svg aria-hidden="true" class="enp-meta-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"></path></svg> <span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-mini">Rundy poprawek</button><span id="ec-tip-revisions-mini" role="tooltip" class="ec-meta-tip-content">Pakiet Abonament nie obejmuje rund poprawek w cenie. Jedna runda to jeden zbiorczy zestaw uwag do przedstawionej wersji strony.</span></span></dt><dd>Brak w cenie</dd></div>
-<div><dt><svg aria-hidden="true" class="enp-meta-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg> Okres umowy</dt><dd>${contractPeriod}</dd></div>
-</dl>
-<div class="enp-abo-actions"><button type="button" class="enp-btn" data-choose="mini">Wybieram ${miniPackage.name==="Abonament"?"abonament":escapeTemplateText(miniPackage.name)} <span aria-hidden="true">↗</span></button><button type="button" class="enp-btn enp-btn-outline enp-btn-secondary" data-configure="mini">Skonfiguruj pakiet <span aria-hidden="true">↗</span></button></div>
-</div>
-<details class="enp-abo-details" name="ec-card-scope"><summary>Pełen zakres i warunki pakietu</summary><div class="enp-disclosure-body"><ul><li>Realizacja na gotowym szablonie, na podstawie dostarczonych tekstów i zdjęć.</li><li>Hosting na infrastrukturze Eniverse w okresie obowiązywania umowy, bez skrzynek pocztowych.</li><li>Pakiet nie obejmuje CMS, przekazania plików ani praw do szablonu. Strona jest dostępna przez czas trwania umowy i nie jest przekazywana na własność.</li><li>Po zakończeniu umowy bez jej przedłużenia strona przestaje być dostępna. Promocyjna stawka roczna dotyczy pierwszych maksymalnie 12 miesięcy umowy; kolejne okresy według stawki regularnej.</li></ul></div></details>
-</article></div>` : "";
-        q("#ec-packages").innerHTML = packages.filter(p=>!p.recurring).map(renderCard).join("");
-        q(".ec-package-group--entry").hidden=!miniPackage;
-        q(".ec-package-group--main").hidden=!packages.some(p=>!p.recurring);
-        
+        function includedCardServices(p){
+          return [...extraServices,...seoServices].filter(([key])=>serviceIncluded(p,key)).map(([,label])=>[label,true]);
+        }
+        function cardDetailsRows(p){
+          const entry=p.id==="mini"||p.id==="start";
+          return cardRows([
+            ["Dostosowanie do urządzeń mobilnych",p.id==="start"],
+            ["Panel administracyjny — samodzielna edycja tekstów i zdjęć",!entry&&p.panel],
+            [p.rights,true],
+            ...includedCardServices(p),
+            ...(entry?annualServices.filter(x=>annualIncluded(p,x.id)).map(x=>[x.nazwa,true]):[]),
+            [p.training,!entry&&p.training!=="Brak szkolenia"],
+            ["Czas realizacji liczony od otrzymania kompletu materiałów",!!p.days],
+            ["Zaplanowanie nawigacji",p.nav]
+          ].filter(x=>x[1]));
+        }
+        function bindCards(){
+          const known=new Map(packages.map(p=>[p.id,p]));
+          const seen=new Set();
+          const setTextBeforeArrow=(el,value)=>{
+            if(el.firstChild?.nodeType===3)el.firstChild.nodeValue=value+" ";
+            else el.insertBefore(document.createTextNode(value+" "),el.firstChild);
+          };
+          cardElements.forEach(card=>{
+            const p=known.get(card.dataset.ecPlan);
+            card.hidden=!p||seen.has(card.dataset.ecPlan);
+            if(card.hidden)return;
+            seen.add(p.id);
+            const choose=p.id==="mini"&&p.name==="Abonament"?"Wybieram abonament":p.id==="firm"&&p.name==="Strona firmowa"?"Wybieram stronę firmową":"Wybieram "+(p.id==="wiz"&&p.name==="Wizytówka"?"Wizytówkę":p.name);
+            const fields={
+              name:p.name,price:money(p.price).replace(" zł",""),
+              monthly:String(aboPricing.monthly),annual:String(aboPricing.annual),
+              regularAnnual:money(aboPricing.regularAnnual),
+              days:p.days?"Do "+p.days+" dni roboczych":"Do zatwierdzenia",
+              revisions:p.revisions?p.revisions+" w cenie":"Brak w cenie",
+              structure:p.structure,chips:p.chips.join(", "),choose,
+              startScale:p.structure==="Strona główna do 5 sekcji"?"Strona z szablonu · do 5 sekcji":p.structure,
+              startScaleNote:p.chips.join("|")==="Hero|O nas|Oferta|Opinie|Kontakt"?"Np. Hero, O nas, Oferta, Opinie i Kontakt.":p.chips.join(", "),
+              startTraining:p.training==="Instrukcja PDF"?"Instrukcja obsługi PDF":p.training
+            };
+            card.querySelectorAll("[data-card-field]").forEach(el=>{
+              const key=el.dataset.cardField;
+              if(Object.hasOwn(fields,key))el.textContent=fields[key];
+              if(key==="regularAnnual")el.setAttribute("aria-label","Poprzednia cena: "+fields[key]+" netto za rok");
+            });
+            card.querySelectorAll("[data-card-gallery]").forEach(el=>{
+              el.hidden=!hasTemplateLibrary(p);
+              el.dataset.templatePlan=p.id;
+              setTextBeforeArrow(el,p.id==="start"&&p.name==="Start"?"Przejrzyj szablony Start":"Przejrzyj szablony pakietu "+p.name);
+            });
+            card.querySelectorAll("[data-choose]").forEach(el=>{
+              el.dataset.choose=p.id;
+              if(!el.querySelector("[data-card-field='choose']"))setTextBeforeArrow(el,choose);
+            });
+            card.querySelectorAll("[data-configure]").forEach(el=>el.dataset.configure=p.id);
+            card.querySelectorAll("[data-card-hosting]").forEach(el=>el.hidden=!annualServices.some(x=>x.id==="hosting"&&annualIncluded(p,x.id)));
+            card.querySelectorAll("[data-card-list]").forEach(el=>{
+              const kind=el.dataset.cardList;
+              if(kind==="core")el.innerHTML=cardCore(p);
+              if(kind==="details")el.innerHTML=cardDetailsRows(p);
+              if(kind==="miniExtras"){
+                el.innerHTML=cardRows([...includedCardServices(p),...annualServices.filter(x=>x.id!=="hosting"&&annualIncluded(p,x.id)).map(x=>[x.nazwa,true])]);
+                el.hidden=!el.children.length;
+              }
+            });
+          });
+          q(".ec-package-group--entry").hidden=!cardElements.some(c=>!c.hidden&&c.closest("#ec-entry-packages"));
+          q(".ec-package-group--main").hidden=!cardElements.some(c=>!c.hidden&&c.closest("#ec-packages"));
+        }
+        bindCards();
+
         // Poglądowe makiety: docelowe miniatury i projekty można podmienić tutaj.
         // Siedem projektów demonstracyjnych z ZIP-ów użytkownika. Grafiki są osadzone lokalnie
         // w kodzie kalkulatora, więc galeria działa również bez WordPress API.
@@ -552,7 +552,7 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
         function equalizePackageHeights() {
           const catalog = q("#ec-catalog");
           if (q("#ec-demo-page").hidden) return;
-          const cards = all("#ec-packages .ec-package");
+          const cards = all("#ec-packages .ec-package").filter(card=>!card.hidden);
           if (!cards.length) return;
           const opened = all("#ec-catalog .ec-card-details[open]");
           catalog.style.removeProperty("--ec-equal-card-height");
@@ -657,7 +657,7 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
           templateId: "",
           annual:{},
           ...Object.fromEntries(extraServices.map(([key,,,included])=>[key,!!(included&&p.includedAddons[key])])),
-          ...Object.fromEntries(seoServices.map(([key])=>[key,false])),
+          ...Object.fromEntries(seoServices.map(([key])=>[key,serviceIncluded(p,key)])),
         });
         const states = Object.fromEntries(
           packages.map((p) => [p.id, defaults(p)]),
@@ -736,16 +736,17 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
             (e) => (e.checked = e.value === s.billing),
           );
           optionGroup("#ec-seo", "ec-seo", seo.map((variant,i) => [seoName(p,i), variant[1], variant[2]]), p.seo, s.seo);
-          q("#ec-seo-extras").closest(".ec-seo-services").hidden=!seoServices.length;
+          const availableMarketing=seoServices.filter(([key])=>serviceAvailable(p,key));
+          q("#ec-seo-extras").closest(".ec-seo-services").hidden=!availableMarketing.length;
           q("#ec-seo").hidden=!cennik.seo.length;
-          q("#ec-seo").closest(".ec-section").hidden=!cennik.seo.length&&!seoServices.length;
+          q("#ec-seo").closest(".ec-section").hidden=!cennik.seo.length&&!availableMarketing.length;
           q("#ec-contact").closest(".ec-section").hidden=!cennik.kontakt.length;
-          q("#ec-seo-extras").innerHTML = seoServices.map(([key,label,price,description]) =>
+          q("#ec-seo-extras").innerHTML = availableMarketing.map(([key,label,price,description]) =>
             '<label class="ec-addon ec-seo-addon ec-interactive">' +
             '<span class="ec-addon-content"><strong>' + escapeTemplateText(label) + '</strong><small>' + escapeTemplateText(description) +
-            ' · +' + money(price) + '</small></span>' +
+            (serviceIncluded(p,key)?' · W cenie pakietu':' · +' + money(price)) + '</small></span>' +
             '<input class="ec-toggle" type="checkbox" role="switch" id="ec-seo-addon-' + key +
-            '" aria-label="' + escapeTemplateText(label) + '" ' + (s[key] ? 'checked ' : '') + '>' +
+            '" aria-label="' + escapeTemplateText(label) + '" ' + (s[key]||serviceIncluded(p,key) ? 'checked ' : '') + (serviceIncluded(p,key)?'disabled ':'') + '>' +
             '<span class="ec-toggle-track" aria-hidden="true"></span></label>'
           ).join("");
           optionGroup(
@@ -765,8 +766,9 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
             )
             .join("");
           // Dodatki po prawej stronie listy elementów objętych pakietem.
-          q("#ec-addons").parentElement.hidden=!extraServices.length;
-          q("#ec-addons").innerHTML = extraServices.map(([key,label,price,mayBeIncluded]) => {
+          const availableExtras=extraServices.filter(([key])=>serviceAvailable(p,key));
+          q("#ec-addons").parentElement.hidden=!availableExtras.length;
+          q("#ec-addons").innerHTML = availableExtras.map(([key,label,price,mayBeIncluded]) => {
             const included = mayBeIncluded && !!p.includedAddons[key];
             const checked = included || !!s[key];
             return '<label class="ec-addon ec-interactive"><span class="ec-addon-content"><strong>' +
@@ -776,8 +778,9 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
               '><span class="ec-toggle-track" aria-hidden="true"></span></label>';
           }).join("");
           renderLanguages();
-          q("#ec-hosting").closest(".ec-section").hidden=!annualServices.length;
-          q("#ec-hosting").innerHTML='<div class="ec-service-list">'+annualServices.map(x=>{
+          const availableAnnual=annualServices.filter(x=>annualAvailable(p,x.id));
+          q("#ec-hosting").closest(".ec-section").hidden=!availableAnnual.length;
+          q("#ec-hosting").innerHTML='<div class="ec-service-list">'+availableAnnual.map(x=>{
             const included=annualIncluded(p,x.id),checked=annualSelected(p,s,x.id);
             return '<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-annual-'+x.id+'" '+(checked?'checked ':'')+(included?'disabled ':'')+'><span><strong>'+escapeTemplateText(x.nazwa)+'</strong><small>'+(included?(p.hosting==="year"?"W cenie przez pierwszy rok":"W cenie pakietu"):money(x.cena)+" / rok"+(p.recurring?" · za okres umowy w abonamencie":""))+'</small></span></label>';
           }).join("")+'</div>';
@@ -815,11 +818,11 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
             items.push(["Zmiana szkolenia: " + trainingLabel(), trainingCharge()]);
           if(expansion.dodatkowyJezyk)(s.languages||[]).forEach(language=>items.push([expansion.dodatkowyJezyk.nazwa+": "+language,languagePrice]));
           extraServices.forEach(([key,label,price,mayBeIncluded]) => {
-            if (s[key] && !(mayBeIncluded && p.includedAddons[key]))
+            if (serviceAvailable(p,key) && s[key] && !serviceIncluded(p,key))
               items.push([label, price]);
           });
           seoServices.forEach(([key,label,price]) => {
-            if (s[key]) items.push([label, price]);
+            if (serviceAvailable(p,key) && s[key] && !serviceIncluded(p,key)) items.push([label, price]);
           });
           // W pakiecie Abonament opieka jest opłacana za 12 miesięcy w ramach abonamentu.
           if(p.recurring)annualExtras(p,s).forEach(x=>items.push([x.nazwa+" / "+contractPeriod,annualPeriods.reduce((sum,n)=>sum+prorate(x.cena,n),0)/100]));
@@ -853,10 +856,10 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
           ).map(row => row.querySelector(".ec-language-choice").value)
            .filter((language, index, languages) => language && languages.indexOf(language) === index);
           extraServices.forEach(([key,, ,mayBeIncluded]) => {
-            s[key] = (mayBeIncluded && !!p.includedAddons[key]) || q("#ec-addon-" + key).checked;
+            s[key] = serviceAvailable(p,key) && (serviceIncluded(p,key) || !!q("#ec-addon-" + key)?.checked);
           });
           seoServices.forEach(([key]) => {
-            s[key] = q("#ec-seo-addon-" + key).checked;
+            s[key] = serviceAvailable(p,key) && (serviceIncluded(p,key) || !!q("#ec-seo-addon-" + key)?.checked);
           });
         }
         function baseUpdate() {
@@ -924,7 +927,7 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
             ["Zakres", p.structure],
             ...(p.recurring && !directSummaryMode && s.billing==="annual" ? [["Promocja pakietu "+p.name, money(aboPricing.annual) + "/rok zamiast " + money(aboPricing.regularAnnual) + "/rok"]] : []),
             ...(cennik.seo.length?[["SEO",seoName(p,s.seo)]]:[]),
-            ["Dodatkowe usługi SEO", seoServices.filter(([key]) => s[key])
+            ["Dodatkowe usługi SEO", seoServices.filter(([key]) => serviceAvailable(p,key)&&s[key])
               .map(([,label]) => label).join(", ") || "Bez dodatkowych usług"],
             ...(cennik.kontakt.length?[["Kontakt",contacts[s.contact][0]]]:[]),
             ...(expansion.dodatkowyJezyk?[[expansion.dodatkowyJezyk.nazwa,(s.languages||[]).join(", ")||"Bez dodatkowych języków"]]:[]),
@@ -1316,7 +1319,7 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
         }
         // W Elementorze kod w widżecie HTML wykonuje się po stworzeniu kart na stronie.
         // Jeśli widget ładuje się wcześniej, DOMContentLoaded uruchomi próbę ponownie.
-        // Karty generowane z cennik.js są jedynym źródłem oferty. Usuń stare karty Elementora przy wdrożeniu.
+        // Boxy w index.html powiązane z ID w cennik.js są jedynym źródłem oferty. Usuń stare karty Elementora przy wdrożeniu.
         const decimalMoney = (n) =>
           new Intl.NumberFormat("pl-PL", {
             useGrouping: "always",
@@ -1415,8 +1418,8 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
             ...(expansion.dodatkowaSekcja?[expansion.dodatkowaSekcja.nazwa+": "+s.sections]:[]),
             ...(expansion.dodatkowaPodstrona?[expansion.dodatkowaPodstrona.nazwa+": "+s.pages]:[]),
             ...(cennik.seo.length?["SEO: "+seoName(p,s.seo)]:[]),
-            ...seoServices.map(([key,label,price]) =>
-              label + ": " + (s[key] ? "Dodane, " + money(price) : "Nie")),
+            ...seoServices.filter(([key])=>serviceAvailable(p,key)).map(([key,label,price]) =>
+              label + ": " + (s[key] ? (serviceIncluded(p,key)?"W cenie pakietu":"Dodane, " + money(price)) : "Nie")),
             ...(cennik.kontakt.length?["Kontakt: "+contacts[s.contact][0]]:[]),
             ...(cennik.szkolenia.length?["Szkolenie: "+trainingLabel(),"Dopłata za zmianę szkolenia: "+money(trainingCharge())]:[]),
             (expansion.dodatkowaRundaPoprawek?.nazwa||"Sesje poprawek w pakiecie")+": " +
@@ -1428,7 +1431,7 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
               " dodatkowych)",
             ...(annualServices.length?["Usługi roczne: "+hostingDescription(p)]:[]),
             ...(expansion.dodatkowyJezyk?[expansion.dodatkowyJezyk.nazwa+": "+((s.languages||[]).join(", ")||"Nie")]:[]),
-            ...extraServices.map(([key,label,price,mayBeIncluded]) =>
+            ...extraServices.filter(([key])=>serviceAvailable(p,key)).map(([key,label,price,mayBeIncluded]) =>
               label + ": " + (s[key] ? ((mayBeIncluded && p.includedAddons[key]) ? "W cenie pakietu" : "Dodane, " + money(price)) : "Nie")),
             "Czy ma stronę/sklep: " + (q("#ec-existing-check").checked ? "Tak" : "Nie"),
             "Link do istniejącej strony: " + (q("#ec-existing-check").checked ? q("#ec-existing-url").value.trim() : "Brak"),
