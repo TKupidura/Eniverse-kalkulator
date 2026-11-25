@@ -1080,7 +1080,7 @@
           const simpleRows = [
             ["Pakiet", p.name],
             ["Zakres", p.structure],
-            ...(p.recurring && s.billing==="annual" ? [["Promocja pakietu Abonament", money(aboPricing.annual) + "/rok zamiast " + money(aboPricing.regularAnnual) + "/rok"]] : []),
+            ...(p.recurring && !directSummaryMode && s.billing==="annual" ? [["Promocja pakietu Abonament", money(aboPricing.annual) + "/rok zamiast " + money(aboPricing.regularAnnual) + "/rok"]] : []),
             ["SEO", seoName(p,s.seo)],
             ["Dodatkowe usługi SEO", seoServices.filter(([key]) => s[key])
               .map(([,label]) => label).join(", ") || "Bez dodatkowych usług"],
@@ -1109,9 +1109,16 @@
             row(label,value) + (label==="Pakiet" ? templateRow : "")
           ).join("");
           const total = p.recurring ? a.contract : a.total;
-          const totalBlock = '<div class="ec-summary-total">' +
+          const billingSwitch = p.recurring && directSummaryMode
+            ? '<label class="ec-summary-billing ec-existing-toggle" for="ec-summary-installments">' +
+                '<span class="ec-summary-billing-copy"><strong>Płatność w ratach</strong>' +
+                '<small>Rocznie: <del>' + money(aboPricing.regularAnnual) + '</del> <strong class="ec-summary-promo-price">' + money(aboPricing.annual) + '/rok</strong> · promocja</small></span>' +
+                '<input id="ec-summary-installments" type="checkbox" role="switch" aria-label="Płatność w ratach miesięcznych"' + (s.billing==="monthly" ? ' checked' : '') + '>' +
+                '<span class="ec-switch-track" aria-hidden="true"></span></label>'
+            : '';
+          const totalBlock = '<div class="ec-summary-total">' + billingSwitch +
             row(p.recurring ? "Łącznie za 12 miesięcy" : "Projekt i usługi łącznie",money(total)) +
-            (p.recurring ? row("Suma dodatków",money(a.extra)) + row("Rata pakietu i dodatków",miniSchedule()) :
+            (p.recurring ? row("Suma dodatków",money(a.extra)) + row("Rata pakietu i dodatków",directSummaryMode ? directMiniSchedule() : miniSchedule()) :
               row("Wartość projektu z dodatkami",money(project)) +
               (a.host ? row("Usługi roczne z góry",money(a.host)) : "")) +
             '</div>';
@@ -1279,6 +1286,15 @@
             openTemplateDialog(templateLink);
           }
         });
+        q("#ec-summary").addEventListener("change", event => {
+          if (!event.target.matches("#ec-summary-installments") || !current.recurring || !directSummaryMode) return;
+          const billing = event.target.checked ? "monthly" : "annual";
+          states[current.id].billing = billing;
+          all('[name="ec-billing"]').forEach(input => input.checked = input.value === billing);
+          update();
+          summary(true);
+          q("#ec-summary-installments")?.focus({preventScroll:true});
+        });
         let scrollBeforeModal = false;
         function open(id, baseChoice, button) {
           const target = packages.find((p) => p.id === id);
@@ -1286,7 +1302,10 @@
           current = target;
           opener = button || null;
           directSummaryMode=!!baseChoice;
-          if (baseChoice) states[id] = defaults(current);
+          if (baseChoice) {
+            states[id] = defaults(current);
+            if (current.recurring) states[id].billing = "annual";
+          }
           scrollBeforeModal = document.body.classList.contains("eni-calc-scroll-locked");
           document.body.classList.add("eni-calc-scroll-locked");
           q("#ec-modal-stage").hidden = false;
@@ -1591,7 +1610,7 @@
           ];
           if (p.recurring)
             lines.push(
-              "Łączna płatność za pakiet i dodatki: " + miniSchedule(),
+              "Łączna płatność za pakiet i dodatki: " + (directSummaryMode ? directMiniSchedule() : miniSchedule()),
               "Umowa: 12 miesięcy",
               "Cała umowa z dodatkami: " + money(a.contract),
               "Dodatki są rozłożone na cały okres umowy; brak osobnej opłaty jednorazowej.",
@@ -1815,6 +1834,12 @@
         }
         function miniPlan(billing = states[current.id].billing) {
           return installmentPlan(calculate().extra, billing);
+        }
+        function directMiniSchedule(billing = states[current.id].billing) {
+          const b = miniPlan(billing);
+          return b.annual
+            ? "Jednorazowa płatność " + money(b.regular) + "/rok"
+            : b.count + " rat po " + money(b.regular) + " / mc";
         }
         function miniSchedule(billing = states[current.id].billing) {
           const b = miniPlan(billing);
