@@ -4180,7 +4180,7 @@
         function templateNewTabLink(t) {
           const url=t.isBundled?t.previewPath:templateHttpsUrl(t.preview_url);
           if(!url)return "";
-          return '<a class="ec-template-new-tab" href="'+escapeTemplateText(url)+'" target="_blank" rel="noopener noreferrer" aria-label="Otwórz szablon '+escapeTemplateText(t.name)+' w nowej karcie">Podgląd w nowej karcie <span aria-hidden="true">↗</span></a>';
+          return '<a class="ec-template-new-tab" href="'+escapeTemplateText(url)+'" target="_blank" rel="noopener noreferrer" aria-label="Otwórz szablon '+escapeTemplateText(t.name)+' w nowej karcie">Podgląd demo <span aria-hidden="true">↗</span></a>';
         }
         function templateScene(t, full = false) {
           if(t.isBundled || t.isRemote) {
