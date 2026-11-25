@@ -22,11 +22,11 @@ const server=http.createServer((req,res)=>{
  if(uri==='/')location=path.join(dir,'index.html');
  if(!location.startsWith(dir+path.sep)||!fs.existsSync(location)||!fs.statSync(location).isFile()){res.writeHead(404);return res.end();}
  let buf=fs.readFileSync(location);
- if(mutation&&location===path.join(dir,'cennik.js'))buf=Buffer.concat([buf,Buffer.from('\nwindow.ENIVERSE_CENNIK.dodatki[0].nazwa="Mapy Apple";window.ENIVERSE_CENNIK.dodatki.push({id:"chat",nazwa:"Czat na stronie",cena:150,dostepneWPakietach:["start","firm","testpakiet"],wPakietach:["firm"]});window.ENIVERSE_CENNIK.marketing.push({id:"seoTest",nazwa:"Test SEO",cena:80,dostepneWPakietach:["firm"],wPakietach:["firm"]});window.ENIVERSE_CENNIK.uslugiRoczne.push({id:"monitoring",nazwa:"Monitoring",cena:200,dostepneWPakietach:["firm"],wPakietach:["firm"]});window.ENIVERSE_CENNIK.pakiety.find(p=>p.id==="start").nazwa="Start test";window.ENIVERSE_CENNIK.pakiety.find(p=>p.id==="start").cena=1290;window.ENIVERSE_CENNIK.dodatki=window.ENIVERSE_CENNIK.dodatki.filter(x=>x.id!=="newsletter");window.ENIVERSE_CENNIK.pakiety=window.ENIVERSE_CENNIK.pakiety.filter(x=>x.id!=="mini");window.ENIVERSE_CENNIK.pakiety.push({...window.ENIVERSE_CENNIK.pakiety[0],id:"testpakiet",nazwa:"Pakiet testowy",cena:999},{...window.ENIVERSE_CENNIK.pakiety[0],id:"orphan",nazwa:"Brak boxa",cena:999});')]);
+ if(mutation&&location===path.join(dir,'cennik.js'))buf=Buffer.concat([buf,Buffer.from('\nwindow.ENIVERSE_CENNIK.dodatki[0].nazwa="Mapy Apple";window.ENIVERSE_CENNIK.dodatki.push({id:"chat",nazwa:"Czat na stronie",cena:150,dostepneWPakietach:["start","firm","testpakiet"],wPakietach:["firm"]});window.ENIVERSE_CENNIK.marketing.push({id:"seoTest",nazwa:"Test SEO",cena:80,dostepneWPakietach:["firm"],wPakietach:["firm"]});window.ENIVERSE_CENNIK.uslugiRoczne.push({id:"monitoring",nazwa:"Monitoring",cena:200,dostepneWPakietach:["firm"],wPakietach:["firm"]});window.ENIVERSE_CENNIK.pakiety.find(p=>p.id==="start").nazwa="Start test";window.ENIVERSE_CENNIK.pakiety.find(p=>p.id==="start").cena=1290;window.ENIVERSE_CENNIK.pakiety.find(p=>p.id==="start").structure="Do 8 sekcji";window.ENIVERSE_CENNIK.dodatki=window.ENIVERSE_CENNIK.dodatki.filter(x=>x.id!=="newsletter");window.ENIVERSE_CENNIK.pakiety=window.ENIVERSE_CENNIK.pakiety.filter(x=>x.id!=="mini");window.ENIVERSE_CENNIK.pakiety.push({...window.ENIVERSE_CENNIK.pakiety[0],id:"testpakiet",nazwa:"Pakiet testowy",cena:999},{...window.ENIVERSE_CENNIK.pakiety[0],id:"orphan",nazwa:"Brak boxa",cena:999});')]);
  if(mutation&&location===path.join(dir,'index.html')){
   const h=buf.toString('utf8'),start=h.match(/<article[^>]*data-ec-plan="start"[^>]*>[\s\S]*?<\/article>/)[0];
   const clone=start.replace(/start/g,'testpakiet');
-  buf=Buffer.from(h.replace(start,start+'\n'+clone));
+  buf=Buffer.from(h.replace(start,start.replace('Dla małej działalności, która potrzebuje strony WordPress do samodzielnej edycji.','Własny opis HTML')+'\n'+clone));
  }
  res.writeHead(200,{'Content-Type':types[path.extname(location)]||'application/octet-stream','Cache-Control':'no-store'});res.end(buf);
 });
@@ -132,6 +132,8 @@ const norm=s=>s.replace(/\s+/g,' ').trim();
    check(await page.locator('[data-ec-plan="mini"]').count()===1&&!await page.locator('[data-ec-plan="mini"]').isVisible(),'Usunięty pakiet ukrywa statyczny box');
    check(await page.locator('[data-ec-plan="orphan"]').count()===0,'Wpis bez boxa nie generuje karty');
    check((await page.locator('[data-ec-plan="start"]').innerText()).includes('Start test')&&norm(await page.locator('[data-ec-plan="start"]').innerText()).includes('1 290'),'Nazwa i cena karty aktualizowane po ID');
+   check((await page.locator('[data-ec-plan="start"]').innerText()).includes('Własny opis HTML'),'Własna treść marketingowa z HTML nie jest nadpisywana');
+   check((await page.locator('[data-ec-plan="start"] .ec-project-scale h3').innerText())==='Do 8 sekcji','Zakres zmienia się z cennika');
    check(await page.locator('[data-ec-plan="testpakiet"]').count()===1,'Nowy pakiet');
    await page.locator('[data-configure="testpakiet"]').click();
    await page.locator('input[name="ec-template-choice"][value="later"]').check();await page.locator('#ec-next').click();

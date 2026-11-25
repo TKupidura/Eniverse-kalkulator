@@ -13,7 +13,7 @@
  */
 window.ENIVERSE_CENNIK = {
   // 01. Pakiety — ID odpowiadają boxom HTML
-  "pakiety": [
+  pakiety: [
     {
       "id": "mini",
       "nazwa": "Abonament",
@@ -41,10 +41,8 @@ window.ENIVERSE_CENNIK = {
       "rights": "Korzystanie ze strony w ramach abonamentu",
       "terms": "Umowa abonamentowa",
       "nav": false,
-      // 04. SEO — warianty
-  "seo": "brak",
-      // 06. Kontakt
-  "kontakt": "podstawowy",
+      "seo": "brak",
+      "kontakt": "podstawowy",
       "szkolenie": "instrukcjaPDF",
       "galeria": true
     },
@@ -149,8 +147,9 @@ window.ENIVERSE_CENNIK = {
       "galeria": false
     }
   ],
+
   // 02. Rozbudowa strony
-  "rozbudowa": {
+  rozbudowa: {
     "dodatkowaSekcja": {
       "nazwa": "Dodatkowe sekcje",
       "cena": 90
@@ -168,34 +167,9 @@ window.ENIVERSE_CENNIK = {
       "cena": 69
     }
   },
-  "seo": [
-    {
-      "id": "brak",
-      "nazwa": "Bez dodatkowego SEO",
-      "opis": "Brak SEO na start w bazie pakietu",
-      "cena": 0
-    },
-    {
-      "id": "techniczne",
-      "nazwa": "SEO techniczne na start",
-      "opis": "Zakres do doprecyzowania w warunkach SEO",
-      "cena": 149
-    },
-    {
-      "id": "podstawowe",
-      "nazwa": "Podstawowe SEO na start",
-      "opis": "Według warunków SEO; dalsze usługi wyceniane osobno",
-      "cena": 290
-    },
-    {
-      "id": "rozszerzone",
-      "nazwa": "Rozszerzone SEO",
-      "opis": "Według warunków SEO; dalsze usługi wyceniane osobno",
-      "cena": 490
-    }
-  ],
+
   // 03. Dodatki do projektu
-  "dodatki": [
+  dodatki: [
     {
       "id": "maps",
       "nazwa": "Mapy Google",
@@ -239,8 +213,37 @@ window.ENIVERSE_CENNIK = {
       "cena": 190
     }
   ],
+
+  // 04. SEO — warianty
+  seo: [
+    {
+      "id": "brak",
+      "nazwa": "Bez dodatkowego SEO",
+      "opis": "Brak SEO na start w bazie pakietu",
+      "cena": 0
+    },
+    {
+      "id": "techniczne",
+      "nazwa": "SEO techniczne na start",
+      "opis": "Zakres do doprecyzowania w warunkach SEO",
+      "cena": 149
+    },
+    {
+      "id": "podstawowe",
+      "nazwa": "Podstawowe SEO na start",
+      "opis": "Według warunków SEO; dalsze usługi wyceniane osobno",
+      "cena": 290
+    },
+    {
+      "id": "rozszerzone",
+      "nazwa": "Rozszerzone SEO",
+      "opis": "Według warunków SEO; dalsze usługi wyceniane osobno",
+      "cena": 490
+    }
+  ],
+
   // 05. Marketing i dodatkowe SEO
-  "marketing": [
+  marketing: [
     {
       "id": "contentEdit",
       "nazwa": "Redakcja i optymalizacja treści",
@@ -266,7 +269,9 @@ window.ENIVERSE_CENNIK = {
       "opis": "Pakiet startowy · dalsza obsługa osobno"
     }
   ],
-  "kontakt": [
+
+  // 06. Kontakt
+  kontakt: [
     {
       "id": "podstawowy",
       "nazwa": "Kontakt podstawowy",
@@ -286,8 +291,9 @@ window.ENIVERSE_CENNIK = {
       "cena": 190
     }
   ],
+
   // 07. Szkolenia
-  "szkolenia": [
+  szkolenia: [
     {
       "id": "instrukcjaPDF",
       "nazwa": "Instrukcja PDF",
@@ -309,8 +315,9 @@ window.ENIVERSE_CENNIK = {
       "cena": 179
     }
   ],
+
   // 08. Usługi roczne
-  "uslugiRoczne": [
+  uslugiRoczne: [
     {
       "id": "hosting",
       "nazwa": "Hosting strony",
@@ -322,11 +329,12 @@ window.ENIVERSE_CENNIK = {
       "cena": 348
     }
   ],
+
   // 09. Ustawienia globalne rozliczeń
   ustawienia: {
-    "okresAbonamentu": 12,
-    "zaliczkaProcent": 50,
-    "zaokraglanieRat": true,
-    "progZaokraglania": 0.5
+    okresAbonamentu: 12,
+    zaliczkaProcent: 50,
+    zaokraglanieRat: true,
+    progZaokraglania: 0.50
   }
 };

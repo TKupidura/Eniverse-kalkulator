@@ -61,7 +61,7 @@ body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!impo
 <p class="enp-price-note abo-hosting-note">Umowa na <span data-contract-period></span><span data-card-hosting> · hosting w cenie</span></p>
 </div>
 <div class="enp-abo-scopecol">
-<div class="enp-abo-scale"><div aria-hidden="true" class="enp-scale-visual"><div class="enp-scale-map enp-scale-one"><i></i><i></i><i></i><i></i><i></i></div></div><div><p class="enp-scope">1 strona · do 5 sekcji</p><p class="enp-scope-note">Gotowy szablon HTML i CSS</p></div></div>
+<div class="enp-abo-scale"><div aria-hidden="true" class="enp-scale-visual"><div class="enp-scale-map enp-scale-one"><i></i><i></i><i></i><i></i><i></i></div></div><div><p class="enp-scope" data-card-field="structure" data-card-reference="Strona główna do 5 sekcji">1 strona · do 5 sekcji</p><p class="enp-scope-note">Gotowy szablon HTML i CSS</p></div></div>
 <button type="button" class="enp-abo-template" data-card-gallery data-templates-open data-template-plan="mini" aria-haspopup="dialog"><span aria-hidden="true">↗</span></button>
 <div class="enp-features"><h4 class="enp-group-title">Co zyskujesz</h4><ul class="enp-feature-list"><li>Gotowy wygląd i wersja mobilna</li><li data-card-hosting>Hosting przez okres umowy</li><li>Strona z Twoimi gotowymi materiałami</li><li class="enp-off">Panel administracyjny WordPress</li><li class="enp-off">Samodzielna edycja treści</li><li class="enp-off">Przekazanie praw do szablonu</li></ul></div>
 </div>
@@ -82,14 +82,15 @@ body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!impo
                   <div class="ec-packages ec-packages--main" id="ec-packages">
 <!-- Boxy pakietów: kolejność, układ, opisy i ikony edytuj tutaj. Ceny i pola data-card-* uzupełnia cennik.js. -->
 
-<article class="ec-package  " data-ec-plan="start" aria-labelledby="ec-plan-start">
+<!-- PAKIET: Start | ID: start -->
+<article class="ec-package" data-ec-plan="start" aria-labelledby="ec-plan-start">
             
             
             <div class="ec-card-header"><span class="ec-kicker">STRONA NA DOBRY POCZĄTEK</span><h2 id="ec-plan-start" data-card-field="name"></h2><p class="ec-card-description">Dla małej działalności, która potrzebuje strony WordPress do samodzielnej edycji.</p></div>
             <div class="ec-card-budget"><div class="ec-card-price"><small>od</small><strong data-card-field="price"></strong><span>zł netto</span></div><p class="ec-muted">Realizacja na szablonie WordPress</p></div>
             
-            <div class="ec-project-scale"><div class="ec-project-page" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><h3 data-card-field="startScale">Strona z szablonu · do 5 sekcji</h3><p data-card-field="startScaleNote">Np. Hero, O nas, Oferta, Opinie i Kontakt.</p><button type="button" class="ec-template-launch ec-interactive" data-card-gallery data-templates-open data-template-plan="start" aria-haspopup="dialog"><span aria-hidden="true">↗</span></button></div>
-            <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul><li><span class="ec-tick" aria-hidden="true"></span><span>WordPress i panel do samodzielnej edycji tekstów i zdjęć</span></li><li><span class="ec-tick" aria-hidden="true"></span><span>Dopasowanie szablonu do marki</span></li><li><span class="ec-tick" aria-hidden="true"></span><span>Wprowadzenie dostarczonych treści</span></li><li><span class="ec-tick" aria-hidden="true"></span><span data-card-field="startTraining">Instrukcja obsługi PDF</span></li><li class="ec-off"><span class="ec-tick" aria-hidden="true">−</span><span>Szkolenie na żywo</span></li></ul>
+            <div class="ec-project-scale"><div class="ec-project-page" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><h3 data-card-field="structure" data-card-reference="Strona główna do 5 sekcji">Strona z szablonu · do 5 sekcji</h3><p data-card-field="chips" data-card-reference="Hero, O nas, Oferta, Opinie, Kontakt">Np. Hero, O nas, Oferta, Opinie i Kontakt.</p><button type="button" class="ec-template-launch ec-interactive" data-card-gallery data-templates-open data-template-plan="start" aria-haspopup="dialog"><span aria-hidden="true">↗</span></button></div>
+            <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul><li><span class="ec-tick" aria-hidden="true"></span><span>WordPress i panel do samodzielnej edycji tekstów i zdjęć</span></li><li><span class="ec-tick" aria-hidden="true"></span><span>Dopasowanie szablonu do marki</span></li><li><span class="ec-tick" aria-hidden="true"></span><span>Wprowadzenie dostarczonych treści</span></li><li><span class="ec-tick" aria-hidden="true"></span><span data-card-field="training" data-card-reference="Instrukcja PDF">Instrukcja obsługi PDF</span></li><li class="ec-off"><span class="ec-tick" aria-hidden="true">−</span><span>Szkolenie na żywo</span></li></ul>
               <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary><ul class="ec-details-list" data-card-list="details"></ul></details>
             </div>
             
@@ -98,7 +99,8 @@ body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!impo
             <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="start"><span>Skonfiguruj pakiet</span><span aria-hidden="true">↗</span></button></div>
             
           </article>
-<article class="ec-package  " data-ec-plan="one" aria-labelledby="ec-plan-one">
+<!-- PAKIET: One Page | ID: one -->
+<article class="ec-package" data-ec-plan="one" aria-labelledby="ec-plan-one">
             
             
             <div class="ec-card-header"><span class="ec-kicker">PROSTA OBECNOŚĆ W SIECI</span><h2 id="ec-plan-one" data-card-field="name"></h2><p class="ec-card-description">Dla freelancera i mikrofirmy. Przedstaw ofertę jasno, na jednej przewijanej stronie.</p></div>
@@ -114,7 +116,8 @@ body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!impo
             <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="one"><span>Skonfiguruj pakiet</span><span aria-hidden="true">↗</span></button></div>
             
           </article>
-<article class="ec-package ec-package--featured " data-ec-plan="wiz" aria-labelledby="ec-plan-wiz">
+<!-- PAKIET: Wizytówka | ID: wiz -->
+<article class="ec-package ec-package--featured" data-ec-plan="wiz" aria-labelledby="ec-plan-wiz">
             <div class="ec-featured-badge">Dla rozwijających się firm</div>
             
             <div class="ec-card-header"><span class="ec-kicker">WIĘCEJ MIEJSCA NA OFERTĘ</span><h2 id="ec-plan-wiz" data-card-field="name"></h2><p class="ec-card-description">Dla małej firmy, która potrzebuje kilku podstron na usługi, realizacje i kontakt.</p></div>
@@ -130,7 +133,8 @@ body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!impo
             <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="wiz"><span>Skonfiguruj pakiet</span><span aria-hidden="true">↗</span></button></div>
             
           </article>
-<article class="ec-package  " data-ec-plan="firm" aria-labelledby="ec-plan-firm">
+<!-- PAKIET: Strona firmowa | ID: firm -->
+<article class="ec-package" data-ec-plan="firm" aria-labelledby="ec-plan-firm">
             
             
             <div class="ec-card-header"><span class="ec-kicker">PEŁNA PREZENTACJA FIRMY</span><h2 id="ec-plan-firm" data-card-field="name"></h2><p class="ec-card-description">Dla firmy z rozbudowaną ofertą. Miejsce na usługi, realizacje i regularne publikacje.</p></div>

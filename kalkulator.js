@@ -233,14 +233,11 @@
               regularAnnual:money(aboPricing.regularAnnual),
               days:p.days?"Do "+p.days+" dni roboczych":"Do zatwierdzenia",
               revisions:p.revisions?p.revisions+" w cenie":"Brak w cenie",
-              structure:p.structure,chips:p.chips.join(", "),choose,
-              startScale:p.structure==="Strona główna do 5 sekcji"?"Strona z szablonu · do 5 sekcji":p.structure,
-              startScaleNote:p.chips.join("|")==="Hero|O nas|Oferta|Opinie|Kontakt"?"Np. Hero, O nas, Oferta, Opinie i Kontakt.":p.chips.join(", "),
-              startTraining:p.training==="Instrukcja PDF"?"Instrukcja obsługi PDF":p.training
+              structure:p.structure,chips:p.chips.join(", "),choose,training:p.training
             };
             card.querySelectorAll("[data-card-field]").forEach(el=>{
               const key=el.dataset.cardField;
-              if(Object.hasOwn(fields,key))el.textContent=fields[key];
+              if(Object.hasOwn(fields,key)&&el.dataset.cardReference!==String(fields[key]))el.textContent=fields[key];
               if(key==="regularAnnual")el.setAttribute("aria-label","Poprzednia cena: "+fields[key]+" netto za rok");
             });
             card.querySelectorAll("[data-card-gallery]").forEach(el=>{
