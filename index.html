@@ -3283,10 +3283,10 @@
 #eni-calc .ec-template-gallery-item .ec-template-choice {width:100%;flex:0 0 auto;}
 #eni-calc .ec-template-new-tab {
   display:flex;align-items:center;justify-content:space-between;gap:6px;
-  padding:10px 12px;min-height:38px;border:1px solid #E20B0C;border-radius:5px;background:#E20B0C;
+  padding:10px 12px;min-height:38px;border:1px solid #101112;border-radius:5px;background:#101112;
   color:#fff;font:600 12px/1.4 "DM Sans",sans-serif;text-decoration:none;
 }
-#eni-calc .ec-template-new-tab:hover {background:#b9090a;border-color:#b9090a;color:#fff;text-decoration:none;}
+#eni-calc .ec-template-new-tab:hover {background:#303338;border-color:#303338;color:#fff;text-decoration:none;}
 #eni-calc .ec-template-new-tab:visited {color:#fff;}
 #eni-calc .ec-template-new-tab:focus-visible {outline:2px solid #E20B0C;outline-offset:2px;}
 #eni-calc .ec-template-select-actions {display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;padding:0 14px 12px;}
@@ -3297,6 +3297,21 @@
   #eni-calc .ec-template-gallery-item .ec-template-new-tab {font-size:11px;padding:8px 7px;min-height:36px;}
 }
 
+
+/* Akcje aktywnego projektu obok siebie w stopce podglądu. */
+#eni-calc #ec-template-modal .ec-template-footer {display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-end;align-items:stretch;gap:10px;}
+#eni-calc #ec-template-external {display:flex;}
+#eni-calc #ec-template-modal .ec-template-footer .ec-template-new-tab,
+#eni-calc #ec-template-modal .ec-template-footer #ec-template-configure {
+  min-height:44px;padding:12px 17px;box-sizing:border-box;font-size:13px;font-weight:700;line-height:1.4;
+}
+#eni-calc #ec-template-modal .ec-template-footer .ec-template-new-tab {gap:12px;}
+@media(max-width:580px) {
+  #eni-calc #ec-template-modal .ec-template-footer {gap:6px;}
+  #eni-calc #ec-template-external {flex:1 1 auto;}
+  #eni-calc #ec-template-modal .ec-template-footer .ec-template-new-tab {width:100%;}
+  #eni-calc #ec-template-modal .ec-template-footer #ec-template-configure {flex:1 1 auto;}
+}
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -3343,7 +3358,7 @@
                 <div id="ec-template-viewport" tabindex="0" role="region" aria-label="Podgląd projektu strony"></div>
               </div>
             </div>
-            <footer class="ec-template-footer"><button type="button" id="ec-template-configure">Wybierz ten szablon i konfiguruj ↗</button></footer>
+            <footer class="ec-template-footer"><div id="ec-template-external"></div><button type="button" id="ec-template-configure">Wybierz ten szablon i konfiguruj ↗</button></footer>
           </section>
         </div>
 <div class="ec-modal-stage" id="ec-modal-stage" hidden>
@@ -4231,9 +4246,14 @@
             visibleTemplateIndex=-1;
             q("#ec-template-viewport").innerHTML='<p class="ec-template-unavailable">Aktualnie brak opublikowanych szablonów. Wybierz opcję „Szablon wybiorę później”.</p>';
             q("#ec-template-configure").hidden=true;
+            q("#ec-template-external").innerHTML="";
+            q("#ec-template-external").hidden=true;
             return;
           }
           q("#ec-template-configure").hidden=false;
+          const external=q("#ec-template-external");
+          external.innerHTML=templateNewTabLink(t);
+          external.hidden=!external.firstElementChild;
           visibleTemplateIndex=index;
           q("#ec-template-viewport").innerHTML=templateScene(t,true);
           q("#ec-template-viewport").scrollTop=0;
@@ -4246,7 +4266,7 @@
         }
         function renderTemplateGallery() {
           q("#ec-template-gallery").innerHTML=templateSamples.map((t,i)=>
-            '<div class="ec-template-gallery-item"><button type="button" class="ec-template-choice" data-template-index="'+i+'" aria-pressed="'+(i===0)+'"><span class="ec-template-thumb'+(hasEmbeddedTemplateBadge(t)?' ec-template-crop-badge':'')+'">'+templateScene(t)+'</span><span class="ec-template-choice-label"><strong>'+escapeTemplateText(t.name)+'</strong><small>'+escapeTemplateText(t.type)+'</small></span></button>'+templateNewTabLink(t)+'</div>'
+            '<div class="ec-template-gallery-item"><button type="button" class="ec-template-choice" data-template-index="'+i+'" aria-pressed="'+(i===0)+'"><span class="ec-template-thumb'+(hasEmbeddedTemplateBadge(t)?' ec-template-crop-badge':'')+'">'+templateScene(t)+'</span><span class="ec-template-choice-label"><strong>'+escapeTemplateText(t.name)+'</strong><small>'+escapeTemplateText(t.type)+'</small></span></button></div>'
           ).join("");
           showTemplate(0);
         }
