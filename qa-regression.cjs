@@ -4,7 +4,7 @@ const http=require('node:http');
 const path=require('node:path');
 const assert=require('node:assert/strict');
 const cp=require('node:child_process');
-const oldRef='f3b466a59ba1e0defd2d82e983c60de9495572af';
+const oldRef='6281cd10af915c5a225d7b58772f1f73e0d4dcaf';
 const dir=process.cwd();
 fs.mkdirSync('qa-output',{recursive:true});
 const baseline=path.join(dir,'qa-output','baseline-source');
@@ -17,7 +17,8 @@ const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=
 const server=http.createServer((req,res)=>{
  let uri=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
  let location=uri.startsWith('/baseline/')?path.join(baseline,uri.slice(10)):path.join(dir,uri.slice(1));
- if(uri.startsWith('/wp-content/uploads/eniverse-kalkulator/Strony internetowe/'))location=path.join(dir,path.basename(uri));
+ if(uri.startsWith('/baseline/demos/'))location=path.join(dir,uri.slice(10));
+ if(uri.startsWith('/wp-content/eniverse-kalkulator/Strony internetowe/'))location=path.join(dir,path.basename(uri));
  if(uri==='/')location=path.join(dir,'index.html');
  if(!location.startsWith(dir+path.sep)||!fs.existsSync(location)||!fs.statSync(location).isFile()){res.writeHead(404);return res.end();}
  let buf=fs.readFileSync(location);
@@ -38,6 +39,35 @@ const norm=s=>s.replace(/\s+/g,' ').trim();
  async function direct(id){await page.locator('[data-choose="'+id+'"]').click();await page.waitForSelector('#ec-final:not([hidden])');}
  async function close(){await page.locator('#ec-close').click();}
  try{
+   // Exact pre-change vs inline style comparison at 4 widths.
+   async function snap(){
+     await page.evaluate(()=>document.fonts.ready);
+     await page.waitForTimeout(200);
+     return page.evaluate(()=>{
+       const sels=['body','#eni-calc','#ec-catalog','#ec-entry-packages','#ec-packages',...Array.from(document.querySelectorAll('[data-ec-plan]')).map(e=>'[data-ec-plan="'+e.dataset.ecPlan+'"]')];
+       return sels.map(sel=>{const el=document.querySelector(sel),r=el.getBoundingClientRect(),c=getComputedStyle(el);return {sel,rect:[r.x,r.y,r.width,r.height].map(n=>Math.round(n*100)/100),style:[c.display,c.color,c.backgroundColor,c.fontFamily,c.fontSize,c.margin,c.padding,c.position,c.overflow]};});
+     });
+   }
+   for(const width of [1440,1024,768,390]){
+     await page.setViewportSize({width,height:1000});
+     await load('/baseline/index.html');const before=await snap();
+     const oldCss=await page.evaluate(()=>[...document.styleSheets].find(x=>x.href?.includes('pakiety-stron.css')).cssRules.length);
+     await load('/index.html');const after=await snap();
+     check(JSON.stringify(before)===JSON.stringify(after),'Identical computed catalog geometry/styles '+width);
+     check(await page.evaluate(n=>document.querySelector('#eniverse-pakiety-stron').sheet.cssRules.length===n,oldCss),'Inline CSSOM rules '+width);
+     check(await page.locator('link[href*="pakiety-stron.css"]').count()===0,'No external legacy stylesheet '+width);
+     await page.locator('[data-templates-open]').first().click();
+     check(await page.locator('#ec-template-modal').isVisible(),'Gallery '+width);
+     check(await page.evaluate(()=>document.body.classList.contains('eni-calc-scroll-locked')&&getComputedStyle(document.body).overflow==='hidden'),'Scroll lock '+width);
+     await page.locator('#ec-template-close').click();
+     check(await page.evaluate(()=>!document.body.classList.contains('eni-calc-scroll-locked')),'Scroll unlock '+width);
+   }
+   await page.setViewportSize({width:1440,height:1000});
+   await load('/index-production.html');
+   check(await page.evaluate(()=>document.querySelector('#eni-calc').dataset.mode==='production'&&document.querySelector('#eniverse-pakiety-stron').sheet.cssRules.length>0),'Production HTML & inline CSS');
+   check(await page.evaluate(()=>[...document.querySelectorAll('link[href],script[src]')].filter(e=>(e.getAttribute('href')||e.getAttribute('src')).startsWith('/wp-content/eniverse-kalkulator/')).length===3),'Production three assets');
+   await page.evaluate(()=>{const x=document.createElement('div');x.id='eniverse-quote-form';document.body.append(x);});
+   check(await page.evaluate(()=>{const s=getComputedStyle(document.querySelector('#eniverse-quote-form'));return s.position==='absolute'&&s.width==='1px'&&s.pointerEvents==='none';}),'CF7 hiding still works');
    await load('/baseline/index.html');await page.screenshot({path:'qa-output/baseline-desktop.png',fullPage:true});
    const baselineCount=await page.locator('[data-ec-plan]').count();check(baselineCount===5,'Baseline: pięć kart');
    await load('/index.html');await page.screenshot({path:'qa-output/current-desktop.png',fullPage:true});
