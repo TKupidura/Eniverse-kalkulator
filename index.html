@@ -1,4 +1,4 @@
-<!-- Eniverse — kalkulator HTML/CSS/JS. Wersja Elementor; źródłem ofert i cen jest eniverse-cennik.html od użytkownika. -->
+<!-- Eniverse — kalkulator HTML/CSS/JS. Jedynym źródłem cen jest cennik.js. -->
 <!-- Ten fragment działa też jako samodzielny plik .html; nie wklejaj go jako pełnego dokumentu <html>. -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap">
 <style>
@@ -2292,7 +2292,7 @@
         filter:none;
       }
 
-      /* Ceny Abonament: 69 zł/mies. lub promocyjnie 590 zł/rok zamiast 790 zł. */
+      /* Wygląd cen Abonamentu — wartości z cennik.js. */
       #eni-calc .ec-packages-overview .ec-mini-prices {
         display:grid;
         grid-template-columns:max-content max-content max-content;
@@ -3420,7 +3420,7 @@
                           >12 rat za pakiet i dodatki</small
                         ></span
                       ><span class="ec-tag" id="ec-monthly-rate"
-                        >69 zł / mies.</span
+                        ></span
                       ></label
                     ><label class="ec-option ec-interactive"
                       ><input
@@ -3433,8 +3433,8 @@
                           >1 płatność za pakiet i dodatki</small
                         ></span
                       ><span class="ec-tag" id="ec-annual-rate"
-                        >590 zł / rok · promocja</span
-                      ><small class="ec-billing-promo">Cena promocyjna pakietu: <del>790 zł</del> <strong class="ec-promo-price">590 zł / rok</strong></small></label
+                        ></span
+                      ><small class="ec-billing-promo">Cena promocyjna pakietu: <del data-cennik="regularAnnual"></del> <strong class="ec-promo-price" data-cennik="annual" data-cennik-suffix=" / rok"></strong></small></label
                     >
                   </div>
                 </section>
@@ -3445,8 +3445,7 @@
                   <div class="ec-counter-row">
                     <div>
                       Dodatkowe sekcje
-                      <div class="ec-muted" data-extra-cost="+90 zł / sekcję">
-                        +90 zł / sekcję · jednorazowo
+                      <div class="ec-muted" data-extra-cost="section" data-extra-unit=" / sekcję">
                       </div>
                     </div>
                     <div class="ec-counter">
@@ -3481,9 +3480,8 @@
                       Dodatkowe podstrony
                       <div
                         class="ec-muted"
-                        data-extra-cost="+190 zł / podstronę"
+                        data-extra-cost="page" data-extra-unit=" / podstronę"
                       >
-                        +190 zł / podstronę · jednorazowo
                       </div>
                     </div>
                     <div class="ec-counter">
@@ -3580,12 +3578,12 @@
                   <div class="ec-mini-rate-comparison" id="ec-mini-rate-comparison" hidden>
                     <div class="ec-mini-rate-variant" id="ec-mini-monthly-variant">
                       <span>Miesięcznie</span>
-                      <strong id="ec-mini-monthly-price">69 zł</strong>
+                      <strong id="ec-mini-monthly-price"></strong>
                     </div>
                     <div class="ec-mini-rate-variant" id="ec-mini-annual-variant">
                       <span>Rocznie z góry</span>
-                      <strong id="ec-mini-annual-price">590 zł</strong>
-                      <small class="ec-abo-regular-price"><del>790 zł</del> — regularna cena samego pakietu</small>
+                      <strong id="ec-mini-annual-price"></strong>
+                      <small class="ec-abo-regular-price"><del data-cennik="regularAnnual"></del> — regularna cena samego pakietu</small>
                     </div>
                   </div>
                   <p class="ec-muted ec-mini-rate-footnote" id="ec-mini-rate-footnote" hidden>Kwoty zawierają pakiet i wybrane dodatki.</p>
@@ -3631,7 +3629,7 @@
                 ></div>
                 <p class="ec-note">
                   Ceny rozszerzeń są przykładowe. Od pakietu Start: strona i
-                  dodatki płatne jednorazowo. Hosting opcjonalnie: 948 zł za rok,
+                  dodatki płatne jednorazowo. Hosting opcjonalnie: <span data-cennik="hostingWithCare"></span> za rok,
                   płatne z góry. Kwoty netto; VAT według właściwej stawki.
                 </p>
               </aside>
@@ -3756,6 +3754,7 @@
     </div>
     <!-- LOGIKA PAKIETÓW, WYCENY I FORMULARZA -->
     
+<script src="cennik.js"></script>
 <script>
 
       (() => {
@@ -3763,15 +3762,48 @@
           q = (s) => root.querySelector(s),
           all = (s) => [...root.querySelectorAll(s)],
           money = (n) => new Intl.NumberFormat("pl-PL", {useGrouping:"always"}).format(n) + " zł";
+        // Walidacja bez zapasowych cen: nie pozwalamy na wycenę z uszkodzonym cennikiem.
+        function validatePricing(cennik) {
+          const required = ["pakiety.abonament.miesiecznie","pakiety.abonament.roczniePromocja","pakiety.abonament.rocznieRegularna","pakiety.start","pakiety.onePage","pakiety.wizytowka","pakiety.firmowy","rozbudowa.dodatkowaSekcja","rozbudowa.dodatkowaPodstrona","rozbudowa.dodatkowyJezyk","rozbudowa.dodatkowaRundaPoprawek","seo.brak","seo.techniczne","seo.podstawowe","seo.rozszerzone","dodatki.mapyGoogle","dodatki.newsletter","dodatki.socialMedia","dodatki.googleAnalytics","dodatki.googleSearchConsole","dodatki.blogRealizacje","dodatki.logoAI","marketing.optymalizacjaTresci","marketing.tworzenieTresciSEO","marketing.kampaniaGoogleAds","marketing.pozycjonowanieSEO","kontakt.podstawowy","kontakt.formularz","kontakt.formularzRozszerzony","szkolenia.instrukcjaPDF","szkolenia.szkolenie30min","szkolenia.szkolenie1h","szkolenia.szkolenie2h","uslugiRoczne.hosting","uslugiRoczne.opiekaTechniczna"];
+          for (const path of required) {
+            const value = path.split(".").reduce((obj,key) => obj?.[key], cennik);
+            if (typeof value !== "number" || !Number.isFinite(value) || value < 0 ||
+                !Number.isSafeInteger(Math.round(value * 100)) ||
+                Math.abs(value * 100 - Math.round(value * 100)) > 1e-6)
+              throw new Error("Niepoprawna cena: " + path);
+          }
+          if (!Number.isInteger(cennik.pakiety.abonament.miesiecznie))
+            throw new Error("Miesięczny abonament musi być podany w pełnych złotych.");
+          if (cennik.seo.brak !== 0 || cennik.kontakt.podstawowy !== 0 || cennik.szkolenia.instrukcjaPDF !== 0)
+            throw new Error("Bezpłatne warianty bazowe muszą mieć cenę 0.");
+          const levels = [
+            [cennik.seo.brak,cennik.seo.techniczne,cennik.seo.podstawowe,cennik.seo.rozszerzone],
+            [cennik.kontakt.podstawowy,cennik.kontakt.formularz,cennik.kontakt.formularzRozszerzony],
+            [cennik.szkolenia.instrukcjaPDF,cennik.szkolenia.szkolenie30min,cennik.szkolenia.szkolenie1h,cennik.szkolenia.szkolenie2h]
+          ];
+          if (levels.some(row => row.some((n,i) => i > 0 && n < row[i-1])))
+            throw new Error("Ceny kolejnych wariantów SEO, kontaktu i szkolenia nie mogą maleć.");
+          if (cennik.pakiety.abonament.roczniePromocja > cennik.pakiety.abonament.rocznieRegularna)
+            throw new Error("Cena promocyjna nie może być wyższa od regularnej.");
+          return cennik;
+        }
+        let cennik;
+        try {
+          cennik = validatePricing(window.ENIVERSE_CENNIK);
+        } catch(error) {
+          console.error("Eniverse: sprawdź cennik.js.", error);
+          root.innerHTML = '<p role="alert" style="padding:24px;text-align:center">Kalkulator jest chwilowo niedostępny. Skontaktuj się z nami w sprawie wyceny.</p>';
+          return;
+        }
         const sections5 = ["Hero", "O nas", "Oferta", "Opinie", "Kontakt"];
-        const aboPricing = {monthly:69, annual:590, regularAnnual:790};
+        const aboPricing = {monthly:cennik.pakiety.abonament.miesiecznie, annual:cennik.pakiety.abonament.roczniePromocja, regularAnnual:cennik.pakiety.abonament.rocznieRegularna};
         const rights =
           "Prawa do indywidualnie wykonanych elementów — zgodnie z umową i licencjami";
         const packages = [
           {
             id: "mini",
             name: "Abonament",
-            price: 69,
+            price: aboPricing.monthly,
             recurring: true,
             structure: "Strona główna do 5 sekcji",
             chips: sections5,
@@ -3795,7 +3827,7 @@
           {
             id: "start",
             name: "Start",
-            price: 1190,
+            price: cennik.pakiety.start,
             recurring: false,
             structure: "Strona główna do 5 sekcji",
             chips: sections5,
@@ -3820,7 +3852,7 @@
           {
             id: "one",
             name: "One Page",
-            price: 1690,
+            price: cennik.pakiety.onePage,
             recurring: false,
             structure: "Strona główna do 5 sekcji",
             chips: sections5,
@@ -3845,7 +3877,7 @@
           {
             id: "wiz",
             name: "Wizytówka",
-            price: 2490,
+            price: cennik.pakiety.wizytowka,
             recurring: false,
             structure: "Do 5 podstron",
             chips: [],
@@ -3870,7 +3902,7 @@
           {
             id: "firm",
             name: "Strona firmowa",
-            price: 3490,
+            price: cennik.pakiety.firmowy,
             recurring: false,
             structure: "Do 10 podstron",
             chips: [],
@@ -3894,21 +3926,21 @@
           },
         ];
         const seo = [
-          ["Bez dodatkowego SEO", "Brak SEO na start w bazie pakietu", 0],
+          ["Bez dodatkowego SEO", "Brak SEO na start w bazie pakietu", cennik.seo.brak],
           [
             "SEO techniczne na start",
             "Zakres do doprecyzowania w warunkach SEO",
-            149,
+            cennik.seo.techniczne,
           ],
           [
             "Podstawowe SEO na start",
             "Według warunków SEO; dalsze usługi wyceniane osobno",
-            290,
+            cennik.seo.podstawowe,
           ],
           [
             "Rozszerzone SEO",
             "Według warunków SEO; dalsze usługi wyceniane osobno",
-            490,
+            cennik.seo.rozszerzone,
           ],
         ];
         // Wyświetlana nazwa SEO tylko w pakietach One Page i Wizytówka.
@@ -3920,12 +3952,12 @@
             : name;
         }
         const contacts = [
-          ["Kontakt podstawowy", "Przyciski kontaktowe: telefon i e-mail", 0],
-          ["Formularz kontaktowy", "Standardowy formularz kontaktowy", 90],
+          ["Kontakt podstawowy", "Przyciski kontaktowe: telefon i e-mail", cennik.kontakt.podstawowy],
+          ["Formularz kontaktowy", "Standardowy formularz kontaktowy", cennik.kontakt.formularz],
           [
             "Formularz kontaktowy rozszerzony",
             "Rozbudowane pola i opcje formularza",
-            190,
+            cennik.kontakt.formularzRozszerzony,
           ],
         ];
         const hostingText = (p) =>
@@ -3936,24 +3968,36 @@
               : "Hosting i opieka techniczna: usługi opcjonalne, płatne rocznie z góry";
         // Ceny dodatków: stawki robocze netto, do potwierdzenia przed wdrożeniem.
         const extraServices = [
-          ["maps", "Mapy Google", 50, false],
-          ["newsletter", "Newsletter", 300, false],
-          ["social", "Integracja z social media", 50, false],
-          ["analytics", "Google Analytics", 200, false],
-          ["gsc", "Google Search Console", 90, true],
-          ["blog", "Blog / Realizacje", 249, true],
-          ["logoAi", "Logo stworzone przy pomocy AI", 190, false],
+          ["maps", "Mapy Google", cennik.dodatki.mapyGoogle, false],
+          ["newsletter", "Newsletter", cennik.dodatki.newsletter, false],
+          ["social", "Integracja z social media", cennik.dodatki.socialMedia, false],
+          ["analytics", "Google Analytics", cennik.dodatki.googleAnalytics, false],
+          ["gsc", "Google Search Console", cennik.dodatki.googleSearchConsole, true],
+          ["blog", "Blog / Realizacje", cennik.dodatki.blogRealizacje, true],
+          ["logoAi", "Logo stworzone przy pomocy AI", cennik.dodatki.logoAI, false],
         ];
         // Stawki poglądowe: dodatki jednorazowe, bez cyklicznej obsługi reklam i SEO.
         const seoServices = [
-          ["contentEdit", "Redakcja i optymalizacja treści", 290, "Optymalizacja istniejących tekstów"],
-          ["contentSeo", "Stworzenie i optymalizacja treści pod SEO", 590, "Przygotowanie nowych tekstów pod SEO"],
-          ["googleAds", "Kampania Google Ads", 490, "Uruchomienie kampanii · bez budżetu reklamowego"],
-          ["seoPosition", "Pozycjonowanie SEO", 690, "Pakiet startowy · dalsza obsługa osobno"],
+          ["contentEdit", "Redakcja i optymalizacja treści", cennik.marketing.optymalizacjaTresci, "Optymalizacja istniejących tekstów"],
+          ["contentSeo", "Stworzenie i optymalizacja treści pod SEO", cennik.marketing.tworzenieTresciSEO, "Przygotowanie nowych tekstów pod SEO"],
+          ["googleAds", "Kampania Google Ads", cennik.marketing.kampaniaGoogleAds, "Uruchomienie kampanii · bez budżetu reklamowego"],
+          ["seoPosition", "Pozycjonowanie SEO", cennik.marketing.pozycjonowanieSEO, "Pakiet startowy · dalsza obsługa osobno"],
         ];
-        const annualHosting = 600;
-        const annualCare = 348;
-        const languagePrice = 490;
+        const annualHosting = cennik.uslugiRoczne.hosting;
+        const annualCare = cennik.uslugiRoczne.opiekaTechniczna;
+        const languagePrice = cennik.rozbudowa.dodatkowyJezyk;
+        const sectionPrice = cennik.rozbudowa.dodatkowaSekcja;
+        const pagePrice = cennik.rozbudowa.dodatkowaPodstrona;
+        const revisionPrice = cennik.rozbudowa.dodatkowaRundaPoprawek;
+        // Etykiety statycznego HTML korzystają z tego samego źródła cen co wycena.
+        const displayPrices = {...aboPricing, hostingWithCare:annualHosting + annualCare};
+        all("[data-cennik]").forEach(el => {
+          el.textContent = money(displayPrices[el.dataset.cennik]) + (el.dataset.cennikSuffix || "");
+        });
+        q("#ec-mini-monthly-price").textContent = money(aboPricing.monthly);
+        q("#ec-mini-annual-price").textContent = money(aboPricing.annual);
+        q("#ec-monthly-rate").textContent = money(aboPricing.monthly) + " / mies.";
+        q("#ec-annual-rate").textContent = money(aboPricing.annual) + " / rok · promocja";
         const languageChoices = [
           "Angielski","Niemiecki","Ukraiński","Francuski","Hiszpański",
           "Włoski","Czeski","Niderlandzki","Portugalski","Szwedzki",
@@ -4077,7 +4121,7 @@
             ${featured ? '<div class="ec-featured-badge">Dla rozwijających się firm</div>' : ''}
             ${starter ? '<div class="ec-abo-intro">' : ''}
             <div class="ec-card-header"><span class="ec-kicker">${kicker}</span><h2 id="ec-plan-${p.id}">${p.name}</h2><p class="ec-card-description">${description}</p></div>
-            <div class="ec-card-budget">${price}${p.recurring ? '<p class="ec-mini-saving">Oszczędzasz 238 zł rocznie w porównaniu z płatnościami miesięcznymi.</p><p class="ec-muted ec-mini-small">Cena promocyjna na cały 12-miesięczny okres umowy · hosting w cenie</p>' : '<p class="ec-muted">Realizacja na szablonie WordPress</p>'}</div>
+            <div class="ec-card-budget">${price}${p.recurring ? '<p class="ec-mini-saving">Oszczędzasz ' + money(aboPricing.monthly * 12 - aboPricing.annual) + ' rocznie w porównaniu z płatnościami miesięcznymi.</p><p class="ec-muted ec-mini-small">Cena promocyjna na cały 12-miesięczny okres umowy · hosting w cenie</p>' : '<p class="ec-muted">Realizacja na szablonie WordPress</p>'}</div>
             ${starter ? '</div><div class="ec-abo-details">' : ''}
             <div class="ec-project-scale">${projectIcon(p)}<h3>${scale}</h3><p>${scaleNote}</p>${templateEnabled ? `<button type="button" class="ec-template-launch ec-interactive" data-templates-open data-template-plan="${p.id}" aria-haspopup="dialog">${starter ? "Przejrzyj szablony pakietu Abonament" : "Przejrzyj szablony Start"} <span aria-hidden="true">↗</span></button>` : ''}</div>
             <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul>${benefits}${originalPlan ? "" : cardRows(excluded)}</ul>
@@ -4447,10 +4491,10 @@
           all(".ec-card-details").forEach(other => { if (other !== opened) other.open = false; });
         }, true);
         const trainingOptions = [
-          ["Instrukcja PDF", 0],
-          ["Szkolenie 30 min", 49],
-          ["Szkolenie 1 h", 90],
-          ["Szkolenie 2 h", 179],
+          ["Instrukcja PDF", cennik.szkolenia.instrukcjaPDF],
+          ["Szkolenie 30 min", cennik.szkolenia.szkolenie30min],
+          ["Szkolenie 1 h", cennik.szkolenia.szkolenie1h],
+          ["Szkolenie 2 h", cennik.szkolenia.szkolenie2h],
         ];
         function trainingBase(p) {
           return p.id === "one"
@@ -4622,7 +4666,7 @@
           q("#ec-revisions").innerHTML = [0, 1, 2, 3]
             .map(
               (n) =>
-                `<label class="ec-option ec-interactive"><input type="radio" name="ec-revisions" value="${n}" ${n === s.revisions ? "checked" : ""}><span><strong>${n === 0 ? "Bez dodatkowych sesji" : n === 1 ? "+1 sesja" : n === 2 ? "+2 sesje" : "+3 sesje"}</strong><small>${n ? "+" + money(n * 69) + " · łącznie " + (p.revisions + n) + " sesji" : "Zakres bazowy · " + p.revisions + " sesji"}</small></span></label>`,
+                `<label class="ec-option ec-interactive"><input type="radio" name="ec-revisions" value="${n}" ${n === s.revisions ? "checked" : ""}><span><strong>${n === 0 ? "Bez dodatkowych sesji" : n === 1 ? "+1 sesja" : n === 2 ? "+2 sesje" : "+3 sesje"}</strong><small>${n ? "+" + money(n * revisionPrice) + " · łącznie " + (p.revisions + n) + " sesji" : "Zakres bazowy · " + p.revisions + " sesji"}</small></span></label>`,
             )
             .join("");
           // Dodatki po prawej stronie listy elementów objętych pakietem.
@@ -4665,15 +4709,15 @@
         function calculate() {
           const p = current, s = states[p.id], items = [];
           if (s.sections)
-            items.push(["Dodatkowe sekcje × " + s.sections, s.sections * 90]);
+            items.push(["Dodatkowe sekcje × " + s.sections, s.sections * sectionPrice]);
           if (s.pages)
-            items.push(["Dodatkowe podstrony × " + s.pages, s.pages * 190]);
+            items.push(["Dodatkowe podstrony × " + s.pages, s.pages * pagePrice]);
           if (s.seo > p.seo)
             items.push([seoName(p,s.seo), seo[s.seo][2] - seo[p.seo][2]]);
           if (s.contact > p.contact)
             items.push([contacts[s.contact][0], contacts[s.contact][2] - contacts[p.contact][2]]);
           if (s.revisions)
-            items.push(["Dodatkowe sesje × " + s.revisions, s.revisions * 69]);
+            items.push(["Dodatkowe sesje × " + s.revisions, s.revisions * revisionPrice]);
           if (trainingCharge())
             items.push(["Zmiana szkolenia: " + trainingLabel(), trainingCharge()]);
           (s.languages || []).forEach(language =>
@@ -4758,8 +4802,8 @@
           q("#ec-total").textContent = money(a.total);
           q("#ec-paynote").textContent = p.recurring
             ? s.billing === "annual"
-              ? "590 zł / rok promocyjnie + dodatki rozłożone na raty."
-              : "12 × 69 zł + dodatki rozłożone na raty."
+              ? money(aboPricing.annual) + " / rok promocyjnie + dodatki rozłożone na raty."
+              : "12 × " + money(aboPricing.monthly) + " + dodatki rozłożone na raty."
             : a.host
               ? "Projekt, dodatki i wybrane usługi roczne płatne z góry."
               : p.hosting === "year"
@@ -4791,7 +4835,7 @@
           const simpleRows = [
             ["Pakiet", p.name],
             ["Zakres", p.structure],
-            ...(p.recurring && s.billing==="annual" ? [["Promocja pakietu Abonament", "590 zł/rok zamiast 790 zł/rok"]] : []),
+            ...(p.recurring && s.billing==="annual" ? [["Promocja pakietu Abonament", money(aboPricing.annual) + "/rok zamiast " + money(aboPricing.regularAnnual) + "/rok"]] : []),
             ["SEO", seoName(p,s.seo)],
             ["Dodatkowe usługi SEO", seoServices.filter(([key]) => s[key])
               .map(([,label]) => label).join(", ") || "Bez dodatkowych usług"],
@@ -4907,7 +4951,7 @@
           lang.className = "ec-section";
           lang.innerHTML =
             '<h3>Języki obce na stronie</h3>' +
-            '<p class="ec-muted">Włącz język i wybierz go z listy. Możesz dodać kilka wersji językowych. Cena robocza: 490 zł za każdy język jednorazowo. Tłumaczenie treści jest wyceniane osobno.</p>' +
+            '<p class="ec-muted">Włącz język i wybierz go z listy. Możesz dodać kilka wersji językowych. Cena robocza: ' + money(languagePrice) + ' za każdy język jednorazowo. Tłumaczenie treści jest wyceniane osobno.</p>' +
             '<div class="ec-language-list" id="ec-language-rows"></div>' +
             '<button class="ec-language-add ec-interactive" type="button" id="ec-add-language">+ Dodaj kolejny język</button>';
           wizardPanes[3].insertBefore(lang,sections[7]);
@@ -5324,7 +5368,7 @@
           if (p.hosting === "year")
             lines.push("Hosting po pierwszym roku: cena do ustalenia.");
           lines.push(
-            "Ceny dodatków są przykładowe. Sesje poprawek i modyfikacje od 69 zł; w makiecie 69 zł/sesję. Kwoty netto; VAT według właściwej stawki.",
+            "Ceny dodatków są przykładowe. Sesje poprawek i modyfikacje od " + money(revisionPrice) + "; w makiecie " + money(revisionPrice) + "/sesję. Kwoty netto; VAT według właściwej stawki.",
           );
           return lines.join(String.fromCharCode(10));
         }
@@ -5487,7 +5531,7 @@
             : "Wybrane dodatki";
           all("[data-extra-cost]").forEach((e) => {
             e.textContent =
-              e.dataset.extraCost +
+              "+" + money(e.dataset.extraCost === "section" ? sectionPrice : pagePrice) + e.dataset.extraUnit +
               " · " +
               (mini ? "wliczone w raty" : "jednorazowo");
           });
