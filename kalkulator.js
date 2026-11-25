@@ -38,6 +38,11 @@
           }
           if(!c.rozbudowa || typeof c.rozbudowa!=="object") throw Error("Brak rozbudowy");
           for(const [key,x] of Object.entries(c.rozbudowa))if(!["dodatkowaSekcja","dodatkowaPodstrona","dodatkowyJezyk","dodatkowaRundaPoprawek"].includes(key)||!x||!nameOK(x.nazwa)||!priceOK(x.cena))throw Error("Niepoprawna rozbudowa: "+key+"; nowe usługi dodawaj do dodatki");
+          const u=c.ustawienia;
+          if(!u||!Number.isInteger(u.okresAbonamentu)||u.okresAbonamentu<1||u.okresAbonamentu>120||
+             typeof u.zaliczkaProcent!=="number"||!Number.isFinite(u.zaliczkaProcent)||u.zaliczkaProcent<0||u.zaliczkaProcent>100||
+             typeof u.zaokraglanieRat!=="boolean"||typeof u.progZaokraglania!=="number"||!Number.isFinite(u.progZaokraglania)||u.progZaokraglania<0||u.progZaokraglania>1||
+             Math.abs(u.progZaokraglania*100-Math.round(u.progZaokraglania*100))>1e-6)throw Error("Niepoprawne ustawienia rozliczeń");
           return c;
         }
         let cennik;
@@ -51,6 +56,17 @@
           root.innerHTML='<p class="ec-pricing-error">Aktualnie brak dostępnych pakietów.</p>';
           return;
         }
+        const settings=cennik.ustawienia;
+        const months=settings.okresAbonamentu;
+        const depositPercent=settings.zaliczkaProcent;
+        const remainingPercent=Number((100-depositPercent).toFixed(10));
+        const monthLabel=n=>n===1?"1 miesiąc":n%10>=2&&n%10<=4&&!(n%100>=12&&n%100<=14)?n+" miesiące":n+" miesięcy";
+        const contractPeriod=monthLabel(months);
+        const annualPeriods=Array.from({length:Math.ceil(months/12)},(_,i)=>Math.min(12,months-i*12));
+        const annualUnit=months<12?" / "+contractPeriod:" / rok";
+        const prorate=(rate,n)=>Math.round(rate*100*n/12);
+        const annualBaseCents=(regular=false)=>annualPeriods.reduce((sum,n,i)=>sum+prorate(regular||i>0?aboPricing.regularAnnual:aboPricing.annual,n),0);
+        const contractBase=(billing,regular=false)=>billing==="annual"?annualBaseCents(regular)/100:Math.round(aboPricing.monthly*100)*months/100;
         const variants=(items,emptyLabel)=>{
           const result=items.map(x=>({...x}));
           if(!result.length || result[0].cena!==0)result.unshift({id:"__none",nazwa:emptyLabel,opis:"Brak w bazie pakietu",cena:0});
@@ -67,6 +83,7 @@
         const aboPricing={monthly:abo?.miesiecznie??0,annual:abo?.roczniePromocja??0,regularAnnual:abo?.rocznieRegularna??0};
         const packages=cennik.pakiety.map(p=>({
           ...p,name:p.nazwa,price:p.recurring?aboPricing.monthly:p.cena,
+          terms:p.recurring?p.terms+" na "+contractPeriod:p.terms,
           seo:indexOfVariant(seoConfig,p.seo),contact:indexOfVariant(contactConfig,p.kontakt),
           trainingIndex:indexOfVariant(trainingConfig,p.szkolenie),
           training:p.recurring?"Brak szkolenia":trainingOptions[indexOfVariant(trainingConfig,p.szkolenie)][0],
@@ -103,6 +120,7 @@
         const revisionPrice=expansion.dodatkowaRundaPoprawek?.cena??0;
         // Etykiety statycznego HTML korzystają z tego samego źródła cen co wycena.
         const displayPrices = {...aboPricing, hostingWithCare:annualHosting + annualCare};
+        all("[data-contract-period]").forEach(el=>el.textContent=contractPeriod);
         all("[data-cennik]").forEach(el => {
           el.textContent = money(displayPrices[el.dataset.cennik]) + (el.dataset.cennikSuffix || "");
         });
@@ -211,14 +229,14 @@
             ${featured ? '<div class="ec-featured-badge">Dla rozwijających się firm</div>' : ''}
             ${starter ? '<div class="ec-abo-intro">' : ''}
             <div class="ec-card-header"><span class="ec-kicker">${kicker}</span><h2 id="ec-plan-${p.id}">${escapeTemplateText(p.name)}</h2><p class="ec-card-description">${description}</p></div>
-            <div class="ec-card-budget">${price}${p.recurring ? '<p class="ec-mini-saving">Oszczędzasz ' + money(aboPricing.monthly * 12 - aboPricing.annual) + ' rocznie w porównaniu z płatnościami miesięcznymi.</p><p class="ec-muted ec-mini-small">Cena promocyjna na cały 12-miesięczny okres umowy · hosting w cenie</p>' : '<p class="ec-muted">Realizacja na szablonie WordPress</p>'}</div>
+            <div class="ec-card-budget">${price}${p.recurring ? '<p class="ec-mini-saving">Oszczędzasz ' + money(aboPricing.monthly * 12 - aboPricing.annual) + ' rocznie w porównaniu z płatnościami miesięcznymi.</p><p class="ec-muted ec-mini-small">Cena promocyjna w pierwszym roku · hosting w cenie</p>' : '<p class="ec-muted">Realizacja na szablonie WordPress</p>'}</div>
             ${starter ? '</div><div class="ec-abo-details">' : ''}
             <div class="ec-project-scale">${projectIcon(p)}<h3>${scale}</h3><p>${scaleNote}</p>${templateEnabled ? `<button type="button" class="ec-template-launch ec-interactive" data-templates-open data-template-plan="${p.id}" aria-haspopup="dialog">${p.id==="start"&&p.name==="Start"?"Przejrzyj szablony Start":"Przejrzyj szablony pakietu "+escapeTemplateText(p.name)} <span aria-hidden="true">↗</span></button>` : ''}</div>
             <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul>${benefits}${originalPlan ? "" : cardRows(excluded)}</ul>
               <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary>${cardDetails(p)}</details>
             </div>
             ${starter ? '</div><div class="ec-abo-side">' : ''}
-            <dl class="ec-card-meta"><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-${p.id}">Czas realizacji</button><span id="ec-tip-time-${p.id}" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd>${p.days ? `Do ${p.days} dni roboczych` : "Do zatwierdzenia"}</dd></div><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-${p.id}">Rundy poprawek</button><span id="ec-tip-revisions-${p.id}" role="tooltip" class="ec-meta-tip-content">Jedna runda poprawek to jeden zbiorczy zestaw uwag do przedstawionej wersji strony. Liczba rund w cenie zależy od wybranego pakietu.</span></span></dt><dd>${p.revisions ? p.revisions + " w cenie" : "Brak w cenie"}</dd></div>${p.recurring ? '<div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="ec-dotted">Abonament</span></dt><dd>12 miesięcy</dd></div>' : ''}</dl>
+            <dl class="ec-card-meta"><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-${p.id}">Czas realizacji</button><span id="ec-tip-time-${p.id}" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd>${p.days ? `Do ${p.days} dni roboczych` : "Do zatwierdzenia"}</dd></div><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-${p.id}">Rundy poprawek</button><span id="ec-tip-revisions-${p.id}" role="tooltip" class="ec-meta-tip-content">Jedna runda poprawek to jeden zbiorczy zestaw uwag do przedstawionej wersji strony. Liczba rund w cenie zależy od wybranego pakietu.</span></span></dt><dd>${p.revisions ? p.revisions + " w cenie" : "Brak w cenie"}</dd></div>${p.recurring ? '<div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="ec-dotted">Abonament</span></dt><dd>${contractPeriod}</dd></div>' : ''}</dl>
             <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="${p.id}"><span>${p.id==="firm"&&p.name==="Strona firmowa"?"Wybieram stronę firmową":"Wybieram "+(p.id==="wiz"&&p.name==="Wizytówka"?"Wizytówkę":escapeTemplateText(p.name))}</span><span aria-hidden="true">↗</span></button>
             <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="${p.id}"><span>Skonfiguruj pakiet</span><span aria-hidden="true">↗</span></button></div>
             ${starter ? '</div>' : ''}
@@ -230,7 +248,7 @@
 <div class="enp-abo-pricecol">
 <header><span class="enp-eyebrow">Prosty start w internecie</span><h3 id="enp-plan-abonament-1">${escapeTemplateText(miniPackage.name)}</h3><p class="enp-card-desc">Profesjonalna strona internetowa bez dużej inwestycji na start.</p></header>
 <div class="abo-price-view" data-price-view="b"><div class="abo-pay-options abo-compact-options"><div class="abo-pay-option"><span class="enp-eyebrow">Miesięcznie</span><p class="enp-price"><strong>${aboPricing.monthly}</strong></p><p class="enp-abo-unit">zł netto / mies.</p></div><div class="abo-pay-separator">lub</div><div class="abo-pay-option abo-pay-year"><span class="enp-eyebrow enp-red">Rocznie</span><p class="enp-price enp-red abo-year-price"><strong>${aboPricing.annual}</strong><del aria-label="Poprzednia cena: ${aboPricing.regularAnnual} zł netto za rok" class="abo-previous-price">${aboPricing.regularAnnual} zł</del></p><p class="enp-abo-unit">zł netto / rok</p></div></div></div>
-<p class="enp-price-note abo-hosting-note">Umowa na 12 miesięcy · hosting w cenie</p>
+<p class="enp-price-note abo-hosting-note">Umowa na ${contractPeriod} · hosting w cenie</p>
 </div>
 <div class="enp-abo-scopecol">
 <div class="enp-abo-scale"><div aria-hidden="true" class="enp-scale-visual"><div class="enp-scale-map enp-scale-one"><i></i><i></i><i></i><i></i><i></i></div></div><div><p class="enp-scope">1 strona · do 5 sekcji</p><p class="enp-scope-note">Gotowy szablon HTML i CSS</p></div></div>
@@ -241,11 +259,11 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
 <dl class="enp-meta">
 <div><dt><svg aria-hidden="true" class="enp-meta-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="5"></rect><path d="M7 3v4m10-4v4M3 11h18"></path></svg> <span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-mini">Czas realizacji</button><span id="ec-tip-time-mini" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd>Do 3 dni roboczych</dd></div>
 <div><dt><svg aria-hidden="true" class="enp-meta-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"></path></svg> <span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-mini">Rundy poprawek</button><span id="ec-tip-revisions-mini" role="tooltip" class="ec-meta-tip-content">Pakiet Abonament nie obejmuje rund poprawek w cenie. Jedna runda to jeden zbiorczy zestaw uwag do przedstawionej wersji strony.</span></span></dt><dd>Brak w cenie</dd></div>
-<div><dt><svg aria-hidden="true" class="enp-meta-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg> Okres umowy</dt><dd>12 miesięcy</dd></div>
+<div><dt><svg aria-hidden="true" class="enp-meta-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg> Okres umowy</dt><dd>${contractPeriod}</dd></div>
 </dl>
 <div class="enp-abo-actions"><button type="button" class="enp-btn" data-choose="mini">Wybieram ${miniPackage.name==="Abonament"?"abonament":escapeTemplateText(miniPackage.name)} <span aria-hidden="true">↗</span></button><button type="button" class="enp-btn enp-btn-outline enp-btn-secondary" data-configure="mini">Skonfiguruj pakiet <span aria-hidden="true">↗</span></button></div>
 </div>
-<details class="enp-abo-details" name="ec-card-scope"><summary>Pełen zakres i warunki pakietu</summary><div class="enp-disclosure-body"><ul><li>Realizacja na gotowym szablonie, na podstawie dostarczonych tekstów i zdjęć.</li><li>Hosting na infrastrukturze Eniverse w okresie obowiązywania umowy, bez skrzynek pocztowych.</li><li>Pakiet nie obejmuje CMS, przekazania plików ani praw do szablonu. Strona jest dostępna przez czas trwania umowy i nie jest przekazywana na własność.</li><li>Po zakończeniu umowy bez jej przedłużenia strona przestaje być dostępna. Promocyjna płatność roczna dotyczy pierwszego 12-miesięcznego okresu umowy.</li></ul></div></details>
+<details class="enp-abo-details" name="ec-card-scope"><summary>Pełen zakres i warunki pakietu</summary><div class="enp-disclosure-body"><ul><li>Realizacja na gotowym szablonie, na podstawie dostarczonych tekstów i zdjęć.</li><li>Hosting na infrastrukturze Eniverse w okresie obowiązywania umowy, bez skrzynek pocztowych.</li><li>Pakiet nie obejmuje CMS, przekazania plików ani praw do szablonu. Strona jest dostępna przez czas trwania umowy i nie jest przekazywana na własność.</li><li>Po zakończeniu umowy bez jej przedłużenia strona przestaje być dostępna. Promocyjna stawka roczna dotyczy pierwszych maksymalnie 12 miesięcy umowy; kolejne okresy według stawki regularnej.</li></ul></div></details>
 </article></div>` : "";
         q("#ec-packages").innerHTML = packages.filter(p=>!p.recurring).map(renderCard).join("");
         q(".ec-package-group--entry").hidden=!miniPackage;
@@ -761,7 +779,7 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
           q("#ec-hosting").closest(".ec-section").hidden=!annualServices.length;
           q("#ec-hosting").innerHTML='<div class="ec-service-list">'+annualServices.map(x=>{
             const included=annualIncluded(p,x.id),checked=annualSelected(p,s,x.id);
-            return '<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-annual-'+x.id+'" '+(checked?'checked ':'')+(included?'disabled ':'')+'><span><strong>'+escapeTemplateText(x.nazwa)+'</strong><small>'+(included?(p.hosting==="year"?"W cenie przez pierwszy rok":"W cenie pakietu"):money(x.cena)+" / rok"+(p.recurring?" · za 12 mies. w abonamencie":""))+'</small></span></label>';
+            return '<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-annual-'+x.id+'" '+(checked?'checked ':'')+(included?'disabled ':'')+'><span><strong>'+escapeTemplateText(x.nazwa)+'</strong><small>'+(included?(p.hosting==="year"?"W cenie przez pierwszy rok":"W cenie pakietu"):money(x.cena)+" / rok"+(p.recurring?" · za okres umowy w abonamencie":""))+'</small></span></label>';
           }).join("")+'</div>';
           for(const [key,id] of [["dodatkowaSekcja","sections"],["dodatkowaPodstrona","pages"]]){
             const row=q("#ec-"+id).closest(".ec-counter-row");
@@ -804,9 +822,9 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
             if (s[key]) items.push([label, price]);
           });
           // W pakiecie Abonament opieka jest opłacana za 12 miesięcy w ramach abonamentu.
-          if(p.recurring)annualExtras(p,s).forEach(x=>items.push([x.nazwa+" / 12 mies.",x.cena]));
+          if(p.recurring)annualExtras(p,s).forEach(x=>items.push([x.nazwa+" / "+contractPeriod,annualPeriods.reduce((sum,n)=>sum+prorate(x.cena,n),0)/100]));
           const extra = items.reduce((sum,item) => sum + item[1], 0);
-          const year = p.recurring ? (s.billing === "annual" ? aboPricing.annual : aboPricing.monthly * 12) : p.price;
+          const year = p.recurring ? contractBase(s.billing) : p.price;
           const host=p.recurring?0:annualExtras(p,s).reduce((sum,x)=>sum+x.cena,0);
           const total = p.recurring
             ? installmentPlan(extra, s.billing).contract
@@ -872,14 +890,14 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
           q("#ec-paynote").textContent = p.recurring
             ? s.billing === "annual"
               ? money(aboPricing.annual) + " / rok promocyjnie + dodatki rozłożone na raty."
-              : "12 × " + money(aboPricing.monthly) + " + dodatki rozłożone na raty."
+              : months + " × " + money(aboPricing.monthly) + " + dodatki rozłożone na raty."
             : a.host
               ? "Projekt, dodatki i wybrane usługi roczne płatne z góry."
               : p.hosting === "year"
                 ? "Hosting i opieka w cenie na pierwszy rok."
                 : "Hosting i opieka techniczna nie są doliczone.";
           q("#ec-contract").textContent = p.recurring
-            ? "Koszt umowy na 12 miesięcy z dodatkami: " +
+            ? "Koszt umowy na "+contractPeriod+" z dodatkami: " +
               money(a.contract) +
               "."
             : p.hosting === "year"
@@ -940,10 +958,10 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
                 '<span class="ec-switch-track" aria-hidden="true"></span></label>'
             : '';
           const totalValue = p.recurring && directSummaryMode && s.billing === "annual"
-            ? '<del class="ec-summary-regular-price">' + money(aboPricing.regularAnnual + a.extra) + '</del> <strong class="ec-summary-promo-price">' + money(total) + '</strong> <small class="ec-summary-promo-label">· promocja</small>'
+            ? '<del class="ec-summary-regular-price">' + money(contractBase("annual",true)+a.extra) + '</del> <strong class="ec-summary-promo-price">' + money(total) + '</strong> <small class="ec-summary-promo-label">· promocja</small>'
             : money(total);
           const totalBlock = '<div class="ec-summary-total">' + billingSwitch +
-            row(p.recurring ? "Łącznie za 12 miesięcy" : "Projekt i usługi łącznie",totalValue) +
+            row(p.recurring ? "Łącznie za "+contractPeriod : "Projekt i usługi łącznie",totalValue) +
             (p.recurring ? row("Suma dodatków",money(a.extra)) + row("Rata pakietu i dodatków",directSummaryMode ? directMiniSchedule() : miniSchedule()) :
               row("Wartość projektu z dodatkami",money(project)) +
               (a.host ? row("Usługi roczne z góry",money(a.host)) : "")) +
@@ -1094,7 +1112,7 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
           q("#ec-back").textContent="← Wstecz";
           q("#ec-footer-note").textContent=last
             ? "Podgląd wyceny. Formularz demonstracyjny."
-            : current.recurring?"Abonament: umowa na 12 miesięcy.":"Strona i dodatki jednorazowo; usługi roczne płatne z góry.";
+            : current.recurring?"Abonament: umowa na "+contractPeriod+".":"Strona i dodatki jednorazowo; usługi roczne płatne z góry.";
           q("#ec-config .ec-fields").scrollTop=0;
           if(last)summary(baseChoice);
         }
@@ -1317,12 +1335,12 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
         function paymentInfo() {
           const p = current, a = calculate();
           const principal = p.price + a.extra;
-          const deposit = Math.round(principal * 50) / 100;
+          const deposit = Math.round(Math.round(principal*100)*depositPercent/100)/100;
           return {
             eligible: !p.recurring,
             principal,
             deposit,
-            remaining: principal - deposit,
+            remaining: (Math.round(principal*100)-Math.round(deposit*100))/100,
             hostInitial: a.host,
             initial: deposit + a.host,
             total: a.total
@@ -1331,13 +1349,13 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
         function paymentDescription() {
           const b = paymentInfo();
           if (!b.eligible) return "";
-          return "Zaliczka 50% za projekt i dodatki: " + decimalMoney(b.deposit) +
+          return "Zaliczka "+depositPercent+"% za projekt i dodatki: " + decimalMoney(b.deposit) +
             (b.hostInitial ? " + roczne usługi płatne z góry: " + money(b.hostInitial) : "") + ".";
         }
         function remainingPaymentDescription() {
           const b = paymentInfo();
           if(!b.eligible) return "";
-          return "Pozostałe 50% projektu: " + decimalMoney(b.remaining) +
+          return "Pozostałe "+remainingPercent+"% projektu: " + decimalMoney(b.remaining) +
             ". Termin zapłaty zgodnie z umową.";
         }
         function singlePaymentUpdate() {
@@ -1348,10 +1366,10 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
             q("#ec-host-label").textContent=annualCostLabel();
             q("#ec-host-cost").textContent = money(b.hostInitial);
             q("#ec-total").textContent = money(b.initial);
-            q("#ec-total-label").textContent = "Zaliczka 50% + usługi na start";
+            q("#ec-total-label").textContent = "Zaliczka "+depositPercent+"% + usługi na start";
             q("#ec-payment-aside").innerHTML =
               '<span>Do zapłaty na start</span><strong>' + decimalMoney(b.initial) +
-              '</strong><p class="ec-muted">Pozostałe 50% projektu: ' + decimalMoney(b.remaining) + '</p>';
+              '</strong><p class="ec-muted">Pozostałe '+remainingPercent+'% projektu: ' + decimalMoney(b.remaining) + '</p>';
             q("#ec-paynote").textContent = paymentDescription();
           }
           q("#ec-items").removeAttribute("aria-label");
@@ -1363,9 +1381,9 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
             const block = document.createElement("section");
             block.className = "ec-payment-summary";
             const h = document.createElement("h3");
-            h.textContent = "Zaliczka 50% wartości projektu";
+            h.textContent = "Zaliczka "+depositPercent+"% wartości projektu";
             const first = document.createElement("p");
-            first.textContent = "50% za projekt i dodatki: " + decimalMoney(b.deposit);
+            first.textContent = depositPercent+"% za projekt i dodatki: " + decimalMoney(b.deposit);
             const second = document.createElement("p");
             second.textContent = "Usługi roczne płatne z góry: " + money(b.hostInitial);
             const amount = document.createElement("p");
@@ -1421,19 +1439,19 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
             "WYCENA",
             "Cena bazowa: " +
               money(a.year) +
-              (p.recurring ? " / rok" : " za wykonanie"),
+              (p.recurring ? " / "+contractPeriod : " za wykonanie"),
             ...a.items.map((x) => x[0] + ": " + money(x[1])),
             (p.recurring
               ? "Dodatki — wartość za całą umowę: "
               : "Suma dodatków: ") + money(a.extra),
             "Dodatkowe usługi roczne (hosting/opieka): " + money(a.host),
-            "Łącznie" + " w pierwszym roku" + ": " + money(a.total),
+            (p.recurring?"Łącznie za "+contractPeriod:"Łącznie w pierwszym roku")+": "+money(a.total),
             "",
           ];
           if (p.recurring)
             lines.push(
               "Łączna płatność za pakiet i dodatki: " + (directSummaryMode ? directMiniSchedule() : miniSchedule()),
-              "Umowa: 12 miesięcy",
+              "Umowa: "+contractPeriod,
               "Cała umowa z dodatkami: " + money(a.contract),
               "Dodatki są rozłożone na cały okres umowy; brak osobnej opłaty jednorazowej.",
             );
@@ -1446,7 +1464,7 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
             );
           if (b.eligible)
             lines.push(
-              "Zaliczka 50% wartości projektu: " + decimalMoney(b.deposit),
+              "Zaliczka "+depositPercent+"% wartości projektu: " + decimalMoney(b.deposit),
               "Hosting i opieka za rok z góry: " + money(b.hostInitial),
               "Do zapłaty na start: " + decimalMoney(b.initial),
               remainingPaymentDescription(),
@@ -1637,50 +1655,52 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
         );
 
         function installmentPlan(extra, billing) {
-          const annual = billing === "annual",
-            count = annual ? 1 : 12,
-            base = Math.round((annual ? aboPricing.annual : aboPricing.monthly) * 100),
-            extraCents = Math.round(extra * 100),
-            totalCents = base * count + extraCents;
-          // Raty miesięczne w pełnych złotych: dokładnie 50 gr w dół, powyżej 50 gr w górę.
-          // Operujemy na całkowitej liczbie groszy, bez błędów zmiennoprzecinkowych.
-          const rateCents = annual ? totalCents : Math.floor((totalCents + 599) / 1200) * 100;
-          return {
-            annual,
-            count,
-            regular: rateCents / 100,
-            last: rateCents / 100,
-            extraPart: (rateCents - base) / 100,
-            contract: rateCents * count / 100,
-          };
+          const annual=billing==="annual", extraCents=Math.round(extra*100);
+          let payments, bases;
+          if(annual){
+            bases=annualPeriods.map((n,i)=>prorate(i===0?aboPricing.annual:aboPricing.regularAnnual,n));
+            let elapsed=0,allocated=0;
+            payments=annualPeriods.map((n,i)=>{
+              elapsed+=n;
+              const cumulative=Math.round(extraCents*elapsed/months);
+              const amount=bases[i]+cumulative-allocated;
+              allocated=cumulative;
+              return amount;
+            });
+          }else{
+            const base=Math.round(aboPricing.monthly*100), total=base*months+extraCents;
+            bases=Array(months).fill(base);
+            if(settings.zaokraglanieRat){
+              const full=Math.floor(total/(months*100));
+              const remainder=total-full*months*100;
+              const rate=(full+(remainder>Math.round(settings.progZaokraglania*100)*months?1:0))*100;
+              payments=Array(months).fill(rate);
+            }else{
+              const rate=Math.floor(total/months);
+              payments=Array(months).fill(rate);
+              payments[months-1]=total-rate*(months-1);
+            }
+          }
+          return {annual,count:payments.length,regular:payments[0]/100,last:payments[payments.length-1]/100,
+            extraPart:(payments[0]-bases[0])/100,baseFirst:bases[0]/100,contract:payments.reduce((sum,n)=>sum+n,0)/100,
+            payments:payments.map(n=>n/100)};
         }
-        function miniPlan(billing = states[current.id].billing) {
-          return installmentPlan(calculate().extra, billing);
+        function miniPlan(billing=states[current.id].billing){return installmentPlan(calculate().extra,billing);}
+        function directMiniSchedule(billing=states[current.id].billing){
+          const b=miniPlan(billing);
+          if(b.annual){
+            if(b.count===1)return "Jednorazowa płatność "+money(b.regular)+(months===12?"/rok":" / "+contractPeriod);
+            return b.payments.map((amount,i)=>(i+1)+". okres ("+monthLabel(annualPeriods[i])+"): "+money(amount)).join("; ");
+          }
+          if(b.count===1)return "1 rata "+money(b.regular)+" / mc";
+          if(b.regular===b.last)return b.count+" rat po "+money(b.regular)+" / mc";
+          return (b.count-1)+" rat po "+money(b.regular)+" / mc i ostatnia "+money(b.last);
         }
-        function directMiniSchedule(billing = states[current.id].billing) {
-          const b = miniPlan(billing);
-          return b.annual
-            ? "Jednorazowa płatność " + money(b.regular) + "/rok"
-            : b.count + " rat po " + money(b.regular) + " / mc";
-        }
-        function miniSchedule(billing = states[current.id].billing) {
-          const b = miniPlan(billing);
-          if (b.count === 1) return "1 płatność roczna w wysokości " + decimalMoney(b.regular);
-          return b.regular === b.last
-            ? b.count +
-                " " +
-                (b.annual ? "płatności roczne" : "raty miesięczne") +
-                " po " +
-                money(b.regular)
-            : b.count -
-                1 +
-                " " +
-                (b.annual ? "płatność roczna" : "raty miesięczne") +
-                " po " +
-                decimalMoney(b.regular) +
-                " i ostatnia " +
-                (b.annual ? "płatność " : "rata ") +
-                decimalMoney(b.last);
+        function miniSchedule(billing=states[current.id].billing){
+          const b=miniPlan(billing);
+          if(b.annual&&b.count===1)return (months===12?"1 płatność roczna":"1 płatność za "+contractPeriod)+" w wysokości "+decimalMoney(b.regular);
+          if(!b.annual&&b.regular===b.last)return b.count+" raty miesięczne po "+money(b.regular);
+          return directMiniSchedule(billing);
         }
         function update() {
           singlePaymentUpdate();
@@ -1694,7 +1714,7 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
           q("#ec-paynote").hidden = mini;
           q("#ec-extra-label").textContent = mini
             ? "Dodatki / " +
-              (states[current.id].billing === "annual" ? "rok" : "ratę")
+              (states[current.id].billing === "annual" ? (months<12?contractPeriod:"rok") : "ratę")
             : "Dodatki jednorazowe";
           q("#ec-items-title").textContent = mini
             ? "Dodatki — wartość za całą umowę"
@@ -1710,14 +1730,14 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
             b = miniPlan();
           q("#ec-base").textContent = b.annual ? decimalMoney(b.regular) : money(b.regular);
           q("#ec-period").textContent = b.annual
-            ? "rocznie za pakiet i dodatki"
+            ? (months<12?"za "+contractPeriod+" — pakiet i dodatki":months>12?"pierwsza płatność roczna za pakiet i dodatki":"rocznie za pakiet i dodatki")
             : "miesięcznie za pakiet i dodatki";
           q("#ec-base-label").textContent = b.annual
-            ? "Baza / rok"
+            ? "Baza / "+(months<12?contractPeriod:"rok")
             : "Rata bazowa";
-          q("#ec-base-cost").textContent = money(b.annual ? aboPricing.annual : aboPricing.monthly);
+          q("#ec-base-cost").textContent = money(b.baseFirst);
           q("#ec-extra").textContent = b.annual ? decimalMoney(b.extraPart) : money(b.extraPart);
-          q("#ec-project-subtotal-label").textContent = b.annual ? "Pakiet + dodatki / rok" : "Pakiet + dodatki / mies.";
+          q("#ec-project-subtotal-label").textContent = b.annual ? "Pakiet + dodatki / "+(months<12?contractPeriod:"rok") : "Pakiet + dodatki / mies.";
           q("#ec-project-subtotal").textContent = b.annual ? decimalMoney(b.regular) : money(b.regular);
           q("#ec-contract").textContent =
             "Dodatki o wartości " +
@@ -1735,7 +1755,7 @@ ${miniPackage.galeria?`<button type="button" class="enp-abo-template" data-templ
           q("#ec-monthly-detail").textContent =
             miniSchedule("monthly") + " za pakiet i dodatki.";
           q("#ec-annual-rate").textContent =
-            decimalMoney(annual.regular) + " / rok";
+            decimalMoney(annual.regular) + annualUnit;
           q("#ec-annual-rate").classList.toggle("ec-promo-price", a.extra === 0);
           q("#ec-annual-detail").textContent =
             miniSchedule("annual") + " za pakiet i dodatki.";

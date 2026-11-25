@@ -39,7 +39,7 @@ window.ENIVERSE_CENNIK = {
       "content": "Klient dostarcza gotowe treści, dopasowane do wybranego szablonu.",
       "panel": false,
       "rights": "Korzystanie ze strony w ramach abonamentu",
-      "terms": "Umowa abonamentowa na 12 miesięcy",
+      "terms": "Umowa abonamentowa",
       "nav": false,
       "seo": "brak",
       "kontakt": "podstawowy",
@@ -359,5 +359,13 @@ window.ENIVERSE_CENNIK = {
       "nazwa": "Opieka techniczna",
       "cena": 348
     }
-  ]
+  ],
+
+  // Ustawienia rozliczeń — wspólne dla całego kalkulatora.
+  ustawienia: {
+    okresAbonamentu: 12,
+    zaliczkaProcent: 50,
+    zaokraglanieRat: true,
+    progZaokraglania: 0.50
+  }
 };
