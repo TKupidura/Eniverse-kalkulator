@@ -1479,7 +1479,9 @@
       #eni-calc .ec-template-close {
         flex:0 0 39px; width:39px; height:39px; border:1px solid #d9e0e5;
         border-radius:50%; background:white; font-size:26px; cursor:pointer;
+        display:grid; place-items:center; padding:0; line-height:1;
       }
+      #eni-calc .ec-template-close > svg { display:block; width:18px; height:18px; pointer-events:none; }
       #eni-calc .ec-template-close:hover { background:#f3f5f6; }
       #eni-calc .ec-template-content { min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; padding:19px 26px; }
       #eni-calc .ec-template-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:23px; }
