@@ -5433,17 +5433,17 @@
             count = annual ? 1 : 12,
             base = Math.round((annual ? aboPricing.annual : aboPricing.monthly) * 100),
             extraCents = Math.round(extra * 100),
-            part = Math.floor(extraCents / count),
-            difference = extraCents - part * count,
-            // Wyrównanie ostatniej raty tylko wtedy, gdy różnica przekracza 1 zł.
-            lastPart = part + (difference > 100 ? difference : 0);
+            totalCents = base * count + extraCents;
+          // Raty miesięczne w pełnych złotych: dokładnie 50 gr w dół, powyżej 50 gr w górę.
+          // Operujemy na całkowitej liczbie groszy, bez błędów zmiennoprzecinkowych.
+          const rateCents = annual ? totalCents : Math.floor((totalCents + 599) / 1200) * 100;
           return {
             annual,
             count,
-            regular: (base + part) / 100,
-            last: (base + lastPart) / 100,
-            extraPart: part / 100,
-            contract: ((base + part) * (count - 1) + base + lastPart) / 100,
+            regular: rateCents / 100,
+            last: rateCents / 100,
+            extraPart: (rateCents - base) / 100,
+            contract: rateCents * count / 100,
           };
         }
         function miniPlan(billing = states[current.id].billing) {
@@ -5457,7 +5457,7 @@
                 " " +
                 (b.annual ? "płatności roczne" : "raty miesięczne") +
                 " po " +
-                decimalMoney(b.regular)
+                money(b.regular)
             : b.count -
                 1 +
                 " " +
@@ -5494,7 +5494,7 @@
           if (!mini) return;
           const a = calculate(),
             b = miniPlan();
-          q("#ec-base").textContent = decimalMoney(b.regular);
+          q("#ec-base").textContent = b.annual ? decimalMoney(b.regular) : money(b.regular);
           q("#ec-period").textContent = b.annual
             ? "rocznie za pakiet i dodatki"
             : "miesięcznie za pakiet i dodatki";
@@ -5502,9 +5502,9 @@
             ? "Baza / rok"
             : "Rata bazowa";
           q("#ec-base-cost").textContent = money(b.annual ? aboPricing.annual : aboPricing.monthly);
-          q("#ec-extra").textContent = decimalMoney(b.extraPart);
+          q("#ec-extra").textContent = b.annual ? decimalMoney(b.extraPart) : money(b.extraPart);
           q("#ec-project-subtotal-label").textContent = b.annual ? "Pakiet + dodatki / rok" : "Pakiet + dodatki / mies.";
-          q("#ec-project-subtotal").textContent = decimalMoney(b.regular);
+          q("#ec-project-subtotal").textContent = b.annual ? decimalMoney(b.regular) : money(b.regular);
           q("#ec-contract").textContent =
             "Dodatki o wartości " +
             money(a.extra) +
@@ -5517,7 +5517,7 @@
           q("#ec-mini-monthly-variant").classList.toggle("is-selected", !b.annual);
           q("#ec-mini-annual-variant").classList.toggle("is-selected", b.annual);
           q("#ec-monthly-rate").textContent =
-            decimalMoney(monthly.regular) + " / mies.";
+            money(monthly.regular) + " / mies.";
           q("#ec-monthly-detail").textContent =
             miniSchedule("monthly") + " za pakiet i dodatki.";
           q("#ec-annual-rate").textContent =
