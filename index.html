@@ -4229,7 +4229,7 @@
                 '<span class="ec-template-select-dot ec-template-select-dot--'+t.id+(hasEmbeddedTemplateBadge(t)?' ec-template-crop-badge':'')+'" aria-hidden="true">'+(t.isBundled?'<img src="'+t.image+'" alt="">':t.isRemote&&templateHttpsUrl(t.thumbnail_url)?'<img src="'+escapeTemplateText(templateHttpsUrl(t.thumbnail_url))+'" alt="">':'')+'</span>'+
                 '<span class="ec-template-tile-text"><strong>'+escapeTemplateText(t.name)+'</strong><small>'+escapeTemplateText(t.type)+'</small>'+
                 '<span class="ec-template-select-description">'+escapeTemplateText(t.details)+'</span></span></label>' +
-                '<div class="ec-template-select-actions"><button class="ec-template-preview-action" type="button" data-template-preview="'+t.id+'" aria-label="Zobacz podgląd szablonu '+escapeTemplateText(t.name)+'">Zobacz podgląd</button>'+templateNewTabLink(t)+'</div>' +
+                '<div class="ec-template-select-actions"><button class="ec-template-preview-action" type="button" data-template-preview="'+t.id+'" aria-label="Zobacz podgląd szablonu '+escapeTemplateText(t.name)+'">Zobacz podgląd</button>'+(current.id==="mini"?"":templateNewTabLink(t))+'</div>' +
               '</div>'
             ).join('') +
             '<label class="ec-template-select-option ec-template-select-empty ec-template-select-later">' +
