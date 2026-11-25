@@ -3253,6 +3253,23 @@
   background:currentColor;border:0;border-radius:1px;transform:translateY(-50%);
 }
 
+
+/* Czysty podgląd projektu — bez imitacji przeglądarki i dodatkowych nagłówków. */
+#eni-calc #ec-template-modal .ec-template-preview {
+  flex:1 1 auto;min-width:0;min-height:0;padding:0;gap:0;
+  border:0;border-radius:0;background:#fff;overflow:hidden;
+}
+#eni-calc #ec-template-modal #ec-template-viewport {
+  display:flex;flex-direction:column;flex:1 1 auto;width:100%;height:100%;min-height:0;
+  padding:0;margin:0;border:0;border-radius:0;background:#fff;
+}
+#eni-calc #ec-template-modal #ec-template-viewport:has(> .ec-template-project-frame) {overflow:hidden;}
+#eni-calc #ec-template-modal .ec-template-project-frame {
+  display:block;flex:1 1 auto;width:100%;height:100%;min-height:0;
+  padding:0;margin:0;border:0;border-radius:0;background:#fff;
+}
+#eni-calc #ec-template-modal .ec-template-project-image {display:block;width:100%;height:auto;flex:0 0 auto;margin:0;border:0;border-radius:0;}
+
 </style>
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -3296,9 +3313,7 @@
                 </button>
               </div>
               <div class="ec-template-preview">
-                <div class="ec-template-preview-head"><div><span id="ec-template-kind"></span><h3 id="ec-template-name"></h3></div></div>
-                <div class="ec-template-browser"><div class="ec-template-browser-bar"><span aria-hidden="true">● ● ●</span><span>Podgląd wszystkich 5 sekcji · przewiń stronę w dół ↓</span></div><div id="ec-template-viewport" tabindex="0" role="region" aria-label="Przewijany podgląd pięciu sekcji szablonu"></div></div>
-                <p id="ec-template-description"></p>
+                <div id="ec-template-viewport" tabindex="0" role="region" aria-label="Podgląd projektu strony"></div>
               </div>
             </div>
             <footer class="ec-template-footer"><span>Wizualizacje poglądowe, nie gotowe strony klientów.</span><button type="button" id="ec-template-configure">Wybierz ten szablon i konfiguruj ↗</button></footer>
@@ -4118,27 +4133,15 @@
           } catch {return "";}
         }
         function templateScene(t, full = false) {
-          if(t.isBundled) {
-            // Galeria pokazuje pełne demo ZIP z zasobami wbudowanymi w stronę.
-            if(!full) return '<img class="ec-template-real-thumbnail" src="'+t.image+'" alt="Miniatura szablonu '+escapeTemplateText(t.name)+'">';
-            const src=escapeTemplateText(t.previewPath||"");
-            return '<div class="ec-template-real-preview ec-template-bundled-preview">'+
-              '<div class="ec-template-real-intro"><strong>'+escapeTemplateText(t.name)+'</strong><span>'+escapeTemplateText(t.type)+'</span></div>'+
-              '<iframe class="ec-template-bundled-frame" src="'+src+'" title="Interaktywny podgląd strony '+escapeTemplateText(t.name)+'" loading="lazy" sandbox="allow-scripts allow-forms allow-popups" referrerpolicy="no-referrer"></iframe>'+
-              '<a class="ec-template-real-open" href="'+src+'" target="_blank" rel="noopener noreferrer">Otwórz pełną stronę demo w nowej karcie ↗</a>'+
-              '</div>';
-          }
-          if(t.isRemote) {
-            const image=templateHttpsUrl(t.thumbnail_url);
-            const preview=templateHttpsUrl(t.preview_url);
+          if(t.isBundled || t.isRemote) {
+            const image=t.isBundled?t.image:templateHttpsUrl(t.thumbnail_url);
+            const preview=t.isBundled?t.previewPath:templateHttpsUrl(t.preview_url);
             if(!full) return image
-              ? '<img class="ec-template-real-thumbnail" loading="lazy" src="'+escapeTemplateText(image)+'" alt="Podgląd '+escapeTemplateText(t.name)+'">'
+              ? '<img class="ec-template-real-thumbnail" loading="lazy" src="'+escapeTemplateText(image)+'" alt="Miniatura szablonu '+escapeTemplateText(t.name)+'">'
               : '<span class="ec-template-real-placeholder">'+escapeTemplateText(t.name)+'</span>';
-            return '<div class="ec-template-real-preview">'+
-              '<div class="ec-template-real-intro"><strong>'+escapeTemplateText(t.name)+'</strong><span>'+escapeTemplateText(t.type)+'</span></div>'+
-              (image?'<img class="ec-template-real-image" src="'+escapeTemplateText(image)+'" alt="Miniatura szablonu '+escapeTemplateText(t.name)+'">':'<p>Miniatura nie została jeszcze dodana.</p>')+
-              (preview?'<a class="ec-template-real-open" href="'+escapeTemplateText(preview)+'" target="_blank" rel="noopener noreferrer">Otwórz pełny podgląd strony ↗</a>':'<p>Pełny podgląd strony nie został jeszcze opublikowany.</p>')+
-              '</div>';
+            if(preview) return '<iframe class="ec-template-project-frame" src="'+escapeTemplateText(preview)+'" title="Podgląd projektu '+escapeTemplateText(t.name)+'" loading="lazy" sandbox="'+(t.isBundled?'allow-scripts allow-forms allow-popups':'allow-scripts')+'" referrerpolicy="no-referrer"></iframe>';
+            if(image) return '<img class="ec-template-project-image" src="'+escapeTemplateText(image)+'" alt="Podgląd szablonu '+escapeTemplateText(t.name)+'">';
+            return '<p class="ec-template-unavailable">Podgląd tego projektu nie został jeszcze opublikowany.</p>';
           }
           const d=templateDetails[t.id];
           const hero='<section class="ec-template-scene ec-template-scene--'+t.id+(full?' ec-template-scene--full':'')+'">' +
@@ -4192,9 +4195,6 @@
           if(!t){
             visibleTemplateIndex=-1;
             q("#ec-template-viewport").innerHTML='<p class="ec-template-unavailable">Aktualnie brak opublikowanych szablonów. Wybierz opcję „Szablon wybiorę później”.</p>';
-            q("#ec-template-kind").textContent="";
-            q("#ec-template-name").textContent="Katalog szablonów";
-            q("#ec-template-description").textContent="";
             q("#ec-template-configure").hidden=true;
             return;
           }
@@ -4202,9 +4202,7 @@
           visibleTemplateIndex=index;
           q("#ec-template-viewport").innerHTML=templateScene(t,true);
           q("#ec-template-viewport").scrollTop=0;
-          q("#ec-template-kind").textContent=t.type;
-          q("#ec-template-name").textContent=t.name;
-          q("#ec-template-description").textContent=t.details;
+
           
           all("#ec-template-gallery .ec-template-choice").forEach((button,i)=>{
             button.classList.toggle("is-active",i===index);
@@ -4217,10 +4215,6 @@
           q("#ec-template-gallery").innerHTML=templateSamples.map((t,i)=>
             '<button type="button" class="ec-template-choice" data-template-index="'+i+'" aria-pressed="'+(i===0)+'"><span class="ec-template-thumb">'+templateScene(t)+'</span><span class="ec-template-choice-label"><strong>'+escapeTemplateText(t.name)+'</strong><small>'+escapeTemplateText(t.type)+'</small></span></button>'
           ).join("");
-          // Oznaczenie podglądu ustawiane osobno przez showTemplate().
-          q("#ec-template-modal .ec-template-browser-bar span:last-child").textContent=live
-            ?"Opublikowane szablony: pełny podgląd · pozostałe: grafika ZIP"
-            :bundled?"Pełna strona demo w osadzonym oknie · przewiń w dół":"Podgląd demonstracyjny";
           q("#ec-template-modal .ec-template-footer > span").textContent=live
             ?"Szablony z WordPress i paczek ZIP."
             :bundled?"Katalog testowy — 7 szablonów z ZIP.": "Wizualizacje poglądowe.";
