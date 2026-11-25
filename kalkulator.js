@@ -1111,13 +1111,15 @@
           const total = p.recurring ? a.contract : a.total;
           const billingSwitch = p.recurring && directSummaryMode
             ? '<label class="ec-summary-billing ec-existing-toggle" for="ec-summary-installments">' +
-                '<span class="ec-summary-billing-copy"><strong>Płatność w ratach</strong>' +
-                '<small>Rocznie: <del>' + money(aboPricing.regularAnnual) + '</del> <strong class="ec-summary-promo-price">' + money(aboPricing.annual) + '/rok</strong> · promocja</small></span>' +
+                '<span class="ec-summary-billing-copy"><strong>Płatność w ratach</strong></span>' +
                 '<input id="ec-summary-installments" type="checkbox" role="switch" aria-label="Płatność w ratach miesięcznych"' + (s.billing==="monthly" ? ' checked' : '') + '>' +
                 '<span class="ec-switch-track" aria-hidden="true"></span></label>'
             : '';
+          const totalValue = p.recurring && directSummaryMode && s.billing === "annual"
+            ? '<del class="ec-summary-regular-price">' + money(aboPricing.regularAnnual + a.extra) + '</del> <strong class="ec-summary-promo-price">' + money(total) + '</strong> <small class="ec-summary-promo-label">· promocja</small>'
+            : money(total);
           const totalBlock = '<div class="ec-summary-total">' + billingSwitch +
-            row(p.recurring ? "Łącznie za 12 miesięcy" : "Projekt i usługi łącznie",money(total)) +
+            row(p.recurring ? "Łącznie za 12 miesięcy" : "Projekt i usługi łącznie",totalValue) +
             (p.recurring ? row("Suma dodatków",money(a.extra)) + row("Rata pakietu i dodatków",directSummaryMode ? directMiniSchedule() : miniSchedule()) :
               row("Wartość projektu z dodatkami",money(project)) +
               (a.host ? row("Usługi roczne z góry",money(a.host)) : "")) +
