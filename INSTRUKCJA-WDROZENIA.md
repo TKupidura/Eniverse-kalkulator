@@ -41,6 +41,13 @@ Gałąź main jest jedynym źródłem rozwoju. Jej index.html uruchamia podgląd
 - Usuń stare ręcznie tworzone karty Elementora — karty generowane z cennik.js są źródłem oferty. Zmiana cennika nie zmienia statycznych tekstów umownych, opisów marketingowych ani nazw kroków. W specjalnej karcie Abonament część opisów i warunków pozostaje stała. Usunięcie pozycji hosting/care usuwa opcję z konfiguratora, ale nie zmienia automatycznie zapisów umownych świadczeń zawartych w pakietach. Przed publikacją sprawdź zgodność zakresu i opisów.
 - Po każdej zmianie sprawdź karty, konfigurator, podsumowanie i treść wyceny. Nie wgrywaj niezweryfikowanego cennika na produkcję.
 
+## 9. Ustawienia rozliczeń (na końcu cennik.js)
+- okresAbonamentu: liczba miesięcy (1–120). Aktualizuje okres umowy, liczbę rat i sumy. Przy płatności rocznej promocja obowiązuje przez pierwsze maks. 12 miesięcy; kolejne lata według ceny regularnej. Niepełny rok wyceniany proporcjonalnie. Dodatki jednorazowe rozłożone na okres umowy, usługi roczne proporcjonalnie do liczby miesięcy.
+- zaliczkaProcent: procent wartości projektu i dodatków (0–100). Usługi roczne płatne w całości na start. Pozostała płatność to dopełnienie do 100%.
+- zaokraglanieRat: true — miesięczne raty w pełnych złotych, false — raty do grosza (ostatnia wyrównuje sumę).
+- progZaokraglania: ułamek złotego 0–1, do dwóch miejsc po kropce. Przy 0.50 dokładnie 50 gr zaokrąglamy w dół, powyżej w górę. Przy wyłączonym zaokrąglaniu próg nie działa.
+- Zmiana okresu wymaga sprawdzenia zgodności z umową i ofertą. Płatności roczne nie są zaokrąglane do pełnych złotych.
+
 ## Status i ograniczenia
 Połączono najnowsze pliki main z obsługą CF7 z gałęzi wdrożeniowej. Nie znamy prywatnych ustawień CF7 ani SMTP; rzeczywista wysyłka wymaga testu na WordPressie. Szablony demo są zachowane bez zmian jako osobne samodzielne dokumenty. Wtyczka Templates Manager jest osobnym produktem.
 Dokumentacja zdarzeń CF7: https://contactform7.com/dom-events/
