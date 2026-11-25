@@ -31,7 +31,7 @@ const norm=s=>s.replace(/\s+/g,' ').trim();
  await new Promise(r=>server.listen(0,'127.0.0.1',r));const url='http://127.0.0.1:'+server.address().port;
  const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
  const page=await browser.newPage({viewport:{width:1440,height:1000}});
- const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const errors=[];page.on('pageerror',e=>errors.push({url:page.url(),message:e.message,stack:e.stack}));
  await page.route('https://eniverse.pl/wp-json/eniverse/v1/templates',r=>r.fulfill({status:200,contentType:'application/json',headers:{'Access-Control-Allow-Origin':'*'},body:'[]'}));
  await page.route('https://fonts.googleapis.com/**',r=>r.fulfill({status:200,contentType:'text/css',body:''}));
  async function load(p){await page.goto(url+p);await page.waitForSelector('[data-choose="start"]');}
@@ -72,12 +72,12 @@ const norm=s=>s.replace(/\s+/g,' ').trim();
        await page.locator('input[name="ec-template-choice"][value="later"]').check();
        await page.locator('#ec-next').click();
      }
-     await page.locator('#ec-addon-maps').check();await page.locator('#ec-next').click();
+     await page.locator('label.ec-addon').filter({has:page.locator('#ec-addon-maps')}).click();check(await page.locator('#ec-addon-maps').isChecked(),'Mapy zaznaczone '+id);await page.locator('#ec-next').click();
      await page.locator('[data-counter="sections"][data-delta="1"]').click();
-     await page.locator('#ec-seo-addon-googleAds').check();await page.locator('#ec-next').click();
+     await page.locator('label.ec-addon').filter({has:page.locator('#ec-seo-addon-googleAds')}).click();check(await page.locator('#ec-seo-addon-googleAds').isChecked(),'Reklama zaznaczona '+id);await page.locator('#ec-next').click();
      await page.locator('input[name="ec-revisions"][value="1"]').check();
      await page.locator('#ec-next').click();
-     await page.locator('.ec-language-toggle').first().check();
+     await page.locator('.ec-language-switch-label').first().click();check(await page.locator('.ec-language-toggle').first().isChecked(),'Język zaznaczony '+id);
      await page.locator('#ec-add-language').click();
      check(await page.locator('.ec-language-row').count()===2,'Drugi język '+id);
      await page.locator('#ec-next').click();
@@ -100,8 +100,8 @@ const norm=s=>s.replace(/\s+/g,' ').trim();
    await page.locator('input[name="ec-template-choice"][value="later"]').check();await page.locator('#ec-next').click();
    check((await page.locator('#ec-addons').innerText()).includes('Mapy Apple'),'Zmiana nazwy');
    check(await page.locator('#ec-addon-newsletter').count()===0,'Usunięty dodatek');
-   await page.locator('#ec-addon-chat').check();check((await page.locator('#ec-items').innerText()).includes('Czat na stronie'),'Nowy dodatek wyceniany');
-   check(errors.length===0,'Błędy JS: '+errors.join('; '));
+   await page.locator('label.ec-addon').filter({has:page.locator('#ec-addon-chat')}).click();check(await page.locator('#ec-addon-chat').isChecked(),'Czat zaznaczony');check((await page.locator('#ec-items').innerText()).includes('Czat na stronie'),'Nowy dodatek wyceniany');
+   check(errors.length===0,'Błędy JS: '+JSON.stringify(errors));
  }catch(e){counts.failures.push(e.message);await page.screenshot({path:'qa-output/failure.png',fullPage:true}).catch(()=>{});}
  finally{console.log('QA_RESULT '+JSON.stringify({...counts,errors}));await browser.close();server.close();fs.rmSync(baseline,{recursive:true,force:true});if(counts.failures.length)process.exitCode=1;}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});
