@@ -267,7 +267,7 @@ window.ENIVERSE_CENNIK = {
     {
       "id": "techniczne",
       "nazwa": "SEO techniczne na start",
-      "opis": "Zakres do doprecyzowania w warunkach SEO",
+      "opis": "Według warunków SEO; dalsze usługi wyceniane osobno",
       "cena": 149
     },
     {
