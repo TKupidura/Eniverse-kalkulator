@@ -1,11 +1,114 @@
-/** ENIVERSE — CENNIK STRON INTERNETOWYCH
- * Ceny netto PLN. ID pakietu = data-ec-plan w HTML. Nazwa i wygląd boxa są w HTML.
- * Dodaj pakiet w cenniku oraz odpowiadający box w HTML; usuń wpis, aby ukryć box.
- * Dodatki / marketing / uslugiRoczne: dodaj, usuń lub zmień obiekt.
- * wPakietach: pakiety mające usługę w cenie; dostepneWPakietach: dostępność.
- * Brak ograniczeń = dostępny we wszystkich. SEO, kontakt, szkolenia wg rosnącej ceny.
- * Pakiet wskazuje bazowy wariant po ID; hosting ma dotychczasowe reguły bazowe.
- * Rozbudowa: cztery istniejące mechanizmy; usuń klucz, aby ukryć.
+/**
+ * ============================================================
+ * ENIVERSE — CENTRUM ZARZĄDZANIA CENNIKIEM STRON INTERNETOWYCH
+ * ============================================================
+ *
+ * ZASADY OGÓLNE
+ * ------------------------------------------------------------
+ * Wszystkie ceny podawane są w PLN netto.
+ * Kwoty dziesiętne zapisujemy z kropką, np. 149.90.
+ * Nie zmieniaj istniejących ID bez potrzeby.
+ * Nazwy i wygląd boxów pakietów edytuj w HTML.
+ *
+ * IDENTYFIKATORY PAKIETÓW
+ * ------------------------------------------------------------
+ * mini  - Abonament
+ * start - Start
+ * one   - One Page
+ * wiz   - Wizytówka
+ * firm  - Strona firmowa
+ *
+ * ZARZĄDZANIE PAKIETAMI
+ * ------------------------------------------------------------
+ * cena - cena bazowa pakietu.
+ * revisions - liczba rund poprawek zawartych w cenie pakietu.
+ * Przykład: "revisions": 3 oznacza 3 rundy poprawek w cenie.
+ * Wartość 0 oznacza brak rund poprawek w cenie.
+ *
+ * Dodanie nowego pakietu wymaga utworzenia boxa w HTML
+ * oraz wpisu z takim samym ID w cennik.js.
+ * Usunięcie pakietu z cennika ukrywa odpowiadający mu box.
+ *
+ * DOSTĘPNOŚĆ DODATKÓW
+ * ------------------------------------------------------------
+ * wPakietach:
+ * Określa, w których pakietach dodatek jest już w cenie.
+ *
+ * Przykład:
+ * "wPakietach": ["wiz", "firm"]
+ *
+ * dostepneWPakietach:
+ * Określa, w których pakietach dodatek jest dostępny.
+ * W pozostałych pakietach nie będzie widoczny.
+ *
+ * Przykład:
+ * "dostepneWPakietach": ["one", "wiz", "firm"]
+ *
+ * Jeżeli nie podasz żadnego z powyższych parametrów,
+ * zwykły dodatek będzie dostępny odpłatnie we wszystkich pakietach.
+ *
+ * Można również łączyć oba parametry:
+ * "dostepneWPakietach": ["one", "wiz", "firm"],
+ * "wPakietach": ["firm"]
+ *
+ * W takim przypadku dodatek jest płatny w One Page
+ * i Wizytówce, a w Stronie firmowej jest już w cenie.
+ * Każde ID z wPakietach musi należeć do dostepneWPakietach,
+ * jeśli podano obie listy.
+ *
+ * Reguły dotyczą sekcji dodatki, marketing i uslugiRoczne.
+ * Hosting i opieka techniczna zachowują specjalne reguły bazowe.
+ * Dodaj, usuń lub zmień cały obiekt, aby zarządzać usługą.
+ *
+ * ZARZĄDZANIE FORMULARZAMI KONTAKTOWYMI
+ * ------------------------------------------------------------
+ * Dostępne warianty:
+ * podstawowy           - kontakt telefoniczny i e-mail
+ * formularz            - standardowy formularz kontaktowy
+ * formularzRozszerzony - rozszerzony formularz kontaktowy
+ *
+ * Aby zmienić formularz zawarty w cenie pakietu,
+ * zmień parametr "kontakt" w wybranym pakiecie.
+ *
+ * Przed: "kontakt": "podstawowy"
+ * Po:    "kontakt": "formularz"
+ *
+ * Nie zmieniaj ceny formularza na 0 zł tylko po to,
+ * by uwzględnić go w wybranym pakiecie.
+ * Przypisanie jego ID do pakietu oznacza, że jest w cenie.
+ * Klient dopłaca jedynie różnicę za wyższy wariant.
+ *
+ * ZARZĄDZANIE SZKOLENIAMI
+ * ------------------------------------------------------------
+ * Dostępne warianty:
+ * instrukcjaPDF  - instrukcja PDF
+ * szkolenie30min - szkolenie 30 minut
+ * szkolenie1h    - szkolenie 1 godzina
+ * szkolenie2h    - szkolenie 2 godziny
+ *
+ * Aby zmienić szkolenie zawarte w cenie pakietu,
+ * zmień parametr "szkolenie" w wybranym pakiecie.
+ *
+ * Przykład:
+ * "szkolenie": "szkolenie1h"
+ *
+ * Aby dodać nowe szkolenie, utwórz nowy obiekt
+ * w sekcji szkolenia, podając unikalne ID, nazwę i cenę.
+ *
+ * Przykład:
+ * {
+ *     "id": "szkolenie3h",
+ *     "nazwa": "Szkolenie 3 h",
+ *     "cena": 249
+ * }
+ *
+ * Następnie możesz przypisać je do wybranego pakietu:
+ * "szkolenie": "szkolenie3h"
+ *
+ * Warianty SEO, kontaktu i szkoleń zawsze porządkuj
+ * według ceny rosnąco, od najtańszego do najdroższego.
+ *
+ * ============================================================
  */
 window.ENIVERSE_CENNIK = {
   // 01. Ceny pakietów i przypisania usług
@@ -61,7 +164,18 @@ window.ENIVERSE_CENNIK = {
     }
   ],
 
-  // 02. Rozbudowa strony
+  // ============================================================
+  // 02. ROZBUDOWA STRONY
+  // ============================================================
+  //
+  // UWAGA!
+  // Nie dodawaj tutaj nowych, dowolnych identyfikatorów.
+  // Ta sekcja obsługuje cztery konkretne mechanizmy.
+  //
+  // Możesz zmieniać ich nazwy i ceny lub usuwać całe obiekty.
+  //
+  // Nowe standardowe usługi dodawaj w sekcji "dodatki".
+  // ============================================================
   rozbudowa: {
     "dodatkowaSekcja": {
       "nazwa": "Dodatkowe sekcje",
@@ -81,7 +195,22 @@ window.ENIVERSE_CENNIK = {
     }
   },
 
-  // 03. Dodatki do projektu
+  // ============================================================
+  // 03. DODATKI DO PROJEKTU
+  // ============================================================
+  //
+  // id                  - unikalny identyfikator dodatku
+  // nazwa               - nazwa widoczna w kalkulatorze
+  // cena                - cena netto dodatku
+  // wPakietach          - pakiety, które mają dodatek w cenie
+  // dostepneWPakietach  - pakiety, w których dodatek jest dostępny
+  //
+  // Brak wPakietach i dostepneWPakietach oznacza, że dodatek
+  // jest dostępny odpłatnie we wszystkich pakietach.
+  //
+  // Dodaj cały obiekt, aby utworzyć nową usługę.
+  // Usuń cały obiekt, aby usunąć usługę z kalkulatora.
+  // ============================================================
   dodatki: [
     {
       "id": "maps",
@@ -183,7 +312,20 @@ window.ENIVERSE_CENNIK = {
     }
   ],
 
-  // 06. Kontakt
+  // ============================================================
+  // 06. KONTAKT
+  // ============================================================
+  //
+  // Aby zmienić formularz zawarty w cenie pakietu,
+  // zmień wartość parametru "kontakt" w sekcji pakiety.
+  //
+  // Nie ustawiaj ceny formularza na 0 zł tylko w celu
+  // uwzględnienia go w wybranym pakiecie.
+  // Przypisanie ID do pakietu oznacza, że jest w cenie.
+  //
+  // Dopłata za wyższy wariant = różnica cen wariantów.
+  // Warianty muszą być uporządkowane według ceny rosnąco.
+  // ============================================================
   kontakt: [
     {
       "id": "podstawowy",
@@ -205,7 +347,19 @@ window.ENIVERSE_CENNIK = {
     }
   ],
 
-  // 07. Szkolenia
+  // ============================================================
+  // 07. SZKOLENIA
+  // ============================================================
+  //
+  // Aby dodać szkolenie, utwórz nowy obiekt z unikalnym ID,
+  // nazwą oraz ceną netto.
+  //
+  // Aby przypisać szkolenie do pakietu, zmień parametr
+  // "szkolenie" w sekcji pakiety, podając ID szkolenia.
+  //
+  // Dopłata za wyższy wariant = różnica cen wariantów.
+  // Warianty muszą być uporządkowane według ceny rosnąco.
+  // ============================================================
   szkolenia: [
     {
       "id": "instrukcjaPDF",
