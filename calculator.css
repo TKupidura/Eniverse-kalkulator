@@ -2714,3 +2714,24 @@
   background: #f3f5f6 !important;
   border-color: #DD0629 !important;
 }
+
+/* Ceny netto: dłuższe etykiety pozostają czytelne na wąskich ekranach. */
+#eni-calc .ec-pane .ec-option .ec-tag,
+#eni-calc .ec-addon small,
+#eni-calc .ec-summary-total .ec-summary-regular-price,
+#eni-calc .ec-summary-total .ec-summary-promo-price {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+#eni-calc .ec-summary-total .ec-line > :last-child,
+#eni-calc .ec-aside .ec-line > :last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+#eni-calc #ec-summary > .ec-vat-note {
+  display: block !important;
+  margin: 8px 0 0 !important;
+  color: var(--ec-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
