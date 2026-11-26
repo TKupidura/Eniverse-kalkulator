@@ -2736,8 +2736,20 @@
   line-height: 1.45;
 }
 
-/* 20261126-7 — tło sekcji cennika na całą szerokość ekranu.
-   Bez zmiany szerokości kart, paddingu, pozycji modali i bez dodatkowego scrolla. */
-#eni-calc #ec-demo-page {
-  border-image: linear-gradient(#f7f8fa, #fff 900px) fill 0 / 0 / 0 100vmax;
+/* 20261126-8 — pełna szerokość zewnętrznej sekcji, cennik nadal 1200 px. */
+#eni-calc[data-mode="production"] {
+  width: 100% !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+}
+#eni-calc[data-mode="production"] #ec-demo-page {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  background: linear-gradient(#f7f8fa, #fff 900px);
+}
+#eni-calc[data-mode="production"] #ec-demo-page > #ec-catalog {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
 }
