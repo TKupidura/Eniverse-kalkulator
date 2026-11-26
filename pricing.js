@@ -26,7 +26,7 @@
  * Wartość 0 oznacza brak rund poprawek w cenie.
  *
  * Dodanie nowego pakietu wymaga utworzenia boxa w HTML
- * oraz wpisu z takim samym ID w cennik.js.
+ * oraz wpisu z takim samym ID w pricing.js.
  * Usunięcie pakietu z cennika ukrywa odpowiadający mu box.
  *
  * DOSTĘPNOŚĆ DODATKÓW

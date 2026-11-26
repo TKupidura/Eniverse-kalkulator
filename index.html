@@ -1,4 +1,4 @@
-<!-- Eniverse: wspólne źródło dla podglądu i WordPress. Instrukcja wdrożenia: INSTRUKCJA-WDROZENIA.md. -->
+<!-- Eniverse: wspólne źródło dla podglądu i WordPress. Instrukcja wdrożenia: DEPLOYMENT-GUIDE.md. -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap">
 <style id="eniverse-pakiety-stron">
 /* Style strony demonstracyjnej oraz elementów poza #eni-calc. */
@@ -36,7 +36,7 @@ body.eni-calc-scroll-locked { overflow: hidden; }
 /* Dedykowany formularz Contact Form 7. */
 body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!important; width:1px!important; height:1px!important; overflow:hidden!important; clip-path:inset(50%); pointer-events:none; }
 </style>
-<link rel="stylesheet" href="kalkulator.css?v=20261126-1">
+<link rel="stylesheet" href="calculator.css?v=20261126-3">
 
 <!-- Style wyłącznie boxów i sekcji ofertowej -->
 <style id="eniverse-boxy-pakietow">
@@ -831,7 +831,7 @@ body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!impo
         filter:none;
       }
 
-/* Wygląd cen Abonamentu — wartości z cennik.js. */
+/* Wygląd cen Abonamentu — wartości z pricing.js. */
 #eni-calc .ec-packages-overview .ec-mini-prices {
         display:grid;
         grid-template-columns:max-content max-content max-content;
@@ -2104,7 +2104,7 @@ body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!impo
                 <div class="ec-package-group ec-package-group--main">
                   <div class="ec-price-group-heading"><strong>PAKIETY JEDNORAZOWE</strong></div>
                   <div class="ec-packages ec-packages--main" id="ec-packages">
-<!-- Boxy pakietów: kolejność, układ, opisy i ikony edytuj tutaj. Ceny i pola data-card-* uzupełnia cennik.js. -->
+<!-- Boxy pakietów: kolejność, układ, opisy i ikony edytuj tutaj. Ceny i pola data-card-* uzupełnia pricing.js. -->
 
 <!-- PAKIET: Start | ID: start -->
 <article class="ec-package" data-ec-plan="start" aria-labelledby="ec-plan-start"
@@ -2685,5 +2685,5 @@ body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!impo
         </div>
     </div>
     <!-- LOGIKA PAKIETÓW, WYCENY I FORMULARZA -->
-<script src="cennik.js?v=20261126-1" defer></script>
-<script src="kalkulator.js?v=20261126-1" defer></script>
+<script src="pricing.js?v=20261126-3" defer></script>
+<script src="calculator.js?v=20261126-3" defer></script>
