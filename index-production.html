@@ -36,7 +36,2021 @@ body.eni-calc-scroll-locked { overflow: hidden; }
 /* Dedykowany formularz Contact Form 7. */
 body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!important; width:1px!important; height:1px!important; overflow:hidden!important; clip-path:inset(50%); pointer-events:none; }
 </style>
-<link rel="stylesheet" href="/wp-content/eniverse-kalkulator/Strony%20internetowe/kalkulator.css?v=20261125-8">
+<link rel="stylesheet" href="/wp-content/eniverse-kalkulator/Strony%20internetowe/kalkulator.css?v=20261126-1">
+
+<!-- Style wyłącznie boxów i sekcji ofertowej -->
+<style id="eniverse-boxy-pakietow">
+#eni-calc .ec-package {
+        background: white;
+        border: 1px solid var(--ec-line);
+        border-top: 4px solid var(--ec-red);
+        padding: 30px;
+        border-radius: 8px;
+        max-width: 440px;
+        margin: 10px auto;
+      }
+
+#eni-calc .ec-package ul {
+        padding-left: 20px;
+        margin: 22px 0;
+        line-height: 2;
+      }
+
+#eni-calc .ec-package .ec-action {
+        width: 100%;
+      }
+
+#eni-calc .ec-page {
+        background: var(--ec-white);
+        padding: 24px 18px;
+      }
+
+#eni-calc .ec-nav {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding-bottom: 22px;
+        border-bottom: 1px solid var(--ec-line);
+        margin-bottom: 28px;
+        padding-right: 80px;
+      }
+
+#eni-calc .ec-brand {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.06em;
+      }
+
+#eni-calc .ec-brand b {
+        color: var(--ec-red);
+      }
+
+#eni-calc .ec-page-title {
+        max-width: 650px;
+        margin: 10px 0 12px;
+        font-size: 38px;
+        letter-spacing: -0.045em;
+        font-weight: 500;
+        line-height: 1.15;
+      }
+
+#eni-calc .ec-intro {
+        color: var(--ec-muted);
+        max-width: 620px;
+        margin-bottom: 26px;
+      }
+
+#eni-calc .ec-packages {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+#eni-calc .ec-package {
+        max-width: none;
+        margin: 0;
+        padding: 20px 16px;
+        display: flex;
+        flex-direction: column;
+        border-top-width: 3px;
+        min-width: 0;
+      }
+
+#eni-calc .ec-package h2 {
+        font-size: 25px;
+        margin: 7px 0 0;
+      }
+
+#eni-calc .ec-package .ec-price {
+        font-size: 33px;
+        white-space: nowrap;
+      }
+
+#eni-calc .ec-pack-price {
+        margin-top: 18px;
+        min-height: 86px;
+      }
+
+#eni-calc .ec-package ul {
+        list-style: none;
+        padding: 0;
+        line-height: 1.5;
+        margin: 12px 0 14px;
+      }
+
+#eni-calc .ec-package li {
+        display: flex;
+        gap: 7px;
+        padding: 8px 0;
+        border-bottom: 1px solid #edf0f2;
+        font-size: 12px;
+      }
+
+#eni-calc .ec-tick {
+        color: var(--ec-red);
+        flex-shrink: 0;
+      }
+
+#eni-calc .ec-package details {
+        font-size: 12px;
+        margin: 0 0 18px;
+      }
+
+#eni-calc .ec-package summary {
+        font-weight: 600;
+        padding: 8px 0;
+        color: var(--ec-ink);
+      }
+
+#eni-calc .ec-card-actions {
+        display: grid;
+        gap: 8px;
+        margin-top: auto;
+        padding-top: 10px;
+      }
+
+#eni-calc .ec-card-actions .ec-action {
+        font-size: 12px;
+        padding: 10px 6px;
+        gap: 4px;
+        min-height: 42px;
+      }
+
+#eni-calc .ec-card-note {
+        font-size: 11px;
+        color: var(--ec-muted);
+        margin-top: 10px;
+      }
+
+#eni-calc .ec-off {
+        color: var(--ec-muted);
+      }
+
+#eni-calc .ec-pricing-note {
+        margin-top: 24px;
+        font-size: 11px;
+        color: var(--ec-muted);
+      }
+
+@media (min-width: 980px) {
+#eni-calc .ec-packages {
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 10px;
+        }
+
+#eni-calc .ec-package {
+          padding: 18px 12px;
+        }
+
+#eni-calc .ec-package h2 {
+          font-size: 22px;
+        }
+
+#eni-calc .ec-package .ec-price {
+          font-size: 29px;
+        }
+}
+
+@media (max-width: 760px) {
+#eni-calc .ec-packages {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+#eni-calc .ec-page-title {
+          font-size: 30px;
+        }
+}
+
+@media (max-width: 470px) {
+#eni-calc .ec-packages {
+          grid-template-columns: 1fr;
+        }
+
+#eni-calc .ec-page {
+          padding: 18px 10px;
+        }
+
+#eni-calc .ec-package {
+          padding: 22px;
+        }
+}
+
+#eni-calc .ec-preview-page { padding:28px 18px 42px; background:#fff; border-radius:0; }
+
+#eni-calc .ec-preview-heading { margin-bottom:32px; }
+
+#eni-calc .ec-page-title { font-size:clamp(29px,4vw,43px); margin:8px 0; }
+
+#eni-calc .ec-intro { font-size:14px; margin-bottom:0; }
+
+#eni-calc .ec-group-label { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:22px 0 12px; padding-bottom:10px; border-bottom:1px solid var(--ec-line); }
+
+#eni-calc .ec-group-label span:first-child { font-weight:600; font-size:16px; }
+
+#eni-calc .ec-group-label span:last-child { color:var(--ec-muted); font-size:12px; }
+
+#eni-calc .ec-group-label--main { margin-top:42px; }
+
+#eni-calc .ec-packages,
+#eni-calc .ec-packages--main { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+
+#eni-calc .ec-packages--entry { grid-template-columns:repeat(2,minmax(0,1fr)); }
+
+/* Otwarty zakres powiększa wyłącznie swoją kartę, nie sąsiednie wiersza. */
+#eni-calc .ec-packages--entry,
+#eni-calc .ec-packages--main { align-items:start; }
+
+#eni-calc .ec-packages--entry > .ec-package,
+#eni-calc .ec-packages--main > .ec-package { align-self:start; width:100%; }
+
+#eni-calc .ec-package { position:relative; background:#fff; border:1px solid #d9dfe4; border-radius:9px; padding:23px 24px 24px; margin:0; max-width:none; display:flex; flex-direction:column; min-width:0; min-height:var(--ec-equal-card-height, 0px); color:#121414; }
+
+#eni-calc .ec-package h2 { font-size:29px; font-weight:500; letter-spacing:-.045em; margin:10px 0 10px; line-height:1.12; color:inherit; }
+
+#eni-calc .ec-package h3 { font-size:18px; letter-spacing:-.035em; font-weight:500; margin:7px 0 5px; color:inherit; }
+
+#eni-calc .ec-package .ec-kicker { font-size:11px; font-weight:600; letter-spacing:.095em; color:#617080; }
+
+#eni-calc .ec-card-header { min-height:148px; }
+
+#eni-calc .ec-card-description { font-size:15px; line-height:1.55; color:#66727f; min-height:70px; }
+
+#eni-calc .ec-card-budget { margin-top:4px; padding-bottom:17px; }
+
+#eni-calc .ec-card-price { display:flex; align-items:baseline; flex-wrap:wrap; gap:9px; white-space:nowrap; }
+
+#eni-calc .ec-card-price small { font-size:13px; font-weight:400; }
+
+#eni-calc .ec-card-price strong { font-size:47px; font-weight:500; letter-spacing:-.065em; line-height:1.15; font-variant-numeric:tabular-nums; }
+
+#eni-calc .ec-card-price span { font-size:12px; }
+
+#eni-calc .ec-card-budget .ec-muted { margin-top:8px; font-size:12px; }
+
+/* Abonament: dwie czytelne ceny w jednym wierszu. */
+#eni-calc .ec-mini-prices { display:grid; grid-template-columns:max-content max-content max-content; justify-content:start; align-items:baseline; column-gap:clamp(6px,.8vw,12px); row-gap:5px; max-width:100%; }
+
+#eni-calc .ec-mini-price { min-width:0; display:flex; align-items:baseline; flex-wrap:wrap; column-gap:5px; row-gap:0; }
+
+#eni-calc .ec-mini-price strong { font-size:clamp(31px,3.2vw,47px); font-weight:500; line-height:1.14; letter-spacing:-.065em; font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+#eni-calc .ec-mini-price span { font-size:12px; white-space:nowrap; }
+
+#eni-calc .ec-mini-price--annual strong { color:#101112; }
+
+#eni-calc .ec-mini-or { color:#69747e; font-size:12px; }
+
+#eni-calc .ec-mini-saving { margin-top:13px!important; font-size:13px; line-height:1.45; color:#32383d; font-weight:500; }
+
+#eni-calc .ec-mini-small { margin-top:5px!important; font-size:11px!important; color:#66727f; }
+
+@media(max-width:400px) {
+#eni-calc .ec-mini-price strong { font-size:30px; }
+
+#eni-calc .ec-mini-prices { gap:6px; }
+
+#eni-calc .ec-mini-price span { font-size:11px; }
+}
+
+#eni-calc .ec-project-scale { min-height:152px; padding:14px 0 20px; border-top:1px solid var(--ec-line); }
+
+#eni-calc .ec-project-scale p { font-size:12px; line-height:1.55; color:#66727f; }
+
+#eni-calc .ec-project-page { display:flex; flex-direction:column; gap:4px; width:54px; height:47px; padding:5px; border:1px solid #a8b7c4; border-radius:2px; margin-bottom:9px; }
+
+#eni-calc .ec-project-page i { height:5px; background:#dfe5e9; border-radius:1px; }
+
+#eni-calc .ec-project-page i:first-child { background:currentColor; height:6px; }
+
+#eni-calc .ec-project-tiles { display:grid; grid-template-columns:repeat(5,31px); gap:4px; width:max-content; margin:2px 0 9px; }
+
+#eni-calc .ec-project-tiles i { display:block; width:31px; height:12px; border:1px solid #9caab5; background:#e9edf0; border-radius:1px; }
+
+#eni-calc .ec-project-tiles i.is-active { background:#121414; border-color:#121414; }
+
+#eni-calc .ec-features { border-top:1px solid var(--ec-line); padding-top:17px; min-height:285px; }
+
+#eni-calc .ec-features ul { list-style:none; padding:0; margin:10px 0 0; }
+
+#eni-calc .ec-features li { display:flex; gap:9px; padding:3px 0; border:0; font-size:13px; line-height:1.5; }
+
+#eni-calc .ec-features li small { display:block; font-size:11px; color:#65717b; margin-top:1px; }
+
+#eni-calc .ec-tick { min-width:12px; color:inherit; }
+
+#eni-calc .ec-dotted { text-decoration:underline dotted; text-decoration-thickness:1px; text-underline-offset:3px; }
+
+#eni-calc .ec-card-meta { margin:12px 0 0; }
+
+#eni-calc .ec-card-meta div { display:flex; justify-content:space-between; gap:12px; margin:7px 0; font-size:12px; }
+
+#eni-calc .ec-card-meta dt { color:#64717d; font-weight:600; display:inline-flex; align-items:center; gap:8px; }
+
+#eni-calc .ec-card-meta .ec-meta-icon { display:inline-flex; align-items:center; justify-content:center; width:15px; flex:0 0 15px; }
+
+#eni-calc .ec-card-meta dd { margin:0; text-align:right; }
+
+#eni-calc .ec-card-details { margin:16px 0 16px; padding:0; border:1px solid #E20B0C; border-radius:6px; background:#fff; color:#101112; font-size:12px; overflow:hidden; }
+
+#eni-calc .ec-card-details[open] { border-color:#E20B0C; box-shadow:none; }
+
+#eni-calc .ec-card-details summary { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:13px 14px; color:#101112; list-style:none!important; cursor:pointer; font-size:13px; font-weight:600; background:#fff; }
+
+#eni-calc .ec-card-details summary:hover { background:#fafafa; }
+
+#eni-calc .ec-card-details summary:focus-visible { outline:2px solid #E20B0C; outline-offset:-3px; }
+
+#eni-calc .ec-details-copy { display:flex; flex-direction:column; gap:3px; min-width:0; }
+
+#eni-calc .ec-details-copy strong { font:inherit; }
+
+#eni-calc .ec-details-copy small { font-size:11px; line-height:1.35; font-weight:400; color:#66727f; }
+
+#eni-calc .ec-card-details summary::-webkit-details-marker { display:none; }
+
+#eni-calc .ec-card-details summary::after { content:""; flex-shrink:0; width:9px; height:9px; border-right:2px solid #E20B0C; border-bottom:2px solid #E20B0C; transform:rotate(45deg); transition:transform .18s ease; margin:0 5px 4px 0; }
+
+#eni-calc .ec-card-details[open] summary::after { transform:rotate(225deg); margin-top:7px; margin-bottom:0; }
+
+#eni-calc .ec-package .ec-details-list { margin:0; padding:12px 14px 14px; border-top:1px solid #e5e5e5; color:#101112; background:#fff; }
+
+#eni-calc .ec-package .ec-details-list li { font-size:12px; padding:5px 0; border:0; line-height:1.5; }
+
+/* Odstęp elastyczny należy do metadanych, a nie do przycisku zakresu.
+         Czas realizacji, rundy poprawek i cała grupa przycisków pozostają razem na dole. */
+#eni-calc .ec-package .ec-card-meta { margin: auto 0 0; padding-top: 16px; }
+
+/* Gdy rozwijamy zakres, zachowujemy odstęp ponad metadanymi z zamkniętej karty.
+         Dodatkowa treść powiększa kartę WYŁĄCZNIE w dół i przesuwa przyciski pod nią. */
+#eni-calc .ec-package:has(.ec-card-details[open]) .ec-card-meta {
+        margin-top: var(--ec-meta-fixed-gap, 0px);
+      }
+
+#eni-calc .ec-package .ec-card-details { margin: 9px 0 9px; }
+
+#eni-calc .ec-package .ec-card-actions { margin-top:0; display:grid; gap:9px; padding-top:0; }
+
+#eni-calc .ec-card-actions .ec-action { display:flex; justify-content:space-between; align-items:center; gap:15px; padding:14px 17px; min-height:57px; border:1px solid #7b8792; border-radius:4px; font-size:14px; font-weight:500; text-align:left; background:transparent; color:#141719; line-height:1.4; }
+
+#eni-calc .ec-card-actions .ec-action:hover { border-color:var(--ec-red); color:var(--ec-red); }
+
+#eni-calc .ec-card-actions .ec-configure { border-color:#dce1e5; min-height:44px; background:#f6f7f8; font-size:12px; }
+
+#eni-calc .ec-package--featured { background:#101112; color:#f7f8f9; border-color:#101112; }
+
+#eni-calc .ec-package--featured .ec-kicker,
+#eni-calc .ec-package--featured .ec-section-label,
+#eni-calc .ec-package--featured .ec-card-description,
+#eni-calc .ec-package--featured .ec-muted,
+#eni-calc .ec-package--featured .ec-project-scale p,
+#eni-calc .ec-package--featured .ec-features small,
+#eni-calc .ec-package--featured .ec-card-meta dt { color:#b9c0c7; }
+
+#eni-calc .ec-package--featured .ec-project-scale,
+#eni-calc .ec-package--featured .ec-features { border-color:#454c52; }
+
+#eni-calc .ec-package--featured .ec-card-details { background:#101112; border-color:#E20B0C; color:#fff; }
+
+#eni-calc .ec-package--featured .ec-card-details summary { background:#101112; color:#fff; }
+
+#eni-calc .ec-package--featured .ec-card-details summary:hover { background:#24272a; }
+
+#eni-calc .ec-package--featured .ec-details-copy small { color:#e6e9eb; }
+
+#eni-calc .ec-package--featured .ec-details-list { background:#101112; border-color:#454c52; color:#fff; }
+
+#eni-calc .ec-package--featured .ec-project-tiles i { background:#333c43; border-color:#7b8790; }
+
+#eni-calc .ec-package--featured .ec-project-tiles i.is-active { background:#e0002e; border-color:#e0002e; }
+
+#eni-calc .ec-package--featured .ec-card-actions .ec-choose { background:#e0002d; border-color:#e0002d; color:#fff; }
+
+#eni-calc .ec-package--featured .ec-card-actions .ec-configure { background:#24282c; border-color:#545d65; color:#fff; }
+
+#eni-calc .ec-package--featured .ec-card-actions .ec-action:hover { filter:brightness(1.1); }
+
+#eni-calc .ec-featured-badge { position:absolute; right:16px; top:-11px; padding:6px 9px; border-radius:2px; background:#e0002d; color:#fff; font-size:10px; font-weight:600; line-height:1; }
+
+#eni-calc .ec-off { color:var(--ec-muted); }
+
+#eni-calc .ec-package--featured .ec-off { color:#9ea6ae; }
+
+#eni-calc .ec-pricing-note { font-size:11px; margin-top:18px; }
+
+/* Elementor / WordPress: widok demonstracyjny znika, gdy wykryte są istniejące boksy. */
+#eni-calc.ec-elementor-mode { margin:0; max-width:none; isolation:auto; }
+
+@media(max-width:1040px) {
+#eni-calc .ec-packages--main { gap:12px; }
+
+#eni-calc .ec-package { padding:19px 16px; }
+
+#eni-calc .ec-card-price strong { font-size:40px; }
+}
+
+@media(max-width:750px) {
+#eni-calc .ec-packages--main,
+#eni-calc .ec-packages--entry { grid-template-columns:repeat(2,minmax(0,1fr)); }
+
+#eni-calc .ec-card-header,
+#eni-calc .ec-features,
+#eni-calc .ec-project-scale { min-height:0; }
+
+#eni-calc .ec-card-meta { margin-top:30px; }
+}
+
+@media(max-width:580px) {
+#eni-calc .ec-packages--main,
+#eni-calc .ec-packages--entry { grid-template-columns:1fr; }
+
+#eni-calc .ec-preview-page { padding:18px 10px 26px; }
+
+#eni-calc .ec-package { padding:23px 20px; }
+
+#eni-calc .ec-package .ec-card-price strong { font-size:45px; }
+
+#eni-calc .ec-group-label { align-items:flex-start; flex-direction:column; gap:3px; }
+}
+
+#eni-calc .ec-aside .ec-line.ec-project-subtotal {
+        align-items:center;
+        border-top:1px solid #dce2e7;
+        margin-top:13px;
+        padding-top:12px;
+        font-weight:700;
+        color:#141719;
+      }
+
+#eni-calc .ec-project-subtotal strong {
+        white-space:nowrap;
+        font-size:15px;
+        font-variant-numeric:tabular-nums;
+      }
+
+#eni-calc .ec-preview-page { padding-left:clamp(12px,1.5vw,28px); padding-right:clamp(12px,1.5vw,28px); }
+
+#eni-calc .ec-packages-wide-scroll { width:100%; max-width:100%; overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:thin; padding:12px 0 18px; }
+
+#eni-calc .ec-packages-overview { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(0,3fr); gap:16px; align-items:start; min-width:1450px; }
+
+#eni-calc .ec-package-group { min-width:0; }
+
+#eni-calc .ec-package-group .ec-group-label { margin:0 0 15px; min-height:50px; align-items:flex-end; padding-bottom:9px; }
+
+#eni-calc .ec-package-group .ec-group-label span:first-child { font-size:15px; }
+
+#eni-calc .ec-package-group .ec-group-label span:last-child { font-size:10px; text-align:right; }
+
+#eni-calc .ec-packages-overview .ec-packages--entry { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+
+#eni-calc .ec-packages-overview .ec-packages--main { grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+
+#eni-calc .ec-packages-overview .ec-package { padding:22px 15px 23px; }
+
+#eni-calc .ec-packages-overview .ec-card-header { min-height:150px; }
+
+#eni-calc .ec-packages-overview .ec-package h2 { font-size:clamp(23px,1.65vw,29px); }
+
+#eni-calc .ec-packages-overview .ec-card-description { font-size:13px; }
+
+#eni-calc .ec-packages-overview .ec-features li { font-size:12px; }
+
+#eni-calc .ec-packages-overview .ec-mini-prices { grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; }
+
+#eni-calc .ec-packages-overview .ec-mini-price { display:flex; flex-direction:column; gap:2px; align-items:flex-start; }
+
+#eni-calc .ec-packages-overview .ec-mini-price strong { font-size:clamp(30px,2.6vw,43px); }
+
+#eni-calc .ec-packages-overview .ec-card-price strong { font-size:clamp(35px,2.7vw,47px); }
+
+#eni-calc .ec-packages-overview .ec-card-actions .ec-action { font-size:12px; padding:12px 10px; }
+
+#eni-calc .ec-packages-overview .ec-card-actions .ec-configure { font-size:11px; }
+
+@media (max-width:1199px) {
+#eni-calc .ec-packages-overview { min-width:0; display:grid; grid-template-columns:1fr; gap:28px; }
+
+#eni-calc .ec-package-group .ec-group-label { min-height:0; }
+
+#eni-calc .ec-packages-overview .ec-packages--entry { grid-template-columns:repeat(2,minmax(0,1fr)); }
+
+#eni-calc .ec-packages-overview .ec-packages--main { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+
+@media (max-width:750px) {
+#eni-calc .ec-packages-overview .ec-packages--main { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+
+@media (max-width:580px) {
+#eni-calc .ec-packages-overview .ec-packages--entry,
+#eni-calc .ec-packages-overview .ec-packages--main { grid-template-columns:1fr; }
+
+#eni-calc .ec-packages-wide-scroll { overflow:visible; }
+
+#eni-calc .ec-packages-overview .ec-package { padding:22px 19px; }
+
+#eni-calc .ec-packages-overview .ec-mini-price { flex-direction:row; align-items:baseline; }
+}
+
+/* Abonament: przycisk galerii i galeria wzorów stron. */
+#eni-calc .ec-template-launch {
+        margin-top:14px; width:100%; display:flex; align-items:center; justify-content:space-between;
+        gap:9px; padding:12px 11px; border:1px solid #E20B0C; border-radius:5px;
+        background:#fff; color:#E20B0C; font-size:12px; font-weight:650; text-align:left;
+      }
+
+#eni-calc .ec-template-launch:hover { background:#fff3f3; }
+
+#eni-calc .ec-elementor-templates { color:#E20B0C!important; border-color:#E20B0C!important; }
+
+/* Poziome „klamry” nad każdą z dwóch grup kart.
+         Wewnątrz podpis grupy i liczba pakietów; klamra wskazuje obszar poniżej. */
+#eni-calc .ec-package-group .ec-group-label.ec-group-label--brace {
+        display:flex;
+        flex-direction:column;
+        align-items:stretch;
+        justify-content:flex-end;
+        gap:4px;
+        min-height:96px;
+        margin:0 0 15px;
+        padding:0;
+        border:0;
+      }
+
+#eni-calc .ec-brace-copy {
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:11px;
+        padding:0 12px;
+        text-align:left;
+      }
+
+#eni-calc .ec-brace-number {
+        flex:0 0 auto;
+        display:grid;
+        place-items:center;
+        width:33px;
+        height:33px;
+        border:1px solid #ecc9ca;
+        border-radius:50%;
+        color:#E20B0C;
+        background:#fff8f8;
+        font-size:11px;
+        font-weight:750;
+        font-variant-numeric:tabular-nums;
+      }
+
+#eni-calc .ec-brace-text {
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        gap:4px;
+        min-width:0;
+      }
+
+#eni-calc .ec-package-group .ec-brace-text strong {
+        color:#172027;
+        font-size:17px;
+        line-height:1.2;
+        font-weight:720;
+        letter-spacing:-.025em;
+      }
+
+#eni-calc .ec-package-group .ec-brace-text small {
+        color:#667481;
+        font-size:11px;
+        line-height:1.25;
+        font-weight:400;
+      }
+
+#eni-calc .ec-brace-svg {
+        display:block;
+        width:100%;
+        height:36px;
+        overflow:visible;
+        fill:none;
+        stroke:#8e9ba5;
+        stroke-width:1.6px;
+        stroke-linecap:round;
+        stroke-linejoin:round;
+        transform:rotate(180deg);
+      }
+
+#eni-calc .ec-brace-svg path { vector-effect:non-scaling-stroke; }
+
+#eni-calc .ec-package-group--entry .ec-brace-svg { stroke:#a4afb8; }
+
+#eni-calc .ec-package-group--main .ec-brace-svg { stroke:#a4afb8; }
+
+@media (max-width:580px) {
+#eni-calc .ec-package-group .ec-group-label.ec-group-label--brace { min-height:90px; }
+
+#eni-calc .ec-brace-copy { padding:0 4px; }
+
+#eni-calc .ec-brace-text strong { font-size:16px; }
+
+#eni-calc .ec-brace-text small { font-size:10px; }
+
+#eni-calc .ec-brace-svg { height:30px; }
+}
+
+/* Pełen zakres jako subtelny tekst na końcu listy, z czarną strzałką.
+         Dla czarnej karty Wizytówka strzałka ma białe tło dla czytelności. */
+#eni-calc .ec-package .ec-features .ec-card-details {
+        margin:12px 0 0;
+        padding:0;
+        border:0;
+        border-radius:0;
+        background:transparent;
+        color:inherit;
+        overflow:visible;
+      }
+
+#eni-calc .ec-package .ec-features .ec-card-details[open] {
+        border:0;
+        box-shadow:none;
+      }
+
+#eni-calc .ec-package .ec-features .ec-card-details > summary {
+        display:inline-flex;
+        align-items:center;
+        justify-content:flex-start;
+        gap:9px;
+        padding:3px 0;
+        margin:0;
+        border:0;
+        border-radius:0;
+        background:transparent;
+        color:inherit;
+        font-size:12px;
+        font-weight:700;
+        line-height:1.4;
+        cursor:pointer;
+        list-style:none;
+      }
+
+#eni-calc .ec-package .ec-features .ec-card-details > summary strong {
+        font-weight:700;
+      }
+
+#eni-calc .ec-package .ec-features .ec-card-details > summary:hover {
+        background:transparent;
+        color:inherit;
+      }
+
+#eni-calc .ec-package .ec-features .ec-card-details > summary:hover strong {
+        text-decoration:underline;
+        text-underline-offset:3px;
+      }
+
+#eni-calc .ec-package .ec-features .ec-card-details > summary::after {
+        display:block;
+        content:"";
+        width:7px;
+        height:7px;
+        flex:0 0 7px;
+        margin:0 2px 4px 0;
+        border-right:2px solid #17191b;
+        border-bottom:2px solid #17191b;
+        background:transparent;
+        transform:rotate(45deg);
+        transition:transform .2s ease;
+      }
+
+#eni-calc .ec-package .ec-features .ec-card-details[open] > summary::after {
+        transform:rotate(225deg);
+        margin:5px 2px 0 0;
+      }
+
+#eni-calc .ec-package--featured .ec-features .ec-card-details > summary {
+        color:#fff;
+        background:transparent;
+      }
+
+#eni-calc .ec-package.ec-package--featured .ec-features .ec-card-details > summary::after {
+        background:transparent;
+        border-right-color:#fff;
+        border-bottom-color:#fff;
+        border-radius:0;
+        box-shadow:none;
+      }
+
+#eni-calc .ec-package .ec-features .ec-card-details .ec-details-list {
+        margin:10px 0 0;
+        padding:9px 0 0;
+        background:transparent;
+        border-top:1px solid #e0e5e9;
+        color:inherit;
+      }
+
+#eni-calc .ec-package--featured .ec-features .ec-card-details .ec-details-list {
+        background:transparent;
+        color:#fff;
+        border-top-color:#454c52;
+      }
+
+/* Dwa pełnowymiarowe CTA: czarne główne, białe drugorzędne,
+         ten sam rozmiar również w czarnej Wizytówce. */
+#eni-calc .ec-packages-overview .ec-card-actions .ec-choose,
+#eni-calc .ec-packages-overview .ec-card-actions .ec-configure {
+        display:flex;
+        width:100%;
+        height:58px;
+        min-height:58px;
+        box-sizing:border-box;
+        align-items:center;
+        justify-content:space-between;
+        gap:9px;
+        padding:11px 12px;
+        border-radius:5px;
+        font-size:12px;
+        font-weight:650;
+        line-height:1.3;
+        transition:background .18s ease,border-color .18s ease,color .18s ease;
+      }
+
+/* Czarny przycisk tylko na niewyróżnionych kartach.
+         Wizytówka ma oddzielny, bardziej szczegółowy selektor. */
+#eni-calc .ec-package:not(.ec-package--featured) .ec-card-actions .ec-choose {
+        background:#111214;
+        border:1px solid #111214;
+        color:#fff;
+      }
+
+#eni-calc .ec-package:not(.ec-package--featured) .ec-card-actions .ec-choose:hover {
+        background:#2b2d31;
+        border-color:#2b2d31;
+        color:#fff;
+        filter:none;
+      }
+
+#eni-calc .ec-package.ec-package--featured[data-ec-plan="wiz"] .ec-card-actions button.ec-choose {
+        background-color:#E20B0C!important;
+        border-color:#E20B0C!important;
+        color:#fff!important;
+        box-shadow:none;
+        filter:none;
+      }
+
+#eni-calc .ec-package.ec-package--featured[data-ec-plan="wiz"] .ec-card-actions button.ec-choose:hover {
+        background-color:#c5090a!important;
+        border-color:#c5090a!important;
+        color:#fff!important;
+        filter:none;
+      }
+
+#eni-calc .ec-package .ec-card-actions .ec-configure,
+#eni-calc .ec-package--featured .ec-card-actions .ec-configure {
+        background:#fff;
+        border:1px solid #c9d0d6;
+        color:#141719;
+      }
+
+#eni-calc .ec-package .ec-card-actions .ec-configure:hover,
+#eni-calc .ec-package--featured .ec-card-actions .ec-configure:hover {
+        background:#f4f6f8;
+        border-color:#8e9aa5;
+        color:#141719;
+        filter:none;
+      }
+
+/* Wyróżniona Wizytówka: konfigurator czarny, z jasnym tekstem i
+         delikatnym obramowaniem, żeby nie zlewał się z czarną kartą. */
+#eni-calc .ec-package.ec-package--featured[data-ec-plan="wiz"] .ec-card-actions button.ec-configure {
+        background-color:#1b1d20;
+        border-color:#636b74;
+        color:#fff;
+        filter:none;
+      }
+
+#eni-calc .ec-package.ec-package--featured[data-ec-plan="wiz"] .ec-card-actions button.ec-configure:hover {
+        background-color:#30343a;
+        border-color:#8b939b;
+        color:#fff;
+        filter:none;
+      }
+
+/* Wygląd cen Abonamentu — wartości z cennik.js. */
+#eni-calc .ec-packages-overview .ec-mini-prices {
+        display:grid;
+        grid-template-columns:max-content max-content max-content;
+        justify-content:start;
+        align-items:start;
+        column-gap:8px;
+        row-gap:4px;
+        max-width:100%;
+      }
+
+#eni-calc .ec-packages-overview .ec-mini-or {
+        align-self:start;
+        margin-top:16px;
+        white-space:nowrap;
+      }
+
+#eni-calc .ec-packages-overview .ec-mini-price {
+        display:flex;
+        flex-direction:column;
+        align-items:flex-start;
+        justify-content:flex-start;
+        gap:3px;
+      }
+
+@media(max-width:400px) {
+#eni-calc .ec-packages-overview .ec-mini-prices { column-gap:5px; }
+
+#eni-calc .ec-packages-overview .ec-mini-or { margin-top:13px; }
+}
+
+/* Nowy układ: Abonament w poziomym boksie nad czterema pakietami. */
+#eni-calc .ec-packages-overview {
+        display:grid;grid-template-columns:minmax(0,1fr);width:100%;min-width:0;
+        align-items:start;gap:28px;
+      }
+
+#eni-calc .ec-packages-wide-scroll {overflow-x:hidden;padding:12px 0 20px;}
+
+#eni-calc .ec-packages-overview .ec-package-group {width:100%;min-width:0;}
+
+#eni-calc .ec-price-group-heading {
+        display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
+        gap:7px 18px;margin:0 0 12px;font-size:12px;color:#687480;line-height:1.4;
+      }
+
+#eni-calc .ec-price-group-heading strong {font-size:11px;color:#283139;font-weight:750;letter-spacing:.08em;}
+
+#eni-calc .ec-packages-overview .ec-packages--entry {
+        display:grid;grid-template-columns:minmax(0,1fr);gap:0;
+      }
+
+#eni-calc .ec-packages-overview .ec-packages--main {
+        display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;
+      }
+
+#eni-calc .ec-packages-overview .ec-package {min-width:0;}
+
+#eni-calc .ec-packages-overview .ec-package[data-ec-plan="mini"] {
+        display:grid;
+        grid-template-columns:minmax(0,1.22fr) minmax(0,1.13fr) minmax(0,.90fr);
+        grid-template-rows:auto auto;
+        align-items:start;gap:12px 27px;
+        min-height:0;padding:25px 30px;
+        border:1px solid #d1d7df;
+        background:linear-gradient(120deg,#fff 0%,#fff 65%,#f9fafb 100%);
+      }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-card-header {
+        grid-column:1;grid-row:1;min-height:0;
+      }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-card-description {
+        min-height:0;margin:0;max-width:440px;
+      }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-card-budget {
+        grid-column:1;grid-row:2;margin:0;padding:0;
+      }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-project-scale {
+        grid-column:2;grid-row:1;min-height:0;border:0;padding:0;
+      }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-features {
+        grid-column:2;grid-row:2;min-height:0;border:0;padding:0;
+      }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-features ul {margin-top:8px;}
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-card-meta {
+        grid-column:3;grid-row:1;margin:0;padding:0;
+      }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-card-actions {
+        grid-column:3;grid-row:2;margin:0;padding:0;align-self:start;
+      }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-mini-prices {
+        display:grid;grid-template-columns:max-content max-content max-content;
+        align-items:start;justify-content:start;column-gap:9px;row-gap:4px;
+        max-width:100%;
+      }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-mini-price {
+        display:flex;flex-direction:column;align-items:flex-start;gap:3px;
+      }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-mini-price strong {
+        font-size:clamp(32px,3vw,45px);
+      }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-mini-or {margin-top:15px;white-space:nowrap;}
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-mini-price--annual strong {color:#E20B0C;}
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-mini-saving {
+        max-width:420px;margin-top:10px!important;font-size:12px;
+      }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-mini-small {
+        max-width:420px;line-height:1.5;
+      }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-template-launch {
+        width:auto;max-width:100%;margin-top:12px;
+      }
+
+@media(max-width:1150px) {
+#eni-calc .ec-packages-overview .ec-packages--main {
+          grid-template-columns:repeat(2,minmax(0,1fr));
+        }
+
+#eni-calc .ec-packages-overview .ec-package[data-ec-plan="mini"] {
+          grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+          gap:16px 24px;
+        }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-card-header {grid-column:1;grid-row:1;}
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-card-budget {grid-column:1;grid-row:2;}
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-project-scale {grid-column:2;grid-row:1;}
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-features {grid-column:2;grid-row:2;}
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-card-meta {grid-column:1;grid-row:3;}
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-card-actions {grid-column:2;grid-row:3;}
+}
+
+@media(max-width:650px) {
+#eni-calc .ec-packages-overview .ec-packages--main {
+          grid-template-columns:minmax(0,1fr);
+        }
+
+#eni-calc .ec-packages-overview .ec-package[data-ec-plan="mini"] {
+          display:flex;flex-direction:column;gap:14px;padding:21px 19px;
+        }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-card-budget,
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-project-scale,
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-features,
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-card-meta,
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-card-actions {
+          width:100%;
+        }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-project-scale,
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-features {
+          border-top:1px solid #e3e8ec;padding-top:14px;
+        }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-mini-prices {column-gap:6px;}
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-mini-price strong {
+          font-size:clamp(29px,8vw,38px);
+        }
+
+#eni-calc .ec-package[data-ec-plan="mini"] .ec-annual-promo-line del {font-size:15px;}
+}
+
+/* Cena przekreślona w porównaniu płatności w konfiguratorze. */
+#eni-calc .ec-mini-rate-variant .ec-abo-regular-price {
+        display:block;
+        margin-top:4px;
+        font-size:10px;
+        line-height:1.45;
+        color:#64717c;
+      }
+
+#eni-calc .ec-mini-rate-variant .ec-abo-regular-price del {
+        color:#8e99a4;
+        text-decoration:line-through;
+      }
+
+/* Abonament: uporządkowana oferta 3-kolumnowa. Każdy blok jest jedną całością:
+         wprowadzenie/cena | zakres/korzyści | warunki/CTA. */
+#eni-calc .ec-packages-overview .ec-package.ec-package--abo {
+        display:grid;
+        grid-template-columns:minmax(0,1.12fr) minmax(0,1fr) minmax(250px,.78fr);
+        grid-template-rows:auto;
+        gap:0;
+        align-items:stretch;
+        min-height:0;
+        padding:28px 30px;
+        background:#fff;
+      }
+
+#eni-calc .ec-package--abo > .ec-abo-intro,
+#eni-calc .ec-package--abo > .ec-abo-details,
+#eni-calc .ec-package--abo > .ec-abo-side {
+        display:flex;
+        flex-direction:column;
+        min-width:0;
+      }
+
+#eni-calc .ec-package--abo > .ec-abo-intro {
+        grid-column:1;grid-row:1;
+        padding-right:27px;
+      }
+
+#eni-calc .ec-package--abo > .ec-abo-details {
+        grid-column:2;grid-row:1;
+        padding:0 27px;
+        border-left:1px solid #e4e8ec;
+      }
+
+#eni-calc .ec-package--abo > .ec-abo-side {
+        grid-column:3;grid-row:1;
+        padding-left:27px;
+        border-left:1px solid #e4e8ec;
+        gap:22px;
+        justify-content:space-between;
+      }
+
+#eni-calc .ec-package--abo .ec-card-header {
+        min-height:0;
+      }
+
+#eni-calc .ec-package--abo .ec-card-header h2 {
+        font-size:clamp(33px,3vw,41px);
+        margin:9px 0 12px;
+        font-weight:600;
+      }
+
+#eni-calc .ec-package--abo .ec-card-description {
+        min-height:0;
+        max-width:360px;
+        line-height:1.55;
+      }
+
+#eni-calc .ec-package--abo .ec-card-budget {
+        margin-top:26px;
+        padding:0;
+      }
+
+#eni-calc .ec-package--abo .ec-project-scale {
+        display:grid;
+        grid-template-columns:54px minmax(0,1fr);
+        grid-template-rows:auto auto auto;
+        align-items:center;
+        gap:1px 14px;
+        min-height:0;
+        border:0;
+        padding:0;
+      }
+
+#eni-calc .ec-package--abo .ec-project-page {
+        grid-column:1;grid-row:1 / span 2;
+        margin:0;
+      }
+
+#eni-calc .ec-package--abo .ec-project-scale h3 {
+        grid-column:2;grid-row:1;
+        margin:0;
+        font-size:17px;
+        line-height:1.35;
+      }
+
+#eni-calc .ec-package--abo .ec-project-scale p {
+        grid-column:2;grid-row:2;
+        margin:2px 0 0;
+      }
+
+#eni-calc .ec-package--abo .ec-template-launch {
+        grid-column:1 / -1;
+        grid-row:3;
+        justify-self:start;
+        margin-top:16px;
+        padding:11px 13px;
+      }
+
+#eni-calc .ec-package--abo .ec-features {
+        border-top:1px solid #e4e8ec;
+        padding-top:18px;
+        margin-top:22px;
+        min-height:0;
+      }
+
+#eni-calc .ec-package--abo .ec-features ul { margin-top:9px; }
+
+#eni-calc .ec-package--abo .ec-features li { padding:4px 0; }
+
+#eni-calc .ec-package--abo .ec-card-meta {
+        margin:0;
+        padding:0;
+      }
+
+#eni-calc .ec-package--abo .ec-card-meta div {
+        gap:10px;
+        margin:0 0 13px;
+      }
+
+#eni-calc .ec-package--abo .ec-card-meta dt {
+        flex-shrink:0;
+      }
+
+#eni-calc .ec-package--abo .ec-card-actions {
+        margin-top:auto;
+        gap:10px;
+        width:100%;
+      }
+
+#eni-calc .ec-package--abo:has(.ec-card-details[open]) .ec-card-meta {
+        margin:0;
+      }
+
+@media (max-width:1150px) {
+#eni-calc .ec-packages-overview .ec-package.ec-package--abo {
+          grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+          gap:23px 0;
+        }
+
+#eni-calc .ec-package--abo > .ec-abo-intro {
+          grid-column:1 / -1;grid-row:1;
+          display:grid;
+          grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+          gap:24px;
+          padding:0 0 22px;
+          border-bottom:1px solid #e4e8ec;
+        }
+
+#eni-calc .ec-package--abo .ec-card-budget {
+          margin-top:0;
+        }
+
+#eni-calc .ec-package--abo > .ec-abo-details {
+          grid-column:1;grid-row:2;
+          border:0;padding:0 26px 0 0;
+        }
+
+#eni-calc .ec-package--abo > .ec-abo-side {
+          grid-column:2;grid-row:2;
+          padding-left:26px;
+        }
+}
+
+@media (max-width:700px) {
+#eni-calc .ec-packages-overview .ec-package.ec-package--abo {
+          display:flex;
+          flex-direction:column;
+          gap:20px;
+          padding:23px 20px;
+        }
+
+#eni-calc .ec-package--abo > .ec-abo-intro {
+          display:flex;
+          flex-direction:column;
+          gap:0;
+          padding:0 0 19px;
+        }
+
+#eni-calc .ec-package--abo .ec-card-budget {margin-top:20px;}
+
+#eni-calc .ec-package--abo > .ec-abo-details {
+          border-bottom:1px solid #e4e8ec;
+          padding:0 0 20px;
+        }
+
+#eni-calc .ec-package--abo > .ec-abo-side {
+          border:0;
+          padding:0;
+          gap:15px;
+        }
+
+#eni-calc .ec-package--abo .ec-card-actions {margin-top:4px;}
+
+#eni-calc .ec-package--abo .ec-card-header h2 {font-size:34px;}
+}
+
+/* Czytelniejsza typografia wszystkich pięciu kart cennika. */
+#eni-calc .ec-packages-overview .ec-package .ec-card-description {
+        font-size:14px;
+        line-height:1.6;
+      }
+
+#eni-calc .ec-packages-overview .ec-package .ec-section-label {
+        font-size:12px;
+        font-weight:700;
+        letter-spacing:.075em;
+      }
+
+#eni-calc .ec-packages-overview .ec-package .ec-features li {
+        font-size:14px;
+        line-height:1.55;
+        padding-block:4px;
+      }
+
+#eni-calc .ec-packages-overview .ec-package .ec-features li small {
+        font-size:12px;
+        line-height:1.5;
+      }
+
+#eni-calc .ec-packages-overview .ec-package .ec-project-scale p {
+        font-size:13px;
+        line-height:1.55;
+      }
+
+#eni-calc .ec-packages-overview .ec-package .ec-card-meta div {
+        font-size:13px;
+        line-height:1.5;
+      }
+
+#eni-calc .ec-packages-overview .ec-package .ec-card-details > summary {
+        font-size:13px;
+      }
+
+#eni-calc .ec-packages-overview .ec-package .ec-details-list li {
+        font-size:13px;
+        line-height:1.55;
+      }
+
+#eni-calc .ec-packages-overview .ec-package .ec-card-actions .ec-action {
+        font-size:13px;
+        line-height:1.4;
+      }
+
+/* Wyraźny oddech między ostatnim wierszem warunków a przyciskami. */
+#eni-calc .ec-packages-overview .ec-package .ec-card-actions {
+        padding-top:22px;
+      }
+
+@media (max-width:650px) {
+#eni-calc .ec-packages-overview .ec-package .ec-card-actions {
+          padding-top:18px;
+        }
+}
+
+/* Abonament: "Pełen zakres pakietu" otwiera się nad układem,
+         wyłącznie na szerokość środkowej kolumny. Nie rozciąga karty. */
+#eni-calc .ec-packages-wide-scroll {
+        overflow-x:clip;
+        overflow-y:visible;
+      }
+
+#eni-calc .ec-package-group--entry:has(.ec-card-details[open]) {
+        position:relative;
+        z-index:20;
+      }
+
+#eni-calc .ec-packages-overview .ec-package.ec-package--abo:has(.ec-card-details[open]) {
+        z-index:21;
+      }
+
+#eni-calc .ec-package.ec-package--abo .ec-features .ec-card-details {
+        position:relative;
+      }
+
+#eni-calc .ec-package.ec-package--abo .ec-features .ec-card-details[open] > .ec-details-list {
+        position:absolute;
+        inset-inline:0;
+        top:calc(100% + 8px);
+        width:100%;
+        box-sizing:border-box;
+        z-index:25;
+        max-height:min(310px,48dvh);
+        overflow-y:auto;
+        overscroll-behavior:contain;
+        scrollbar-width:thin;
+        margin:0;
+        padding:12px 14px;
+        background:#fff;
+        border:1px solid #dce2e7;
+        border-radius:7px;
+        color:#16191c;
+        box-shadow:0 14px 28px rgba(20,26,32,.16);
+      }
+
+@media (max-width:700px) {
+#eni-calc .ec-package.ec-package--abo .ec-features .ec-card-details[open] > .ec-details-list {
+          max-height:min(270px,42dvh);
+          padding:11px 12px;
+        }
+}
+
+#eni-calc .ec-packages-overview .ec-mini-price--annual .ec-annual-promo-line > strong { color:#E20B0C; }
+
+#eni-calc .ec-preview-page { background:linear-gradient(#f7f8fa,#fff 900px); }
+
+#eni-calc .ec-page-title { font-size:clamp(32px,4.1vw,48px); font-weight:500; letter-spacing:-.045em; line-height:1.15; }
+
+#eni-calc .ec-preview-heading .ec-kicker { font-size:12px; font-weight:600; letter-spacing:.11em; }
+
+#eni-calc .ec-preview-heading .ec-kicker::before { content:""; display:inline-block; width:7px; height:7px; margin-right:12px; border-radius:50%; background:#E20B0C; vertical-align:2px; }
+
+#eni-calc .ec-packages-overview .ec-package { border-radius:8px; box-shadow:0 12px 38px #19212904; }
+
+#eni-calc .ec-packages-overview .ec-package .ec-card-header h2 { font-size:29px; font-weight:500; letter-spacing:-.045em; line-height:1.15; }
+
+#eni-calc .ec-packages-overview .ec-package.ec-package--abo .ec-card-header h2 { font-size:clamp(32px,3vw,41px); }
+
+#eni-calc .ec-packages-overview .ec-package .ec-kicker { font-size:12px; font-weight:600; letter-spacing:.08em; line-height:1.6; }
+
+#eni-calc .ec-packages-overview .ec-package .ec-card-description { font-size:15px; line-height:1.5; }
+
+#eni-calc .ec-packages-overview .ec-card-price strong { font-size:clamp(35px,3.1vw,46px); font-weight:500; letter-spacing:-.055em; line-height:1.1; }
+
+#eni-calc .ec-packages-overview .ec-package .ec-card-price span { font-size:14px; }
+
+#eni-calc .ec-packages-overview .ec-package[data-ec-plan="mini"] .ec-mini-price strong { letter-spacing:-.055em; font-weight:500; }
+
+#eni-calc .ec-packages-overview .ec-package .ec-section-label { font-size:11px; letter-spacing:.075em; font-weight:600; }
+
+#eni-calc .ec-packages-overview .ec-package .ec-features li { font-size:14px; line-height:1.5; padding-block:3px; }
+
+#eni-calc .ec-features .ec-tick { position:relative; display:inline-block; width:12px; min-width:12px; flex:0 0 12px; height:20px; }
+
+#eni-calc .ec-features li:not(.ec-off) > .ec-tick::before { content:""; position:absolute; left:2px; top:7px; width:8px; height:5px; border-left:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:rotate(-45deg); }
+
+#eni-calc .ec-card-meta .ec-meta-icon { width:14px; height:14px; flex:0 0 14px; }
+
+#eni-calc .ec-packages-overview .ec-package .ec-card-meta dt { font-weight:400; }
+
+#eni-calc .ec-packages-overview .ec-package .ec-card-meta dd { font-weight:500; }
+
+#eni-calc .ec-project-page { gap:2px; padding:4px; border-color:#acb7c0; border-radius:3px; background:#fff; }
+
+#eni-calc .ec-project-page i { flex:1; min-height:4px; background:#e7ecef; }
+
+#eni-calc .ec-project-page i:first-child { background:#101112; }
+
+#eni-calc .ec-project-tiles i { border-color:#b7c0c8; border-radius:2px; background:#f1f4f6; }
+
+#eni-calc .ec-package--featured .ec-project-tiles i { border-color:#69757e; background:#30383e; }
+
+#eni-calc .ec-package--featured .ec-project-tiles i.is-active { background:#E20B0C; border-color:#E20B0C; }
+
+#eni-calc .ec-packages-overview .ec-package .ec-card-actions .ec-action { font-size:14px; font-weight:500; border-radius:4px; }
+
+#eni-calc .ec-packages-overview .ec-package .ec-template-launch { font-size:13px; font-weight:500; border-radius:4px; }
+
+#eni-calc .ec-packages-overview .ec-package .ec-card-details > summary { font-size:14px; font-weight:500; }
+
+#eni-calc .ec-package .ec-features .ec-card-details > summary strong { font-weight:600; }
+
+@media(max-width:650px) {
+#eni-calc .ec-packages-overview .ec-package .ec-card-header h2 { font-size:28px; }
+
+#eni-calc .ec-packages-overview .ec-package .ec-card-description { font-size:14px; }
+}
+
+/* Referencja eniverse-cennik-abonament-final.html: parametry enp-card, enp-abonament (stone),
+   abo-compact-options, enp-price, enp-features, enp-meta, enp-btn.
+   Zachowana siatka 1+4 i funkcje kalkulatora. */
+#eni-calc #ec-catalog {font:400 17px/1.65 "DM Sans",sans-serif; --ec-red:#dd0429; --ec-ink:#101112; --ec-muted:#5f6973; --ec-line:#dce0e3; --ec-soft:#f7f8fa;}
+
+#eni-calc #ec-catalog .ec-package {font:inherit; color:var(--ec-ink); padding:24px; border:1px solid var(--ec-line);border-radius:8px;background:#fff;box-shadow:0 12px 38px #19212904;min-width:0;}
+
+#eni-calc #ec-catalog .ec-packages--main {gap:10px;}
+
+#eni-calc #ec-catalog .ec-package--featured {background:#101112;color:#fff;border-color:#101112;--ec-muted:#c6cbd0;--ec-line:#42464a;box-shadow:0 16px 40px #11111115;}
+
+#eni-calc #ec-catalog .ec-featured-badge {right:18px;top:-14px;font-size:11px;line-height:1.45;font-weight:600;padding:6px 9px;border-radius:4px;background:#dd0429;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-header h2 {font-size:29px;font-weight:500;letter-spacing:-.045em;line-height:1.15;margin:10px 0 0;color:inherit;}
+
+#eni-calc #ec-catalog .ec-package .ec-kicker {display:block;font-size:12px;line-height:1.6;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ec-muted);}
+
+#eni-calc #ec-catalog .ec-package .ec-card-description {font-size:15px;line-height:1.5;color:var(--ec-muted);margin-top:10px;min-height:68px;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-budget {margin-top:16px;padding-bottom:16px;border-bottom:1px solid var(--ec-line);}
+
+#eni-calc #ec-catalog .ec-package .ec-card-price {display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;line-height:1.1;letter-spacing:-.02em;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-price strong {font-size:46px;line-height:1.1;letter-spacing:-.055em;font-weight:500;white-space:nowrap;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-price span {font-size:14px;letter-spacing:0;white-space:nowrap;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-budget .ec-muted {font-size:13px;color:var(--ec-muted);margin-top:8px;}
+
+#eni-calc #ec-catalog .ec-package .ec-project-scale {padding:14px 0;margin-bottom:15px;border-top:0;border-bottom:1px solid var(--ec-line);}
+
+#eni-calc #ec-catalog .ec-package .ec-project-scale h3 {font-size:18px;font-weight:500;letter-spacing:-.02em;line-height:1.4;margin:0 0 5px;color:inherit;}
+
+#eni-calc #ec-catalog .ec-package .ec-project-scale p {font-size:13px;line-height:1.5;color:var(--ec-muted);min-height:39px;}
+
+#eni-calc #ec-catalog .ec-project-page {display:flex;flex-direction:column;gap:2px;width:54px;height:46px;border:1px solid #acb7c0;border-radius:3px;background:#fff;padding:4px;margin:0 0 8px;}
+
+#eni-calc #ec-catalog .ec-project-page i {display:block;flex:1;min-height:4px;background:#e7ecef;border-radius:1px;}
+
+#eni-calc #ec-catalog .ec-project-page i:first-child {background:#101112;}
+
+#eni-calc #ec-catalog .ec-project-tiles {width:174px;max-width:100%;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;align-content:center;min-height:46px;margin:0 0 8px;}
+
+#eni-calc #ec-catalog .ec-project-tiles i {display:block;width:auto;height:12px;border:1px solid #b7c0c8;border-radius:2px;background:#f1f4f6;}
+
+#eni-calc #ec-catalog .ec-project-tiles i.is-active {background:#101112;border-color:#101112;}
+
+#eni-calc #ec-catalog .ec-package--featured .ec-project-tiles i {border-color:#69757e;background:#30383e;}
+
+#eni-calc #ec-catalog .ec-package--featured .ec-project-tiles i.is-active {background:#dd0429;border-color:#dd0429;}
+
+#eni-calc #ec-catalog .ec-package .ec-features {flex:1 0 auto;border-top:0;padding-top:0;padding-bottom:17px;}
+
+#eni-calc #ec-catalog .ec-package .ec-section-label {font-size:11px;letter-spacing:.075em;text-transform:uppercase;font-weight:600;color:var(--ec-muted);margin-bottom:9px;}
+
+#eni-calc #ec-catalog .ec-package .ec-features ul {list-style:none;display:grid;gap:6px;font-size:14px;line-height:1.5;margin:0;padding:0;}
+
+#eni-calc #ec-catalog .ec-package .ec-features li {position:relative;display:block;padding:0 0 0 20px;font-size:14px;line-height:1.5;}
+
+#eni-calc #ec-catalog .ec-package .ec-features .ec-tick {position:absolute;left:2px;top:.5em;width:8px;height:5px;min-width:0;display:block;line-height:0;}
+
+#eni-calc #ec-catalog .ec-package .ec-features li:not(.ec-off) > .ec-tick::before {content:"";position:absolute;inset:0;width:8px;height:5px;border-left:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);}
+
+#eni-calc #ec-catalog .ec-package .ec-features li.ec-off {color:var(--ec-muted);}
+
+#eni-calc #ec-catalog .ec-package .ec-features li.ec-off > .ec-tick {left:0;top:0;width:14px;height:21px;border:0;font-size:0;line-height:0;}
+
+#eni-calc #ec-catalog .ec-package .ec-features li.ec-off > .ec-tick::before {content:"";position:absolute;left:2px;top:50%;width:10px;height:1.5px;background:currentColor;border:0;border-radius:1px;transform:translateY(-50%);}
+
+#eni-calc #ec-catalog .ec-package .ec-features .ec-card-details > summary {width:100%;display:flex;justify-content:space-between;min-height:35px;font-size:14px;line-height:1.5;padding:3px 0;color:inherit;}
+
+#eni-calc #ec-catalog .ec-package .ec-features .ec-card-details > .ec-details-list {padding-top:9px;margin-top:10px;border-top:1px solid var(--ec-line);}
+
+#eni-calc #ec-catalog .ec-package .ec-card-meta {display:grid;gap:4px;margin-bottom:17px;font-size:12px;line-height:1.5;padding-top:0;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-meta > div {display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;font-size:12px;line-height:1.5;margin:0;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-meta dt {display:flex;align-items:center;gap:6px;color:var(--ec-muted);font-weight:400;white-space:nowrap;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-meta dd {text-align:right;font-weight:500;white-space:normal;}
+
+#eni-calc #ec-catalog .ec-package .ec-meta-icon {display:block;flex:none;width:14px;height:14px;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-actions {display:grid;gap:10px;padding-top:0;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-actions .ec-action {width:100%;height:auto;min-height:68px;display:inline-flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 18px;background:#101112;border:1px solid #101112;border-radius:4px;color:#fff;font-size:15px;line-height:1.4;font-weight:500;text-align:left;transition:background .18s,color .18s,border-color .18s;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-actions .ec-action span[aria-hidden] {font-size:20px;line-height:1;flex:none;}
+
+#eni-calc #ec-catalog .ec-package:not(.ec-package--featured) .ec-card-actions .ec-choose:hover {background:#dd0429;border-color:#dd0429;color:#fff;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-actions .ec-configure {min-height:48px;background:#fff;color:#101112;border-color:#c8ced3;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-actions .ec-configure:hover {background:#f4f6f8;border-color:#101112;color:#101112;}
+
+#eni-calc #ec-catalog .ec-package--featured .ec-card-actions .ec-configure {background:transparent;color:#fff;border-color:#818b95;}
+
+#eni-calc #ec-catalog .ec-package--featured .ec-card-actions .ec-configure:hover {background:#373f47;border-color:#f5f6f7;color:#fff;}
+
+#eni-calc #ec-catalog .ec-package .ec-template-launch {width:100%;display:inline-flex;align-items:center;justify-content:space-between;gap:9px;font-size:13px;font-weight:600;color:#dd0429;margin-top:14px;line-height:1.45;min-height:42px;padding:10px 14px;border:1px solid #dd0429;border-radius:5px;background:#fff;max-width:100%;transition:background .18s,color .18s,border-color .18s;}
+
+#eni-calc #ec-catalog .ec-package .ec-template-launch:hover {background:#dd0429;color:#fff;}
+
+/* Poziomy wariant abo-v1, paleta stone, kompaktowe kafelki miesięczny/roczny. */
+#eni-calc #ec-catalog .ec-package.ec-package--abo {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:stretch;padding:24px;border:0;background:#eef1f3;--ec-line:#cbd2d8;--ec-muted:#515e68;--ec-soft:#e3e8ec;min-height:0;}
+
+#eni-calc #ec-catalog .ec-package--abo > .ec-abo-intro {grid-column:1;grid-row:1;display:block;padding:0;border:0;}
+
+#eni-calc #ec-catalog .ec-package--abo > .ec-abo-details {grid-column:2;grid-row:1;padding:0 0 0 24px;border:0;border-left:1px solid var(--ec-line);}
+
+#eni-calc #ec-catalog .ec-package--abo > .ec-abo-side {grid-column:3;grid-row:1;padding:0 0 0 24px;border:0;border-left:1px solid var(--ec-line);gap:18px;}
+
+#eni-calc #ec-catalog .ec-package--abo .ec-card-header,
+#eni-calc #ec-catalog .ec-package--abo .ec-card-description {min-height:0;}
+
+#eni-calc #ec-catalog .ec-package--abo .ec-card-budget {margin-top:18px;padding:0;border:0;}
+
+#eni-calc #ec-catalog .ec-package--abo .ec-project-scale {padding:0;border:0;margin:0;min-height:0;gap:3px 12px;}
+
+#eni-calc #ec-catalog .ec-package--abo .ec-project-scale p {min-height:0;}
+
+#eni-calc #ec-catalog .ec-package--abo .ec-project-page {margin:0;}
+
+#eni-calc #ec-catalog .ec-package--abo .ec-features {margin-top:12px;padding:0;border:0;min-height:0;}
+
+#eni-calc #ec-catalog .ec-package--abo .ec-card-meta {margin:0;gap:9px;padding-top:3px;}
+
+#eni-calc #ec-catalog .ec-package--abo .ec-card-actions .ec-choose {min-height:54px;}
+
+#eni-calc #ec-catalog .ec-package--abo .ec-card-actions .ec-configure {min-height:48px;}
+
+#eni-calc #ec-catalog .ec-package--abo .ec-features .ec-card-details[open] > .ec-details-list {position:absolute;inset-inline:0;top:calc(100% + 8px);padding:12px 14px;background:#fff;border:1px solid var(--ec-line);border-radius:6px;margin:0;box-shadow:0 8px 28px #10111226;}
+
+#eni-calc #ec-catalog .ec-abo-reference-prices {display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1.25fr);gap:7px;align-items:stretch;container-type:inline-size;}
+
+#eni-calc #ec-catalog .ec-abo-reference-option {background:#fff;border:1px solid var(--ec-line);border-radius:4px;padding:10px;min-width:0;display:flex;flex-direction:column;align-items:flex-start;}
+
+#eni-calc #ec-catalog .ec-abo-reference-year {border-color:#dd04296b;}
+
+#eni-calc #ec-catalog .ec-abo-reference-label {font-size:10px;line-height:1.6;letter-spacing:.045em;font-weight:600;text-transform:uppercase;color:var(--ec-muted);margin-bottom:6px;}
+
+#eni-calc #ec-catalog .ec-abo-reference-year .ec-abo-reference-label,
+#eni-calc #ec-catalog .ec-abo-reference-year .ec-abo-reference-amount strong {color:#E20B0C;}
+
+#eni-calc #ec-catalog .ec-abo-reference-amount {display:flex;align-items:baseline;flex-wrap:nowrap;gap:3px;line-height:1.1;}
+
+#eni-calc #ec-catalog .ec-abo-reference-amount strong {font-size:clamp(23px,10cqi,40px);font-weight:500;letter-spacing:-.06em;line-height:1.1;}
+
+#eni-calc #ec-catalog .ec-abo-reference-amount del {font-size:clamp(10px,3.8cqi,16px);line-height:1.2;font-weight:400;color:#7a858f;white-space:nowrap;text-decoration-thickness:1px;letter-spacing:-.025em;}
+
+#eni-calc #ec-catalog .ec-abo-reference-unit {font-size:12px;line-height:1.45;margin-top:4px;}
+
+#eni-calc #ec-catalog .ec-abo-reference-or {font-size:14px;line-height:1;color:var(--ec-muted);font-weight:500;align-self:center;justify-self:center;}
+
+#eni-calc #ec-catalog .ec-abo-reference-promo {font-size:10px;letter-spacing:.045em;margin-top:5px;color:#E20B0C;font-weight:600;}
+
+#eni-calc #ec-catalog .ec-package--abo .ec-mini-saving {font-size:13px;line-height:1.5;color:var(--ec-muted);margin-top:10px;}
+
+#eni-calc #ec-catalog .ec-package--abo .ec-mini-small {font-size:13px;line-height:1.5;color:var(--ec-muted);margin-top:8px;}
+
+@media(min-width:900px) and (max-width:1100px) {
+#eni-calc #ec-catalog .ec-package.ec-package--abo {padding:22px 18px;gap:16px;}
+
+#eni-calc #ec-catalog .ec-package--abo > .ec-abo-details,
+#eni-calc #ec-catalog .ec-package--abo > .ec-abo-side {padding-left:16px;}
+
+#eni-calc #ec-catalog .ec-abo-reference-option {padding:8px;}
+}
+
+@media(max-width:899px) {
+#eni-calc #ec-catalog .ec-package.ec-package--abo {grid-template-columns:1fr 1fr;gap:20px;}
+
+#eni-calc #ec-catalog .ec-package--abo > .ec-abo-side {grid-column:1/-1;grid-row:2;border-left:0;border-top:1px solid var(--ec-line);padding:18px 0 0;display:grid;grid-template-columns:1fr 1fr;align-items:end;}
+}
+
+@media(max-width:580px) {
+#eni-calc #ec-catalog .ec-package.ec-package--abo {display:flex;flex-direction:column;gap:20px;padding:24px;}
+
+#eni-calc #ec-catalog .ec-package--abo > .ec-abo-details,
+#eni-calc #ec-catalog .ec-package--abo > .ec-abo-side {border-left:0;border-top:1px solid var(--ec-line);padding:18px 0 0;display:flex;flex-direction:column;align-items:stretch;}
+
+#eni-calc #ec-catalog .ec-package--abo > .ec-abo-details {display:block;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-actions .ec-action {min-height:48px;}
+}
+
+@media(max-width:359px) {
+#eni-calc #ec-catalog .ec-package {padding:20px;}
+
+#eni-calc #ec-catalog .ec-abo-reference-option {padding:8px;}
+}
+
+/* Oryginalna karta Abonament z eniverse-cennik-abonament-final.html, zakres lokalny. */
+#eni-calc #ec-abo-reference {--enp-red:#dd0429;--enp-ink:#101112;--enp-muted:#5f6973;--enp-line:#dce0e3;--enp-soft:#f7f8fa;--enp-radius:8px;color:var(--enp-ink);font:400 17px/1.65 "DM Sans",sans-serif;text-align:left;isolation:isolate;overflow-wrap:break-word}
+
+#eni-calc #ec-abo-reference *,
+#eni-calc #ec-abo-reference *::before,
+#eni-calc #ec-abo-reference *::after {box-sizing:border-box}
+
+#eni-calc #ec-abo-reference :where(h2,h3,h4,p,ul,ol,dl,dt,dd,figure) {margin:0;padding:0}
+
+#eni-calc #ec-abo-reference :where(h2,h3,h4) {font-family:inherit;color:inherit;text-transform:none;font-style:normal}
+
+#eni-calc #ec-abo-reference :where(h2,h3) {font-weight:500;letter-spacing:-.045em;line-height:1.15}
+
+#eni-calc #ec-abo-reference h2 {font-size:clamp(32px,4.1vw,48px)}
+
+#eni-calc #ec-abo-reference h3 {font-size:29px}
+
+#eni-calc #ec-abo-reference h4 {font-size:16px;font-weight:600;letter-spacing:0;line-height:1.5}
+
+#eni-calc #ec-abo-reference p {font-size:inherit;line-height:inherit}
+
+#eni-calc #ec-abo-reference a {font-family:inherit;color:inherit;text-decoration:none}
+
+#eni-calc #ec-abo-reference strong {font-weight:600}
+
+#eni-calc #ec-abo-reference .enp-eyebrow {display:block;font-size:12px;line-height:1.6;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--enp-muted)}
+
+#eni-calc #ec-abo-reference .enp-red {color:var(--enp-red)}
+
+#eni-calc #ec-abo-reference .enp-btn {min-height:48px;display:inline-flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 18px;background:var(--enp-ink);border:1px solid var(--enp-ink);border-radius:4px;color:#fff;font-size:15px;line-height:1.4;font-weight:500;transition:background .18s,color .18s,border-color .18s}
+
+#eni-calc #ec-abo-reference .enp-btn span[aria-hidden] {font-size:20px;line-height:1;flex:none}
+
+#eni-calc #ec-abo-reference .enp-btn:hover {background:var(--enp-red);border-color:var(--enp-red);color:#fff}
+
+#eni-calc #ec-abo-reference :where(a,summary,.enp-tip-trigger):focus-visible {outline:3px solid var(--enp-red);outline-offset:4px;box-shadow:0 0 0 2px #fff}
+
+#eni-calc #ec-abo-reference .enp-btn-outline {background:transparent;color:var(--enp-ink);border-color:#7c858d}
+
+#eni-calc #ec-abo-reference .enp-price {display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;line-height:1.1;letter-spacing:-.02em}
+
+#eni-calc #ec-abo-reference .enp-price strong {font-size:46px;line-height:1.1;letter-spacing:-.055em;font-weight:500;white-space:nowrap}
+
+#eni-calc #ec-abo-reference .enp-price span {font-size:14px;letter-spacing:0;white-space:nowrap}
+
+#eni-calc #ec-abo-reference .enp-price-note {font-size:13px;color:var(--enp-muted);margin-top:8px}
+
+#eni-calc #ec-abo-reference .enp-card-desc {font-size:15px;line-height:1.5;color:var(--enp-muted);margin-top:10px;min-height:68px}
+
+#eni-calc #ec-abo-reference .enp-scale-visual {display:flex;align-items:center;min-height:46px;margin-bottom:8px}
+
+#eni-calc #ec-abo-reference .enp-scale-map {width:174px;max-width:100%;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;align-content:center;min-height:46px}
+
+#eni-calc #ec-abo-reference .enp-scale-one {display:flex;flex-direction:column;gap:2px;width:54px;height:46px;border:1px solid #acb7c0;border-radius:3px;background:#fff;padding:4px}
+
+#eni-calc #ec-abo-reference .enp-scale-one i {display:block;flex:1;min-height:4px;background:#e7ecef;border-radius:1px}
+
+#eni-calc #ec-abo-reference .enp-scale-one i:first-child {background:var(--enp-ink)}
+
+#eni-calc #ec-abo-reference .enp-scope {font-size:18px;font-weight:500;letter-spacing:-.02em;line-height:1.4;margin-bottom:5px}
+
+#eni-calc #ec-abo-reference .enp-scope-note {font-size:13px;line-height:1.5;color:var(--enp-muted);min-height:39px}
+
+#eni-calc #ec-abo-reference .enp-group-title {font-size:11px;letter-spacing:.075em;text-transform:uppercase;font-weight:600;color:var(--enp-muted);margin-bottom:9px}
+
+#eni-calc #ec-abo-reference .enp-features {flex:1 0 auto;padding-bottom:17px}
+
+#eni-calc #ec-abo-reference .enp-feature-list {list-style:none;display:grid;gap:6px;font-size:14px;line-height:1.5}
+
+#eni-calc #ec-abo-reference .enp-feature-list li {position:relative;padding-left:20px}
+
+#eni-calc #ec-abo-reference .enp-feature-list li::before {content:"";position:absolute;left:2px;top:.5em;width:8px;height:5px;border-left:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg)}
+
+#eni-calc #ec-abo-reference .enp-meta {display:grid;gap:4px;margin-bottom:17px;font-size:12px;line-height:1.5}
+
+#eni-calc #ec-abo-reference .enp-meta>div {display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
+
+#eni-calc #ec-abo-reference .enp-meta dt {display:flex;align-items:center;gap:6px;color:var(--enp-muted);white-space:nowrap}
+
+#eni-calc #ec-abo-reference .enp-meta dd {text-align:right;font-weight:500;white-space:nowrap}
+
+#eni-calc #ec-abo-reference .enp-meta-icon {display:block;flex:none;width:14px;height:14px}
+
+#eni-calc #ec-abo-reference summary {position:relative;list-style:none;cursor:pointer;min-height:48px;padding:13px 30px 13px 0;font-size:15px;line-height:1.5;font-weight:500}
+
+#eni-calc #ec-abo-reference summary::-webkit-details-marker {display:none}
+
+#eni-calc #ec-abo-reference summary::after {content:"+";position:absolute;right:3px;top:12px;font-size:22px;font-weight:400;line-height:1}
+
+#eni-calc #ec-abo-reference details[open]>summary::after {content:"−"}
+
+#eni-calc #ec-abo-reference .enp-disclosure-body {padding:0 0 18px;font-size:14px;color:var(--enp-muted)}
+
+@media (min-width:900px) and (max-width:1100px) {
+#eni-calc #ec-abo-reference .enp-price strong {font-size:42px}
+
+#eni-calc #ec-abo-reference .enp-card-desc {min-height:90px}
+
+#eni-calc #ec-abo-reference .enp-scope {font-size:17px}
+
+#eni-calc #ec-abo-reference .enp-scope-note {min-height:59px}
+}
+
+@media (max-width:899px) {
+#eni-calc #ec-abo-reference .enp-card-desc,
+#eni-calc #ec-abo-reference .enp-scope-note {min-height:0}
+}
+
+@media (max-width:767px) {
+#eni-calc #ec-abo-reference {font-size:16px}
+
+#eni-calc #ec-abo-reference .enp-price strong {font-size:42px}
+}
+
+@media (max-width:359px) {
+#eni-calc #ec-abo-reference .enp-price {gap:6px}
+
+#eni-calc #ec-abo-reference .enp-price strong {font-size:38px}
+}
+
+@media (prefers-reduced-motion:reduce) {
+#eni-calc #ec-abo-reference * {transition:none!important;scroll-behavior:auto!important}
+}
+
+#eni-calc #ec-abo-reference .enp-abonament {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);column-gap:24px;padding:24px;margin:0 0 28px;border:0;border-radius:var(--enp-radius);background:#fff;box-shadow:0 12px 38px #19212904}
+
+#eni-calc #ec-abo-reference .enp-abonament h3 {margin-top:10px}
+
+#eni-calc #ec-abo-reference .enp-abonament .enp-card-desc {min-height:0}
+
+#eni-calc #ec-abo-reference .enp-abo-pricecol,
+#eni-calc #ec-abo-reference .enp-abo-scopecol,
+#eni-calc #ec-abo-reference .enp-abo-actioncol {min-width:0}
+
+#eni-calc #ec-abo-reference .enp-abo-scopecol,
+#eni-calc #ec-abo-reference .enp-abo-actioncol {border-left:1px solid var(--enp-line);padding-left:24px}
+
+#eni-calc #ec-abo-reference .enp-abo-unit {font-size:13px;line-height:1.45;margin-top:5px}
+
+#eni-calc #ec-abo-reference .enp-abo-scale {display:flex;align-items:center;gap:12px}
+
+#eni-calc #ec-abo-reference .enp-abo-scale .enp-scale-visual {flex:none;margin:0}
+
+#eni-calc #ec-abo-reference .enp-abo-scale .enp-scope {margin-bottom:3px}
+
+#eni-calc #ec-abo-reference .enp-abo-scale .enp-scope-note {min-height:0}
+
+#eni-calc #ec-abo-reference .enp-abo-template {display:inline-flex;align-items:center;justify-content:center;gap:9px;font-size:13px;font-weight:600;color:var(--enp-red);margin-top:14px;line-height:1.45;text-decoration:none;min-height:42px;padding:10px 14px;border:1px solid var(--enp-red);border-radius:5px;background:#fff;max-width:100%;box-sizing:border-box;transition:background .18s,color .18s,border-color .18s}
+
+#eni-calc #ec-abo-reference .enp-abo-template span[aria-hidden] {flex:none}
+
+#eni-calc #ec-abo-reference .enp-abo-template:hover {background:var(--enp-red);color:#fff;text-decoration:none}
+
+#eni-calc #ec-abo-reference .enp-abo-template:focus-visible {outline:2px solid var(--enp-red);outline-offset:3px}
+
+#eni-calc #ec-abo-reference .enp-abonament .enp-features {margin-top:12px;padding-bottom:0}
+
+#eni-calc #ec-abo-reference .enp-abo-actioncol {display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+
+#eni-calc #ec-abo-reference .enp-abo-actioncol .enp-meta {margin:0;gap:9px;padding-top:3px}
+
+#eni-calc #ec-abo-reference .enp-abo-actioncol .enp-meta dd {white-space:normal}
+
+#eni-calc #ec-abo-reference .enp-abo-actions .enp-btn {width:100%;min-height:54px}
+
+#eni-calc #ec-abo-reference .enp-abo-actions {display:grid;gap:10px}
+
+#eni-calc #ec-abo-reference .enp-abo-actions .enp-btn-outline {background:#fff;color:var(--enp-ink);border-color:#c8ced3}
+
+#eni-calc #ec-abo-reference .enp-abo-actions .enp-btn-outline:hover {background:#f4f6f8;border-color:var(--enp-ink);color:var(--enp-ink)}
+
+#eni-calc #ec-abo-reference .enp-abo-actions .enp-btn-secondary {min-height:48px}
+
+#eni-calc #ec-abo-reference .enp-abo-actions .enp-price-note {font-size:12px;margin-top:7px}
+
+#eni-calc #ec-abo-reference .enp-abo-details {grid-column:1/-1;border-top:1px solid var(--enp-line);margin-top:18px}
+
+#eni-calc #ec-abo-reference .enp-abo-details summary {padding-bottom:0;min-height:35px;font-size:14px}
+
+#eni-calc #ec-abo-reference .enp-abo-details[open] summary {padding-bottom:12px}
+
+#eni-calc #ec-abo-reference .enp-abo-details .enp-disclosure-body {padding-bottom:0}
+
+#eni-calc #ec-abo-reference .enp-abo-details ul {padding-left:18px;display:grid;gap:5px}
+
+@media (min-width:900px) and (max-width:1100px) {
+#eni-calc #ec-abo-reference .enp-abonament {padding:22px 18px;column-gap:16px;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)}
+
+#eni-calc #ec-abo-reference .enp-abo-scopecol,
+#eni-calc #ec-abo-reference .enp-abo-actioncol {padding-left:16px}
+
+#eni-calc #ec-abo-reference .enp-abo-scale {gap:8px}
+
+#eni-calc #ec-abo-reference .enp-abo-actioncol .enp-meta {font-size:11px}
+}
+
+@media (max-width:899px) {
+#eni-calc #ec-abo-reference .enp-abonament {max-width:620px;margin-inline:auto;grid-template-columns:1fr 1fr;gap:20px}
+
+#eni-calc #ec-abo-reference .enp-abo-actioncol {grid-column:1/-1;border-left:0;border-top:1px solid var(--enp-line);padding:18px 0 0;display:grid;grid-template-columns:1fr 1fr;align-items:end}
+
+#eni-calc #ec-abo-reference .enp-abo-details {margin-top:0}
+}
+
+@media (max-width:580px) {
+#eni-calc #ec-abo-reference .enp-abonament {grid-template-columns:1fr;gap:20px;padding:24px}
+
+#eni-calc #ec-abo-reference .enp-abo-scopecol,
+#eni-calc #ec-abo-reference .enp-abo-actioncol {border-left:0;border-top:1px solid var(--enp-line);padding:18px 0 0}
+
+#eni-calc #ec-abo-reference .enp-abo-actioncol {display:flex;align-items:stretch;gap:16px}
+
+#eni-calc #ec-abo-reference .enp-abo-actions .enp-btn {min-height:48px}
+}
+
+@media (max-width:359px) {
+#eni-calc #ec-abo-reference .enp-abonament {padding:20px}
+}
+
+#eni-calc #ec-abo-reference .abo-v1 .enp-abo-actions .enp-price-note {margin-top:7px}
+
+#eni-calc #ec-abo-reference .abo-pay-options {display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center}
+
+#eni-calc #ec-abo-reference .abo-pay-separator {font-size:14px;line-height:1;color:var(--enp-muted);font-weight:500;text-transform:lowercase;align-self:center;justify-self:center;padding-inline:2px}
+
+#eni-calc #ec-abo-reference .abo-pay-option {background:#fff;border:1px solid var(--enp-line);border-radius:4px;padding:13px;min-width:0}
+
+#eni-calc #ec-abo-reference .abo-pay-option .enp-eyebrow {font-size:10px;letter-spacing:.05em;margin-bottom:7px}
+
+#eni-calc #ec-abo-reference .abo-pay-option .enp-price strong {font-size:43px}
+
+#eni-calc #ec-abo-reference .abo-pay-option .enp-price-note {margin-top:6px}
+
+#eni-calc #ec-abo-reference .abo-pay-year {border-color:#dd04296b}
+
+@media(max-width:580px) {
+#eni-calc #ec-abo-reference .abo-pay-option {padding:9px}
+
+#eni-calc #ec-abo-reference .abo-pay-option .enp-price strong {font-size:36px}
+
+#eni-calc #ec-abo-reference .abo-pay-options {gap:7px;grid-template-columns:1fr auto 1fr}
+
+#eni-calc #ec-abo-reference .abo-pay-separator {font-size:12px}
+
+#eni-calc #ec-abo-reference .abo-pay-option .enp-eyebrow {font-size:9px}
+
+#eni-calc #ec-abo-reference .abo-pay-option .enp-price-note {font-size:11px}
+}
+
+#eni-calc #ec-abo-reference[data-abo-palette=stone] .enp-abonament {background:#eef1f3;--enp-line:#cbd2d8;--enp-muted:#515e68;--enp-soft:#e3e8ec}
+
+#eni-calc #ec-abo-reference .abo-price-view {margin-top:18px}
+
+#eni-calc #ec-abo-reference .abo-price-view[hidden] {display:none!important}
+
+#eni-calc #ec-abo-reference .abo-price-view .enp-price strong {font-size:clamp(36px,4vw,46px);font-weight:500;letter-spacing:-.06em}
+
+#eni-calc #ec-abo-reference .abo-price-view .enp-price {gap:0}
+
+#eni-calc #ec-abo-reference .abo-price-view .enp-abo-unit {font-size:12px;margin-top:4px;white-space:nowrap}
+
+#eni-calc #ec-abo-reference .abo-compact-options {grid-template-columns:minmax(0,1fr) auto minmax(0,1.25fr);gap:7px;align-items:stretch}
+
+#eni-calc #ec-abo-reference .abo-compact-options .abo-pay-separator {align-self:center;padding:0}
+
+#eni-calc #ec-abo-reference .abo-compact-options .abo-pay-option {container-type:inline-size}
+
+#eni-calc #ec-abo-reference .abo-compact-options .abo-pay-option .enp-abo-unit {white-space:normal}
+
+#eni-calc #ec-abo-reference .abo-compact-options .abo-year-price {flex-wrap:nowrap;gap:3px}
+
+#eni-calc #ec-abo-reference .abo-compact-options .abo-year-price strong {font-size:clamp(20px,31cqi,46px)}
+
+#eni-calc #ec-abo-reference .abo-compact-options .abo-year-price .abo-previous-price {font-size:clamp(9px,10cqi,16px)}
+
+#eni-calc #ec-abo-reference .abo-compact-options .abo-pay-option {padding:10px;display:flex;flex-direction:column;align-items:flex-start}
+
+#eni-calc #ec-abo-reference .abo-compact-options .enp-price strong {font-size:clamp(32px,3.4vw,40px)}
+
+#eni-calc #ec-abo-reference .abo-compact-options .enp-price-note {font-size:11px;line-height:1.4;margin-top:7px}
+
+#eni-calc #ec-abo-reference .abo-price-view .enp-eyebrow {font-size:10px;letter-spacing:.045em;margin-bottom:6px;display:block}
+
+#eni-calc #ec-abo-reference .abo-hosting-note {margin-top:10px;color:var(--enp-ink);font-size:13px!important}
+
+@media(max-width:1100px) {
+#eni-calc #ec-abo-reference .abo-price-view .enp-abo-unit {font-size:11px}
+
+#eni-calc #ec-abo-reference .abo-compact-options .abo-pay-option {padding:8px}
+}
+
+@media(max-width:767px) {
+#eni-calc #ec-abo-reference .abo-price-view .enp-price strong {font-size:42px}
+
+#eni-calc #ec-abo-reference .abo-price-view .enp-abo-unit {font-size:12px}
+
+#eni-calc #ec-abo-reference .abo-compact-options .abo-pay-option {padding:10px}
+}
+
+@media(max-width:359px) {
+#eni-calc #ec-abo-reference .abo-price-view .enp-price strong {font-size:36px}
+
+#eni-calc #ec-abo-reference .abo-price-view .enp-abo-unit {font-size:11px}
+
+#eni-calc #ec-abo-reference .abo-compact-options .abo-pay-option {padding:8px}
+}
+
+#eni-calc #ec-abo-reference .abo-previous-price {font-size:13px;line-height:1.4;color:var(--enp-muted);margin-top:7px;font-weight:500}
+
+#eni-calc #ec-abo-reference .abo-previous-price del {text-decoration:line-through;text-decoration-thickness:1px}
+
+#eni-calc #ec-abo-reference .abo-hosting-note {color:var(--enp-muted);font-weight:400;line-height:1.5}
+
+#eni-calc #ec-abo-reference .abo-pay-year {container-type:inline-size}
+
+#eni-calc #ec-abo-reference .abo-price-view .abo-year-price {display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 7px;max-width:100%}
+
+#eni-calc #ec-abo-reference .abo-year-price .abo-previous-price {font-size:clamp(11px,10cqi,16px);line-height:1.2;font-weight:400;color:#7a858f;margin:0;white-space:nowrap;text-decoration:line-through;text-decoration-thickness:1px;letter-spacing:-.025em}
+
+#eni-calc #ec-abo-reference .abo-price-view .abo-year-price strong {font-size:clamp(30px,31cqi,46px)}
+
+#eni-calc #ec-abo-reference .abo-compact-options {container-type:inline-size}
+
+#eni-calc #ec-abo-reference .abo-compact-options .abo-pay-option {container-type:normal}
+
+#eni-calc #ec-abo-reference .abo-compact-options .abo-pay-option .enp-price strong {font-size:clamp(23px,10cqi,40px);font-weight:500;letter-spacing:-.06em}
+
+#eni-calc #ec-abo-reference .abo-compact-options .abo-year-price .abo-previous-price {font-size:clamp(10px,3.8cqi,16px)}
+
+#eni-calc #ec-abo-reference .abo-v1 .enp-abo-template {width:100%;justify-content:space-between;text-align:left}
+
+/* Integracja przycisków i izolacja od stylów motywu oraz starej karty. */
+#eni-calc #ec-abo-reference {width:100%;min-width:0;}
+
+#eni-calc #ec-abo-reference .enp-abonament {margin-bottom:0;}
+
+#eni-calc #ec-abo-reference button {appearance:none;font-family:inherit;text-transform:none;letter-spacing:normal;cursor:pointer;text-align:left;box-shadow:none;}
+
+#eni-calc #ec-abo-reference button:focus-visible {outline:3px solid var(--enp-red);outline-offset:4px;}
+
+#eni-calc #ec-abo-reference .enp-feature-list li {margin:0;}
+
+/* Ujednolicone przyciski pakietów i zakres bez separatora po rozwinięciu. */
+#eni-calc #ec-catalog .ec-package .ec-features .ec-card-details[open] > .ec-details-list {
+  border-top:0;
+  padding-top:0;
+  margin-top:9px;
+}
+
+#eni-calc #ec-abo-reference .enp-abo-details[open] {border-top-color:transparent;}
+
+#eni-calc #ec-catalog .ec-package .ec-card-actions,
+#eni-calc #ec-abo-reference .enp-abo-actions {
+  grid-template-columns:minmax(0,1fr);
+  grid-auto-rows:1fr;
+}
+
+#eni-calc #ec-catalog .ec-package .ec-card-actions .ec-action,
+#eni-calc #ec-catalog .ec-package .ec-card-actions .ec-configure,
+#eni-calc #ec-abo-reference .enp-abo-actions .enp-btn,
+#eni-calc #ec-abo-reference .enp-abo-actions .enp-btn-secondary {
+  box-sizing:border-box;
+  width:100%;
+  min-height:58px;
+  height:100%;
+  padding:13px 18px;
+  font-size:15px;
+  font-weight:500;
+  line-height:1.4;
+  gap:12px;
+}
+
+/* Biały przycisk konfiguracji wyróżnionej Wizytówki oraz objaśnienia metadanych. */
+#eni-calc #ec-catalog .ec-package.ec-package--featured[data-ec-plan="wiz"] .ec-card-actions button.ec-configure {
+  background:#fff; border-color:#fff; color:#101112; filter:none;
+}
+
+#eni-calc #ec-catalog .ec-package.ec-package--featured[data-ec-plan="wiz"] .ec-card-actions button.ec-configure:hover {
+  background:#edf0f2; border-color:#edf0f2; color:#101112; filter:none;
+}
+
+#eni-calc #ec-catalog .ec-meta-tip {position:relative;display:inline-flex;align-items:center;min-width:0;}
+
+#eni-calc #ec-catalog .ec-meta-tip button.ec-meta-tip-trigger {
+  appearance:none;background:transparent;border:0;border-radius:0;box-shadow:none;
+  padding:0;margin:0;min-width:0;min-height:0;width:auto;height:auto;
+  color:inherit;font:inherit;line-height:inherit;letter-spacing:inherit;text-transform:none;text-align:left;
+  text-decoration:underline dotted;text-underline-offset:3px;cursor:help;
+}
+
+#eni-calc #ec-catalog .ec-meta-tip button.ec-meta-tip-trigger:focus-visible {outline:2px solid currentColor;outline-offset:3px;}
+
+#eni-calc #ec-catalog .ec-meta-tip-content {
+  position:absolute;bottom:calc(100% + 9px);left:-18px;z-index:100;
+  display:block;width:216px;max-width:calc(100vw - 76px);padding:10px 12px;
+  box-sizing:border-box;background:#25282b;color:#fff;border:1px solid #454b50;
+  border-radius:5px;box-shadow:0 5px 16px #0002;
+  font:400 12px/1.5 "DM Sans",sans-serif;white-space:normal;text-align:left;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .15s,visibility .15s;
+}
+
+#eni-calc #ec-catalog .ec-meta-tip-content::after {
+  content:"";position:absolute;top:100%;left:32px;border:6px solid transparent;border-top-color:#25282b;
+}
+
+#eni-calc #ec-catalog .ec-meta-tip:not(.ec-tip-dismissed):hover .ec-meta-tip-content,
+#eni-calc #ec-catalog .ec-meta-tip:not(.ec-tip-dismissed):focus-within .ec-meta-tip-content {opacity:1;visibility:visible;}
+
+#eni-calc #ec-catalog .ec-package:has(.ec-meta-tip:hover,.ec-meta-tip:focus-within),
+#eni-calc #ec-abo-reference:has(.ec-meta-tip:hover,.ec-meta-tip:focus-within) {position:relative;z-index:30;}
+
+/* Kontener cennika 1200 px; gradient dokładnie z pliku referencyjnego. */
+#eni-calc #ec-demo-page {
+  width:100%;
+  max-width:none;
+  padding:54px 20px;
+  background:linear-gradient(#f7f8fa,#fff 900px);
+}
+
+#eni-calc #ec-demo-page > #ec-catalog {
+  width:100%;
+  max-width:1200px;
+  margin-inline:auto;
+  min-width:0;
+}
+
+@media(max-width:650px) {
+#eni-calc #ec-demo-page {padding:32px 16px;}
+}
+
+/* Nagłówek cennika zgodny z referencją; zachowana szerokość 1200 px. */
+#eni-calc #ec-catalog .ec-preview-heading {
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,64px);
+  align-items:center;margin:0 0 34px;
+}
+
+#eni-calc #ec-catalog .ec-preview-heading .ec-page-title {
+  max-width:none;margin:0;font-size:clamp(34px,4vw,48px);font-weight:500;
+  line-height:1.18;letter-spacing:-.045em;color:var(--ec-ink);
+}
+
+#eni-calc #ec-catalog .ec-preview-heading .ec-page-title span {color:var(--ec-red);}
+
+#eni-calc #ec-catalog .ec-preview-heading .ec-intro {
+  max-width:none;margin:0;font-size:18px;line-height:1.65;font-weight:400;color:var(--ec-muted);
+}
+
+#eni-calc #ec-catalog .ec-preview-heading .ec-intro strong {font-weight:600;color:var(--ec-ink);}
+
+@media(max-width:767px) {
+#eni-calc #ec-catalog .ec-preview-heading {grid-template-columns:1fr;gap:16px;margin-bottom:24px;}
+
+#eni-calc #ec-catalog .ec-preview-heading .ec-page-title {font-size:clamp(30px,6vw,42px);}
+
+#eni-calc #ec-catalog .ec-preview-heading .ec-intro {font-size:16px;}
+}
+
+/* Niedostępne elementy Abonamentu: minus zamiast znacznika wyboru. */
+#eni-calc #ec-abo-reference .enp-feature-list li.enp-off {color:var(--enp-muted);}
+
+#eni-calc #ec-abo-reference .enp-feature-list li.enp-off::before {
+  content:"";position:absolute;left:2px;top:10.5px;width:10px;height:1.5px;
+  background:currentColor;border:0;border-radius:1px;transform:translateY(-50%);
+}
+</style>
 
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
@@ -54,26 +2068,36 @@ body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!impo
                   <div class="ec-packages ec-packages--entry" id="ec-entry-packages">
 <!-- PAKIET: Abonament | ID: mini -->
 <div id="ec-abo-reference" data-abo-palette="stone">
-<article aria-labelledby="enp-plan-abonament-1" class="enp-abonament abo-v1" data-ec-plan="mini">
+<article aria-labelledby="enp-plan-abonament-1" class="enp-abonament abo-v1" data-ec-plan="mini"
+    data-scope-structure="Strona główna do 5 sekcji"
+    data-scope-chips="Hero|O nas|Oferta|Opinie|Kontakt"
+    data-scope-tech="HTML / CSS"
+    data-scope-design="Gotowy szablon z bazy Eniverse"
+    data-scope-content="Klient dostarcza gotowe treści, dopasowane do wybranego szablonu."
+    data-scope-panel="false"
+    data-scope-rights="Korzystanie ze strony w ramach abonamentu"
+    data-scope-terms="Umowa abonamentowa"
+    data-scope-nav="false"
+    data-scope-days="3">
 <div class="enp-abo-pricecol">
-<header><span class="enp-eyebrow">Prosty start w internecie</span><h3 id="enp-plan-abonament-1" data-card-field="name"></h3><p class="enp-card-desc">Profesjonalna strona internetowa bez dużej inwestycji na start.</p></header>
+<header><span class="enp-eyebrow">Prosty start w internecie</span><h3 id="enp-plan-abonament-1" data-card-name>Abonament</h3><p class="enp-card-desc">Profesjonalna strona internetowa bez dużej inwestycji na start.</p></header>
 <div class="abo-price-view" data-price-view="b"><div class="abo-pay-options abo-compact-options"><div class="abo-pay-option"><span class="enp-eyebrow">Miesięcznie</span><p class="enp-price"><strong data-card-field="monthly"></strong></p><p class="enp-abo-unit">zł netto / mies.</p></div><div class="abo-pay-separator">lub</div><div class="abo-pay-option abo-pay-year"><span class="enp-eyebrow enp-red">Rocznie</span><p class="enp-price enp-red abo-year-price"><strong data-card-field="annual"></strong><del class="abo-previous-price" data-card-field="regularAnnual"></del></p><p class="enp-abo-unit">zł netto / rok</p></div></div></div>
 <p class="enp-price-note abo-hosting-note">Umowa na <span data-contract-period></span><span data-card-hosting> · hosting w cenie</span></p>
 </div>
 <div class="enp-abo-scopecol">
-<div class="enp-abo-scale"><div aria-hidden="true" class="enp-scale-visual"><div class="enp-scale-map enp-scale-one"><i></i><i></i><i></i><i></i><i></i></div></div><div><p class="enp-scope" data-card-field="structure" data-card-reference="Strona główna do 5 sekcji">1 strona · do 5 sekcji</p><p class="enp-scope-note">Gotowy szablon HTML i CSS</p></div></div>
-<button type="button" class="enp-abo-template" data-card-gallery data-templates-open data-template-plan="mini" aria-haspopup="dialog"><span aria-hidden="true">↗</span></button>
+<div class="enp-abo-scale"><div aria-hidden="true" class="enp-scale-visual"><div class="enp-scale-map enp-scale-one"><i></i><i></i><i></i><i></i><i></i></div></div><div><p class="enp-scope">1 strona · do 5 sekcji</p><p class="enp-scope-note">Gotowy szablon HTML i CSS</p></div></div>
+<button type="button" class="enp-abo-template" data-templates-open data-template-plan="mini" aria-haspopup="dialog">Przejrzyj szablony pakietu Abonament <span aria-hidden="true">↗</span></button>
 <div class="enp-features"><h4 class="enp-group-title">Co zyskujesz</h4><ul class="enp-feature-list"><li>Gotowy wygląd i wersja mobilna</li><li data-card-hosting>Hosting przez okres umowy</li><li>Strona z Twoimi gotowymi materiałami</li><li class="enp-off">Panel administracyjny WordPress</li><li class="enp-off">Samodzielna edycja treści</li><li class="enp-off">Przekazanie praw do szablonu</li></ul></div>
 </div>
 <div class="enp-abo-actioncol">
 <dl class="enp-meta">
-<div><dt><svg aria-hidden="true" class="enp-meta-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="5"></rect><path d="M7 3v4m10-4v4M3 11h18"></path></svg> <span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-mini">Czas realizacji</button><span id="ec-tip-time-mini" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd data-card-field="days"></dd></div>
-<div><dt><svg aria-hidden="true" class="enp-meta-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"></path></svg> <span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-mini">Rundy poprawek</button><span id="ec-tip-revisions-mini" role="tooltip" class="ec-meta-tip-content">Pakiet Abonament nie obejmuje rund poprawek w cenie. Jedna runda to jeden zbiorczy zestaw uwag do przedstawionej wersji strony.</span></span></dt><dd data-card-field="revisions"></dd></div>
+<div><dt><svg aria-hidden="true" class="enp-meta-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><rect height="16" rx="2" width="18" x="3" y="5"></rect><path d="M7 3v4m10-4v4M3 11h18"></path></svg> <span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-mini">Czas realizacji</button><span id="ec-tip-time-mini" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd>Do 3 dni roboczych</dd></div>
+<div><dt><svg aria-hidden="true" class="enp-meta-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"></path></svg> <span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-mini">Rundy poprawek</button><span id="ec-tip-revisions-mini" role="tooltip" class="ec-meta-tip-content">Pakiet Abonament nie obejmuje rund poprawek w cenie. Jedna runda to jeden zbiorczy zestaw uwag do przedstawionej wersji strony.</span></span></dt><dd data-card-field="revisions">Brak w cenie</dd></div>
 <div><dt><svg aria-hidden="true" class="enp-meta-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg> Okres umowy</dt><dd data-contract-period></dd></div>
 </dl>
-<div class="enp-abo-actions"><button type="button" class="enp-btn" data-choose="mini"><span aria-hidden="true">↗</span></button><button type="button" class="enp-btn enp-btn-outline enp-btn-secondary" data-configure="mini">Skonfiguruj pakiet <span aria-hidden="true">↗</span></button></div>
+<div class="enp-abo-actions"><button type="button" class="enp-btn" data-choose="mini">Wybieram abonament <span aria-hidden="true">↗</span></button><button type="button" class="enp-btn enp-btn-outline enp-btn-secondary" data-configure="mini">Skonfiguruj pakiet <span aria-hidden="true">↗</span></button></div>
 </div>
-<details class="enp-abo-details" name="ec-card-scope"><summary>Pełen zakres i warunki pakietu</summary><div class="enp-disclosure-body"><ul><li>Realizacja na gotowym szablonie, na podstawie dostarczonych tekstów i zdjęć.</li><li>Hosting na infrastrukturze Eniverse w okresie obowiązywania umowy, bez skrzynek pocztowych.</li><li>Pakiet nie obejmuje CMS, przekazania plików ani praw do szablonu. Strona jest dostępna przez czas trwania umowy i nie jest przekazywana na własność.</li><li>Po zakończeniu umowy bez jej przedłużenia strona przestaje być dostępna. Promocyjna stawka roczna dotyczy pierwszych maksymalnie 12 miesięcy umowy; kolejne okresy według stawki regularnej.</li></ul><ul data-card-list="miniExtras" hidden></ul></div></details>
+<details class="enp-abo-details" name="ec-card-scope"><summary>Pełen zakres i warunki pakietu</summary><div class="enp-disclosure-body"><ul><li>Realizacja na gotowym szablonie, na podstawie dostarczonych tekstów i zdjęć.</li><li>Hosting na infrastrukturze Eniverse w okresie obowiązywania umowy, bez skrzynek pocztowych.</li><li>Pakiet nie obejmuje CMS, przekazania plików ani praw do szablonu. Strona jest dostępna przez czas trwania umowy i nie jest przekazywana na własność.</li><li>Po zakończeniu umowy bez jej przedłużenia strona przestaje być dostępna. Promocyjna stawka roczna dotyczy pierwszych maksymalnie 12 miesięcy umowy; kolejne okresy według stawki regularnej.</li></ul></div></details>
 </article></div>
 </div>
                 </div>
@@ -83,70 +2107,160 @@ body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!impo
 <!-- Boxy pakietów: kolejność, układ, opisy i ikony edytuj tutaj. Ceny i pola data-card-* uzupełnia cennik.js. -->
 
 <!-- PAKIET: Start | ID: start -->
-<article class="ec-package" data-ec-plan="start" aria-labelledby="ec-plan-start">
+<article class="ec-package" data-ec-plan="start" aria-labelledby="ec-plan-start"
+    data-scope-structure="Strona główna do 5 sekcji"
+    data-scope-chips="Hero|O nas|Oferta|Opinie|Kontakt"
+    data-scope-tech="CMS — WordPress"
+    data-scope-design="Gotowy szablon z bazy Eniverse (WordPress)"
+    data-scope-content="Klient dostarcza treści, a my dopasowujemy je do projektu strony."
+    data-scope-panel="true"
+    data-scope-rights="Licencja na korzystanie ze strony, bez wyłączności do szablonu"
+    data-scope-terms="Samodzielne zarządzanie stroną bez abonamentu za projekt"
+    data-scope-nav="false"
+    data-scope-days="5">
             
             
-            <div class="ec-card-header"><span class="ec-kicker">STRONA NA DOBRY POCZĄTEK</span><h2 id="ec-plan-start" data-card-field="name"></h2><p class="ec-card-description">Dla małej działalności, która potrzebuje strony WordPress do samodzielnej edycji.</p></div>
+            <div class="ec-card-header"><span class="ec-kicker">STRONA NA DOBRY POCZĄTEK</span><h2 id="ec-plan-start" data-card-name>Start</h2><p class="ec-card-description">Dla małej działalności, która potrzebuje strony WordPress do samodzielnej edycji.</p></div>
             <div class="ec-card-budget"><div class="ec-card-price"><small>od</small><strong data-card-field="price"></strong><span>zł netto</span></div><p class="ec-muted">Realizacja na szablonie WordPress</p></div>
             
-            <div class="ec-project-scale"><div class="ec-project-page" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><h3 data-card-field="structure" data-card-reference="Strona główna do 5 sekcji">Strona z szablonu · do 5 sekcji</h3><p data-card-field="chips" data-card-reference="Hero, O nas, Oferta, Opinie, Kontakt">Np. Hero, O nas, Oferta, Opinie i Kontakt.</p><button type="button" class="ec-template-launch ec-interactive" data-card-gallery data-templates-open data-template-plan="start" aria-haspopup="dialog"><span aria-hidden="true">↗</span></button></div>
-            <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul><li><span class="ec-tick" aria-hidden="true"></span><span>WordPress i panel do samodzielnej edycji tekstów i zdjęć</span></li><li><span class="ec-tick" aria-hidden="true"></span><span>Dopasowanie szablonu do marki</span></li><li><span class="ec-tick" aria-hidden="true"></span><span>Wprowadzenie dostarczonych treści</span></li><li><span class="ec-tick" aria-hidden="true"></span><span data-card-field="training" data-card-reference="Instrukcja PDF">Instrukcja obsługi PDF</span></li><li class="ec-off"><span class="ec-tick" aria-hidden="true">−</span><span>Szkolenie na żywo</span></li></ul>
-              <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary><ul class="ec-details-list" data-card-list="details"></ul></details>
+            <div class="ec-project-scale"><div class="ec-project-page" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><h3>Strona z szablonu · do 5 sekcji</h3><p>Np. Hero, O nas, Oferta, Opinie i Kontakt.</p><button type="button" class="ec-template-launch ec-interactive" data-templates-open data-template-plan="start" aria-haspopup="dialog">Przejrzyj szablony Start <span aria-hidden="true">↗</span></button></div>
+            <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul><li><span class="ec-tick" aria-hidden="true"></span><span>WordPress i panel do samodzielnej edycji tekstów i zdjęć</span></li><li><span class="ec-tick" aria-hidden="true"></span><span>Dopasowanie szablonu do marki</span></li><li><span class="ec-tick" aria-hidden="true"></span><span>Wprowadzenie dostarczonych treści</span></li><li><span class="ec-tick" aria-hidden="true"></span><span data-card-training-reference="Instrukcja PDF">Instrukcja obsługi PDF</span></li><li class="ec-off"><span class="ec-tick" aria-hidden="true">−</span><span>Szkolenie na żywo</span></li></ul>
+              <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary><ul class="ec-details-list">
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Dostosowanie do urządzeń mobilnych</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Licencja na korzystanie ze strony, bez wyłączności do szablonu</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Czas realizacji liczony od otrzymania kompletu materiałów</span></li>
+</ul></details>
             </div>
             
-            <dl class="ec-card-meta"><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-start">Czas realizacji</button><span id="ec-tip-time-start" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd data-card-field="days"></dd></div><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-start">Rundy poprawek</button><span id="ec-tip-revisions-start" role="tooltip" class="ec-meta-tip-content">Jedna runda poprawek to jeden zbiorczy zestaw uwag do przedstawionej wersji strony. Liczba rund w cenie zależy od wybranego pakietu.</span></span></dt><dd data-card-field="revisions"></dd></div></dl>
-            <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="start"><span data-card-field="choose"></span><span aria-hidden="true">↗</span></button>
+            <dl class="ec-card-meta"><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-start">Czas realizacji</button><span id="ec-tip-time-start" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd>Do 5 dni roboczych</dd></div><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-start">Rundy poprawek</button><span id="ec-tip-revisions-start" role="tooltip" class="ec-meta-tip-content">Jedna runda poprawek to jeden zbiorczy zestaw uwag do przedstawionej wersji strony. Liczba rund w cenie zależy od wybranego pakietu.</span></span></dt><dd data-card-field="revisions">1 w cenie</dd></div></dl>
+            <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="start"><span>Wybieram Start</span><span aria-hidden="true">↗</span></button>
             <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="start"><span>Skonfiguruj pakiet</span><span aria-hidden="true">↗</span></button></div>
             
           </article>
 <!-- PAKIET: One Page | ID: one -->
-<article class="ec-package" data-ec-plan="one" aria-labelledby="ec-plan-one">
+<article class="ec-package" data-ec-plan="one" aria-labelledby="ec-plan-one"
+    data-scope-structure="Strona główna do 5 sekcji"
+    data-scope-chips="Hero|O nas|Oferta|Opinie|Kontakt"
+    data-scope-tech="CMS — WordPress"
+    data-scope-design="Dostosowanie układu sekcji i wyglądu strony do Twojej marki: zmiana kolejności sekcji, usunięcie lub drobne modyfikacje."
+    data-scope-content="Klient dostarcza treści, a my dopasowujemy je do projektu strony."
+    data-scope-panel="true"
+    data-scope-rights="Prawa do indywidualnie wykonanych elementów — zgodnie z umową i licencjami"
+    data-scope-terms="Jednorazowa opłata za wykonanie strony"
+    data-scope-nav="false"
+    data-scope-days="7">
             
             
-            <div class="ec-card-header"><span class="ec-kicker">PROSTA OBECNOŚĆ W SIECI</span><h2 id="ec-plan-one" data-card-field="name"></h2><p class="ec-card-description">Dla freelancera i mikrofirmy. Przedstaw ofertę jasno, na jednej przewijanej stronie.</p></div>
+            <div class="ec-card-header"><span class="ec-kicker">PROSTA OBECNOŚĆ W SIECI</span><h2 id="ec-plan-one" data-card-name>One Page</h2><p class="ec-card-description">Dla freelancera i mikrofirmy. Przedstaw ofertę jasno, na jednej przewijanej stronie.</p></div>
             <div class="ec-card-budget"><div class="ec-card-price"><small>od</small><strong data-card-field="price"></strong><span>zł netto</span></div><p class="ec-muted">Realizacja na szablonie WordPress</p></div>
             
-            <div class="ec-project-scale"><div class="ec-project-page" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><h3 data-card-field="structure"></h3><p data-card-field="chips"></p><button type="button" class="ec-template-launch ec-interactive" data-card-gallery data-templates-open data-template-plan="one" aria-haspopup="dialog" hidden><span aria-hidden="true">↗</span></button></div>
-            <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul data-card-list="core"></ul>
-              <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary><ul class="ec-details-list" data-card-list="details"></ul></details>
+            <div class="ec-project-scale"><div class="ec-project-page" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><h3>Strona główna do 5 sekcji</h3><p>Hero, O nas, Oferta, Opinie, Kontakt</p></div>
+            <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Strona główna do 5 sekcji (Hero, O nas, Oferta, Opinie, Kontakt)</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>CMS — WordPress</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Dostosowanie do urządzeń mobilnych</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Dostosowanie układu sekcji i wyglądu strony do Twojej marki: zmiana kolejności sekcji, usunięcie lub drobne modyfikacje.</span></li>
+<li class="" data-card-service="seo"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>SEO techniczne</span></li>
+<li class="" data-card-service="contact"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>Formularz kontaktowy</span></li>
+<li class="" data-card-service="revisions"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>2 sesje poprawek w cenie</span></li>
+<li class="ec-off" data-card-service="hosting"><span class="ec-tick" aria-hidden="true">−</span><span data-card-label>Usługi roczne opcjonalne, płatne z góry</span></li>
+</ul>
+              <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary><ul class="ec-details-list">
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Panel administracyjny — samodzielna edycja tekstów i zdjęć</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Prawa do indywidualnie wykonanych elementów — zgodnie z umową i licencjami</span></li>
+<li class="" data-card-service="training"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>Szkolenie 30 min</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Czas realizacji liczony od otrzymania kompletu materiałów</span></li>
+</ul></details>
             </div>
             
-            <dl class="ec-card-meta"><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-one">Czas realizacji</button><span id="ec-tip-time-one" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd data-card-field="days"></dd></div><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-one">Rundy poprawek</button><span id="ec-tip-revisions-one" role="tooltip" class="ec-meta-tip-content">Jedna runda poprawek to jeden zbiorczy zestaw uwag do przedstawionej wersji strony. Liczba rund w cenie zależy od wybranego pakietu.</span></span></dt><dd data-card-field="revisions"></dd></div></dl>
-            <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="one"><span data-card-field="choose"></span><span aria-hidden="true">↗</span></button>
+            <dl class="ec-card-meta"><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-one">Czas realizacji</button><span id="ec-tip-time-one" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd>Do 7 dni roboczych</dd></div><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-one">Rundy poprawek</button><span id="ec-tip-revisions-one" role="tooltip" class="ec-meta-tip-content">Jedna runda poprawek to jeden zbiorczy zestaw uwag do przedstawionej wersji strony. Liczba rund w cenie zależy od wybranego pakietu.</span></span></dt><dd data-card-field="revisions">2 w cenie</dd></div></dl>
+            <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="one"><span>Wybieram One Page</span><span aria-hidden="true">↗</span></button>
             <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="one"><span>Skonfiguruj pakiet</span><span aria-hidden="true">↗</span></button></div>
             
           </article>
 <!-- PAKIET: Wizytówka | ID: wiz -->
-<article class="ec-package ec-package--featured" data-ec-plan="wiz" aria-labelledby="ec-plan-wiz">
+<article class="ec-package ec-package--featured" data-ec-plan="wiz" aria-labelledby="ec-plan-wiz"
+    data-scope-structure="Do 5 podstron"
+    data-scope-chips=""
+    data-scope-tech="CMS — WordPress"
+    data-scope-design="Personalizacja szablonu WordPress — dopasowanie kolorystyki, układu sekcji i prezentacji usług firmy."
+    data-scope-content="Klient dostarcza treści, a my dopasowujemy je do projektu strony."
+    data-scope-panel="true"
+    data-scope-rights="Prawa do indywidualnie wykonanych elementów — zgodnie z umową i licencjami"
+    data-scope-terms="Jednorazowa opłata za wykonanie strony"
+    data-scope-nav="false"
+    data-scope-days="10">
             <div class="ec-featured-badge">Dla rozwijających się firm</div>
             
-            <div class="ec-card-header"><span class="ec-kicker">WIĘCEJ MIEJSCA NA OFERTĘ</span><h2 id="ec-plan-wiz" data-card-field="name"></h2><p class="ec-card-description">Dla małej firmy, która potrzebuje kilku podstron na usługi, realizacje i kontakt.</p></div>
+            <div class="ec-card-header"><span class="ec-kicker">WIĘCEJ MIEJSCA NA OFERTĘ</span><h2 id="ec-plan-wiz" data-card-name>Wizytówka</h2><p class="ec-card-description">Dla małej firmy, która potrzebuje kilku podstron na usługi, realizacje i kontakt.</p></div>
             <div class="ec-card-budget"><div class="ec-card-price"><small>od</small><strong data-card-field="price"></strong><span>zł netto</span></div><p class="ec-muted">Realizacja na szablonie WordPress</p></div>
             
-            <div class="ec-project-scale"><div class="ec-project-tiles ec-project-tiles--single" aria-hidden="true"><i class="is-active"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><h3 data-card-field="structure"></h3><p data-card-field="chips"></p><button type="button" class="ec-template-launch ec-interactive" data-card-gallery data-templates-open data-template-plan="wiz" aria-haspopup="dialog" hidden><span aria-hidden="true">↗</span></button></div>
-            <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul data-card-list="core"></ul>
-              <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary><ul class="ec-details-list" data-card-list="details"></ul></details>
+            <div class="ec-project-scale"><div class="ec-project-tiles ec-project-tiles--single" aria-hidden="true"><i class="is-active"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><h3>Do 5 podstron</h3><p></p></div>
+            <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Do 5 podstron</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>CMS — WordPress</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Dostosowanie do urządzeń mobilnych</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Personalizacja szablonu WordPress — dopasowanie kolorystyki, układu sekcji i prezentacji usług firmy.</span></li>
+<li class="" data-card-service="seo"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>Podstawowe SEO</span></li>
+<li class="" data-card-service="contact"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>Formularz kontaktowy</span></li>
+<li class="" data-card-service="revisions"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>3 sesje poprawek w cenie</span></li>
+<li class="ec-off" data-card-service="hosting"><span class="ec-tick" aria-hidden="true">−</span><span data-card-label>Usługi roczne opcjonalne, płatne z góry</span></li>
+</ul>
+              <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary><ul class="ec-details-list">
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Panel administracyjny — samodzielna edycja tekstów i zdjęć</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Prawa do indywidualnie wykonanych elementów — zgodnie z umową i licencjami</span></li>
+<li class="" data-card-addon="gsc"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>Google Search Console</span></li>
+<li class="" data-card-service="training"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>Szkolenie 1 h</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Czas realizacji liczony od otrzymania kompletu materiałów</span></li>
+</ul></details>
             </div>
             
-            <dl class="ec-card-meta"><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-wiz">Czas realizacji</button><span id="ec-tip-time-wiz" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd data-card-field="days"></dd></div><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-wiz">Rundy poprawek</button><span id="ec-tip-revisions-wiz" role="tooltip" class="ec-meta-tip-content">Jedna runda poprawek to jeden zbiorczy zestaw uwag do przedstawionej wersji strony. Liczba rund w cenie zależy od wybranego pakietu.</span></span></dt><dd data-card-field="revisions"></dd></div></dl>
-            <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="wiz"><span data-card-field="choose"></span><span aria-hidden="true">↗</span></button>
+            <dl class="ec-card-meta"><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-wiz">Czas realizacji</button><span id="ec-tip-time-wiz" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd>Do 10 dni roboczych</dd></div><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-wiz">Rundy poprawek</button><span id="ec-tip-revisions-wiz" role="tooltip" class="ec-meta-tip-content">Jedna runda poprawek to jeden zbiorczy zestaw uwag do przedstawionej wersji strony. Liczba rund w cenie zależy od wybranego pakietu.</span></span></dt><dd data-card-field="revisions">3 w cenie</dd></div></dl>
+            <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="wiz"><span>Wybieram Wizytówkę</span><span aria-hidden="true">↗</span></button>
             <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="wiz"><span>Skonfiguruj pakiet</span><span aria-hidden="true">↗</span></button></div>
             
           </article>
 <!-- PAKIET: Strona firmowa | ID: firm -->
-<article class="ec-package" data-ec-plan="firm" aria-labelledby="ec-plan-firm">
+<article class="ec-package" data-ec-plan="firm" aria-labelledby="ec-plan-firm"
+    data-scope-structure="Do 10 podstron"
+    data-scope-chips=""
+    data-scope-tech="CMS — WordPress"
+    data-scope-design="Rozszerzona personalizacja szablonu WordPress — dopasowanie struktury podstron, prezentacji usług i ścieżek kontaktu."
+    data-scope-content="Klient dostarcza treści, a my dopasowujemy je do projektu strony."
+    data-scope-panel="true"
+    data-scope-rights="Prawa do indywidualnie wykonanych elementów — zgodnie z umową i licencjami"
+    data-scope-terms="Jednorazowa opłata za wykonanie strony"
+    data-scope-nav="true"
+    data-scope-days="14">
             
             
-            <div class="ec-card-header"><span class="ec-kicker">PEŁNA PREZENTACJA FIRMY</span><h2 id="ec-plan-firm" data-card-field="name"></h2><p class="ec-card-description">Dla firmy z rozbudowaną ofertą. Miejsce na usługi, realizacje i regularne publikacje.</p></div>
+            <div class="ec-card-header"><span class="ec-kicker">PEŁNA PREZENTACJA FIRMY</span><h2 id="ec-plan-firm" data-card-name>Strona firmowa</h2><p class="ec-card-description">Dla firmy z rozbudowaną ofertą. Miejsce na usługi, realizacje i regularne publikacje.</p></div>
             <div class="ec-card-budget"><div class="ec-card-price"><small>od</small><strong data-card-field="price"></strong><span>zł netto</span></div><p class="ec-muted">Realizacja na szablonie WordPress</p></div>
             
-            <div class="ec-project-scale"><div class="ec-project-tiles " aria-hidden="true"><i class="is-active"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><h3 data-card-field="structure"></h3><p data-card-field="chips"></p><button type="button" class="ec-template-launch ec-interactive" data-card-gallery data-templates-open data-template-plan="firm" aria-haspopup="dialog" hidden><span aria-hidden="true">↗</span></button></div>
-            <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul data-card-list="core"></ul>
-              <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary><ul class="ec-details-list" data-card-list="details"></ul></details>
+            <div class="ec-project-scale"><div class="ec-project-tiles " aria-hidden="true"><i class="is-active"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><h3>Do 10 podstron</h3><p></p></div>
+            <div class="ec-features"><p class="ec-section-label">CO ZYSKUJESZ</p><ul>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Do 10 podstron</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>CMS — WordPress</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Dostosowanie do urządzeń mobilnych</span></li>
+<li class="" data-card-service="hosting"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>Hosting strony + Opieka techniczna w cenie na pierwszy rok</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Rozszerzona personalizacja szablonu WordPress — dopasowanie struktury podstron, prezentacji usług i ścieżek kontaktu.</span></li>
+<li class="" data-card-service="seo"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>Rozszerzone SEO</span></li>
+<li class="" data-card-service="contact"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>Formularz kontaktowy</span></li>
+<li class="" data-card-service="revisions"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>3 sesje poprawek w cenie</span></li>
+</ul>
+              <details class="ec-card-details" name="ec-card-scope"><summary class="ec-interactive"><strong>Pełen zakres pakietu</strong></summary><ul class="ec-details-list">
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Panel administracyjny — samodzielna edycja tekstów i zdjęć</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Prawa do indywidualnie wykonanych elementów — zgodnie z umową i licencjami</span></li>
+<li class="" data-card-addon="gsc"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>Google Search Console</span></li>
+<li class="" data-card-addon="blog"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>Blog / Realizacje</span></li>
+<li class="" data-card-service="training"><span class="ec-tick" aria-hidden="true"></span><span data-card-label>Szkolenie 2 h</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Czas realizacji liczony od otrzymania kompletu materiałów</span></li>
+<li class=""><span class="ec-tick" aria-hidden="true"></span><span>Zaplanowanie nawigacji</span></li>
+</ul></details>
             </div>
             
-            <dl class="ec-card-meta"><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-firm">Czas realizacji</button><span id="ec-tip-time-firm" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd data-card-field="days"></dd></div><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-firm">Rundy poprawek</button><span id="ec-tip-revisions-firm" role="tooltip" class="ec-meta-tip-content">Jedna runda poprawek to jeden zbiorczy zestaw uwag do przedstawionej wersji strony. Liczba rund w cenie zależy od wybranego pakietu.</span></span></dt><dd data-card-field="revisions"></dd></div></dl>
-            <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="firm"><span data-card-field="choose"></span><span aria-hidden="true">↗</span></button>
+            <dl class="ec-card-meta"><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-time-firm">Czas realizacji</button><span id="ec-tip-time-firm" role="tooltip" class="ec-meta-tip-content">Czas realizacji liczony jest w dniach roboczych od otrzymania kompletu materiałów potrzebnych do wykonania strony.</span></span></dt><dd>Do 14 dni roboczych</dd></div><div><dt><svg class="ec-meta-icon" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14z"/></svg><span class="ec-meta-tip"><button type="button" class="ec-meta-tip-trigger" aria-describedby="ec-tip-revisions-firm">Rundy poprawek</button><span id="ec-tip-revisions-firm" role="tooltip" class="ec-meta-tip-content">Jedna runda poprawek to jeden zbiorczy zestaw uwag do przedstawionej wersji strony. Liczba rund w cenie zależy od wybranego pakietu.</span></span></dt><dd data-card-field="revisions">3 w cenie</dd></div></dl>
+            <div class="ec-card-actions"><button type="button" class="ec-action ec-choose ec-interactive" data-choose="firm"><span>Wybieram stronę firmową</span><span aria-hidden="true">↗</span></button>
             <button type="button" class="ec-action ec-secondary ec-interactive ec-configure" data-configure="firm"><span>Skonfiguruj pakiet</span><span aria-hidden="true">↗</span></button></div>
             
           </article>
@@ -571,5 +2685,5 @@ body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!impo
         </div>
     </div>
     <!-- LOGIKA PAKIETÓW, WYCENY I FORMULARZA -->
-<script src="/wp-content/eniverse-kalkulator/Strony%20internetowe/cennik.js?v=20261125-9" defer></script>
-<script src="/wp-content/eniverse-kalkulator/Strony%20internetowe/kalkulator.js?v=20261125-9" defer></script>
+<script src="/wp-content/eniverse-kalkulator/Strony%20internetowe/cennik.js?v=20261126-1" defer></script>
+<script src="/wp-content/eniverse-kalkulator/Strony%20internetowe/kalkulator.js?v=20261126-1" defer></script>
