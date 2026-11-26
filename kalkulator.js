@@ -16,7 +16,7 @@
             if(!Array.isArray(c[key])) throw Error("Niepoprawna lista: "+key);
             const ids=new Set();
             for(const x of c[key]){
-              if(!x || !idOK(x.id) || ids.has(x.id) || !nameOK(x.nazwa) || !(key==="pakiety"&&x.recurring?true:priceOK(x.cena))) throw Error("Niepoprawna pozycja: "+key);
+              if(!x || !idOK(x.id) || ids.has(x.id) || (key!=="pakiety"&&!nameOK(x.nazwa)) || !(key==="pakiety"&&x.id==="mini"?true:priceOK(x.cena))) throw Error("Niepoprawna pozycja: "+key);
               ids.add(x.id);
             }
             if(ordered && c[key].some((x,i)=>i && x.cena<c[key][i-1].cena)) throw Error("Warianty muszą być uporządkowane wg ceny: "+key);
@@ -24,11 +24,11 @@
           for(const k of ["pakiety","dodatki","marketing","uslugiRoczne"])list(k);
           for(const k of ["seo","kontakt","szkolenia"])list(k,true);
           for(const p of c.pakiety){
-            if(typeof p.structure!=="string" || !Array.isArray(p.chips) || !Number.isInteger(p.revisions) || p.revisions<0 || !["subscription","optional","year"].includes(p.hosting)) throw Error("Niepoprawny zakres pakietu: "+p.id);
-            if(p.recurring){
+            if(!Number.isInteger(p.revisions) || p.revisions<0 || !["subscription","optional","year"].includes(p.hosting)) throw Error("Niepoprawny zakres pakietu: "+p.id);
+            if(p.id==="mini"){
               const a=p.platnosc;
               if(p.id!=="mini" || !a || !priceOK(a.miesiecznie)||!Number.isInteger(a.miesiecznie)||!priceOK(a.roczniePromocja)||!priceOK(a.rocznieRegularna)||a.roczniePromocja>a.rocznieRegularna) throw Error("Niepoprawne stawki abonamentu");
-            } else if(p.id==="mini")throw Error("Id mini jest zarezerwowane dla abonamentu");
+            }
           }
           const reserved=new Set(["training","sections","pages","seo","contact","revisions","billing","hosting","care","languages","templateId","annual"]);
           for(const x of [...c.dodatki,...c.marketing]){
@@ -86,16 +86,26 @@
         const seo=seoConfig.map(x=>[x.nazwa,x.opis||"",x.cena]);
         const contacts=contactConfig.map(x=>[x.nazwa,x.opis||"",x.cena]);
         const trainingOptions=trainingConfig.map(x=>[x.nazwa,x.cena]);
-        const abo=cennik.pakiety.find(p=>p.recurring)?.platnosc;
+        const abo=cennik.pakiety.find(p=>p.id==="mini")?.platnosc;
         const aboPricing={monthly:abo?.miesiecznie??0,annual:abo?.roczniePromocja??0,regularAnnual:abo?.rocznieRegularna??0};
-        const packages=activePricing.map(p=>({
-          ...p,name:p.nazwa,price:p.recurring?aboPricing.monthly:p.cena,
-          terms:p.recurring?p.terms+" na "+contractPeriod:p.terms,
-          seo:indexOfVariant(seoConfig,p.seo),contact:indexOfVariant(contactConfig,p.kontakt),
-          trainingIndex:indexOfVariant(trainingConfig,p.szkolenie),
-          training:p.recurring?"Brak szkolenia":trainingOptions[indexOfVariant(trainingConfig,p.szkolenie)][0],
-          includedAddons:Object.fromEntries(cennik.dodatki.map(x=>[x.id,(x.wPakietach||[]).includes(p.id)]))
-        }));
+        // Treści i zakres opisowy pochodzą z boxa HTML. Cennik zawiera tylko dane ofertowe.
+        const packages=activePricing.map(p=>{
+          const card=cardElements.find(x=>x.dataset.ecPlan===p.id),d=card.dataset;
+          const recurring=p.id==="mini";
+          return {
+            ...p,recurring,name:card.querySelector("[data-card-name]").textContent.trim(),
+            price:recurring?aboPricing.monthly:p.cena,
+            structure:d.scopeStructure||"",chips:(d.scopeChips||"").split("|").filter(Boolean),
+            tech:d.scopeTech||"",design:d.scopeDesign||"",content:d.scopeContent||"",
+            panel:d.scopePanel==="true",rights:d.scopeRights||"",nav:d.scopeNav==="true",
+            days:Number(d.scopeDays)||0,terms:(d.scopeTerms||"")+(recurring?" na "+contractPeriod:""),
+            galeria:!!card.querySelector("[data-templates-open]"),
+            seo:indexOfVariant(seoConfig,p.seo),contact:indexOfVariant(contactConfig,p.kontakt),
+            trainingIndex:indexOfVariant(trainingConfig,p.szkolenie),
+            training:recurring?"Brak szkolenia":trainingOptions[indexOfVariant(trainingConfig,p.szkolenie)][0],
+            includedAddons:Object.fromEntries(cennik.dodatki.map(x=>[x.id,(x.wPakietach||[]).includes(p.id)]))
+          };
+        });
         // Wyświetlana nazwa SEO tylko w pakietach One Page i Wizytówka.
         // Ceny oraz zakres wariantów pozostają niezmienione.
         function seoName(p, index) {
@@ -177,88 +187,53 @@
             ]);
           return a;
         }
-        // Karty podglądowe nawiązujące do obecnej struktury .enp-card z Elementora.
-        function cardRows(rows) {
-          // Najpierw świadczenia w cenie, dopiero po nich wyłączenia oznaczone minusem.
-          return [...rows].sort((a, b) => Number(a[1] === false) - Number(b[1] === false))
-            .map((x) => `<li class="${x[1] === false ? "ec-off" : ""}"><span class="ec-tick" aria-hidden="true">${x[1] === false ? "−" : ""}</span><span>${escapeTemplateText(x[0])}</span></li>`)
-            .join("");
-        }
-        // Struktura boxów znajduje się wyłącznie w HTML. JS uzupełnia pola i listy świadczeń.
+        // Boxy są kompletnym HTML. Nie tworzymy ani nie zastępujemy ich struktury.
         function hasTemplateLibrary(p) { return !!p && !!packages.find(x=>x.id===p.id)?.galeria; }
-        function cardCore(p) {
-          const annual=annualServices.filter(x=>annualAvailable(p,x.id));
-          return cardRows([
-            [p.structure+(p.chips.length?" ("+p.chips.join(", ")+")":""),true],
-            [p.tech,true],["Dostosowanie do urządzeń mobilnych",true],
-            ...(annual.length?[[hostingText(p),annual.some(x=>annualIncluded(p,x.id))]]:[]),
-            [p.design,true],
-            ...(cennik.seo.length?[[seoName(p,p.seo),p.seo!==0]]:[]),
-            ...(cennik.kontakt.length?[[contacts[p.contact][0],true]]:[]),
-            [revisionText(p.revisions),p.revisions!==0]
-          ]);
-        }
-        function includedCardServices(p){
-          return [...extraServices,...seoServices].filter(([key])=>serviceIncluded(p,key)).map(([,label])=>[label,true]);
-        }
-        function cardDetailsRows(p){
-          const entry=p.id==="mini"||p.id==="start";
-          return cardRows([
-            ["Dostosowanie do urządzeń mobilnych",p.id==="start"],
-            ["Panel administracyjny — samodzielna edycja tekstów i zdjęć",!entry&&p.panel],
-            [p.rights,true],
-            ...includedCardServices(p),
-            ...(entry?annualServices.filter(x=>annualIncluded(p,x.id)).map(x=>[x.nazwa,true]):[]),
-            [p.training,!entry&&p.training!=="Brak szkolenia"],
-            ["Czas realizacji liczony od otrzymania kompletu materiałów",!!p.days],
-            ["Zaplanowanie nawigacji",p.nav]
-          ].filter(x=>x[1]));
-        }
         function bindCards(){
-          const known=new Map(packages.map(p=>[p.id,p]));
-          const seen=new Set();
-          const setTextBeforeArrow=(el,value)=>{
-            if(el.firstChild?.nodeType===3)el.firstChild.nodeValue=value+" ";
-            else el.insertBefore(document.createTextNode(value+" "),el.firstChild);
-          };
+          const known=new Map(packages.map(p=>[p.id,p])),seen=new Set();
           cardElements.forEach(card=>{
             const p=known.get(card.dataset.ecPlan);
             card.hidden=!p||seen.has(card.dataset.ecPlan);
             if(card.hidden)return;
             seen.add(p.id);
-            const choose=p.id==="mini"&&p.name==="Abonament"?"Wybieram abonament":p.id==="firm"&&p.name==="Strona firmowa"?"Wybieram stronę firmową":"Wybieram "+(p.id==="wiz"&&p.name==="Wizytówka"?"Wizytówkę":p.name);
             const fields={
-              name:p.name,price:money(p.price).replace(" zł",""),
+              price:money(p.price).replace(" zł",""),
               monthly:String(aboPricing.monthly),annual:String(aboPricing.annual),
               regularAnnual:money(aboPricing.regularAnnual),
-              days:p.days?"Do "+p.days+" dni roboczych":"Do zatwierdzenia",
-              revisions:p.revisions?p.revisions+" w cenie":"Brak w cenie",
-              structure:p.structure,chips:p.chips.join(", "),choose,training:p.training
+              revisions:p.revisions?p.revisions+" w cenie":"Brak w cenie"
             };
             card.querySelectorAll("[data-card-field]").forEach(el=>{
               const key=el.dataset.cardField;
-              if(Object.hasOwn(fields,key)&&el.dataset.cardReference!==String(fields[key]))el.textContent=fields[key];
+              if(Object.hasOwn(fields,key))el.textContent=fields[key];
               if(key==="regularAnnual")el.setAttribute("aria-label","Poprzednia cena: "+fields[key]+" netto za rok");
             });
-            card.querySelectorAll("[data-card-gallery]").forEach(el=>{
-              el.hidden=!hasTemplateLibrary(p);
-              el.dataset.templatePlan=p.id;
-              setTextBeforeArrow(el,p.id==="start"&&p.name==="Start"?"Przejrzyj szablony Start":"Przejrzyj szablony pakietu "+p.name);
-            });
-            card.querySelectorAll("[data-choose]").forEach(el=>{
-              el.dataset.choose=p.id;
-              if(!el.querySelector("[data-card-field='choose']"))setTextBeforeArrow(el,choose);
-            });
-            card.querySelectorAll("[data-configure]").forEach(el=>el.dataset.configure=p.id);
             card.querySelectorAll("[data-card-hosting]").forEach(el=>el.hidden=!annualServices.some(x=>x.id==="hosting"&&annualIncluded(p,x.id)));
-            card.querySelectorAll("[data-card-list]").forEach(el=>{
-              const kind=el.dataset.cardList;
-              if(kind==="core")el.innerHTML=cardCore(p);
-              if(kind==="details")el.innerHTML=cardDetailsRows(p);
-              if(kind==="miniExtras"){
-                el.innerHTML=cardRows([...includedCardServices(p),...annualServices.filter(x=>x.id!=="hosting"&&annualIncluded(p,x.id)).map(x=>[x.nazwa,true])]);
-                el.hidden=!el.children.length;
-              }
+            card.querySelectorAll("[data-card-training-reference]").forEach(el=>{
+              el.hidden=!cennik.szkolenia.length;
+              if(p.training!==el.dataset.cardTrainingReference)el.textContent=p.training;
+            });
+            const annual=annualServices.filter(x=>annualAvailable(p,x.id));
+            const serviceFields={
+              hosting:[hostingText(p),annual.some(x=>annualIncluded(p,x.id)),!!annual.length],
+              seo:[seoName(p,p.seo),p.seo!==0,!!cennik.seo.length],
+              contact:[contacts[p.contact][0],true,!!cennik.kontakt.length],
+              revisions:[revisionText(p.revisions),p.revisions!==0,true],
+              training:[p.training,true,!!cennik.szkolenia.length&&p.training!=="Brak szkolenia"]
+            };
+            card.querySelectorAll("[data-card-service],[data-card-addon]").forEach(el=>{
+              let value;
+              if(el.hasAttribute("data-card-addon")){
+                const id=el.dataset.cardAddon,addon=serviceConfigs.get(id);
+                value=[addon?.nazwa||"",true,!!addon&&serviceIncluded(p,id)];
+              }else value=serviceFields[el.dataset.cardService];
+              if(!value)return;
+              const [label,included,visible]=value;
+              el.hidden=!visible;
+              const text=el.querySelector("[data-card-label]");
+              if(text)text.textContent=label;
+              el.classList.toggle("ec-off",!included);
+              const tick=el.querySelector(".ec-tick");
+              if(tick)tick.textContent=included?"":"−";
             });
           });
           q(".ec-package-group--entry").hidden=!cardElements.some(c=>!c.hidden&&c.closest("#ec-entry-packages"));
