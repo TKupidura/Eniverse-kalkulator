@@ -1,6 +1,6 @@
 /* Eniverse — wspólne style bazowe oraz kalkulator, modale, galeria i formularz. Style boxów: index.html. */
 #eni-calc {
-        --ec-red: #dd0429;
+        --ec-red: #DD0629;
         --ec-ink: #101112;
         --ec-muted: #5f6973;
         --ec-line: #dce0e3;
@@ -39,7 +39,7 @@
 
 #eni-calc button:focus-visible,
 #eni-calc input:focus-visible {
-        outline: 3px solid #dd042980;
+        outline: 3px solid #DD062980;
         outline-offset: 3px;
       }
 
@@ -750,7 +750,7 @@
       }
 
 /* ENIVERSE: widok 5 kart. Projekt 3 kart WordPress odpowiada żywemu cennikowi. */
-#eni-calc { --ec-red:#df002b; --ec-ink:#101112; --ec-line:#d9dfe4; --ec-muted:#606d7a; width:100%; max-width:1260px; margin-inline:auto; font-size:14px; }
+#eni-calc { --ec-red:#DD0629; --ec-ink:#101112; --ec-line:#d9dfe4; --ec-muted:#606d7a; width:100%; max-width:1260px; margin-inline:auto; font-size:14px; }
 
 #eni-calc .ec-section-label { letter-spacing:.07em; font-size:11px; font-weight:600; color:#64717c; }
 
@@ -848,7 +848,7 @@
 
 #eni-calc .ec-addon:has(input:checked) { background:#fff7f7; border-color:#ef9fa1; }
 
-#eni-calc .ec-addon input { accent-color:#E20B0C; width:15px; height:15px; margin:0; flex-shrink:0; }
+#eni-calc .ec-addon input { accent-color:#DD0629; width:15px; height:15px; margin:0; flex-shrink:0; }
 
 #eni-calc .ec-addon span { display:flex; justify-content:space-between; gap:7px; align-items:center; width:100%; font-size:11px; line-height:1.25; }
 
@@ -928,7 +928,7 @@
 
 #eni-calc .ec-existing-site label { display:flex; gap:9px; align-items:center; }
 
-#eni-calc .ec-existing-site input[type="checkbox"] { accent-color:#E20B0C; }
+#eni-calc .ec-existing-site input[type="checkbox"] { accent-color:#DD0629; }
 
 #eni-calc .ec-existing-site .ec-field { margin-top:8px; }
 
@@ -974,7 +974,7 @@
 
 #eni-calc .ec-existing-toggle .ec-switch-track::before { content:""; position:absolute; width:16px; height:16px; top:3px; left:3px; background:#fff; border-radius:50%; transition:transform .16s ease; }
 
-#eni-calc .ec-existing-toggle input:checked + .ec-switch-track { background:#E20B0C; }
+#eni-calc .ec-existing-toggle input:checked + .ec-switch-track { background:#DD0629; }
 
 #eni-calc .ec-existing-toggle input:checked + .ec-switch-track::before { transform:translateX(18px); }
 
@@ -1119,13 +1119,13 @@
         background:#fff; border-radius:50%; box-shadow:0 1px 3px #0002; transition:transform .15s ease;
       }
 
-#eni-calc .ec-toggle:checked + .ec-toggle-track { background:#E20B0C; }
+#eni-calc .ec-toggle:checked + .ec-toggle-track { background:#DD0629; }
 
 #eni-calc .ec-toggle:checked + .ec-toggle-track::after { transform:translateX(20px); }
 
 #eni-calc .ec-toggle:disabled + .ec-toggle-track { background:#b8c0c8; }
 
-#eni-calc .ec-toggle:checked:disabled + .ec-toggle-track { background:#E20B0C; opacity:1; }
+#eni-calc .ec-toggle:checked:disabled + .ec-toggle-track { background:#DD0629; opacity:1; }
 
 #eni-calc .ec-toggle:focus-visible + .ec-toggle-track { outline:3px solid #e2a0a1; outline-offset:3px; }
 
@@ -1171,7 +1171,7 @@
 
 #eni-calc .ec-language-switch-label .ec-language-toggle { position:absolute; opacity:0; width:1px; height:1px; }
 
-#eni-calc .ec-language-switch-label .ec-language-toggle:checked + .ec-toggle-track { background:#E20B0C; }
+#eni-calc .ec-language-switch-label .ec-language-toggle:checked + .ec-toggle-track { background:#DD0629; }
 
 #eni-calc .ec-language-switch-label .ec-language-toggle:checked + .ec-toggle-track::after { transform:translateX(20px); }
 
@@ -1185,7 +1185,7 @@
 
 #eni-calc .ec-language-add { background:#fff; border:1px dashed #b7c1cb; border-radius:8px; padding:11px 18px; font-size:13px; font-weight:600; color:#344454; }
 
-#eni-calc .ec-language-add:hover { border-color:#E20B0C; color:#E20B0C; }
+#eni-calc .ec-language-add:hover { border-color:#DD0629; color:#DD0629; }
 
 #eni-calc .ec-language-add:disabled { opacity:.5; cursor:not-allowed; }
 
@@ -1304,8 +1304,8 @@
       }
 
 #eni-calc .ec-mini-rate-variant.is-selected {
-        border-color:#E20B0C;
-        box-shadow:0 0 0 1px #E20B0C;
+        border-color:#DD0629;
+        box-shadow:0 0 0 1px #DD0629;
         background:#fffafa;
       }
 
@@ -1565,7 +1565,7 @@
 
 #eni-calc .ec-template-header p { font-size:13px; color:#62707d; margin:0; line-height:1.5; }
 
-#eni-calc .ec-template-kicker { font-size:11px; letter-spacing:.12em; font-weight:750; color:#E20B0C; }
+#eni-calc .ec-template-kicker { font-size:11px; letter-spacing:.12em; font-weight:750; color:#DD0629; }
 
 #eni-calc .ec-template-close {
         flex:0 0 39px; width:39px; height:39px; border:1px solid #d9e0e5;
@@ -1585,9 +1585,9 @@
 
 #eni-calc .ec-template-choice:hover { border-color:#df9f9f; }
 
-#eni-calc .ec-template-choice.is-active { border-color:#E20B0C; box-shadow:0 0 0 1px #E20B0C; }
+#eni-calc .ec-template-choice.is-active { border-color:#DD0629; box-shadow:0 0 0 1px #DD0629; }
 
-#eni-calc .ec-template-choice:focus-visible { outline:3px solid #E20B0C; outline-offset:2px; }
+#eni-calc .ec-template-choice:focus-visible { outline:3px solid #DD0629; outline-offset:2px; }
 
 #eni-calc .ec-template-thumb { display:block; height:124px; overflow:hidden; border-radius:5px; }
 
@@ -1615,7 +1615,7 @@
 
 #eni-calc .ec-template-footer > span { font-size:11px; color:#77838e; line-height:1.5; }
 
-#eni-calc #ec-template-configure { padding:12px 17px; border:1px solid #E20B0C; border-radius:5px; background:#E20B0C; color:white; font-size:13px; font-weight:700; cursor:pointer; }
+#eni-calc #ec-template-configure { padding:12px 17px; border:1px solid #DD0629; border-radius:5px; background:#DD0629; color:white; font-size:13px; font-weight:700; cursor:pointer; }
 
 #eni-calc #ec-template-configure:hover { background:#b60909; }
 
@@ -1825,7 +1825,7 @@
         background:#fff;
       }
 
-#eni-calc #ec-template-viewport:focus-visible { outline:2px solid #E20B0C; outline-offset:-3px; }
+#eni-calc #ec-template-viewport:focus-visible { outline:2px solid #DD0629; outline-offset:-3px; }
 
 #eni-calc #ec-template-description { display:none; }
 
@@ -1905,9 +1905,9 @@
 
 #eni-calc .ec-template-select-option { display:flex; gap:10px; align-items:center; padding:12px; border:1px solid #dce3e8; border-radius:7px; background:#fff; cursor:pointer; min-width:0; }
 
-#eni-calc .ec-template-select-option:has(input:checked) { border-color:#E20B0C; background:#fff9f9; box-shadow:0 0 0 1px #E20B0C; }
+#eni-calc .ec-template-select-option:has(input:checked) { border-color:#DD0629; background:#fff9f9; box-shadow:0 0 0 1px #DD0629; }
 
-#eni-calc .ec-template-select-option input { accent-color:#E20B0C; flex:0 0 auto; }
+#eni-calc .ec-template-select-option input { accent-color:#DD0629; flex:0 0 auto; }
 
 #eni-calc .ec-template-select-option strong,
 #eni-calc .ec-template-select-option small { display:block; }
@@ -2001,7 +2001,7 @@
       }
 
 #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-card:has(input:checked) {
-        border-color:#E20B0C; box-shadow:0 0 0 1px #E20B0C; background:#fff8f8;
+        border-color:#DD0629; box-shadow:0 0 0 1px #DD0629; background:#fff8f8;
       }
 
 #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-card > .ec-template-select-option {
@@ -2033,7 +2033,7 @@
         border:0;
         border-radius:0;
         background:transparent;
-        color:#E20B0C;
+        color:#DD0629;
         font-size:12px;
         font-weight:650;
         text-align:left;
@@ -2042,14 +2042,14 @@
       }
 
 #eni-calc .ec-template-preview-action:hover {
-        color:#E20B0C;
+        color:#DD0629;
         background:transparent;
         text-decoration:underline;
         text-underline-offset:3px;
       }
 
 #eni-calc .ec-template-preview-action:focus-visible {
-        outline:2px solid #E20B0C;
+        outline:2px solid #DD0629;
         outline-offset:4px;
       }
 
@@ -2093,12 +2093,12 @@
       }
 
 #eni-calc .ec-direct-summary-configure strong {
-        color:#E20B0C;
+        color:#DD0629;
         font-size:13px;
         white-space:nowrap;
       }
 
-#eni-calc .ec-direct-summary-configure:hover { border-color:#E20B0C; background:#fff2f2; }
+#eni-calc .ec-direct-summary-configure:hover { border-color:#DD0629; background:#fff2f2; }
 
 #eni-calc .ec-summary-template-row {
         display:flex;
@@ -2120,10 +2120,10 @@
 #eni-calc .ec-summary-template-browse {
         align-self:flex-start;
         padding:9px 12px;
-        border:1px solid #E20B0C;
+        border:1px solid #DD0629;
         border-radius:5px;
         background:#fff;
-        color:#E20B0C;
+        color:#DD0629;
         font-size:12px;
         font-weight:650;
         cursor:pointer;
@@ -2187,7 +2187,7 @@
         max-width:100%;
         padding:0;
         margin:0;
-        color:#E20B0C;
+        color:#DD0629;
         background:transparent;
         border:0;
         border-radius:0;
@@ -2201,7 +2201,7 @@
       }
 
 #eni-calc .ec-final .ec-summary .ec-direct-summary-configure:hover {
-        color:#E20B0C;
+        color:#DD0629;
         text-decoration:underline;
         text-underline-offset:3px;
       }
@@ -2219,7 +2219,7 @@
         min-width:0;
         border:0;
         background:transparent;
-        color:#E20B0C;
+        color:#DD0629;
         font:inherit;
         font-size:12px;
         font-weight:650;
@@ -2232,13 +2232,13 @@
       }
 
 #eni-calc .ec-final .ec-summary .ec-summary-template-name:hover {
-        color:#E20B0C;
+        color:#DD0629;
         text-decoration:underline;
       }
 
 #eni-calc .ec-final .ec-summary .ec-summary-template-name:focus-visible,
 #eni-calc .ec-final .ec-summary .ec-direct-summary-configure:focus-visible {
-        outline:2px solid #E20B0C;
+        outline:2px solid #DD0629;
         outline-offset:3px;
       }
 
@@ -2297,12 +2297,12 @@
 
 #eni-calc .ec-template-defer small { font-size:10px; line-height:1.4; color:#64727e; }
 
-#eni-calc .ec-template-defer:hover { border-color:#E20B0C; }
+#eni-calc .ec-template-defer:hover { border-color:#DD0629; }
 
 #eni-calc .ec-template-defer.is-selected {
-        border:1px solid #E20B0C;
+        border:1px solid #DD0629;
         background:#fff5f5;
-        box-shadow:0 0 0 1px #E20B0C;
+        box-shadow:0 0 0 1px #DD0629;
       }
 
 #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-later {
@@ -2312,9 +2312,9 @@
       }
 
 #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-later:has(input:checked) {
-        border:1px solid #E20B0C;
+        border:1px solid #DD0629;
         background:#fff5f5;
-        box-shadow:0 0 0 1px #E20B0C;
+        box-shadow:0 0 0 1px #DD0629;
       }
 
 #eni-calc .ec-pane[data-ec-step="template"] .ec-template-select-later strong {
@@ -2370,10 +2370,10 @@
         width:auto;
         max-width:100%;
         padding:8px 13px;
-        border:1px solid #E20B0C;
+        border:1px solid #DD0629;
         border-radius:5px;
         background:#fff;
-        color:#E20B0C;
+        color:#DD0629;
         font-size:12px;
         font-weight:650;
         line-height:1.35;
@@ -2383,7 +2383,7 @@
 
 #eni-calc .ec-final .ec-summary .ec-direct-summary-configure:hover {
         background:#fff2f2;
-        color:#E20B0C;
+        color:#DD0629;
         border-color:#c5090a;
         text-decoration:none;
       }
@@ -2393,7 +2393,7 @@
         display:flex;
         flex-wrap:wrap;
         align-items:baseline;
-        border:1px solid #E20B0C;
+        border:1px solid #DD0629;
         border-radius:7px;
         padding:10px 12px;
         margin:7px 0;
@@ -2436,7 +2436,7 @@
 
 #eni-calc .ec-template-real-image {display:block;width:min(100%,720px);height:auto;object-fit:contain;border-radius:5px;box-shadow:0 5px 24px rgba(21,26,30,.12);}
 
-#eni-calc .ec-template-real-open {display:inline-flex;align-items:center;gap:9px;align-self:center;padding:11px 16px;border:1px solid #E20B0C;border-radius:5px;background:#fff;color:#E20B0C;font-size:13px;font-weight:700;text-decoration:none;}
+#eni-calc .ec-template-real-open {display:inline-flex;align-items:center;gap:9px;align-self:center;padding:11px 16px;border:1px solid #DD0629;border-radius:5px;background:#fff;color:#DD0629;font-size:13px;font-weight:700;text-decoration:none;}
 
 #eni-calc .ec-template-real-open:hover {background:#fff1f1;text-decoration:none;}
 
@@ -2450,7 +2450,7 @@
 
 #eni-calc .ec-annual-promo-label {
         display:inline-block;margin-left:3px;font-size:10px;font-weight:750;
-        font-style:normal;letter-spacing:.05em;color:#E20B0C;
+        font-style:normal;letter-spacing:.05em;color:#DD0629;
       }
 
 /* Wspólny pełny podgląd niezależnych stron demo z ZIP. */
@@ -2503,7 +2503,7 @@
 #eni-calc #ec-template-options[aria-invalid="true"] .ec-template-select-option { border-color:#e8a2a9; }
 
 #eni-calc .ec-aside #ec-billing-section .ec-promo-price,
-#eni-calc .ec-aside #ec-billing-section .ec-tag.ec-promo-price { color:#E20B0C; }
+#eni-calc .ec-aside #ec-billing-section .ec-tag.ec-promo-price { color:#DD0629; }
 
 #eni-calc .ec-aside #ec-billing-section .ec-billing-promo .ec-promo-price { font-size:inherit; }
 
@@ -2611,7 +2611,7 @@
 
 #eni-calc .ec-template-new-tab:visited {color:#fff;}
 
-#eni-calc .ec-template-new-tab:focus-visible {outline:2px solid #E20B0C;outline-offset:2px;}
+#eni-calc .ec-template-new-tab:focus-visible {outline:2px solid #DD0629;outline-offset:2px;}
 
 #eni-calc .ec-template-select-actions {display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;padding:0 14px 12px;}
 
@@ -2666,7 +2666,7 @@
 
 #eni-calc .ec-final .ec-summary-total .ec-summary-regular-price { color:var(--ec-muted); font-size:12px; font-weight:400; white-space:nowrap; }
 
-#eni-calc .ec-final .ec-summary-total .ec-summary-promo-price { color:#E20B0C; font-size:13px; font-weight:700; line-height:1.4; white-space:nowrap; }
+#eni-calc .ec-final .ec-summary-total .ec-summary-promo-price { color:#DD0629; font-size:13px; font-weight:700; line-height:1.4; white-space:nowrap; }
 
 #eni-calc .ec-final .ec-summary-total .ec-summary-promo-label { color:var(--ec-muted); font-size:11px; font-weight:400; white-space:nowrap; }
 
@@ -2674,4 +2674,43 @@
 #eni-calc .ec-final .ec-summary:has(#ec-summary-installments) { max-height:none; overflow:visible; }
 
 #eni-calc .ec-final .ec-summary-total .ec-summary-billing { padding-bottom:6px; margin-bottom:4px; }
+}
+
+/* Zamknięcie modali: jawny kolor i SVG odporne na style motywu WordPress. */
+#eni-calc #ec-window button#ec-close,
+#eni-calc #ec-template-modal button#ec-template-close {
+  color: #101112 !important;
+  background: #fff !important;
+  border: 1px solid #d9e0e5 !important;
+  display: grid !important;
+  place-items: center;
+  padding: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  line-height: 1;
+  cursor: pointer;
+}
+#eni-calc #ec-window button#ec-close > svg,
+#eni-calc #ec-template-modal button#ec-template-close > svg {
+  display: block !important;
+  width: 18px !important;
+  height: 18px !important;
+  color: #101112 !important;
+  fill: none !important;
+  stroke: #101112 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: none;
+}
+#eni-calc #ec-window button#ec-close > svg path,
+#eni-calc #ec-template-modal button#ec-template-close > svg path {
+  fill: none !important;
+  stroke: #101112 !important;
+  stroke-width: 2 !important;
+  stroke-linecap: round;
+}
+#eni-calc #ec-window button#ec-close:hover,
+#eni-calc #ec-template-modal button#ec-template-close:hover {
+  background: #f3f5f6 !important;
+  border-color: #DD0629 !important;
 }

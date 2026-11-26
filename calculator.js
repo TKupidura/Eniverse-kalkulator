@@ -119,7 +119,7 @@
           if(base.length) return base.map(x=>x.nazwa).join(" + ")+(p.recurring?" na okres abonamentu":" w cenie na pierwszy rok");
           return annualServices.some(x=>annualAvailable(p,x.id))?"Usługi roczne opcjonalne, płatne z góry":"";
         };
-        // Ceny dodatków: stawki robocze netto, do potwierdzenia przed wdrożeniem.
+        // Ceny dodatków: stawki netto z pricing.js.
         const extraServices=cennik.dodatki.map(x=>[x.id,x.nazwa,x.cena,Array.isArray(x.wPakietach)]);
         const seoServices=cennik.marketing.map(x=>[x.id,x.nazwa,x.cena,x.opis||""]);
         const serviceConfigs=new Map([...cennik.dodatki,...cennik.marketing].map(x=>[x.id,x]));
@@ -307,7 +307,7 @@
         function templateNewTabLink(t) {
           const url=t.isBundled?t.previewPath:templateHttpsUrl(t.preview_url);
           if(!url)return "";
-          return '<a class="ec-template-new-tab" href="'+escapeTemplateText(url)+'" target="_blank" rel="noopener noreferrer" aria-label="Otwórz szablon '+escapeTemplateText(t.name)+' w nowej karcie">Podgląd demo <span aria-hidden="true">↗</span></a>';
+          return '<a class="ec-template-new-tab" href="'+escapeTemplateText(url)+'" target="_blank" rel="noopener noreferrer" aria-label="Otwórz szablon '+escapeTemplateText(t.name)+' w nowej karcie">Otwórz podgląd <span aria-hidden="true">↗</span></a>';
         }
         function templateScene(t, full = false) {
           if(t.isBundled || t.isRemote) {
@@ -332,7 +332,7 @@
             '<section class="ec-template-demo-section ec-template-demo-about"><div class="ec-template-demo-index">02 / O NAS</div><div class="ec-template-demo-about-grid"><div><small>'+d.eyebrow+'</small><h2>'+d.aboutTitle+'</h2><p>'+d.about+'</p></div><div class="ec-template-demo-image" aria-hidden="true"><span></span></div></div></section>' +
             '<section class="ec-template-demo-section ec-template-demo-offer"><div class="ec-template-demo-index">03 / OFERTA</div><h2>Co możemy dla Ciebie zrobić?</h2><div class="ec-template-demo-cards">'+services+'</div></section>' +
             '<section class="ec-template-demo-section ec-template-demo-proof"><div class="ec-template-demo-index">04 / OPINIE</div><h2>'+d.proofTitle+'</h2><blockquote>'+d.proof+'</blockquote><div class="ec-template-demo-stars" aria-hidden="true">★★★★★</div></section>' +
-            '<section class="ec-template-demo-section ec-template-demo-contact"><div class="ec-template-demo-index">05 / KONTAKT</div><h2>'+d.contactTitle+'</h2><p>'+d.contact+'</p><span class="ec-template-demo-contact-button">'+t.cta+' &nbsp;↗</span><div class="ec-template-demo-contact-end">'+t.brand+' <span>Przykładowy szablon / Eniverse</span></div></section>' +
+            '<section class="ec-template-demo-section ec-template-demo-contact"><div class="ec-template-demo-index">05 / KONTAKT</div><h2>'+d.contactTitle+'</h2><p>'+d.contact+'</p><span class="ec-template-demo-contact-button">'+t.cta+' &nbsp;↗</span><div class="ec-template-demo-contact-end">'+t.brand+' <span>Szablon / Eniverse</span></div></section>' +
             '</div>';
         }
         function templateSelectionName(id) {
@@ -955,7 +955,7 @@
           q("#ec-summary").innerHTML = (directSummaryMode
               ? detailsHeading + lines + compactConfigureLink + totalBlock
               : detailsHeading + lines + totalBlock) +
-            '<p class="ec-note">Ceny netto. Dodatki i usługi oznaczone jako robocze wymagają potwierdzenia w ofercie.</p>';
+            '<p class="ec-note">Kwoty netto; VAT według właściwej stawki.</p>';
         }
         let wizardStep = 0;
         let directSummaryMode = false;
@@ -1022,7 +1022,7 @@
           lang.className = "ec-section";
           lang.innerHTML =
             '<h3>Języki obce na stronie</h3>' +
-            '<p class="ec-muted">Włącz język i wybierz go z listy. Możesz dodać kilka wersji językowych. Cena robocza: ' + money(languagePrice) + ' za każdy język jednorazowo. Tłumaczenie treści jest wyceniane osobno.</p>' +
+            '<p class="ec-muted">Włącz język i wybierz go z listy. Możesz dodać kilka wersji językowych. Cena: ' + money(languagePrice) + ' za każdy język jednorazowo. Tłumaczenie treści jest wyceniane osobno.</p>' +
             '<div class="ec-language-list" id="ec-language-rows"></div>' +
             '<button class="ec-language-add ec-interactive" type="button" id="ec-add-language">+ Dodaj kolejny język</button>';
           wizardPanes[3].insertBefore(lang,sections[7]);
@@ -1085,8 +1085,9 @@
           q("#ec-next").textContent=wizardStep===lastIndex-1?"Podsumowanie →":"Dalej →";
           q("#ec-back").hidden=directSummaryMode||wizardStep===0;
           q("#ec-back").textContent="← Wstecz";
+          q("#ec-footer-note").hidden=last;
           q("#ec-footer-note").textContent=last
-            ? "Podgląd wyceny. Formularz demonstracyjny."
+            ? ""
             : current.recurring?"Abonament: umowa na "+contractPeriod+".":"Strona i dodatki jednorazowo; usługi roczne płatne z góry.";
           q("#ec-config .ec-fields").scrollTop=0;
           if(last)summary(baseChoice);
@@ -1447,7 +1448,8 @@
           if (p.hosting === "year")
             lines.push("Hosting po pierwszym roku: cena do ustalenia.");
           lines.push(
-            "Ceny dodatków są przykładowe. Sesje poprawek i modyfikacje od " + money(revisionPrice) + "; w makiecie " + money(revisionPrice) + "/sesję. Kwoty netto; VAT według właściwej stawki.",
+            ...(expansion.dodatkowaRundaPoprawek ? ["Dodatkowa sesja poprawek: " + money(revisionPrice) + "/sesję."] : []),
+            "Kwoty netto; VAT według właściwej stawki.",
           );
           return lines.join(String.fromCharCode(10));
         }
@@ -1499,7 +1501,6 @@
         }
         if (production) {
           q("#ec-form-demo").textContent="Dane wykorzystamy do kontaktu w sprawie wybranego pakietu.";
-          q(".ec-pricing-note").textContent="Ceny dodatków są przykładowe, a końcowy zakres i termin realizacji wymagają zatwierdzenia.";
           q("#ec-send-result details").hidden=true;
         }
         q("#ec-lead-form").addEventListener("submit", async (event) => {
@@ -1584,7 +1585,7 @@
           ].join(nl);
           q("#ec-message-preview").textContent = message;
           q("#ec-send-status").textContent =
-            "Dane są poprawne. To podgląd wiadomości — makieta nie wysłała e-maila.";
+            "Dane są poprawne. Wersja lokalna nie wysłała e-maila.";
           q("#ec-send-result").hidden = false;
 
             return;
