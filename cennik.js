@@ -1,150 +1,63 @@
-/** ENIVERSE — CENTRUM ZARZĄDZANIA OFERTĄ STRON INTERNETOWYCH
- * Ceny netto PLN; grosze z kropką. Nazwy są wyświetlane w kalkulatorze.
- * ID pakietu musi odpowiadać data-ec-plan w HTML. Nie zmieniaj ID przy zmianie nazwy.
- * Nowy pakiet: dodaj obiekt oraz box HTML z tym samym ID; usuń obiekt, aby ukryć box.
- * mini = specjalny abonament. Opisy marketingowe, ikony i wyróżnienie edytuj w HTML.
- * Dodatki, marketing, uslugiRoczne: dodaj/usuń obiekt, aby dodać/usunąć opcję.
- * dostepneWPakietach: opcjonalna lista ID pakietów, w których opcja jest dostępna.
- * wPakietach: opcjonalna lista ID pakietów, w których opcja jest w cenie.
- * Brak obu pól = płatna opcja dostępna wszędzie. Hosting/care zachowują reguły bazowe.
- * SEO, kontakt, szkolenia: warianty uporządkowane wg ceny, dopłata od bazy.
- * Rozbudowa: cztery mechanizmy z własnymi kontrolkami. Usuń klucz, aby ukryć.
- * Po zmianie wyczyść cache. Szczegóły: INSTRUKCJA-WDROZENIA.md.
+/** ENIVERSE — CENNIK STRON INTERNETOWYCH
+ * Ceny netto PLN. ID pakietu = data-ec-plan w HTML. Nazwa i wygląd boxa są w HTML.
+ * Dodaj pakiet w cenniku oraz odpowiadający box w HTML; usuń wpis, aby ukryć box.
+ * Dodatki / marketing / uslugiRoczne: dodaj, usuń lub zmień obiekt.
+ * wPakietach: pakiety mające usługę w cenie; dostepneWPakietach: dostępność.
+ * Brak ograniczeń = dostępny we wszystkich. SEO, kontakt, szkolenia wg rosnącej ceny.
+ * Pakiet wskazuje bazowy wariant po ID; hosting ma dotychczasowe reguły bazowe.
+ * Rozbudowa: cztery istniejące mechanizmy; usuń klucz, aby ukryć.
  */
 window.ENIVERSE_CENNIK = {
-  // 01. Pakiety — ID odpowiadają boxom HTML
+  // 01. Ceny pakietów i przypisania usług
   pakiety: [
     {
       "id": "mini",
-      "nazwa": "Abonament",
       "platnosc": {
         "miesiecznie": 69,
         "roczniePromocja": 590,
         "rocznieRegularna": 790
       },
-      "recurring": true,
-      "structure": "Strona główna do 5 sekcji",
-      "chips": [
-        "Hero",
-        "O nas",
-        "Oferta",
-        "Opinie",
-        "Kontakt"
-      ],
       "revisions": 0,
-      "hosting": "subscription",
-      "days": 3,
-      "tech": "HTML / CSS",
-      "design": "Gotowy szablon z bazy Eniverse",
-      "content": "Klient dostarcza gotowe treści, dopasowane do wybranego szablonu.",
-      "panel": false,
-      "rights": "Korzystanie ze strony w ramach abonamentu",
-      "terms": "Umowa abonamentowa",
-      "nav": false,
       "seo": "brak",
       "kontakt": "podstawowy",
       "szkolenie": "instrukcjaPDF",
-      "galeria": true
+      "hosting": "subscription"
     },
     {
       "id": "start",
-      "nazwa": "Start",
       "cena": 1190,
-      "recurring": false,
-      "structure": "Strona główna do 5 sekcji",
-      "chips": [
-        "Hero",
-        "O nas",
-        "Oferta",
-        "Opinie",
-        "Kontakt"
-      ],
       "revisions": 1,
-      "hosting": "optional",
-      "days": 5,
-      "tech": "CMS — WordPress",
-      "design": "Gotowy szablon z bazy Eniverse (WordPress)",
-      "content": "Klient dostarcza treści, a my dopasowujemy je do projektu strony.",
-      "panel": true,
-      "rights": "Licencja na korzystanie ze strony, bez wyłączności do szablonu",
-      "terms": "Samodzielne zarządzanie stroną bez abonamentu za projekt",
-      "nav": false,
       "seo": "brak",
       "kontakt": "podstawowy",
       "szkolenie": "instrukcjaPDF",
-      "galeria": true
+      "hosting": "optional"
     },
     {
       "id": "one",
-      "nazwa": "One Page",
       "cena": 1690,
-      "recurring": false,
-      "structure": "Strona główna do 5 sekcji",
-      "chips": [
-        "Hero",
-        "O nas",
-        "Oferta",
-        "Opinie",
-        "Kontakt"
-      ],
       "revisions": 2,
-      "hosting": "optional",
-      "days": 7,
-      "tech": "CMS — WordPress",
-      "design": "Dostosowanie układu sekcji i wyglądu strony do Twojej marki: zmiana kolejności sekcji, usunięcie lub drobne modyfikacje.",
-      "content": "Klient dostarcza treści, a my dopasowujemy je do projektu strony.",
-      "panel": true,
-      "rights": "Prawa do indywidualnie wykonanych elementów — zgodnie z umową i licencjami",
-      "terms": "Jednorazowa opłata za wykonanie strony",
-      "nav": false,
       "seo": "techniczne",
       "kontakt": "formularz",
       "szkolenie": "szkolenie30min",
-      "galeria": false
+      "hosting": "optional"
     },
     {
       "id": "wiz",
-      "nazwa": "Wizytówka",
       "cena": 2490,
-      "recurring": false,
-      "structure": "Do 5 podstron",
-      "chips": [],
       "revisions": 3,
-      "hosting": "optional",
-      "days": 10,
-      "tech": "CMS — WordPress",
-      "design": "Personalizacja szablonu WordPress — dopasowanie kolorystyki, układu sekcji i prezentacji usług firmy.",
-      "content": "Klient dostarcza treści, a my dopasowujemy je do projektu strony.",
-      "panel": true,
-      "rights": "Prawa do indywidualnie wykonanych elementów — zgodnie z umową i licencjami",
-      "terms": "Jednorazowa opłata za wykonanie strony",
-      "nav": false,
       "seo": "podstawowe",
       "kontakt": "formularz",
       "szkolenie": "szkolenie1h",
-      "galeria": false
+      "hosting": "optional"
     },
     {
       "id": "firm",
-      "nazwa": "Strona firmowa",
       "cena": 3490,
-      "recurring": false,
-      "structure": "Do 10 podstron",
-      "chips": [],
       "revisions": 3,
-      "hosting": "year",
-      "days": 14,
-      "tech": "CMS — WordPress",
-      "design": "Rozszerzona personalizacja szablonu WordPress — dopasowanie struktury podstron, prezentacji usług i ścieżek kontaktu.",
-      "content": "Klient dostarcza treści, a my dopasowujemy je do projektu strony.",
-      "panel": true,
-      "rights": "Prawa do indywidualnie wykonanych elementów — zgodnie z umową i licencjami",
-      "terms": "Jednorazowa opłata za wykonanie strony",
-      "nav": true,
       "seo": "rozszerzone",
       "kontakt": "formularz",
       "szkolenie": "szkolenie2h",
-      "galeria": false
+      "hosting": "year"
     }
   ],
 
@@ -214,7 +127,7 @@ window.ENIVERSE_CENNIK = {
     }
   ],
 
-  // 04. SEO — warianty
+  // 04. SEO
   seo: [
     {
       "id": "brak",
@@ -330,7 +243,7 @@ window.ENIVERSE_CENNIK = {
     }
   ],
 
-  // 09. Ustawienia globalne rozliczeń
+  // 09. Ustawienia rozliczeń
   ustawienia: {
     okresAbonamentu: 12,
     zaliczkaProcent: 50,
