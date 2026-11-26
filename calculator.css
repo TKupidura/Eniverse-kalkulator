@@ -2735,3 +2735,9 @@
   font-size: 12px;
   line-height: 1.45;
 }
+
+/* 20261126-7 — tło sekcji cennika na całą szerokość ekranu.
+   Bez zmiany szerokości kart, paddingu, pozycji modali i bez dodatkowego scrolla. */
+#eni-calc #ec-demo-page {
+  border-image: linear-gradient(#f7f8fa, #fff 900px) fill 0 / 0 / 0 100vmax;
+}
