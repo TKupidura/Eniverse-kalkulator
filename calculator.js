@@ -5,7 +5,7 @@
         const production = root.dataset.mode === "production";
         const q = (s) => root.querySelector(s),
           all = (s) => [...root.querySelectorAll(s)],
-          money = (n) => new Intl.NumberFormat("pl-PL", {useGrouping:"always"}).format(n) + " zł";
+          money = (n) => new Intl.NumberFormat("pl-PL", {useGrouping:"always"}).format(n) + " zł netto";
         // Jedno źródło oferty: walidacja struktury i normalizacja danych.
         function validatePricing(c) {
           if (!c || typeof c !== "object") throw Error("Brak cennika");
@@ -197,9 +197,9 @@
             if(card.hidden)return;
             seen.add(p.id);
             const fields={
-              price:money(p.price).replace(" zł",""),
+              price:money(p.price).replace(" zł netto",""),
               monthly:String(aboPricing.monthly),annual:String(aboPricing.annual),
-              regularAnnual:money(aboPricing.regularAnnual),
+              regularAnnual:money(aboPricing.regularAnnual).replace(" netto",""),
               revisions:p.revisions?p.revisions+" w cenie":"Brak w cenie"
             };
             card.querySelectorAll("[data-card-field]").forEach(el=>{
@@ -608,7 +608,7 @@
                     ? "Wariant krótszy · bez obniżenia ceny pakietu"
                     : "Cena: " + money(price) + " · dopłata za rozszerzenie";
               const badge = isBase
-                ? (p.recurring ? "0 zł" : "W cenie")
+                ? (p.recurring ? "0 zł netto" : "W cenie")
                 : extra ? "+" + money(extra) : "Bez dopłaty";
               return `<label class="ec-option ec-interactive"><input type="radio" name="ec-training" value="${i}" ${selected ? "checked" : ""}><span><strong>${escapeTemplateText(option[0])}</strong><small>${label}</small></span><span class="ec-tag">${badge}</span></label>`;
             })
@@ -897,7 +897,7 @@
           const simpleRows = [
             ["Pakiet", p.name],
             ["Zakres", p.structure],
-            ...(p.recurring && !directSummaryMode && s.billing==="annual" ? [["Promocja pakietu "+p.name, money(aboPricing.annual) + "/rok zamiast " + money(aboPricing.regularAnnual) + "/rok"]] : []),
+            ...(p.recurring && !directSummaryMode && s.billing==="annual" ? [["Promocja pakietu "+p.name, money(aboPricing.annual) + " / rok zamiast " + money(aboPricing.regularAnnual) + " / rok"]] : []),
             ...(cennik.seo.length?[["SEO",seoName(p,s.seo)]]:[]),
             ["Dodatkowe usługi SEO", seoServices.filter(([key]) => serviceAvailable(p,key)&&s[key])
               .map(([,label]) => label).join(", ") || "Bez dodatkowych usług"],
@@ -955,7 +955,7 @@
           q("#ec-summary").innerHTML = (directSummaryMode
               ? detailsHeading + lines + compactConfigureLink + totalBlock
               : detailsHeading + lines + totalBlock) +
-            '<p class="ec-note">Kwoty netto; VAT według właściwej stawki.</p>';
+            '<p class="ec-note ec-vat-note">Wszystkie podane ceny są kwotami netto. Należy doliczyć 23% VAT.</p>';
         }
         let wizardStep = 0;
         let directSummaryMode = false;
@@ -1298,10 +1298,10 @@
             useGrouping: "always",
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
-          }).format(n) + " zł";
+          }).format(n) + " zł netto";
         function hostingDescription(p=current){
           const st=states[p.id];
-          const parts=annualServices.filter(x=>annualSelected(p,st,x.id)).map(x=>x.nazwa+": "+(annualIncluded(p,x.id)?"W cenie pakietu":money(x.cena)+"/rok"));
+          const parts=annualServices.filter(x=>annualSelected(p,st,x.id)).map(x=>x.nazwa+": "+(annualIncluded(p,x.id)?"W cenie pakietu":money(x.cena)+" / rok"));
           return parts.length?parts.join("; "):"Bez dodatkowych usług rocznych";
         }
         function annualCostLabel(p=current){
@@ -1448,8 +1448,8 @@
           if (p.hosting === "year")
             lines.push("Hosting po pierwszym roku: cena do ustalenia.");
           lines.push(
-            ...(expansion.dodatkowaRundaPoprawek ? ["Dodatkowa sesja poprawek: " + money(revisionPrice) + "/sesję."] : []),
-            "Kwoty netto; VAT według właściwej stawki.",
+            ...(expansion.dodatkowaRundaPoprawek ? ["Dodatkowa sesja poprawek: " + money(revisionPrice) + " / sesję."] : []),
+            "Wszystkie podane ceny są kwotami netto. Należy doliczyć 23% VAT.",
           );
           return lines.join(String.fromCharCode(10));
         }
@@ -1665,7 +1665,7 @@
         function directMiniSchedule(billing=states[current.id].billing){
           const b=miniPlan(billing);
           if(b.annual){
-            if(b.count===1)return "Jednorazowa płatność "+money(b.regular)+(months===12?"/rok":" / "+contractPeriod);
+            if(b.count===1)return "Jednorazowa płatność "+money(b.regular)+(months===12?" / rok":" / "+contractPeriod);
             return b.payments.map((amount,i)=>(i+1)+". okres ("+monthLabel(annualPeriods[i])+"): "+money(amount)).join("; ");
           }
           if(b.count===1)return "1 rata "+money(b.regular)+" / mc";
