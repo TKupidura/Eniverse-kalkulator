@@ -71,7 +71,7 @@
           if (gallery && wizard) {
             galleryPortal = document.createElement("dialog");
             galleryPortal.id = "eni-calc-portal";
-            galleryPortal.dataset.build = "20261127-16";
+            galleryPortal.dataset.build = "20261127-17";
             galleryPortal.setAttribute("aria-label","Konfigurator Eniverse");
             galleryPortal.addEventListener("cancel",event=>{
               event.preventDefault();
