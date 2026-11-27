@@ -452,7 +452,11 @@
           templateDialogPlanId=requestedPlan;
           templatePreviousScroll=document.body.classList.contains("eni-calc-scroll-locked");
           document.body.classList.add("eni-calc-scroll-locked");
-          q("#ec-template-modal").hidden=false;
+          const galleryDialog=q("#ec-template-modal");
+          galleryDialog.hidden=false;
+          if(typeof galleryDialog.showModal==="function" && !galleryDialog.open){
+            try{galleryDialog.showModal();}catch(error){console.warn("Eniverse: fallback galerii",error);}
+          }
           const selectedId=states[templateDialogPlanId].templateId;
           const selectedIndex=templateSamples.findIndex(t=>t.id===selectedId);
           showTemplate(selectedIndex>=0?selectedIndex:visibleTemplateIndex);
@@ -465,7 +469,9 @@
           q("#ec-template-close").focus();
         }
         function closeTemplateDialog() {
-          q("#ec-template-modal").hidden=true;
+          const galleryDialog=q("#ec-template-modal");
+          if(galleryDialog.open && typeof galleryDialog.close==="function")galleryDialog.close();
+          galleryDialog.hidden=true;
           document.body.classList.toggle("eni-calc-scroll-locked",templatePreviousScroll);
           templateOpener?.focus();
         }
@@ -474,6 +480,10 @@
           if(button)showTemplate(+button.dataset.templateIndex);
         });
         q("#ec-template-close").addEventListener("click",closeTemplateDialog);
+        q("#ec-template-modal").addEventListener("cancel",event=>{
+          event.preventDefault();
+          closeTemplateDialog();
+        });
         q("#ec-template-modal").addEventListener("click",event=>{
           if(event.target===q("#ec-template-modal"))closeTemplateDialog();
         });
