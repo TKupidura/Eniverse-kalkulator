@@ -2,7 +2,7 @@
         const root = document.getElementById("eni-calc");
         if (!root || root.dataset.eniInitialized) return;
         root.dataset.eniInitialized = "true";
-        root.dataset.calculatorBuild = "20261127-19";
+        root.dataset.calculatorBuild = "20261127-20";
         const production = root.dataset.mode === "production";
         let galleryPortal = null;
         const q = (s) => root.querySelector(s) || galleryPortal?.querySelector(s) || null,
@@ -41,7 +41,7 @@
             const ids=new Set();
             for(const x of c[key]){
               if(!x || !idOK(x.id) || ids.has(x.id) || (key!=="pakiety"&&!nameOK(x.nazwa)) || !(key==="pakiety"&&x.id==="mini"?true:priceOK(x.cena))) throw Error("Niepoprawna pozycja: "+key);
-              if(!(key==="pakiety"&&x.id==="mini"))periodOf(x,key==="uslugiRoczne"?"rocznie":"");
+              if(!(key==="pakiety"&&x.id==="mini"))periodOf(x);
               ids.add(x.id);
             }
             // Kolejność wariantów określa zakres, a nie nominalną cenę o różnych okresach.
@@ -218,7 +218,12 @@
         const serviceConfigs=new Map([...cennik.dodatki,...cennik.marketing].map(x=>[x.id,x]));
         const serviceIncluded=(p,id)=>!!serviceConfigs.get(id)?.wPakietach?.includes(p.id);
         const serviceAvailable=(p,id)=>serviceIncluded(p,id)||!serviceConfigs.get(id)?.dostepneWPakietach||serviceConfigs.get(id).dostepneWPakietach.includes(p.id);
-        const annualServices=cennik.uslugiRoczne.map(x=>({...x,okresOplaty:periodOf(x,"rocznie")}));
+        // Każda usługa ma okres wyłącznie z pricing.js — bez domyślnego roku.
+        const annualServices=cennik.uslugiRoczne.map(x=>({...x,okresOplaty:periodOf(x)}));
+        const serviceRateLabel=x=>rateMoney(x.cena,periodOf(x));
+        const careConfig=annualServices.find(x=>x.id==="care");
+        root.dataset.carePeriod=careConfig?.okresOplaty??"";
+        root.dataset.careRate=careConfig?serviceRateLabel(careConfig):"";
         const annualHosting=annualServices.find(x=>x.id==="hosting");
         const annualCare=annualServices.find(x=>x.id==="care");
         const annualIncluded=(p,id)=>!!annualServices.find(x=>x.id===id)?.wPakietach?.includes(p.id)||(annualServices.some(x=>x.id===id)&&(id==="hosting"?p.hosting!=="optional":id==="care"&&p.hosting==="year"));
@@ -1014,7 +1019,7 @@
           q("#ec-hosting").closest(".ec-section").hidden=!availableAnnual.length;
           q("#ec-hosting").innerHTML='<div class="ec-service-list">'+availableAnnual.map(x=>{
             const included=annualIncluded(p,x.id),checked=annualSelected(p,s,x.id);
-            return '<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-annual-'+x.id+'" '+(checked?'checked ':'')+(included?'disabled ':'')+'><span><strong>'+escapeTemplateText(x.nazwa)+'</strong><small>'+(included?(p.hosting==="year"?"W cenie przez pierwszy rok":"W cenie pakietu"):rateMoney(x.cena,periodOf(x))+(p.recurring?" · rozliczenie w abonamencie":""))+'</small></span></label>';
+            return '<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-annual-'+x.id+'" '+(checked?'checked ':'')+(included?'disabled ':'')+'><span><strong>'+escapeTemplateText(x.nazwa)+'</strong><small>'+(included?(p.hosting==="year"?"W cenie przez pierwszy rok":"W cenie pakietu"):serviceRateLabel(x)+(p.recurring?" · rozliczenie w abonamencie":""))+'</small></span></label>';
           }).join("")+'</div>';
           for(const [key,id] of [["dodatkowaSekcja","sections"],["dodatkowaPodstrona","pages"]]){
             const row=q("#ec-"+id).closest(".ec-counter-row");
@@ -1566,7 +1571,7 @@
           }).format(n) + " zł netto";
         function hostingDescription(p=current){
           const st=states[p.id];
-          const parts=annualServices.filter(x=>annualSelected(p,st,x.id)).map(x=>x.nazwa+": "+(annualIncluded(p,x.id)?"W cenie pakietu":rateMoney(x.cena,periodOf(x))));
+          const parts=annualServices.filter(x=>annualSelected(p,st,x.id)).map(x=>x.nazwa+": "+(annualIncluded(p,x.id)?"W cenie pakietu":serviceRateLabel(x)));
           return parts.length?parts.join("; "):"Bez dodatkowych usług";
         }
         function annualCostLabel(p=current){
