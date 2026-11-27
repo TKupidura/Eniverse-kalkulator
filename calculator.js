@@ -69,9 +69,15 @@
           const gallery = root.querySelector("#ec-template-modal");
           const wizard = root.querySelector("#ec-modal-stage");
           if (gallery && wizard) {
-            galleryPortal = document.createElement("div");
+            galleryPortal = document.createElement("dialog");
             galleryPortal.id = "eni-calc-portal";
-            galleryPortal.dataset.build = "20261127-13";
+            galleryPortal.dataset.build = "20261127-15";
+            galleryPortal.setAttribute("aria-label","Konfigurator Eniverse");
+            galleryPortal.addEventListener("cancel",event=>{
+              event.preventDefault();
+              if(!q("#ec-template-modal").hidden)closeTemplateDialog();
+              else if(!q("#ec-modal-stage").hidden)close();
+            });
             galleryPortal.hidden = true;
             document.body.append(galleryPortal);
             galleryPortal.append(wizard,gallery);
@@ -102,7 +108,18 @@
         }
         function syncModalPortal(){
           if(!galleryPortal)return;
-          galleryPortal.hidden=q("#ec-modal-stage").hidden && q("#ec-template-modal").hidden;
+          const closed=q("#ec-modal-stage").hidden && q("#ec-template-modal").hidden;
+          if(closed){
+            if(galleryPortal.open && typeof galleryPortal.close==="function")galleryPortal.close();
+            galleryPortal.hidden=true;
+            galleryPortal.dataset.layer="closed";
+            return;
+          }
+          galleryPortal.hidden=false;
+          if(typeof galleryPortal.showModal==="function" && !galleryPortal.open){
+            try{galleryPortal.showModal();}catch(error){console.error("Eniverse: nie udało się otworzyć natywnego modala",error);}
+          }
+          galleryPortal.dataset.layer=galleryPortal.matches(":modal")?"top-layer":"fallback";
         }
         const settings=cennik.ustawienia;
         const months=settings.okresAbonamentu;
