@@ -2897,3 +2897,14 @@
   #eni-calc-portal #ec-template-gallery .ec-template-choice-label strong { font-size: 12px !important; }
   #eni-calc-portal #ec-template-gallery .ec-template-choice-label small { font-size: 10px !important; }
 }
+
+/* 20261127-12: szybki podgląd, cache trzech ramek i stan ładowania. */
+:is(#eni-calc,#eni-calc-portal) #ec-template-viewport {position:relative;}
+:is(#eni-calc,#eni-calc-portal) #ec-template-viewport > .ec-template-project-frame[hidden] {display:none!important;}
+:is(#eni-calc,#eni-calc-portal) #ec-template-viewport > .ec-template-static-preview {width:100%;min-height:0;flex:1 1 auto;overflow:auto;}
+:is(#eni-calc,#eni-calc-portal) #ec-template-viewport > .ec-template-loading {
+ position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;
+ background:#fff;color:#5f6973;text-align:center;font:400 13px/1.5 "DM Sans",sans-serif;
+}
+:is(#eni-calc,#eni-calc-portal) .ec-template-loading img {display:block;max-width:min(100%,480px);max-height:55%;width:auto;height:auto;object-fit:contain;border-radius:4px;}
+:is(#eni-calc,#eni-calc-portal) .ec-template-loading p {margin:0;color:#5f6973;}
