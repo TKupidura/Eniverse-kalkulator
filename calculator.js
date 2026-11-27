@@ -71,7 +71,7 @@
           if (gallery && wizard) {
             galleryPortal = document.createElement("dialog");
             galleryPortal.id = "eni-calc-portal";
-            galleryPortal.dataset.build = "20261127-15";
+            galleryPortal.dataset.build = "20261127-16";
             galleryPortal.setAttribute("aria-label","Konfigurator Eniverse");
             galleryPortal.addEventListener("cancel",event=>{
               event.preventDefault();
@@ -417,9 +417,14 @@
                 '<div class="ec-template-select-actions"><button class="ec-template-preview-action" type="button" data-template-preview="'+t.id+'" aria-label="Zobacz podgląd szablonu '+escapeTemplateText(t.name)+'">Zobacz podgląd</button>'+'</div>' +
               '</div>'
             ).join('') +
-            '<label class="ec-template-select-option ec-template-select-empty ec-template-select-later">' +
-              '<input type="radio" name="ec-template-choice" value="later" '+(selected==="later"?'checked ':'')+'>' +
-              '<span><strong>Szablon wybiorę później</strong><small>Wybierz tę opcję świadomie, jeśli decyzję podejmiesz później. Formularz zostanie odblokowany.</small></span></label>';
+            '<div class="ec-template-select-card ec-template-select-card--later">' +
+              '<label class="ec-template-select-option">' +
+                '<input type="radio" name="ec-template-choice" value="later" '+(selected==="later"?'checked ':'')+'>' +
+                '<span class="ec-template-select-dot ec-template-select-dot--later" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14h8M8 17h5"/></svg></span>' +
+                '<span class="ec-template-tile-text"><strong>Szablon wybiorę później</strong><small>Wybór opcjonalny na tym etapie</small>' +
+                '<span class="ec-template-select-description">Możesz pominąć wybór na tym etapie. Formularz zostanie odblokowany.</span></span>' +
+              '</label>' +
+            '</div>';
           q("#ec-template-selected").textContent=selected
             ? (selected==="later" ? "Wybrano: szablon wybiorę później." : "Wybrany szablon: "+templateSelectionName(selected))
             : "Nie wskazano jeszcze szablonu ani opcji wyboru później.";
