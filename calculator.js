@@ -403,11 +403,13 @@
             : "Nie wskazano jeszcze szablonu ani opcji wyboru później.";
         }
         let templateOpener=null, templatePreviousScroll=false, templateDialogPlanId="mini";
+        let templatesStatus = "loading", templatesError = "", templatesRequest = null;
         function showTemplate(index) {
           const t=templateSamples[index];
           if(!t){
             visibleTemplateIndex=-1;
-            q("#ec-template-viewport").innerHTML='<p class="ec-template-unavailable">Aktualnie brak opublikowanych szablonów. Wybierz opcję „Szablon wybiorę później”.</p>';
+            const message = templatesStatus==="loading" ? "Ładowanie projektów…" : templatesStatus==="error" ? "Nie udało się pobrać projektów z biblioteki. Spróbuj ponownie." : "Aktualnie brak opublikowanych szablonów. Wybierz opcję „Szablon wybiorę później”.";
+            q("#ec-template-viewport").innerHTML='<div class="ec-template-unavailable" role="status"><p>'+escapeTemplateText(message)+'</p>'+(templatesStatus==="error"||templatesStatus==="empty"?'<button type="button" class="ec-template-new-tab" data-ec-template-retry>Ponów ładowanie</button>':'')+'</div>';
             q("#ec-template-configure").hidden=true;
             q("#ec-template-external").innerHTML="";
             q("#ec-template-external").hidden=true;
@@ -436,20 +438,27 @@
         renderTemplateGallery();
         // Publiczny katalog WordPress: bez tokenów i adresów archiwów ZIP.
         // Niedostępne / puste API -> lokalna biblioteka 7 podglądów ZIP.
-        async function loadWordPressTemplates() {
-          const apiUrl=root.dataset.templatesApi ||
-            window.ENIVERSE_TEMPLATES_API ||
-            "https://eniverse.pl/wp-json/eniverse/v1/templates";
-          const resolvedApi = new URL(apiUrl, document.baseURI).href;
-          if(!templateHttpsUrl(resolvedApi))return;
+        function loadWordPressTemplates() {
+          if (templatesRequest) return templatesRequest;
+          templatesStatus="loading";
+          templatesError="";
+          if(!templateSamples.length)showTemplate(-1);
+          templatesRequest=fetchWordPressTemplates().finally(()=>{templatesRequest=null;});
+          return templatesRequest;
+        }
+        async function fetchWordPressTemplates() {
           const controller=new AbortController();
-          const timeout=setTimeout(()=>controller.abort(),6000);
+          const timeout=setTimeout(()=>controller.abort(),15000);
+          let resolvedApi="";
           try {
-            const response=await fetch(resolvedApi,{method:"GET",mode:"cors",credentials:"omit",cache:"no-store",signal:controller.signal});
-            if(!response.ok)throw new Error("API WordPress HTTP "+response.status);
+            const apiUrl=root.dataset.templatesApi || window.ENIVERSE_TEMPLATES_API || "/wp-json/eniverse/v1/templates";
+            resolvedApi=new URL(apiUrl,document.baseURI).href;
+            if(!templateHttpsUrl(resolvedApi))throw Error("Niepoprawny adres HTTPS biblioteki");
+            const response=await fetch(resolvedApi,{method:"GET",mode:"cors",credentials:"same-origin",cache:"no-store",signal:controller.signal,headers:{"Accept":"application/json"}});
+            if(!response.ok)throw Error("API WordPress HTTP "+response.status);
             const payload=await response.json();
             const data=Array.isArray(payload)?payload:payload?.templates;
-            if(!Array.isArray(data))throw new Error("Niepoprawny format API szablonów");
+            if(!Array.isArray(data))throw Error("Niepoprawny format API szablonów");
             const next=data.slice(0,100)
               .filter(t=>t&&typeof t.id==="string"&&/^wp-\d+$/.test(t.id)&&typeof t.name==="string"&&t.name.trim())
               .map(t=>({
@@ -461,24 +470,40 @@
                 preview_url:templateHttpsUrl(t.preview_url),
                 isRemote:true
               }));
-            // Publikacja szablonu z WordPress zastępuje jego lokalną wersję demo.
+            if(data.length && !next.length)throw Error("API zwróciło "+data.length+" projektów, ale żaden nie spełnia formatu id/nazwa");
+            const previousId=templateSamples[visibleTemplateIndex]?.id;
             const published=new Set(next.map(t=>t.name.trim().toLocaleLowerCase("pl-PL")));
             templateSamples=production ? next : [...next,...bundledTemplateSamples.filter(t=>!published.has(t.name.trim().toLocaleLowerCase("pl-PL")))];
+            templatesStatus=templateSamples.length?"ready":"empty";
+            root.dataset.templatesStatus=templatesStatus;
+            root.dataset.templatesCount=String(templateSamples.length);
+            delete root.dataset.templatesError;
             packages.filter(hasTemplateLibrary).map(p=>p.id).forEach(planId=>{
               const selected=states[planId].templateId;
               if(selected&&selected!=="later"&&!templateSamples.some(t=>t.id===selected))
                 states[planId].templateId="";
             });
             renderTemplateGallery();
+            const selectedId=states[templateDialogPlanId]?.templateId || previousId;
+            const index=templateSamples.findIndex(t=>t.id===selectedId);
+            if(index>=0)showTemplate(index);
             if(hasTemplateLibrary(current)&&!q("#ec-modal-stage").hidden){
               renderTemplateSelection();
               if(!q("#ec-final").hidden)summary(directSummaryMode);
             }
           } catch(error) {
-            console.warn("Eniverse: nie udało się pobrać szablonów z WordPress.",error);
+            templatesStatus="error";
+            templatesError=error?.name==="AbortError"?"Przekroczono czas oczekiwania na API":String(error?.message||error);
+            root.dataset.templatesStatus=templatesStatus;
+            root.dataset.templatesError=templatesError;
+            console.warn("Eniverse: nie udało się pobrać szablonów z WordPress.",resolvedApi,error);
+            if(!templateSamples.length)showTemplate(-1);
           } finally {clearTimeout(timeout);}
         }
         loadWordPressTemplates();
+        q("#ec-template-viewport").addEventListener("click",event=>{
+          if(event.target.closest("[data-ec-template-retry]"))loadWordPressTemplates();
+        });
         function openTemplateDialog(button) {
           templateOpener=button||null;
           const requestedPlan=!q("#ec-modal-stage").hidden
@@ -490,6 +515,7 @@
           document.body.classList.add("eni-calc-scroll-locked");
           if (galleryPortal) galleryPortal.hidden=false;
           q("#ec-template-modal").hidden=false;
+          if(templatesStatus==="error" || templatesStatus==="empty")loadWordPressTemplates();
           const selectedId=states[templateDialogPlanId].templateId;
           const selectedIndex=templateSamples.findIndex(t=>t.id===selectedId);
           showTemplate(selectedIndex>=0?selectedIndex:visibleTemplateIndex);
