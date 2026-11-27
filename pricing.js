@@ -8,6 +8,18 @@
  * Wszystkie ceny podawane są w PLN netto.
  * Kwoty dziesiętne zapisujemy z kropką, np. 149.90.
  * Nie zmieniaj istniejących ID bez potrzeby.
+ *
+ * OKRES OPŁATY (okresOplaty)
+ * ------------------------------------------------------------
+ * okresOplaty: "miesiecznie" — zł netto / mies.
+ * okresOplaty: "rocznie"     — zł netto / rok
+ * okresOplaty: ""           — zł netto, bez oznaczenia okresu.
+ * Abonament ma trzy osobne stawki: okres każdej określa
+ * odpowiadające jej pole okresOplaty w obiekcie platnosc.
+ * UWAGA: te pola są przygotowane do obsługi przez calculator.js.
+ * Dotychczasowy kalkulator ich nie odczytuje; samo ustawienie
+ * okresu nie zmienia częstotliwości rozliczeń ani sum wyceny.
+ * Dotychczasowe zasady naliczania cen pozostają bez zmian.
  * Nazwy i wygląd boxów pakietów edytuj w HTML.
  *
  * IDENTYFIKATORY PAKIETÓW
@@ -99,7 +111,8 @@
  * {
  *     "id": "szkolenie3h",
  *     "nazwa": "Szkolenie 3 h",
- *     "cena": 249
+ *     "cena": 249,
+ *     "okresOplaty": ""
  * }
  *
  * Następnie możesz przypisać je do wybranego pakietu:
@@ -114,53 +127,62 @@ window.ENIVERSE_CENNIK = {
   // 01. Ceny pakietów i przypisania usług
   pakiety: [
     {
-      "id": "mini",
-      "platnosc": {
-        "miesiecznie": 69,
-        "roczniePromocja": 590,
-        "rocznieRegularna": 790
+      id: "mini",
+      platnosc: {
+        miesiecznie: 69,
+        roczniePromocja: 590,
+        rocznieRegularna: 790,
+        okresOplaty: {
+          miesiecznie: "miesiecznie",
+          roczniePromocja: "rocznie",
+          rocznieRegularna: "rocznie"
+        }
       },
-      "revisions": 0,
-      "seo": "brak",
-      "kontakt": "podstawowy",
-      "szkolenie": "instrukcjaPDF",
-      "hosting": "subscription"
+      revisions: 0,
+      seo: "brak",
+      kontakt: "podstawowy",
+      szkolenie: "instrukcjaPDF",
+      hosting: "subscription"
     },
     {
-      "id": "start",
-      "cena": 1190,
-      "revisions": 1,
-      "seo": "brak",
-      "kontakt": "podstawowy",
-      "szkolenie": "instrukcjaPDF",
-      "hosting": "optional"
+      id: "start",
+      cena: 1190,
+      okresOplaty: "",
+      revisions: 1,
+      seo: "brak",
+      kontakt: "podstawowy",
+      szkolenie: "instrukcjaPDF",
+      hosting: "optional"
     },
     {
-      "id": "one",
-      "cena": 1690,
-      "revisions": 2,
-      "seo": "techniczne",
-      "kontakt": "formularz",
-      "szkolenie": "szkolenie30min",
-      "hosting": "optional"
+      id: "one",
+      cena: 1690,
+      okresOplaty: "",
+      revisions: 2,
+      seo: "techniczne",
+      kontakt: "formularz",
+      szkolenie: "szkolenie30min",
+      hosting: "optional"
     },
     {
-      "id": "wiz",
-      "cena": 2490,
-      "revisions": 3,
-      "seo": "podstawowe",
-      "kontakt": "formularz",
-      "szkolenie": "szkolenie1h",
-      "hosting": "optional"
+      id: "wiz",
+      cena: 2490,
+      okresOplaty: "",
+      revisions: 3,
+      seo: "podstawowe",
+      kontakt: "formularz",
+      szkolenie: "szkolenie1h",
+      hosting: "optional"
     },
     {
-      "id": "firm",
-      "cena": 3490,
-      "revisions": 3,
-      "seo": "rozszerzone",
-      "kontakt": "formularz",
-      "szkolenie": "szkolenie2h",
-      "hosting": "year"
+      id: "firm",
+      cena: 3490,
+      okresOplaty: "",
+      revisions: 3,
+      seo: "rozszerzone",
+      kontakt: "formularz",
+      szkolenie: "szkolenie2h",
+      hosting: "year"
     }
   ],
 
@@ -177,21 +199,25 @@ window.ENIVERSE_CENNIK = {
   // Nowe standardowe usługi dodawaj w sekcji "dodatki".
   // ============================================================
   rozbudowa: {
-    "dodatkowaSekcja": {
-      "nazwa": "Dodatkowe sekcje",
-      "cena": 90
+    dodatkowaSekcja: {
+      nazwa: "Dodatkowe sekcje",
+      cena: 50,
+      okresOplaty: ""
     },
-    "dodatkowaPodstrona": {
-      "nazwa": "Dodatkowe podstrony",
-      "cena": 190
+    dodatkowaPodstrona: {
+      nazwa: "Dodatkowe podstrony",
+      cena: 60,
+      okresOplaty: ""
     },
-    "dodatkowyJezyk": {
-      "nazwa": "Dodaj język",
-      "cena": 490
-    },
-    "dodatkowaRundaPoprawek": {
-      "nazwa": "Sesje poprawek",
-      "cena": 69
+    // dodatkowyJezyk: {
+    //   nazwa: "Dodaj język",
+    //   cena: 110,
+    //   okresOplaty: ""
+    // },
+    dodatkowaRundaPoprawek: {
+      nazwa: "Sesje poprawek",
+      cena: 250,
+      okresOplaty: ""
     }
   },
 
@@ -213,102 +239,118 @@ window.ENIVERSE_CENNIK = {
   // ============================================================
   dodatki: [
     {
-      "id": "maps",
-      "nazwa": "Mapy Google",
-      "cena": 50
+      id: "maps",
+      nazwa: "Mapy Google",
+      cena: 50,
+      okresOplaty: ""
     },
     {
-      "id": "newsletter",
-      "nazwa": "Newsletter",
-      "cena": 300
+      id: "newsletter",
+      nazwa: "Newsletter",
+      cena: 250,
+      okresOplaty: ""
     },
     {
-      "id": "social",
-      "nazwa": "Integracja z social media",
-      "cena": 50
+      id: "social",
+      nazwa: "Integracja z social media",
+      cena: 50,
+      okresOplaty: ""
     },
     {
-      "id": "analytics",
-      "nazwa": "Google Analytics",
-      "cena": 200
+      id: "analytics",
+      nazwa: "Google Analytics",
+      cena: 200,
+      okresOplaty: ""
     },
     {
-      "id": "gsc",
-      "nazwa": "Google Search Console",
-      "cena": 90,
-      "wPakietach": [
-        "wiz",
-        "firm"
-      ]
+      id: "gsc",
+      nazwa: "Google Search Console",
+      cena: 100,
+      okresOplaty: "",
+      wPakietach: ["wiz", "firm"]
     },
     {
-      "id": "blog",
-      "nazwa": "Blog / Realizacje",
-      "cena": 249,
-      "wPakietach": [
-        "firm"
-      ]
+      id: "blog",
+      nazwa: "Blog / Realizacje",
+      cena: 400,
+      okresOplaty: "",
+      wPakietach: ["firm"]
     },
     {
-      "id": "logoAi",
-      "nazwa": "Logo stworzone przy pomocy AI",
-      "cena": 190
+      id: "logo",
+      nazwa: "Projekt logo stworzony przez grafika",
+      cena: 800,
+      okresOplaty: ""
+    },
+    {
+      id: "logoAi",
+      nazwa: "Projekt logo stworzony przy pomocy AI",
+      cena: 200,
+      okresOplaty: ""
     }
   ],
 
   // 04. SEO
   seo: [
     {
-      "id": "brak",
-      "nazwa": "Bez dodatkowego SEO",
-      "opis": "Brak SEO na start w bazie pakietu",
-      "cena": 0
+      id: "brak",
+      nazwa: "Bez dodatkowego SEO",
+      opis: "Brak SEO na start w bazie pakietu",
+      cena: 0,
+      okresOplaty: ""
     },
     {
-      "id": "techniczne",
-      "nazwa": "SEO techniczne na start",
-      "opis": "Według warunków SEO; dalsze usługi wyceniane osobno",
-      "cena": 149
+      id: "techniczne",
+      nazwa: "SEO techniczne na start",
+      opis: "Według warunków SEO; dalsze usługi wyceniane osobno",
+      cena: 150,
+      okresOplaty: ""
     },
     {
-      "id": "podstawowe",
-      "nazwa": "Podstawowe SEO na start",
-      "opis": "Według warunków SEO; dalsze usługi wyceniane osobno",
-      "cena": 290
+      id: "podstawowe",
+      nazwa: "Podstawowe SEO na start",
+      opis: "Według warunków SEO; dalsze usługi wyceniane osobno",
+      cena: 250,
+      okresOplaty: ""
     },
     {
-      "id": "rozszerzone",
-      "nazwa": "Rozszerzone SEO",
-      "opis": "Według warunków SEO; dalsze usługi wyceniane osobno",
-      "cena": 490
+      id: "rozszerzone",
+      nazwa: "Rozszerzone SEO",
+      opis: "Według warunków SEO; dalsze usługi wyceniane osobno",
+      cena: 350,
+      okresOplaty: ""
     }
   ],
 
   // 05. Marketing i dodatkowe SEO
   marketing: [
     {
-      "id": "contentEdit",
-      "nazwa": "Redakcja i optymalizacja treści",
-      "cena": 290,
-      "opis": "Optymalizacja istniejących tekstów"
+      id: "contentEdit",
+      nazwa: "Redakcja i optymalizacja przesłanych treści",
+      cena: 150,
+      okresOplaty: "",
+      opis: "Optymalizacja istniejących tekstów"
     },
     {
-      "id": "contentSeo",
-      "nazwa": "Stworzenie i optymalizacja treści pod SEO",
-      "cena": 590,
-      "opis": "Przygotowanie nowych tekstów pod SEO"
+      id: "contentSeo",
+      nazwa: "Stworzenie i optymalizacja treści pod SEO",
+      cena: 400,
+      okresOplaty: "",
+      opis: "Przygotowanie nowych tekstów pod SEO"
     },
     {
-      "id": "googleAds",
-      "nazwa": "Kampania Google Ads",
-      "cena": 490,
-      "opis": "Uruchomienie kampanii · bez budżetu reklamowego"
+      id: "googleAds",
+      nazwa: "Kampania Google Ads",
+      cena: 600,
+      okresOplaty: "",
+      opis: "Uruchomienie oraz opieka kampanii · bez budżetu reklamowego"
     },
     {
-      "id": "seoPosition",
-      "nazwa": "Pozycjonowanie SEO",
-      "cena": 690,
-      "opis": "Pakiet startowy · dalsza obsługa osobno"
+      id: "seoPosition",
+      nazwa: "Pozycjonowanie SEO",
+      cena: 800,
+      okresOplaty: "",
+      opis: "Pakiet startowy · dalsza obsługa osobno"
     }
   ],
 
@@ -328,22 +370,25 @@ window.ENIVERSE_CENNIK = {
   // ============================================================
   kontakt: [
     {
-      "id": "podstawowy",
-      "nazwa": "Kontakt podstawowy",
-      "opis": "Przyciski kontaktowe: telefon i e-mail",
-      "cena": 0
+      id: "podstawowy",
+      nazwa: "Kontakt podstawowy",
+      opis: "Przyciski kontaktowe: telefon i e-mail",
+      cena: 0,
+      okresOplaty: ""
     },
     {
-      "id": "formularz",
-      "nazwa": "Formularz kontaktowy",
-      "opis": "Standardowy formularz kontaktowy",
-      "cena": 90
+      id: "formularz",
+      nazwa: "Formularz kontaktowy",
+      opis: "Standardowy formularz kontaktowy",
+      cena: 100,
+      okresOplaty: ""
     },
     {
-      "id": "formularzRozszerzony",
-      "nazwa": "Formularz kontaktowy rozszerzony",
-      "opis": "Rozbudowane pola i opcje formularza",
-      "cena": 190
+      id: "formularzRozszerzony",
+      nazwa: "Formularz kontaktowy rozszerzony",
+      opis: "Rozbudowane pola i opcje formularza",
+      cena: 250,
+      okresOplaty: ""
     }
   ],
 
@@ -362,38 +407,45 @@ window.ENIVERSE_CENNIK = {
   // ============================================================
   szkolenia: [
     {
-      "id": "instrukcjaPDF",
-      "nazwa": "Instrukcja PDF",
-      "cena": 0
+      id: "instrukcjaPDF",
+      nazwa: "Instrukcja PDF",
+      cena: 0,
+      okresOplaty: ""
     },
     {
-      "id": "szkolenie30min",
-      "nazwa": "Szkolenie 30 min",
-      "cena": 49
+      id: "szkolenie30min",
+      nazwa: "Szkolenie 30 min",
+      cena: 60,
+      okresOplaty: ""
     },
     {
-      "id": "szkolenie1h",
-      "nazwa": "Szkolenie 1 h",
-      "cena": 90
+      id: "szkolenie1h",
+      nazwa: "Szkolenie 1 h",
+      cena: 120,
+      okresOplaty: ""
     },
     {
-      "id": "szkolenie2h",
-      "nazwa": "Szkolenie 2 h",
-      "cena": 179
+      id: "szkolenie2h",
+      nazwa: "Szkolenie 2 h",
+      cena: 240,
+      okresOplaty: ""
     }
   ],
 
   // 08. Usługi roczne
   uslugiRoczne: [
     {
-      "id": "hosting",
-      "nazwa": "Hosting strony",
-      "cena": 600
+      id: "hosting",
+      nazwa: "Hosting strony",
+      cena: 300,
+      okresOplaty: "rocznie"
     },
     {
-      "id": "care",
-      "nazwa": "Opieka techniczna",
-      "cena": 348
+      id: "care",
+      nazwa: "Opieka techniczna pakiet WP Mini",
+      opis: "W cenie: Aktualizacja WordPress oraz wtyczek, Kopia zapasowa, Weryfikacja strony po wykonanej aktualizacji.  ",
+      cena: 100,
+      okresOplaty: "rocznie"
     }
   ],
 
@@ -402,6 +454,6 @@ window.ENIVERSE_CENNIK = {
     okresAbonamentu: 12,
     zaliczkaProcent: 50,
     zaokraglanieRat: true,
-    progZaokraglania: 0.50
+    progZaokraglania: 0.5
   }
-};
+}
