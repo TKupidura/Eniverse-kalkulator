@@ -70,7 +70,7 @@
           if (gallery) {
             galleryPortal = document.createElement("div");
             galleryPortal.id = "eni-calc-portal";
-            galleryPortal.dataset.build = "20261127-10";
+            galleryPortal.dataset.build = "20261127-12";
             galleryPortal.hidden = true;
             document.body.append(galleryPortal);
             galleryPortal.append(gallery);
@@ -404,11 +404,86 @@
         }
         let templateOpener=null, templatePreviousScroll=false, templateDialogPlanId="mini";
         let templatesStatus = "loading", templatesError = "", templatesRequest = null;
+        const previewFrames = new Map();
+        const maxPreviewFrames = 3;
+        let previewNotice = null;
+        let previewNoticeTimer = 0;
+        let activePreviewKey = null;
+        function clearPreviewNotice(){
+          clearTimeout(previewNoticeTimer);
+          previewNotice?.remove();
+          previewNotice = null;
+        }
+        function hidePreviewFrames(){
+          clearPreviewNotice();
+          activePreviewKey = null;
+          for(const record of previewFrames.values())record.frame.hidden=true;
+        }
+        function showPreviewNotice(t){
+          clearPreviewNotice();
+          const box=document.createElement("div");
+          box.className="ec-template-loading";
+          box.setAttribute("role","status");
+          const image=t.isBundled?t.image:templateHttpsUrl(t.thumbnail_url);
+          if(image){const img=document.createElement("img");img.src=image;img.alt="";box.append(img);}
+          const label=document.createElement("p");
+          label.textContent="Ładowanie podglądu projektu…";
+          box.append(label);
+          q("#ec-template-viewport").append(box);
+          previewNotice=box;
+          previewNoticeTimer=setTimeout(()=>{if(previewNotice===box)label.textContent="Podgląd nadal się ładuje. Możesz także otworzyć go w nowej karcie.";},10000);
+        }
+        function displayTemplatePreview(t){
+          const viewport=q("#ec-template-viewport");
+          const preview=t.isBundled?t.previewPath:templateHttpsUrl(t.preview_url);
+          const key=preview?t.id+"|"+preview:null;
+          if(key && activePreviewKey===key && previewFrames.has(key))return;
+          hidePreviewFrames();
+          for(const node of Array.from(viewport.children)){
+            if(!node.classList.contains("ec-template-project-frame"))node.remove();
+          }
+          if(!preview){
+            // Obraz lub demonstracja bez iframe; zachowaj istniejące ramki w DOM.
+            const host=document.createElement("div");host.className="ec-template-static-preview";
+            host.innerHTML=templateScene(t,true);viewport.append(host);return;
+          }
+          // Nie uruchamiaj pobierania pełnej strony, gdy galeria jest zamknięta.
+          if(q("#ec-template-modal").hidden)return;
+          let record=previewFrames.get(key);
+          if(!record){
+            const frame=document.createElement("iframe");
+            frame.className="ec-template-project-frame";
+            frame.title="Podgląd projektu "+t.name;
+            frame.loading="eager";
+            frame.setAttribute("sandbox",t.isBundled?"allow-scripts allow-forms allow-popups":"allow-scripts");
+            frame.referrerPolicy="no-referrer";
+            record={frame,loaded:false};
+            frame.addEventListener("load",()=>{
+              record.loaded=true;
+              if(activePreviewKey===key)clearPreviewNotice();
+            });
+            frame.src=preview;
+            previewFrames.set(key,record);
+            viewport.append(frame);
+          }else{
+            previewFrames.delete(key);previewFrames.set(key,record);
+          }
+          activePreviewKey=key;
+          record.frame.hidden=false;
+          if(!record.loaded)showPreviewNotice(t);
+          while(previewFrames.size>maxPreviewFrames){
+            const oldest=previewFrames.keys().next().value;
+            previewFrames.get(oldest).frame.remove();previewFrames.delete(oldest);
+          }
+        }
         function showTemplate(index) {
           const t=templateSamples[index];
           if(!t){
             visibleTemplateIndex=-1;
             const message = templatesStatus==="loading" ? "Ładowanie projektów…" : templatesStatus==="error" ? "Nie udało się pobrać projektów z biblioteki. Spróbuj ponownie." : "Aktualnie brak opublikowanych szablonów. Wybierz opcję „Szablon wybiorę później”.";
+            hidePreviewFrames();
+            for(const record of previewFrames.values())record.frame.remove();
+            previewFrames.clear();
             q("#ec-template-viewport").innerHTML='<div class="ec-template-unavailable" role="status"><p>'+escapeTemplateText(message)+'</p>'+(templatesStatus==="error"||templatesStatus==="empty"?'<button type="button" class="ec-template-new-tab" data-ec-template-retry>Ponów ładowanie</button>':'')+'</div>';
             q("#ec-template-configure").hidden=true;
             q("#ec-template-external").innerHTML="";
@@ -420,7 +495,7 @@
           external.innerHTML=templateNewTabLink(t);
           external.hidden=!external.firstElementChild;
           visibleTemplateIndex=index;
-          q("#ec-template-viewport").innerHTML=templateScene(t,true);
+          displayTemplatePreview(t);
           q("#ec-template-viewport").scrollTop=0;
 
           
@@ -528,6 +603,7 @@
           q("#ec-template-close").focus({preventScroll:true});
         }
         function closeTemplateDialog() {
+          hidePreviewFrames();
           q("#ec-template-modal").hidden=true;
           if (galleryPortal) galleryPortal.hidden=true;
           document.body.classList.toggle("eni-calc-scroll-locked",templatePreviousScroll);
