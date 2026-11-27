@@ -4,5 +4,5 @@
 [hidden has_site]
 [hidden existing_site_url]
 [hidden package_name]
-[textarea* quote_summary]
+[textarea* quote_summary maxlength:30000]
 [submit "Wyślij zapytanie"]
