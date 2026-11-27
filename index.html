@@ -2096,7 +2096,7 @@ body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!impo
 
 
     <!-- WIDOK CENNIKA I KONFIGURATORY -->
-    <div id="eni-calc" data-build="20261127-19" data-mode="production" data-templates-api="https://eniverse.pl/wp-json/eniverse/v1/templates">
+    <div id="eni-calc" data-build="20261127-20" data-mode="production" data-templates-api="https://eniverse.pl/wp-json/eniverse/v1/templates">
       <div class="ec-page ec-preview-page" id="ec-demo-page">
         <section id="ec-catalog" aria-label="Cennik Eniverse — podgląd">
           <div class="ec-preview-heading">
@@ -2753,14 +2753,18 @@ body:not(.elementor-editor-active) #eniverse-quote-form { position:absolute!impo
     window.ENIVERSE_CENNIK = undefined;
     var requestId = Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
     root.dataset.pricingRequest = requestId;
-    loadScript(base + "pricing.js?v=" + encodeURIComponent(requestId), function () {
+    loadScript(base + "pricing.js?v=20261127-20-" + encodeURIComponent(requestId), function () {
       if (!window.ENIVERSE_CENNIK || !Array.isArray(window.ENIVERSE_CENNIK.pakiety)) {
         fail("pricing.js nie zawiera poprawnego obiektu ENIVERSE_CENNIK.");
         return;
       }
       root.dataset.pricingStatus = "loaded";
-      loadScript(base + "calculator.js?v=20261127-19", function () {
+      loadScript(base + "calculator.js?v=20261127-20-" + encodeURIComponent(requestId), function () {
         if (!root.dataset.eniInitialized) fail("calculator.js nie uruchomił konfiguratora.");
+        else if (root.dataset.calculatorBuild !== "20261127-20") {
+          root.dataset.pricingStatus = "stale-calculator";
+          console.error("Eniverse: wczytano starszy calculator.js. Oczekiwano 20261127-20, otrzymano:", root.dataset.calculatorBuild);
+        }
       }, function () { fail("Nie udało się pobrać calculator.js."); });
     }, function () { fail("Nie udało się pobrać pricing.js."); });
   }
