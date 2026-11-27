@@ -7,6 +7,27 @@
         const q = (s) => root.querySelector(s) || galleryPortal?.querySelector(s) || null,
           all = (s) => [...root.querySelectorAll(s), ...(galleryPortal ? galleryPortal.querySelectorAll(s) : [])],
           money = (n) => new Intl.NumberFormat("pl-PL", {useGrouping:"always"}).format(n) + " zł netto";
+        // Okres opłaty i rozliczenia — źródło: pricing.js.
+        function normalizePeriod(value,fallback=""){
+          if(value===undefined||value===null)return fallback;
+          const v=String(value).trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/ł/g,"l");
+          if(!v)return "";
+          if(["miesiecznie","miesiac","miesieczna","miesieczny","mies","mies.","mc","m-c","monthly","/ mies.","/ miesiac"].includes(v))return "miesiecznie";
+          if(["rocznie","rok","roczna","roczny","annual","yearly","/ rok"].includes(v))return "rocznie";
+          throw Error("Niepoprawny okresOplaty: "+value+"; użyj miesiecznie, rocznie albo pustego tekstu.");
+        }
+        const periodOf=(item,fallback="")=>normalizePeriod(item?.okresOplaty,fallback);
+        const periodSuffix=period=>period==="miesiecznie"?" / mies.":period==="rocznie"?" / rok":"";
+        const rateMoney=(amount,period)=>money(amount)+periodSuffix(period);
+        const roundMoney=n=>Math.round((n+Number.EPSILON)*100)/100;
+        const periodFactor=(period,n)=>period==="miesiecznie"?n:period==="rocznie"?n/12:1;
+        const periodTotal=(amount,period,n)=>roundMoney(amount*periodFactor(period,n));
+        const firstPayment=(amount,period,n)=>period==="rocznie"?periodTotal(amount,period,Math.min(n,12)):roundMoney(amount);
+        const variantDelta=(items,selected,base,n)=>{
+          const x=items[selected],b=items[base],period=periodOf(x);
+          const total=Math.max(0,periodTotal(x.cena,period,n)-periodTotal(b.cena,periodOf(b),n));
+          return roundMoney(total/periodFactor(period,n));
+        };
         // Jedno źródło oferty: walidacja struktury i normalizacja danych.
         function validatePricing(c) {
           if (!c || typeof c !== "object") throw Error("Brak cennika");
@@ -18,9 +39,10 @@
             const ids=new Set();
             for(const x of c[key]){
               if(!x || !idOK(x.id) || ids.has(x.id) || (key!=="pakiety"&&!nameOK(x.nazwa)) || !(key==="pakiety"&&x.id==="mini"?true:priceOK(x.cena))) throw Error("Niepoprawna pozycja: "+key);
+              if(!(key==="pakiety"&&x.id==="mini"))periodOf(x,key==="uslugiRoczne"?"rocznie":"");
               ids.add(x.id);
             }
-            if(ordered && c[key].some((x,i)=>i && x.cena<c[key][i-1].cena)) throw Error("Warianty muszą być uporządkowane wg ceny: "+key);
+            // Kolejność wariantów określa zakres, a nie nominalną cenę o różnych okresach.
           };
           for(const k of ["pakiety","dodatki","marketing","uslugiRoczne"])list(k);
           for(const k of ["seo","kontakt","szkolenia"])list(k,true);
@@ -43,6 +65,7 @@
           }
           if(!c.rozbudowa || typeof c.rozbudowa!=="object") throw Error("Brak rozbudowy");
           for(const [key,x] of Object.entries(c.rozbudowa))if(!["dodatkowaSekcja","dodatkowaPodstrona","dodatkowyJezyk","dodatkowaRundaPoprawek"].includes(key)||!x||!nameOK(x.nazwa)||!priceOK(x.cena))throw Error("Niepoprawna rozbudowa: "+key+"; nowe usługi dodawaj do dodatki");
+          Object.values(c.rozbudowa).forEach(x=>periodOf(x));
           const u=c.ustawienia;
           if(!u||!Number.isInteger(u.okresAbonamentu)||u.okresAbonamentu<1||u.okresAbonamentu>120||
              typeof u.zaliczkaProcent!=="number"||!Number.isFinite(u.zaliczkaProcent)||u.zaliczkaProcent<0||u.zaliczkaProcent>100||
@@ -71,7 +94,7 @@
           if (gallery && wizard) {
             galleryPortal = document.createElement("dialog");
             galleryPortal.id = "eni-calc-portal";
-            galleryPortal.dataset.build = "20261127-17";
+            galleryPortal.dataset.build = "20261127-19";
             galleryPortal.setAttribute("aria-label","Konfigurator Eniverse");
             galleryPortal.addEventListener("cancel",event=>{
               event.preventDefault();
@@ -141,9 +164,9 @@
         const contactConfig=variants(cennik.kontakt,"Bez dodatkowego kontaktu");
         const trainingConfig=variants(cennik.szkolenia,"Brak szkolenia");
         const indexOfVariant=(list,id)=>Math.max(0,list.findIndex(x=>x.id===id));
-        const seo=seoConfig.map(x=>[x.nazwa,x.opis||"",x.cena]);
-        const contacts=contactConfig.map(x=>[x.nazwa,x.opis||"",x.cena]);
-        const trainingOptions=trainingConfig.map(x=>[x.nazwa,x.cena]);
+        const seo=seoConfig.map(x=>[x.nazwa,x.opis||"",x.cena,periodOf(x)]);
+        const contacts=contactConfig.map(x=>[x.nazwa,x.opis||"",x.cena,periodOf(x)]);
+        const trainingOptions=trainingConfig.map(x=>[x.nazwa,x.cena,periodOf(x)]);
         const abo=cennik.pakiety.find(p=>p.id==="mini")?.platnosc;
         const aboPricing={monthly:abo?.miesiecznie??0,annual:abo?.roczniePromocja??0,regularAnnual:abo?.rocznieRegularna??0};
         // Treści i zakres opisowy pochodzą z boxa HTML. Cennik zawiera tylko dane ofertowe.
@@ -175,7 +198,7 @@
         const hostingText = p => {
           const base=annualServices.filter(x=>annualIncluded(p,x.id));
           if(base.length) return base.map(x=>x.nazwa).join(" + ")+(p.recurring?" na okres abonamentu":" w cenie na pierwszy rok");
-          return annualServices.some(x=>annualAvailable(p,x.id))?"Usługi roczne opcjonalne, płatne z góry":"";
+          return annualServices.some(x=>annualAvailable(p,x.id))?"Usługi opcjonalne według wybranego okresu opłaty":"";
         };
         // Ceny dodatków: stawki netto z pricing.js.
         const extraServices=cennik.dodatki.map(x=>[x.id,x.nazwa,x.cena,Array.isArray(x.wPakietach)]);
@@ -183,9 +206,9 @@
         const serviceConfigs=new Map([...cennik.dodatki,...cennik.marketing].map(x=>[x.id,x]));
         const serviceIncluded=(p,id)=>!!serviceConfigs.get(id)?.wPakietach?.includes(p.id);
         const serviceAvailable=(p,id)=>serviceIncluded(p,id)||!serviceConfigs.get(id)?.dostepneWPakietach||serviceConfigs.get(id).dostepneWPakietach.includes(p.id);
-        const annualServices=cennik.uslugiRoczne;
-        const annualHosting=annualServices.find(x=>x.id==="hosting")?.cena??0;
-        const annualCare=annualServices.find(x=>x.id==="care")?.cena??0;
+        const annualServices=cennik.uslugiRoczne.map(x=>({...x,okresOplaty:periodOf(x,"rocznie")}));
+        const annualHosting=annualServices.find(x=>x.id==="hosting");
+        const annualCare=annualServices.find(x=>x.id==="care");
         const annualIncluded=(p,id)=>!!annualServices.find(x=>x.id===id)?.wPakietach?.includes(p.id)||(annualServices.some(x=>x.id===id)&&(id==="hosting"?p.hosting!=="optional":id==="care"&&p.hosting==="year"));
         const annualAvailable=(p,id)=>annualIncluded(p,id)||!annualServices.find(x=>x.id===id)?.dostepneWPakietach||annualServices.find(x=>x.id===id).dostepneWPakietach.includes(p.id);
         const annualSelected=(p,st,id)=>annualAvailable(p,id)&&(annualIncluded(p,id)||!!st.annual[id]);
@@ -197,15 +220,20 @@
         const pagePrice=expansion.dodatkowaPodstrona?.cena??0;
         const revisionPrice=expansion.dodatkowaRundaPoprawek?.cena??0;
         // Etykiety statycznego HTML korzystają z tego samego źródła cen co wycena.
-        const displayPrices = {...aboPricing, hostingWithCare:annualHosting + annualCare};
+        const displayPrices = {...aboPricing};
+        const aboUnits={monthly:normalizePeriod(abo?.okresOplaty?.miesiecznie,"miesiecznie"),annual:normalizePeriod(abo?.okresOplaty?.roczniePromocja,"rocznie"),regularAnnual:normalizePeriod(abo?.okresOplaty?.rocznieRegularna,"rocznie")};
+        // Stawki Abonamentu są z definicji miesięczne i roczne; puste pole ukrywa dopisek.
+        const aboUnit=key=>aboUnits[key]===""?"":key==="monthly"?"miesiecznie":"rocznie";
+        const hostingRates=[annualHosting,annualCare].filter(Boolean).map(x=>x.nazwa+": "+rateMoney(x.cena,periodOf(x))).join("; ");
         all("[data-contract-period]").forEach(el=>el.textContent=contractPeriod);
         all("[data-cennik]").forEach(el => {
-          el.textContent = money(displayPrices[el.dataset.cennik]) + (el.dataset.cennikSuffix || "");
+          const key=el.dataset.cennik;
+          el.textContent = key==="hostingWithCare"?hostingRates:rateMoney(displayPrices[key],aboUnit(key));
         });
         q("#ec-mini-monthly-price").textContent = money(aboPricing.monthly);
         q("#ec-mini-annual-price").textContent = money(aboPricing.annual);
-        q("#ec-monthly-rate").textContent = money(aboPricing.monthly) + " / mies.";
-        q("#ec-annual-rate").textContent = money(aboPricing.annual) + " / rok · promocja";
+        q("#ec-monthly-rate").textContent = rateMoney(aboPricing.monthly,aboUnit("monthly"));
+        q("#ec-annual-rate").textContent = rateMoney(aboPricing.annual,aboUnit("annual")) + " · promocja";
         const languageChoices = [
           "Angielski","Niemiecki","Ukraiński","Francuski","Hiszpański",
           "Włoski","Czeski","Niderlandzki","Portugalski","Szwedzki",
@@ -263,8 +291,9 @@
             card.querySelectorAll("[data-card-field]").forEach(el=>{
               const key=el.dataset.cardField;
               if(Object.hasOwn(fields,key))el.textContent=fields[key];
-              if(key==="regularAnnual")el.setAttribute("aria-label","Poprzednia cena: "+fields[key]+" netto za rok");
+              if(key==="regularAnnual"){el.textContent=fields[key]+periodSuffix(aboUnit(key));el.setAttribute("aria-label","Poprzednia cena: "+rateMoney(aboPricing.regularAnnual,aboUnit(key)));}
             });
+            card.querySelectorAll("[data-card-unit]").forEach(el=>{const key=el.dataset.cardUnit;el.textContent="zł netto"+periodSuffix(key==="price"?periodOf(p):aboUnit(key));});
             card.querySelectorAll("[data-card-hosting]").forEach(el=>el.hidden=!annualServices.some(x=>x.id==="hosting"&&annualIncluded(p,x.id)));
             card.querySelectorAll("[data-card-training-reference]").forEach(el=>{
               el.hidden=!cennik.szkolenia.length;
@@ -797,11 +826,7 @@
         }
         function trainingCharge() {
           const p = current;
-          return Math.max(
-            0,
-            trainingOptions[states[p.id].training][1] -
-              trainingOptions[trainingBase(p)][1],
-          );
+          return states[p.id].training<=trainingBase(p)?0:variantDelta(trainingConfig,states[p.id].training,trainingBase(p),p.recurring?months:12);
         }
         function fillTraining() {
           const p = current,
@@ -815,17 +840,17 @@
           q("#ec-training").innerHTML = trainingOptions
             .map((option, i) => {
               const price = option[1],
-                extra = Math.max(0, price - trainingOptions[base][1]),
+                extra = i<base?0:variantDelta(trainingConfig,i,base,p.recurring?months:12),
                 selected = i === state.training,
                 isBase = i === base,
                 label = isBase
                   ? (p.recurring ? "Domyślnie · bezpłatnie" : "W cenie pakietu")
                   : i < base
                     ? "Wariant krótszy · bez obniżenia ceny pakietu"
-                    : "Cena: " + money(price) + " · dopłata za rozszerzenie";
+                    : "Cena: " + rateMoney(price,option[2]) + " · dopłata za rozszerzenie";
               const badge = isBase
                 ? (p.recurring ? "0 zł netto" : "W cenie")
-                : extra ? "+" + money(extra) : "Bez dopłaty";
+                : extra ? "+" + rateMoney(extra,option[2]) : "Bez dopłaty";
               return `<label class="ec-option ec-interactive"><input type="radio" name="ec-training" value="${i}" ${selected ? "checked" : ""}><span><strong>${escapeTemplateText(option[0])}</strong><small>${label}</small></span><span class="ec-tag">${badge}</span></label>`;
             })
             .join("");
@@ -856,8 +881,8 @@
           q(id).innerHTML = items
             .map((x, i) => {
               const disabled = i < base,
-                extra = x[2] - items[base][2];
-              return `<label class="ec-option ec-interactive ${disabled ? "ec-dim" : ""}"><input type="radio" name="${name}" value="${i}" ${i === selected ? "checked" : ""} ${disabled ? "disabled" : ""}><span><strong>${escapeTemplateText(x[0])}</strong><small>${disabled ? "Wariant poniżej bazy pakietu" : escapeTemplateText(x[1])}</small></span><span class="ec-tag">${disabled ? "—" : extra > 0 ? "+" + money(extra) : "W cenie"}</span></label>`;
+                extra = disabled?0:variantDelta(items.map(v=>({cena:v[2],okresOplaty:v[3]})),i,base,current.recurring?months:12);
+              return `<label class="ec-option ec-interactive ${disabled ? "ec-dim" : ""}"><input type="radio" name="${name}" value="${i}" ${i === selected ? "checked" : ""} ${disabled ? "disabled" : ""}><span><strong>${escapeTemplateText(x[0])}</strong><small>${disabled ? "Wariant poniżej bazy pakietu" : escapeTemplateText(x[1])}</small></span><span class="ec-tag">${disabled ? "—" : extra > 0 ? "+" + rateMoney(extra,x[3]) : "W cenie"}</span></label>`;
             })
             .join("");
         }
@@ -923,7 +948,7 @@
           all('[name="ec-billing"]').forEach(
             (e) => (e.checked = e.value === s.billing),
           );
-          optionGroup("#ec-seo", "ec-seo", seo.map((variant,i) => [seoName(p,i), variant[1], variant[2]]), p.seo, s.seo);
+          optionGroup("#ec-seo", "ec-seo", seo.map((variant,i) => [seoName(p,i), variant[1], variant[2],variant[3]]), p.seo, s.seo);
           const availableMarketing=seoServices.filter(([key])=>serviceAvailable(p,key));
           q("#ec-seo-extras").closest(".ec-seo-services").hidden=!availableMarketing.length;
           q("#ec-seo").hidden=!cennik.seo.length;
@@ -932,7 +957,7 @@
           q("#ec-seo-extras").innerHTML = availableMarketing.map(([key,label,price,description]) =>
             '<label class="ec-addon ec-seo-addon ec-interactive">' +
             '<span class="ec-addon-content"><strong>' + escapeTemplateText(label) + '</strong><small>' + escapeTemplateText(description) +
-            (serviceIncluded(p,key)?' · W cenie pakietu':' · +' + money(price)) + '</small></span>' +
+            (serviceIncluded(p,key)?' · W cenie pakietu':' · +' + rateMoney(price,periodOf(serviceConfigs.get(key)))) + '</small></span>' +
             '<input class="ec-toggle" type="checkbox" role="switch" id="ec-seo-addon-' + key +
             '" aria-label="' + escapeTemplateText(label) + '" ' + (s[key]||serviceIncluded(p,key) ? 'checked ' : '') + (serviceIncluded(p,key)?'disabled ':'') + '>' +
             '<span class="ec-toggle-track" aria-hidden="true"></span></label>'
@@ -950,7 +975,7 @@
           q("#ec-revisions").innerHTML = [0, 1, 2, 3]
             .map(
               (n) =>
-                `<label class="ec-option ec-interactive"><input type="radio" name="ec-revisions" value="${n}" ${n === s.revisions ? "checked" : ""}><span><strong>${n === 0 ? "Bez dodatkowych sesji" : n === 1 ? "+1 sesja" : n === 2 ? "+2 sesje" : "+3 sesje"}</strong><small>${n ? "+" + money(n * revisionPrice) + " · łącznie " + (p.revisions + n) + " sesji" : "Zakres bazowy · " + p.revisions + " sesji"}</small></span></label>`,
+                `<label class="ec-option ec-interactive"><input type="radio" name="ec-revisions" value="${n}" ${n === s.revisions ? "checked" : ""}><span><strong>${n === 0 ? "Bez dodatkowych sesji" : n === 1 ? "+1 sesja" : n === 2 ? "+2 sesje" : "+3 sesje"}</strong><small>${n ? "+" + rateMoney(n * revisionPrice,periodOf(expansion.dodatkowaRundaPoprawek)) + " · łącznie " + (p.revisions + n) + " sesji" : "Zakres bazowy · " + p.revisions + " sesji"}</small></span></label>`,
             )
             .join("");
           // Dodatki po prawej stronie listy elementów objętych pakietem.
@@ -960,7 +985,7 @@
             const included = mayBeIncluded && !!p.includedAddons[key];
             const checked = included || !!s[key];
             return '<label class="ec-addon ec-interactive"><span class="ec-addon-content"><strong>' +
-              escapeTemplateText(label) + '</strong><small>' + (included ? 'W cenie pakietu' : '+' + money(price)) +
+              escapeTemplateText(label) + '</strong><small>' + (included ? 'W cenie pakietu' : '+' + rateMoney(price,periodOf(serviceConfigs.get(key)))) +
               '</small></span><input class="ec-toggle" type="checkbox" role="switch" id="ec-addon-' +
               key + '" ' + (checked ? 'checked ' : '') + (included ? 'disabled ' : '') +
               '><span class="ec-toggle-track" aria-hidden="true"></span></label>';
@@ -970,7 +995,7 @@
           q("#ec-hosting").closest(".ec-section").hidden=!availableAnnual.length;
           q("#ec-hosting").innerHTML='<div class="ec-service-list">'+availableAnnual.map(x=>{
             const included=annualIncluded(p,x.id),checked=annualSelected(p,s,x.id);
-            return '<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-annual-'+x.id+'" '+(checked?'checked ':'')+(included?'disabled ':'')+'><span><strong>'+escapeTemplateText(x.nazwa)+'</strong><small>'+(included?(p.hosting==="year"?"W cenie przez pierwszy rok":"W cenie pakietu"):money(x.cena)+" / rok"+(p.recurring?" · za okres umowy w abonamencie":""))+'</small></span></label>';
+            return '<label class="ec-checkbox ec-interactive"><input type="checkbox" id="ec-annual-'+x.id+'" '+(checked?'checked ':'')+(included?'disabled ':'')+'><span><strong>'+escapeTemplateText(x.nazwa)+'</strong><small>'+(included?(p.hosting==="year"?"W cenie przez pierwszy rok":"W cenie pakietu"):rateMoney(x.cena,periodOf(x))+(p.recurring?" · rozliczenie w abonamencie":""))+'</small></span></label>';
           }).join("")+'</div>';
           for(const [key,id] of [["dodatkowaSekcja","sections"],["dodatkowaPodstrona","pages"]]){
             const row=q("#ec-"+id).closest(".ec-counter-row");
@@ -991,39 +1016,42 @@
         }
         const val = (name) => q(`[name="${name}"]:checked`).value;
         function calculate() {
-          const p = current, s = states[p.id], items = [];
-          if (expansion.dodatkowaSekcja && s.sections)
-            items.push([expansion.dodatkowaSekcja.nazwa+" × "+s.sections,s.sections*sectionPrice]);
-          if (expansion.dodatkowaPodstrona && s.pages)
-            items.push([expansion.dodatkowaPodstrona.nazwa+" × "+s.pages,s.pages*pagePrice]);
-          if (s.seo > p.seo)
-            items.push([seoName(p,s.seo), seo[s.seo][2] - seo[p.seo][2]]);
-          if (s.contact > p.contact)
-            items.push([contacts[s.contact][0], contacts[s.contact][2] - contacts[p.contact][2]]);
-          if (expansion.dodatkowaRundaPoprawek && s.revisions)
-            items.push([expansion.dodatkowaRundaPoprawek.nazwa+" × "+s.revisions,s.revisions*revisionPrice]);
-          if (trainingCharge())
-            items.push(["Zmiana szkolenia: " + trainingLabel(), trainingCharge()]);
-          if(expansion.dodatkowyJezyk)(s.languages||[]).forEach(language=>items.push([expansion.dodatkowyJezyk.nazwa+": "+language,languagePrice]));
-          extraServices.forEach(([key,label,price,mayBeIncluded]) => {
-            if (serviceAvailable(p,key) && s[key] && !serviceIncluded(p,key))
-              items.push([label, price]);
-          });
-          seoServices.forEach(([key,label,price]) => {
-            if (serviceAvailable(p,key) && s[key] && !serviceIncluded(p,key)) items.push([label, price]);
-          });
-          // W pakiecie Abonament opieka jest opłacana za 12 miesięcy w ramach abonamentu.
-          if(p.recurring)annualExtras(p,s).forEach(x=>items.push([x.nazwa+" / "+contractPeriod,annualPeriods.reduce((sum,n)=>sum+prorate(x.cena,n),0)/100]));
-          const extra = items.reduce((sum,item) => sum + item[1], 0);
-          const year = p.recurring ? contractBase(s.billing) : p.price;
-          const host=p.recurring?0:annualExtras(p,s).reduce((sum,x)=>sum+x.cena,0);
-          const total = p.recurring
-            ? installmentPlan(extra, s.billing).contract
-            : year + extra + host;
-          return {
-            items, extra, year, host, total,
-            contract: p.recurring ? total : null
-          };
+          const p=current,s=states[p.id],n=p.recurring?months:12,items=[],recurringItems=[];
+          let extra=0,host=0,hostInitial=0,monthly=0,annual=0,otherInitial=0;
+          const projectBase=p.recurring?0:periodOf(p)?0:p.price;
+          function add(label,rate,period="",upfront=false,isBase=false){
+            rate=roundMoney(rate);
+            if(!rate)return;
+            const total=periodTotal(rate,period,n);
+            const line=[label,total,rate,period];
+            if(p.recurring){items.push(line);extra=roundMoney(extra+total);}
+            else if(period||upfront){
+              recurringItems.push(line);host=roundMoney(host+total);
+              hostInitial=roundMoney(hostInitial+firstPayment(rate,period,n));
+              if(period==="miesiecznie")monthly=roundMoney(monthly+rate);
+              else if(period==="rocznie")annual=roundMoney(annual+rate);
+              else otherInitial=roundMoney(otherInitial+rate);
+            }else if(!isBase){items.push(line);extra=roundMoney(extra+total);}
+          }
+          if(!p.recurring&&periodOf(p))add("Pakiet "+p.name,p.price,periodOf(p),true,true);
+          if(expansion.dodatkowaSekcja&&s.sections)add(expansion.dodatkowaSekcja.nazwa+" × "+s.sections,s.sections*sectionPrice,periodOf(expansion.dodatkowaSekcja));
+          if(expansion.dodatkowaPodstrona&&s.pages)add(expansion.dodatkowaPodstrona.nazwa+" × "+s.pages,s.pages*pagePrice,periodOf(expansion.dodatkowaPodstrona));
+          if(s.seo>p.seo)add(seoName(p,s.seo),variantDelta(seoConfig,s.seo,p.seo,n),periodOf(seoConfig[s.seo]));
+          if(s.contact>p.contact)add(contacts[s.contact][0],variantDelta(contactConfig,s.contact,p.contact,n),periodOf(contactConfig[s.contact]));
+          if(expansion.dodatkowaRundaPoprawek&&s.revisions)add(expansion.dodatkowaRundaPoprawek.nazwa+" × "+s.revisions,s.revisions*revisionPrice,periodOf(expansion.dodatkowaRundaPoprawek));
+          if(trainingCharge())add("Zmiana szkolenia: "+trainingLabel(),trainingCharge(),periodOf(trainingConfig[s.training]));
+          if(expansion.dodatkowyJezyk)(s.languages||[]).forEach(language=>add(expansion.dodatkowyJezyk.nazwa+": "+language,languagePrice,periodOf(expansion.dodatkowyJezyk)));
+          for(const [key,label,price] of [...extraServices,...seoServices])if(serviceAvailable(p,key)&&s[key]&&!serviceIncluded(p,key))add(label,price,periodOf(serviceConfigs.get(key)));
+          annualExtras(p,s).forEach(x=>add(x.nazwa,x.cena,periodOf(x),true));
+          const year=p.recurring?contractBase(s.billing):p.price;
+          const total=p.recurring?installmentPlan(extra,s.billing).contract:roundMoney(projectBase+extra+host);
+          return {items,recurringItems,extra,year,host,hostInitial,monthly,annual,otherInitial,projectBase,total,contract:p.recurring?total:null};
+        }
+        function itemValue(x,n){
+          return x[3]?rateMoney(x[2],x[3])+" · "+money(x[1])+" za "+monthLabel(n):money(x[1]);
+        }
+        function recurringText(a){
+          return [a.monthly?rateMoney(a.monthly,"miesiecznie"):"",a.annual?rateMoney(a.annual,"rocznie"):"",a.otherInitial?money(a.otherInitial):""].filter(Boolean).join(" + ");
         }
         function read() {
           const p = current,
@@ -1062,17 +1090,17 @@
             ? s.billing === "annual"
               ? "rocznie, płatne z góry"
               : "miesięcznie"
-            : "jednorazowo za wykonanie";
+            : periodOf(p)==="miesiecznie"?"miesięcznie":periodOf(p)==="rocznie"?"rocznie":"";
           q("#ec-base-label").textContent = p.recurring
             ? "Abonament / rok"
             : "Cena bazowa";
-          q("#ec-base-cost").textContent = money(a.year);
+          q("#ec-base-cost").textContent = p.recurring?money(a.year):money(a.projectBase);
           q("#ec-extra").textContent = money(a.extra);
           q("#ec-project-subtotal-label").textContent = "Projekt + dodatki";
-          q("#ec-project-subtotal").textContent = money(p.price + a.extra);
+          q("#ec-project-subtotal").textContent = money(a.projectBase + a.extra);
           q("#ec-host-row").hidden = !a.host;
           q("#ec-host-label").textContent=annualCostLabel(p);
-          q("#ec-host-cost").textContent = money(a.host);
+          q("#ec-host-cost").textContent = money(a.hostInitial);
           q("#ec-total-label").textContent =
             p.recurring || a.host
               ? "Łącznie w pierwszym roku"
@@ -1083,7 +1111,7 @@
               ? money(aboPricing.annual) + " / rok promocyjnie + dodatki rozłożone na raty."
               : months + " × " + money(aboPricing.monthly) + " + dodatki rozłożone na raty."
             : a.host
-              ? "Projekt, dodatki i wybrane usługi roczne płatne z góry."
+              ? "Projekt i usługi według wskazanych okresów opłat."
               : p.hosting === "year"
                 ? "Hosting i opieka w cenie na pierwszy rok."
                 : "Hosting i opieka techniczna nie są doliczone.";
@@ -1094,14 +1122,14 @@
             : p.hosting === "year"
               ? "Cena hostingu po pierwszym roku do ustalenia."
               : "";
-          q("#ec-items").innerHTML = a.items.length
-            ? a.items
+          q("#ec-items").innerHTML = (a.items.length||a.recurringItems.length)
+            ? [...a.items,...a.recurringItems]
                 .map(
                   (x) =>
-                    `<div class="ec-line"><span>${escapeTemplateText(x[0])}</span><span>${money(x[1])}</span></div>`,
+                    `<div class="ec-line"><span>${escapeTemplateText(x[0])}</span><span>${escapeTemplateText(itemValue(x,p.recurring?months:12))}</span></div>`,
                 )
                 .join("")
-            : "Brak dodatków jednorazowych.";
+            : "Brak dodatków.";
           all("[data-counter]").forEach((b) => {
             const n = s[b.dataset.counter];
             b.disabled = b.dataset.delta === "-1" ? n === 0 : n === 99;
@@ -1109,7 +1137,7 @@
         }
         function baseSummary(baseChoice) {
           const p = current, s = states[p.id], a = calculate();
-          const project = p.price + a.extra;
+          const project = a.projectBase + a.extra;
           const simpleRows = [
             ["Pakiet", p.name],
             ["Zakres", p.structure],
@@ -1119,7 +1147,7 @@
               .map(([,label]) => label).join(", ") || "Bez dodatkowych usług"],
             ...(cennik.kontakt.length?[["Kontakt",contacts[s.contact][0]]]:[]),
             ...(expansion.dodatkowyJezyk?[[expansion.dodatkowyJezyk.nazwa,(s.languages||[]).join(", ")||"Bez dodatkowych języków"]]:[]),
-            ["Wybrane dodatki", a.items.length ? a.items.map(([name])=>escapeTemplateText(name)).join(", ") : "Bez dodatków"],
+            ["Wybrane dodatki i usługi", (a.items.length||a.recurringItems.length) ? [...a.items,...a.recurringItems].map(x=>escapeTemplateText(x[0]+": "+itemValue(x,p.recurring?months:12))).join("; ") : "Bez dodatków"],
             ...(annualServices.length?[["Hosting / opieka",hostingDescription(p)]]:[])
           ];
           const row = (label,value) =>
@@ -1152,10 +1180,10 @@
             ? '<del class="ec-summary-regular-price">' + money(contractBase("annual",true)+a.extra) + '</del> <strong class="ec-summary-promo-price">' + money(total) + '</strong> <small class="ec-summary-promo-label">· promocja</small>'
             : money(total);
           const totalBlock = '<div class="ec-summary-total">' + billingSwitch +
-            row(p.recurring ? "Łącznie za "+contractPeriod : "Projekt i usługi łącznie",totalValue) +
+            row(p.recurring ? "Łącznie za "+contractPeriod : a.host?"Projekt i usługi — pierwsze 12 miesięcy":"Projekt i usługi łącznie",totalValue) +
             (p.recurring ? row("Suma dodatków",money(a.extra)) + row("Rata pakietu i dodatków",directSummaryMode ? directMiniSchedule() : miniSchedule()) :
               row("Wartość projektu z dodatkami",money(project)) +
-              (a.host ? row("Usługi roczne z góry",money(a.host)) : "")) +
+              (a.host ? row("Stawki usług",recurringText(a))+row("Usługi do zapłaty na start",money(a.hostInitial))+row("Usługi — pierwsze 12 miesięcy",money(a.host)) : "")) +
             '</div>';
           const compactConfigureLink = directSummaryMode
             ? '<div class="ec-direct-summary-switch">' +
@@ -1238,7 +1266,7 @@
           lang.className = "ec-section";
           lang.innerHTML =
             '<h3>Języki obce na stronie</h3>' +
-            '<p class="ec-muted">Włącz język i wybierz go z listy. Możesz dodać kilka wersji językowych. Cena: ' + money(languagePrice) + ' za każdy język jednorazowo. Tłumaczenie treści jest wyceniane osobno.</p>' +
+            '<p class="ec-muted">Włącz język i wybierz go z listy. Możesz dodać kilka wersji językowych. Cena: ' + rateMoney(languagePrice,periodOf(expansion.dodatkowyJezyk)) + ' za każdy język. Tłumaczenie treści jest wyceniane osobno.</p>' +
             '<div class="ec-language-list" id="ec-language-rows"></div>' +
             '<button class="ec-language-add ec-interactive" type="button" id="ec-add-language">+ Dodaj kolejny język</button>';
           wizardPanes[3].insertBefore(lang,sections[7]);
@@ -1304,7 +1332,7 @@
           q("#ec-footer-note").hidden=last;
           q("#ec-footer-note").textContent=last
             ? ""
-            : current.recurring?"Abonament: umowa na "+contractPeriod+".":"Strona i dodatki jednorazowo; usługi roczne płatne z góry.";
+            : current.recurring?"Abonament: umowa na "+contractPeriod+".":"Opłaty według okresów wskazanych przy cenach.";
           q("#ec-config .ec-fields").scrollTop=0;
           if(last)summary(baseChoice);
         }
@@ -1519,24 +1547,23 @@
           }).format(n) + " zł netto";
         function hostingDescription(p=current){
           const st=states[p.id];
-          const parts=annualServices.filter(x=>annualSelected(p,st,x.id)).map(x=>x.nazwa+": "+(annualIncluded(p,x.id)?"W cenie pakietu":money(x.cena)+" / rok"));
-          return parts.length?parts.join("; "):"Bez dodatkowych usług rocznych";
+          const parts=annualServices.filter(x=>annualSelected(p,st,x.id)).map(x=>x.nazwa+": "+(annualIncluded(p,x.id)?"W cenie pakietu":rateMoney(x.cena,periodOf(x))));
+          return parts.length?parts.join("; "):"Bez dodatkowych usług";
         }
         function annualCostLabel(p=current){
-          const selected=annualExtras(p,states[p.id]);
-          return selected.length===1?selected[0].nazwa+" / rok":"Usługi roczne / rok";
+          return "Usługi do zapłaty na start";
         }
         function paymentInfo() {
           const p = current, a = calculate();
-          const principal = p.price + a.extra;
+          const principal = a.projectBase + a.extra;
           const deposit = Math.round(Math.round(principal*100)*depositPercent/100)/100;
           return {
             eligible: !p.recurring,
             principal,
             deposit,
             remaining: (Math.round(principal*100)-Math.round(deposit*100))/100,
-            hostInitial: a.host,
-            initial: deposit + a.host,
+            hostInitial: a.hostInitial,
+            initial: roundMoney(deposit + a.hostInitial),
             total: a.total
           };
         }
@@ -1544,7 +1571,7 @@
           const b = paymentInfo();
           if (!b.eligible) return "";
           return "Zaliczka "+depositPercent+"% za projekt i dodatki: " + decimalMoney(b.deposit) +
-            (b.hostInitial ? " + roczne usługi płatne z góry: " + money(b.hostInitial) : "") + ".";
+            (b.hostInitial ? " + usługi do zapłaty na start: " + money(b.hostInitial) : "") + ".";
         }
         function remainingPaymentDescription() {
           const b = paymentInfo();
@@ -1579,7 +1606,7 @@
             const first = document.createElement("p");
             first.textContent = depositPercent+"% za projekt i dodatki: " + decimalMoney(b.deposit);
             const second = document.createElement("p");
-            second.textContent = "Usługi roczne płatne z góry: " + money(b.hostInitial);
+            second.textContent = "Usługi do zapłaty na start: " + money(b.hostInitial);
             const amount = document.createElement("p");
             amount.classList.add("ec-amount-bold");
             amount.textContent = "Do zapłaty na start: " + decimalMoney(b.initial);
@@ -1610,9 +1637,9 @@
             ...(expansion.dodatkowaPodstrona?[expansion.dodatkowaPodstrona.nazwa+": "+s.pages]:[]),
             ...(cennik.seo.length?["SEO: "+seoName(p,s.seo)]:[]),
             ...seoServices.filter(([key])=>serviceAvailable(p,key)).map(([key,label,price]) =>
-              label + ": " + (s[key] ? (serviceIncluded(p,key)?"W cenie pakietu":"Dodane, " + money(price)) : "Nie")),
+              label + ": " + (s[key] ? (serviceIncluded(p,key)?"W cenie pakietu":"Dodane, " + rateMoney(price,periodOf(serviceConfigs.get(key)))) : "Nie")),
             ...(cennik.kontakt.length?["Kontakt: "+contacts[s.contact][0]]:[]),
-            ...(cennik.szkolenia.length?["Szkolenie: "+trainingLabel(),"Dopłata za zmianę szkolenia: "+money(trainingCharge())]:[]),
+            ...(cennik.szkolenia.length?["Szkolenie: "+trainingLabel(),"Dopłata za zmianę szkolenia: "+rateMoney(trainingCharge(),periodOf(trainingConfig[s.training]))]:[]),
             (expansion.dodatkowaRundaPoprawek?.nazwa||"Sesje poprawek w pakiecie")+": " +
               (p.revisions + s.revisions) +
               " (" +
@@ -1620,10 +1647,10 @@
               " w cenie, " +
               s.revisions +
               " dodatkowych)",
-            ...(annualServices.length?["Usługi roczne: "+hostingDescription(p)]:[]),
+            ...(annualServices.length?["Hosting i opieka: "+hostingDescription(p)]:[]),
             ...(expansion.dodatkowyJezyk?[expansion.dodatkowyJezyk.nazwa+": "+((s.languages||[]).join(", ")||"Nie")]:[]),
             ...extraServices.filter(([key])=>serviceAvailable(p,key)).map(([key,label,price,mayBeIncluded]) =>
-              label + ": " + (s[key] ? ((mayBeIncluded && p.includedAddons[key]) ? "W cenie pakietu" : "Dodane, " + money(price)) : "Nie")),
+              label + ": " + (s[key] ? ((mayBeIncluded && p.includedAddons[key]) ? "W cenie pakietu" : "Dodane, " + rateMoney(price,periodOf(serviceConfigs.get(key)))) : "Nie")),
             "Czy ma stronę/sklep: " + (q("#ec-existing-check").checked ? "Tak" : "Nie"),
             "Link do istniejącej strony: " + (q("#ec-existing-check").checked ? q("#ec-existing-url").value.trim() : "Brak"),
             "",
@@ -1632,13 +1659,12 @@
             "",
             "WYCENA",
             "Cena bazowa: " +
-              money(a.year) +
-              (p.recurring ? " / "+contractPeriod : " za wykonanie"),
-            ...a.items.map((x) => x[0] + ": " + money(x[1])),
+              (p.recurring?money(a.year)+" za "+contractPeriod:rateMoney(p.price,periodOf(p))),
+            ...[...a.items,...a.recurringItems].map(x=>x[0]+": "+itemValue(x,p.recurring?months:12)),
             (p.recurring
               ? "Dodatki — wartość za całą umowę: "
               : "Suma dodatków: ") + money(a.extra),
-            "Dodatkowe usługi roczne (hosting/opieka): " + money(a.host),
+            ...(p.recurring?[]:["Usługi poza projektem — pierwsze 12 miesięcy: "+money(a.host),"Stawki usług: "+(recurringText(a)||"Brak"),"Usługi do zapłaty na start: "+money(a.hostInitial)]),
             (p.recurring?"Łącznie za "+contractPeriod:"Łącznie w pierwszym roku")+": "+money(a.total),
             "",
           ];
@@ -1659,14 +1685,14 @@
           if (b.eligible)
             lines.push(
               "Zaliczka "+depositPercent+"% wartości projektu: " + decimalMoney(b.deposit),
-              "Hosting i opieka za rok z góry: " + money(b.hostInitial),
+              "Usługi do zapłaty na start: " + money(b.hostInitial),
               "Do zapłaty na start: " + decimalMoney(b.initial),
               remainingPaymentDescription(),
             );
           if (p.hosting === "year")
             lines.push("Hosting po pierwszym roku: cena do ustalenia.");
           lines.push(
-            ...(expansion.dodatkowaRundaPoprawek ? ["Dodatkowa sesja poprawek: " + money(revisionPrice) + " / sesję."] : []),
+            ...(expansion.dodatkowaRundaPoprawek ? ["Dodatkowa sesja poprawek: " + rateMoney(revisionPrice,periodOf(expansion.dodatkowaRundaPoprawek)) + " / sesję."] : []),
             "Wszystkie podane ceny są kwotami netto. Należy doliczyć 23% VAT.",
           );
           return lines.join(String.fromCharCode(10));
@@ -1915,9 +1941,7 @@
             : "Wybrane dodatki";
           all("[data-extra-cost]").forEach((e) => {
             e.textContent =
-              "+" + money(e.dataset.extraCost === "section" ? sectionPrice : pagePrice) + e.dataset.extraUnit +
-              " · " +
-              (mini ? "wliczone w raty" : "jednorazowo");
+              "+" + rateMoney(e.dataset.extraCost === "section" ? sectionPrice : pagePrice,periodOf(expansion[e.dataset.extraCost==="section"?"dodatkowaSekcja":"dodatkowaPodstrona"])) + e.dataset.extraUnit + (mini?" · wliczone w raty":"");
           });
           if (!mini) return;
           const a = calculate(),
@@ -1945,11 +1969,11 @@
           q("#ec-mini-monthly-variant").classList.toggle("is-selected", !b.annual);
           q("#ec-mini-annual-variant").classList.toggle("is-selected", b.annual);
           q("#ec-monthly-rate").textContent =
-            money(monthly.regular) + " / mies.";
+            rateMoney(monthly.regular,aboUnit("monthly"));
           q("#ec-monthly-detail").textContent =
             miniSchedule("monthly") + " za pakiet i dodatki.";
           q("#ec-annual-rate").textContent =
-            decimalMoney(annual.regular) + annualUnit;
+            decimalMoney(annual.regular) + (aboUnit("annual")?annualUnit:"");
           q("#ec-annual-rate").classList.toggle("ec-promo-price", a.extra === 0);
           q("#ec-annual-detail").textContent =
             miniSchedule("annual") + " za pakiet i dodatki.";
