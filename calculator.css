@@ -2968,3 +2968,15 @@ dialog#eni-calc-portal::backdrop{background:transparent!important;}
  display:block!important; width:18px!important; height:18px!important; stroke:#101112!important; fill:none!important; opacity:1!important; visibility:visible!important;
 }
 #eni-calc-portal #ec-window #ec-close svg path,#eni-calc-portal #ec-template-modal #ec-template-close svg path {stroke:#101112!important;fill:none!important;}
+
+/* 20261127-16: odłożenie wyboru jako zwykły kafelek siatki szablonów. */
+:is(#eni-calc,#eni-calc-portal) .ec-pane[data-ec-step="template"] .ec-template-select-card--later {
+  grid-column:auto; min-width:0; align-self:stretch;
+}
+:is(#eni-calc,#eni-calc-portal) .ec-pane[data-ec-step="template"] .ec-template-select-dot--later {
+  display:flex; align-items:center; justify-content:center;
+  background:#f0f2f4; color:#65717c;
+}
+:is(#eni-calc,#eni-calc-portal) .ec-template-select-dot--later svg {
+  display:block; width:24px; height:24px; stroke:currentColor; fill:none;
+}
