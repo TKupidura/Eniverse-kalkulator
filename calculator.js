@@ -3,8 +3,9 @@
         if (!root || root.dataset.eniInitialized) return;
         root.dataset.eniInitialized = "true";
         const production = root.dataset.mode === "production";
-        const q = (s) => root.querySelector(s),
-          all = (s) => [...root.querySelectorAll(s)],
+        let galleryPortal = null;
+        const q = (s) => root.querySelector(s) || galleryPortal?.querySelector(s) || null,
+          all = (s) => [...root.querySelectorAll(s), ...(galleryPortal ? galleryPortal.querySelectorAll(s) : [])],
           money = (n) => new Intl.NumberFormat("pl-PL", {useGrouping:"always"}).format(n) + " zł netto";
         // Jedno źródło oferty: walidacja struktury i normalizacja danych.
         function validatePricing(c) {
@@ -62,6 +63,41 @@
         if(!activePricing.length){
           root.innerHTML='<p class="ec-pricing-error">Aktualnie brak dostępnych pakietów.</p>';
           return;
+        }
+        // Galeria poza hierarchią warstw Elementora, z zachowaniem lokalnego zakresu CSS.
+        if (production) {
+          const gallery = root.querySelector("#ec-template-modal");
+          if (gallery) {
+            galleryPortal = document.createElement("div");
+            galleryPortal.id = "eni-calc-portal";
+            galleryPortal.dataset.build = "20261127-10";
+            galleryPortal.hidden = true;
+            document.body.append(galleryPortal);
+            galleryPortal.append(gallery);
+          }
+          // Pełna szerokość widocznego dokumentu, bez szerokości pionowego scrollbara.
+          const page = root.querySelector("#ec-demo-page");
+          const fitPricingBackground = () => {
+            if (!page || page.hidden || !root.getClientRects().length) return;
+            const viewportWidth = document.documentElement.clientWidth;
+            const rootLeft = root.getBoundingClientRect().left + window.scrollX;
+            if (viewportWidth <= 0) return;
+            page.style.setProperty("--ec-full-width", viewportWidth + "px");
+            page.style.setProperty("--ec-full-left", (-rootLeft) + "px");
+          };
+          let backgroundFrame = 0;
+          const scheduleBackground = () => {
+            cancelAnimationFrame(backgroundFrame);
+            backgroundFrame = requestAnimationFrame(fitPricingBackground);
+          };
+          fitPricingBackground();
+          window.addEventListener("resize", scheduleBackground, { passive:true });
+          window.addEventListener("load", scheduleBackground);
+          if (typeof ResizeObserver === "function") {
+            const backgroundObserver = new ResizeObserver(scheduleBackground);
+            backgroundObserver.observe(root);
+            backgroundObserver.observe(document.documentElement);
+          }
         }
         const settings=cennik.ustawienia;
         const months=settings.okresAbonamentu;
@@ -452,11 +488,8 @@
           templateDialogPlanId=requestedPlan;
           templatePreviousScroll=document.body.classList.contains("eni-calc-scroll-locked");
           document.body.classList.add("eni-calc-scroll-locked");
-          const galleryDialog=q("#ec-template-modal");
-          galleryDialog.hidden=false;
-          if(typeof galleryDialog.showModal==="function" && !galleryDialog.open){
-            try{galleryDialog.showModal();}catch(error){console.warn("Eniverse: fallback galerii",error);}
-          }
+          if (galleryPortal) galleryPortal.hidden=false;
+          q("#ec-template-modal").hidden=false;
           const selectedId=states[templateDialogPlanId].templateId;
           const selectedIndex=templateSamples.findIndex(t=>t.id===selectedId);
           showTemplate(selectedIndex>=0?selectedIndex:visibleTemplateIndex);
@@ -466,12 +499,11 @@
             (!q("#ec-modal-stage").hidden && !q("#ec-final").hidden)
               ? "Wybierz ten szablon i wróć do podsumowania ↗"
               : "Wybierz ten szablon i konfiguruj ↗";
-          q("#ec-template-close").focus();
+          q("#ec-template-close").focus({preventScroll:true});
         }
         function closeTemplateDialog() {
-          const galleryDialog=q("#ec-template-modal");
-          if(galleryDialog.open && typeof galleryDialog.close==="function")galleryDialog.close();
-          galleryDialog.hidden=true;
+          q("#ec-template-modal").hidden=true;
+          if (galleryPortal) galleryPortal.hidden=true;
           document.body.classList.toggle("eni-calc-scroll-locked",templatePreviousScroll);
           templateOpener?.focus();
         }
@@ -480,10 +512,6 @@
           if(button)showTemplate(+button.dataset.templateIndex);
         });
         q("#ec-template-close").addEventListener("click",closeTemplateDialog);
-        q("#ec-template-modal").addEventListener("cancel",event=>{
-          event.preventDefault();
-          closeTemplateDialog();
-        });
         q("#ec-template-modal").addEventListener("click",event=>{
           if(event.target===q("#ec-template-modal"))closeTemplateDialog();
         });
