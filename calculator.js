@@ -2,6 +2,7 @@
         const root = document.getElementById("eni-calc");
         if (!root || root.dataset.eniInitialized) return;
         root.dataset.eniInitialized = "true";
+        root.dataset.calculatorBuild = "20261127-19";
         const production = root.dataset.mode === "production";
         let galleryPortal = null;
         const q = (s) => root.querySelector(s) || galleryPortal?.querySelector(s) || null,
@@ -23,6 +24,7 @@
         const periodFactor=(period,n)=>period==="miesiecznie"?n:period==="rocznie"?n/12:1;
         const periodTotal=(amount,period,n)=>roundMoney(amount*periodFactor(period,n));
         const firstPayment=(amount,period,n)=>period==="rocznie"?periodTotal(amount,period,Math.min(n,12)):roundMoney(amount);
+        const billingRate=(amount,source,target)=>!source||source===target?amount:roundMoney(amount*(target==="rocznie"?12:1/12));
         const variantDelta=(items,selected,base,n)=>{
           const x=items[selected],b=items[base],period=periodOf(x);
           const total=Math.max(0,periodTotal(x.cena,period,n)-periodTotal(b.cena,periodOf(b),n));
@@ -50,7 +52,12 @@
             if(!Number.isInteger(p.revisions) || p.revisions<0 || !["subscription","optional","year"].includes(p.hosting)) throw Error("Niepoprawny zakres pakietu: "+p.id);
             if(p.id==="mini"){
               const a=p.platnosc;
-              if(p.id!=="mini" || !a || !priceOK(a.miesiecznie)||!Number.isInteger(a.miesiecznie)||!priceOK(a.roczniePromocja)||!priceOK(a.rocznieRegularna)||a.roczniePromocja>a.rocznieRegularna) throw Error("Niepoprawne stawki abonamentu");
+              if(!a || !priceOK(a.miesiecznie)||!priceOK(a.roczniePromocja)||!priceOK(a.rocznieRegularna)) throw Error("Niepoprawne stawki abonamentu");
+              const periods=a.okresOplaty||{};
+              normalizePeriod(periods.miesiecznie,"miesiecznie");
+              const promo=billingRate(a.roczniePromocja,normalizePeriod(periods.roczniePromocja,"rocznie"),"rocznie");
+              const regular=billingRate(a.rocznieRegularna,normalizePeriod(periods.rocznieRegularna,"rocznie"),"rocznie");
+              if(promo>regular)throw Error("Cena promocyjna abonamentu nie może przekraczać regularnej.");
             }
           }
           const reserved=new Set(["training","sections","pages","seo","contact","revisions","billing","hosting","care","languages","templateId","annual"]);
@@ -168,7 +175,12 @@
         const contacts=contactConfig.map(x=>[x.nazwa,x.opis||"",x.cena,periodOf(x)]);
         const trainingOptions=trainingConfig.map(x=>[x.nazwa,x.cena,periodOf(x)]);
         const abo=cennik.pakiety.find(p=>p.id==="mini")?.platnosc;
-        const aboPricing={monthly:abo?.miesiecznie??0,annual:abo?.roczniePromocja??0,regularAnnual:abo?.rocznieRegularna??0};
+        const aboUnits={monthly:normalizePeriod(abo?.okresOplaty?.miesiecznie,"miesiecznie"),annual:normalizePeriod(abo?.okresOplaty?.roczniePromocja,"rocznie"),regularAnnual:normalizePeriod(abo?.okresOplaty?.rocznieRegularna,"rocznie")};
+        const aboPricing={
+          monthly:billingRate(abo?.miesiecznie??0,aboUnits.monthly,"miesiecznie"),
+          annual:billingRate(abo?.roczniePromocja??0,aboUnits.annual,"rocznie"),
+          regularAnnual:billingRate(abo?.rocznieRegularna??0,aboUnits.regularAnnual,"rocznie")
+        };
         // Treści i zakres opisowy pochodzą z boxa HTML. Cennik zawiera tylko dane ofertowe.
         const packages=activePricing.map(p=>{
           const card=cardElements.find(x=>x.dataset.ecPlan===p.id),d=card.dataset;
@@ -221,8 +233,7 @@
         const revisionPrice=expansion.dodatkowaRundaPoprawek?.cena??0;
         // Etykiety statycznego HTML korzystają z tego samego źródła cen co wycena.
         const displayPrices = {...aboPricing};
-        const aboUnits={monthly:normalizePeriod(abo?.okresOplaty?.miesiecznie,"miesiecznie"),annual:normalizePeriod(abo?.okresOplaty?.roczniePromocja,"rocznie"),regularAnnual:normalizePeriod(abo?.okresOplaty?.rocznieRegularna,"rocznie")};
-        // Stawki Abonamentu są z definicji miesięczne i roczne; puste pole ukrywa dopisek.
+        // Rozliczenia Abonamentu mają stałe tryby; stawki przeliczane do ich okresów, puste pole ukrywa dopisek.
         const aboUnit=key=>aboUnits[key]===""?"":key==="monthly"?"miesiecznie":"rocznie";
         const hostingRates=[annualHosting,annualCare].filter(Boolean).map(x=>x.nazwa+": "+rateMoney(x.cena,periodOf(x))).join("; ");
         all("[data-contract-period]").forEach(el=>el.textContent=contractPeriod);
@@ -284,7 +295,7 @@
             seen.add(p.id);
             const fields={
               price:money(p.price).replace(" zł netto",""),
-              monthly:String(aboPricing.monthly),annual:String(aboPricing.annual),
+              monthly:money(aboPricing.monthly).replace(" zł netto",""),annual:money(aboPricing.annual).replace(" zł netto",""),
               regularAnnual:money(aboPricing.regularAnnual).replace(" netto",""),
               revisions:p.revisions?p.revisions+" w cenie":"Brak w cenie"
             };
@@ -293,7 +304,13 @@
               if(Object.hasOwn(fields,key))el.textContent=fields[key];
               if(key==="regularAnnual"){el.textContent=fields[key]+periodSuffix(aboUnit(key));el.setAttribute("aria-label","Poprzednia cena: "+rateMoney(aboPricing.regularAnnual,aboUnit(key)));}
             });
-            card.querySelectorAll("[data-card-unit]").forEach(el=>{const key=el.dataset.cardUnit;el.textContent="zł netto"+periodSuffix(key==="price"?periodOf(p):aboUnit(key));});
+            const unitNodes=[...card.querySelectorAll("[data-card-unit]")];
+            if(!unitNodes.length){
+              const priceUnit=card.querySelector('[data-card-field="price"]')?.nextElementSibling;
+              if(priceUnit){priceUnit.dataset.cardUnit="price";unitNodes.push(priceUnit);}
+              card.querySelectorAll(".enp-abo-unit").forEach((el,i)=>{el.dataset.cardUnit=i===0?"monthly":"annual";unitNodes.push(el);});
+            }
+            unitNodes.forEach(el=>{const key=el.dataset.cardUnit;el.textContent="zł netto"+periodSuffix(key==="price"?periodOf(p):aboUnit(key));});
             card.querySelectorAll("[data-card-hosting]").forEach(el=>el.hidden=!annualServices.some(x=>x.id==="hosting"&&annualIncluded(p,x.id)));
             card.querySelectorAll("[data-card-training-reference]").forEach(el=>{
               el.hidden=!cennik.szkolenia.length;
@@ -325,6 +342,8 @@
           });
           q(".ec-package-group--entry").hidden=!cardElements.some(c=>!c.hidden&&c.closest("#ec-entry-packages"));
           q(".ec-package-group--main").hidden=!cardElements.some(c=>!c.hidden&&c.closest("#ec-packages"));
+          const mainHeading=q(".ec-package-group--main .ec-price-group-heading strong");
+          if(mainHeading)mainHeading.textContent=packages.some(p=>!p.recurring&&periodOf(p))?"PAKIETY STRON INTERNETOWYCH":"PAKIETY JEDNORAZOWE";
         }
         bindCards();
 
@@ -1093,7 +1112,7 @@
             : periodOf(p)==="miesiecznie"?"miesięcznie":periodOf(p)==="rocznie"?"rocznie":"";
           q("#ec-base-label").textContent = p.recurring
             ? "Abonament / rok"
-            : "Cena bazowa";
+            : periodOf(p)?"Cena projektu jednorazowa":"Cena bazowa";
           q("#ec-base-cost").textContent = p.recurring?money(a.year):money(a.projectBase);
           q("#ec-extra").textContent = money(a.extra);
           q("#ec-project-subtotal-label").textContent = "Projekt + dodatki";
@@ -1108,7 +1127,7 @@
           q("#ec-total").textContent = money(a.total);
           q("#ec-paynote").textContent = p.recurring
             ? s.billing === "annual"
-              ? money(aboPricing.annual) + " / rok promocyjnie + dodatki rozłożone na raty."
+              ? rateMoney(aboPricing.annual,aboUnit("annual")) + " promocyjnie + dodatki rozłożone na raty."
               : months + " × " + money(aboPricing.monthly) + " + dodatki rozłożone na raty."
             : a.host
               ? "Projekt i usługi według wskazanych okresów opłat."
@@ -1141,7 +1160,7 @@
           const simpleRows = [
             ["Pakiet", p.name],
             ["Zakres", p.structure],
-            ...(p.recurring && !directSummaryMode && s.billing==="annual" ? [["Promocja pakietu "+p.name, money(aboPricing.annual) + " / rok zamiast " + money(aboPricing.regularAnnual) + " / rok"]] : []),
+            ...(p.recurring && !directSummaryMode && s.billing==="annual" ? [["Promocja pakietu "+p.name, rateMoney(aboPricing.annual,aboUnit("annual")) + " zamiast " + rateMoney(aboPricing.regularAnnual,aboUnit("regularAnnual"))]] : []),
             ...(cennik.seo.length?[["SEO",seoName(p,s.seo)]]:[]),
             ["Dodatkowe usługi SEO", seoServices.filter(([key]) => serviceAvailable(p,key)&&s[key])
               .map(([,label]) => label).join(", ") || "Bez dodatkowych usług"],
