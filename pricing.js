@@ -16,10 +16,16 @@
  * okresOplaty: ""           — zł netto, bez oznaczenia okresu.
  * Abonament ma trzy osobne stawki: okres każdej określa
  * odpowiadające jej pole okresOplaty w obiekcie platnosc.
- * UWAGA: te pola są przygotowane do obsługi przez calculator.js.
- * Dotychczasowy kalkulator ich nie odczytuje; samo ustawienie
- * okresu nie zmienia częstotliwości rozliczeń ani sum wyceny.
- * Dotychczasowe zasady naliczania cen pozostają bez zmian.
+ * Od wydania 20261127-19 kalkulator odczytuje te pola.
+ * Pakiety poza Abonamentem: opłaty cykliczne liczone za 12 miesięcy,
+ * na start naliczana pierwsza opłata miesięczna lub roczna.
+ * Zaliczka dotyczy jednorazowego projektu i dodatków.
+ * Abonament: opłaty liczone za okres umowy i rozkładane na raty.
+ * Stawki Abonamentu są przeliczane do miesięcznego/rocznego
+ * trybu płatności; pusty okres ukrywa dopisek, nie znosi umowy.
+ * Dla wariantów różnicę kosztów liczy się w okresie wyceny.
+ * W sekcji uslugiRoczne puste pole oznacza opłatę na start.
+ * Brak pola w starszych pozycjach uslugiRoczne oznacza rok.
  * Nazwy i wygląd boxów pakietów edytuj w HTML.
  *
  * IDENTYFIKATORY PAKIETÓW
