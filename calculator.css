@@ -2908,3 +2908,31 @@
 }
 :is(#eni-calc,#eni-calc-portal) .ec-template-loading img {display:block;max-width:min(100%,480px);max-height:55%;width:auto;height:auto;object-fit:contain;border-radius:4px;}
 :is(#eni-calc,#eni-calc-portal) .ec-template-loading p {margin:0;color:#5f6973;}
+
+/* 20261127-13: wspólna warstwa dla wszystkich okien, także podsumowania i formularza. */
+#eni-calc-portal #ec-modal-stage[hidden] {display:none!important;}
+#eni-calc-portal #ec-modal-stage:not([hidden]) {
+ position:absolute!important;inset:0!important;z-index:1!important;display:flex!important;
+ align-items:center!important;justify-content:center!important;box-sizing:border-box!important;
+ width:auto!important;height:auto!important;max-width:none!important;max-height:none!important;
+ margin:0!important;padding:12px!important;border:0!important;outline:0!important;
+ background:rgba(10,13,17,.72)!important;overflow:hidden!important;
+}
+#eni-calc-portal #ec-template-modal:not([hidden]) {z-index:2!important;}
+#eni-calc-portal #ec-modal-stage #ec-window {
+ box-sizing:border-box!important;max-width:100%!important;max-height:100%!important;
+ min-height:0!important;flex:0 1 auto!important;margin:0!important;border:0!important;
+ outline:0!important;box-shadow:none!important;overflow:hidden!important;
+}
+#eni-calc-portal #ec-window > .ec-head {
+ position:relative!important;display:flex!important;flex:0 0 auto!important;
+ visibility:visible!important;opacity:1!important;background:#fff!important;color:#101112!important;
+}
+#eni-calc-portal #ec-window > .ec-head h2,
+#eni-calc-portal #ec-window > .ec-head .ec-kicker {visibility:visible!important;opacity:1!important;}
+#eni-calc-portal #ec-window > .ec-steps,
+#eni-calc-portal #ec-window > .ec-foot {flex:0 0 auto!important;}
+#eni-calc-portal #ec-window > .ec-body,
+#eni-calc-portal #ec-window > .ec-final {min-height:0!important;}
+#eni-calc-portal #ec-close {flex:0 0 auto!important;}
+@media(max-width:760px){#eni-calc-portal #ec-modal-stage:not([hidden]){padding:5px!important;}}
