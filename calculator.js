@@ -67,13 +67,14 @@
         // Galeria poza hierarchią warstw Elementora, z zachowaniem lokalnego zakresu CSS.
         if (production) {
           const gallery = root.querySelector("#ec-template-modal");
-          if (gallery) {
+          const wizard = root.querySelector("#ec-modal-stage");
+          if (gallery && wizard) {
             galleryPortal = document.createElement("div");
             galleryPortal.id = "eni-calc-portal";
-            galleryPortal.dataset.build = "20261127-12";
+            galleryPortal.dataset.build = "20261127-13";
             galleryPortal.hidden = true;
             document.body.append(galleryPortal);
-            galleryPortal.append(gallery);
+            galleryPortal.append(wizard,gallery);
           }
           // Pełna szerokość widocznego dokumentu, bez szerokości pionowego scrollbara.
           const page = root.querySelector("#ec-demo-page");
@@ -98,6 +99,10 @@
             backgroundObserver.observe(root);
             backgroundObserver.observe(document.documentElement);
           }
+        }
+        function syncModalPortal(){
+          if(!galleryPortal)return;
+          galleryPortal.hidden=q("#ec-modal-stage").hidden && q("#ec-template-modal").hidden;
         }
         const settings=cennik.ustawienia;
         const months=settings.okresAbonamentu;
@@ -409,12 +414,17 @@
         let previewNotice = null;
         let previewNoticeTimer = 0;
         let activePreviewKey = null;
+        let previewWarmTimer = 0;
+        let previewWarmId = null;
+        function cancelPreviewWarm(){clearTimeout(previewWarmTimer);previewWarmId=null;}
+        function canWarmPreview(){const n=navigator.connection;return !n?.saveData && !["slow-2g","2g","3g"].includes(n?.effectiveType) && !document.hidden;}
         function clearPreviewNotice(){
           clearTimeout(previewNoticeTimer);
           previewNotice?.remove();
           previewNotice = null;
         }
         function hidePreviewFrames(){
+          cancelPreviewWarm();
           clearPreviewNotice();
           activePreviewKey = null;
           for(const record of previewFrames.values())record.frame.hidden=true;
@@ -433,6 +443,57 @@
           previewNotice=box;
           previewNoticeTimer=setTimeout(()=>{if(previewNotice===box)label.textContent="Podgląd nadal się ładuje. Możesz także otworzyć go w nowej karcie.";},10000);
         }
+        function ensurePreviewFrame(t, warm=false){
+          const viewport=q("#ec-template-viewport");
+          const preview=t.isBundled?t.previewPath:templateHttpsUrl(t.preview_url);
+          if(!preview)return null;
+          const key=t.id+"|"+preview;
+          let record=previewFrames.get(key);
+          if(record){
+            if(!warm){previewFrames.delete(key);previewFrames.set(key,record);}
+            return {key,record};
+          }
+          // Limit 3 iframe'ów; nie usuwaj aktywnej ramki i nie wypieraj
+          // innych podglądów przez samo wskazanie kursorem przy pełnym cache.
+          if(warm && previewFrames.size>=maxPreviewFrames)return null;
+          while(previewFrames.size>=maxPreviewFrames){
+            const oldest=[...previewFrames.keys()].find(k=>k!==activePreviewKey);
+            if(!oldest)return null;
+            previewFrames.get(oldest).frame.remove();previewFrames.delete(oldest);
+          }
+          const frame=document.createElement("iframe");
+          frame.className="ec-template-project-frame";
+          frame.title="Podgląd projektu "+t.name;
+          frame.loading="eager";
+          frame.hidden=true;
+          frame.setAttribute("sandbox",t.isBundled?"allow-scripts allow-forms allow-popups":"allow-scripts");
+          frame.referrerPolicy="no-referrer";
+          record={frame,loaded:false,started:performance.now()};
+          frame.addEventListener("load",()=>{
+            if(previewFrames.get(key)!==record)return;
+            record.loaded=true;
+            const elapsed=Math.round(performance.now()-record.started);
+            root.dataset.previewLoadMs=String(elapsed);
+            root.dataset.previewTemplate=t.id;
+            if(activePreviewKey===key)clearPreviewNotice();
+          });
+          frame.src=preview;
+          previewFrames.set(key,record);
+          viewport.append(frame);
+          return {key,record};
+        }
+        function warmPreview(t){
+          if(!t||!canWarmPreview()||previewFrames.size>=maxPreviewFrames)return;
+          // Nie konkuruj z aktualnie ładowanym pełnym projektem.
+          if([...previewFrames.values()].some(r=>!r.loaded))return;
+          ensurePreviewFrame(t,true);
+        }
+        function schedulePreviewWarm(t){
+          cancelPreviewWarm();
+          if(!t||!canWarmPreview())return;
+          previewWarmId=t.id;
+          previewWarmTimer=setTimeout(()=>{if(previewWarmId===t.id)warmPreview(t);previewWarmId=null;},220);
+        }
         function displayTemplatePreview(t){
           const viewport=q("#ec-template-viewport");
           const preview=t.isBundled?t.previewPath:templateHttpsUrl(t.preview_url);
@@ -443,38 +504,15 @@
             if(!node.classList.contains("ec-template-project-frame"))node.remove();
           }
           if(!preview){
-            // Obraz lub demonstracja bez iframe; zachowaj istniejące ramki w DOM.
             const host=document.createElement("div");host.className="ec-template-static-preview";
             host.innerHTML=templateScene(t,true);viewport.append(host);return;
           }
-          // Nie uruchamiaj pobierania pełnej strony, gdy galeria jest zamknięta.
           if(q("#ec-template-modal").hidden)return;
-          let record=previewFrames.get(key);
-          if(!record){
-            const frame=document.createElement("iframe");
-            frame.className="ec-template-project-frame";
-            frame.title="Podgląd projektu "+t.name;
-            frame.loading="eager";
-            frame.setAttribute("sandbox",t.isBundled?"allow-scripts allow-forms allow-popups":"allow-scripts");
-            frame.referrerPolicy="no-referrer";
-            record={frame,loaded:false};
-            frame.addEventListener("load",()=>{
-              record.loaded=true;
-              if(activePreviewKey===key)clearPreviewNotice();
-            });
-            frame.src=preview;
-            previewFrames.set(key,record);
-            viewport.append(frame);
-          }else{
-            previewFrames.delete(key);previewFrames.set(key,record);
-          }
-          activePreviewKey=key;
-          record.frame.hidden=false;
-          if(!record.loaded)showPreviewNotice(t);
-          while(previewFrames.size>maxPreviewFrames){
-            const oldest=previewFrames.keys().next().value;
-            previewFrames.get(oldest).frame.remove();previewFrames.delete(oldest);
-          }
+          const entry=ensurePreviewFrame(t);
+          if(!entry)return;
+          activePreviewKey=entry.key;
+          entry.record.frame.hidden=false;
+          if(!entry.record.loaded)showPreviewNotice(t);
         }
         function showTemplate(index) {
           const t=templateSamples[index];
@@ -588,8 +626,8 @@
           templateDialogPlanId=requestedPlan;
           templatePreviousScroll=document.body.classList.contains("eni-calc-scroll-locked");
           document.body.classList.add("eni-calc-scroll-locked");
-          if (galleryPortal) galleryPortal.hidden=false;
           q("#ec-template-modal").hidden=false;
+          syncModalPortal();
           if(templatesStatus==="error" || templatesStatus==="empty")loadWordPressTemplates();
           const selectedId=states[templateDialogPlanId].templateId;
           const selectedIndex=templateSamples.findIndex(t=>t.id===selectedId);
@@ -605,10 +643,26 @@
         function closeTemplateDialog() {
           hidePreviewFrames();
           q("#ec-template-modal").hidden=true;
-          if (galleryPortal) galleryPortal.hidden=true;
+          syncModalPortal();
           document.body.classList.toggle("eni-calc-scroll-locked",templatePreviousScroll);
-          templateOpener?.focus();
+          templateOpener?.focus({preventScroll:true});
         }
+        q("#ec-template-gallery").addEventListener("pointerover",event=>{
+          const button=event.target.closest("[data-template-index]");
+          if(button && !button.contains(event.relatedTarget))schedulePreviewWarm(templateSamples[+button.dataset.templateIndex]);
+        });
+        q("#ec-template-gallery").addEventListener("pointerout",event=>{
+          const button=event.target.closest("[data-template-index]");
+          if(button && !button.contains(event.relatedTarget))cancelPreviewWarm();
+        });
+        q("#ec-catalog").addEventListener("pointerover",event=>{
+          const button=event.target.closest("[data-templates-open]");
+          if(button && !button.contains(event.relatedTarget))schedulePreviewWarm(templateSamples[0]);
+        });
+        q("#ec-catalog").addEventListener("pointerout",event=>{
+          const button=event.target.closest("[data-templates-open]");
+          if(button && !button.contains(event.relatedTarget))cancelPreviewWarm();
+        });
         q("#ec-template-gallery").addEventListener("click",event=>{
           const button=event.target.closest("[data-template-index]");
           if(button)showTemplate(+button.dataset.templateIndex);
@@ -1269,16 +1323,18 @@
           scrollBeforeModal = document.body.classList.contains("eni-calc-scroll-locked");
           document.body.classList.add("eni-calc-scroll-locked");
           q("#ec-modal-stage").hidden = false;
+          syncModalPortal();
           fill();
           clearTemplateRequired();
           step(baseChoice ? (hasTemplateLibrary(current)?5:4) : 0, baseChoice);
           q("#ec-modal-stage").scrollTop = 0;
-          q("#ec-close").focus();
+          q("#ec-close").focus({preventScroll:true});
         }
         function close() {
           q("#ec-modal-stage").hidden = true;
+          syncModalPortal();
           document.body.classList.toggle("eni-calc-scroll-locked",scrollBeforeModal);
-          opener?.focus();
+          opener?.focus({preventScroll:true});
         }
         q("#ec-catalog").addEventListener("click", (e) => {
           const b = e.target.closest("[data-configure],[data-choose]");
